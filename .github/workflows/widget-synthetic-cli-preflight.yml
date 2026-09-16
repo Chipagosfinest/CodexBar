@@ -201,6 +201,23 @@ jobs:
           raise SystemExit("Exact packaged debug app did not start within 20 seconds")
           PYVERIFY
 
+      # GitHub's image disables this service in configure-system.sh. Restore only
+      # this disposable runner's normal desktop UI; no TCC or widget database edits.
+      - name: Enable Notification Center for desktop widget proof
+        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          agent=/System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+          test -f "$agent"
+          label=$(/usr/libexec/PlistBuddy -c 'Print :Label' "$agent")
+          test "$label" = com.apple.notificationcenterui.agent
+          launchctl print-disabled "gui/$(id -u)" > "$proof/gui-disabled-services-before.txt"
+          grep -F "\"$label\" => true" "$proof/gui-disabled-services-before.txt"
+          launchctl load -w "$agent"
+          touch "$proof/notification-center-enabled-by-proof"
+          launchctl print "gui/$(id -u)/$label" > "$proof/notification-center-service.txt"
+
       - name: Observe real warm and cold share route with XCUITest
         env:
           CODEXBAR_CI_PACKAGED_APP: ${{ runner.temp }}/widget-synthetic-cli-preflight/app/CodexBar.app
@@ -287,6 +304,14 @@ jobs:
             xcrun xcresulttool export attachments --path "$proof/WidgetGalleryDiscovery.xcresult" --output-path "$proof/widget-gallery-discovery-attachments"
           fi
 
+      - name: Restore disposable runner Notification Center state
+        if: always()
+        run: |
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          if test -f "$proof/notification-center-enabled-by-proof"; then
+            launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+          fi
+
       - name: Clear disposable GUI seed environment
         if: always()
         run: |
@@ -303,6 +328,8 @@ jobs:
         with:
           name: widget-synthetic-cli-preflight
           path: |
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/gui-disabled-services-before.txt
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/notification-center-service.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/package-source-commit.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status-after-app.json
