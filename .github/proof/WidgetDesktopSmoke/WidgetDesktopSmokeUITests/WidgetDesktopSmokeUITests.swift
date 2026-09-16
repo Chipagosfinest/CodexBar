@@ -29,9 +29,6 @@ final class PackagedCodexBarShareUITests: XCTestCase {
 
     func testPackagedAppOpensPopulatedSharePreviewWarmAndCold() throws {
         let environment = ProcessInfo.processInfo.environment
-        guard environment["CODEXBAR_CI_PACKAGED_PROOF"] == "1" else {
-            throw XCTSkip("Packaged share proof is not enabled for this run")
-        }
         let bundlePath = try XCTUnwrap(environment["CODEXBAR_CI_PACKAGED_APP"])
         let seedPath = try XCTUnwrap(environment["CODEXBAR_CI_SEED_ROOT"])
         let runnerTemporaryPath = try XCTUnwrap(environment["CODEXBAR_CI_RUNNER_TEMP"])
