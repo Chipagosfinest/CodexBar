@@ -6,7 +6,7 @@ import Testing
 @MainActor
 struct MenuDescriptorUpdateAndVersionTests {
     @Test
-    func `metaSection includes check for updates when updater is available`() throws {
+    func `metaSection includes check for updates when updater is available`() {
         let descriptor = MenuDescriptor.build(
             provider: nil,
             store: self.makeStore(),
@@ -28,7 +28,7 @@ struct MenuDescriptorUpdateAndVersionTests {
     }
 
     @Test
-    func `metaSection prioritizes install update when update is ready`() throws {
+    func `metaSection prioritizes install update when update is ready`() {
         let descriptor = MenuDescriptor.build(
             provider: nil,
             store: self.makeStore(),
