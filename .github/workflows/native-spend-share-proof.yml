@@ -123,6 +123,13 @@ jobs:
                   server.server_close()
                   (base / 'output/transport-requests.json').write_text(json.dumps(requests, indent=2))
           print((base / 'output/native-tests.log').read_text())
+          if result.returncode and 'OpenRouter' in os.environ['PROOF_NATIVE_TEST']:
+              # Preserve the failing TLS result while collecting the independent synthetic UI boundary.
+              environment.pop('CODEXBAR_OPENROUTER_PROOF_TLS_CERT', None)
+              environment.pop('CODEXBAR_OPENROUTER_PROOF_PORT', None)
+              with (base / 'output/native-stub-tests.log').open('w') as log:
+                  subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
+              print((base / 'output/native-stub-tests.log').read_text())
           raise SystemExit(result.returncode)
           PY
       - name: Open the real overview menu preview
