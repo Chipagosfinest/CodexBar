@@ -6,7 +6,7 @@ import Testing
 
 extension StatusMenuTests {
     @Test
-    func `native overview share menu opens filtered preview`() throws {
+    func `native overview share menu opens filtered preview`() async throws {
         let environment = ProcessInfo.processInfo.environment
         guard let directoryPath = environment["CODEXBAR_OVERVIEW_SHARE_PROOF_DIR"] else { return }
         let home = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true).standardizedFileURL
@@ -17,8 +17,8 @@ extension StatusMenuTests {
               environment[CodexCredentialFileAccess.isolationEnvironmentKey] == "1",
               environment["CODEXBAR_TEST_SESSION_FILE_ISOLATION"] == "1",
               environment["CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS"] != "1",
-              home.path.hasPrefix(temporaryDirectory.path.trimmingCharacters(in: .init(charactersIn: "/")) + "/"),
-              outputDirectory.path.hasPrefix(home.path.trimmingCharacters(in: .init(charactersIn: "/")) + "/"),
+              self.isStrictDescendant(home, of: temporaryDirectory),
+              self.isStrictDescendant(outputDirectory, of: home),
               NSApplication.shared.delegate == nil
         else {
             Issue.record("Native share proof requires an isolated standalone test application")
@@ -121,6 +121,66 @@ extension StatusMenuTests {
         #expect(png.starts(with: [0x89, 0x50, 0x4E, 0x47]))
         try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
         try png.write(to: outputDirectory.appendingPathComponent("overview-share-preview.png"), options: .atomic)
+
+        guard environment["CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF"] == "1" else { return }
+        guard environment["CI"] == "true" else {
+            Issue
+                .record(
+                    "CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF=1 requires CI=true before writing to the general pasteboard")
+            return
+        }
+        let window = try #require(preview.window)
+        let pasteboard = NSPasteboard.general
+        let changeCountBeforeCopy = pasteboard.changeCount
+        let returnKey = try #require(NSEvent.keyEvent(
+            with: .keyDown,
+            location: .zero,
+            modifierFlags: [],
+            timestamp: 0,
+            windowNumber: window.windowNumber,
+            context: nil,
+            characters: "\r",
+            charactersIgnoringModifiers: "\r",
+            isARepeat: false,
+            keyCode: 36))
+        #expect(window.performKeyEquivalent(with: returnKey))
+        #expect(pasteboard.changeCount > changeCountBeforeCopy)
+        let copiedPNG = try #require(pasteboard.data(forType: .png))
+        let copiedTIFF = try #require(pasteboard.data(forType: .tiff))
+        let copiedBitmap = try #require(NSBitmapImageRep(data: copiedPNG))
+        #expect(copiedPNG.starts(with: [0x89, 0x50, 0x4E, 0x47]))
+        #expect(!copiedTIFF.isEmpty)
+        #expect(copiedBitmap.pixelsWide == 1200)
+        #expect(copiedBitmap.pixelsHigh == 630)
+
+        try await Task.sleep(for: .milliseconds(100))
+        content.layoutSubtreeIfNeeded()
+        let copiedPreview = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
+        content.cacheDisplay(in: content.bounds, to: copiedPreview)
+        let copiedPreviewPNG = try #require(copiedPreview.representation(using: .png, properties: [:]))
+        try copiedPreviewPNG.write(
+            to: outputDirectory.appendingPathComponent("overview-share-preview-copied.png"),
+            options: .atomic)
+    }
+
+    @Test
+    func `overview share proof paths require strict containment`() {
+        #expect(self.isStrictDescendant(
+            URL(fileURLWithPath: "/tmp/proof-home/output"),
+            of: URL(fileURLWithPath: "/tmp/proof-home")))
+        #expect(!self.isStrictDescendant(
+            URL(fileURLWithPath: "/tmp/proof-home-other/output"),
+            of: URL(fileURLWithPath: "/tmp/proof-home")))
+        #expect(!self.isStrictDescendant(
+            URL(fileURLWithPath: "/private/var/tmp/proof"),
+            of: URL(fileURLWithPath: "/tmp/proof-home")))
+        #expect(self.isStrictDescendant(URL(fileURLWithPath: "/tmp/proof"), of: URL(fileURLWithPath: "/")))
+    }
+
+    private func isStrictDescendant(_ child: URL, of parent: URL) -> Bool {
+        let childComponents = child.standardizedFileURL.resolvingSymlinksInPath().pathComponents
+        let parentComponents = parent.standardizedFileURL.resolvingSymlinksInPath().pathComponents
+        return childComponents.count > parentComponents.count && childComponents.starts(with: parentComponents)
     }
 
     @Test
