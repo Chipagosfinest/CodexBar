@@ -32,6 +32,15 @@ jobs:
       PACKAGE_RUN_ID: ${{ inputs.package_run_id || '35117930549' }}
       EXPECTED_PACKAGE_SHA: ${{ inputs.package_source_sha || 'd223726ffd8d9d60c3eab54af55e730b7291669c' }}
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode 26.6
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+          echo "DEVELOPER_DIR=/Applications/Xcode_26.6.app/Contents/Developer" >> "$GITHUB_ENV"
+
       - name: Download the existing package proof
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
@@ -111,6 +120,93 @@ jobs:
           assert float(totals["totalCost"]) > 0, totals
           PY
 
+      - name: Configure disposable debug app and GUI seed environment
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          seed="$proof/seed"
+          app="$proof/app/CodexBar.app"
+          test -d "$app"
+          test -f "$seed/config.json"
+          test -d "$seed/codex-home"
+          domain=com.steipete.codexbar.debug
+          defaults write "$domain" tokenCostUsageEnabled -bool YES
+          defaults write "$domain" debugDisableKeychainAccess -bool YES
+          # This records an informed decline for the known modal consent. It does not
+          # suppress macOS notification authorization, which may still block the GUI run.
+          defaults write "$domain" adaptiveActivityScanConsent -string declined
+          defaults write "$domain" appLanguage -string en
+          defaults write "$domain" selectedMenuProvider -string codex
+          for key in statusChecksEnabled sessionQuotaNotificationsEnabled quotaWarningNotificationsEnabled predictivePaceWarningNotificationsEnabled agentSessionsEnabled iCloudSyncEnabled openCodexUsageLogsEnabled; do
+            defaults write "$domain" "$key" -bool NO
+          done
+          defaults read "$domain" > "$proof/disposable-debug-defaults.txt"
+          # LaunchServices receives these values from the GUI launchd environment.
+          # Do not inject XCTest state into the packaged app.
+          for key in XCTestConfigurationFilePath XCTestBundlePath XCTestSessionIdentifier TESTING_LIBRARY_VERSION SWIFT_TESTING SWIFT_TESTING_ENABLED; do
+            launchctl unsetenv "$key" || true
+          done
+          launchctl setenv CODEX_HOME "$seed/codex-home"
+          launchctl setenv CODEXBAR_CONFIG "$seed/config.json"
+          # Start the exact app outside XCTest. A macOS notification prompt remains a
+          # real first-launch gate; the XCUITest result retains a screen attachment if it blocks.
+          open -n -g "$app"
+          export CODEXBAR_CI_APP_EXECUTABLE="$app/Contents/MacOS/CodexBar"
+          export CODEXBAR_CI_EXPECTED_CODEX_HOME="$seed/codex-home"
+          export CODEXBAR_CI_EXPECTED_CONFIG="$seed/config.json"
+          python3 - <<'PYVERIFY'
+          import json, os, pathlib, subprocess, time
+          deadline = time.monotonic() + 20
+          forbidden = ("XCTestConfigurationFilePath", "XCTestBundlePath", "XCTestSessionIdentifier", "TESTING_LIBRARY_VERSION", "SWIFT_TESTING", "SWIFT_TESTING_ENABLED")
+          while time.monotonic() < deadline:
+              found = subprocess.run(["/usr/bin/pgrep", "-x", "CodexBar"], capture_output=True, text=True)
+              for pid in found.stdout.split():
+                  result = subprocess.run(["/bin/ps", "eww", "-p", pid, "-o", "command="], capture_output=True, text=True)
+                  data = result.stdout
+                  if not data.startswith(os.environ["CODEXBAR_CI_APP_EXECUTABLE"]):
+                      continue
+                  assert "CODEX_HOME=" + os.environ["CODEXBAR_CI_EXPECTED_CODEX_HOME"] in data, "App did not inherit synthetic Codex root"
+                  assert "CODEXBAR_CONFIG=" + os.environ["CODEXBAR_CI_EXPECTED_CONFIG"] in data, "App did not inherit synthetic config"
+                  assert not any(key + "=" in data for key in forbidden), "Test flags reached the packaged app"
+                  evidence = {"pid": int(pid), "exactPackagedExecutable": True, "syntheticEnvironmentVerified": True, "testFlagsAbsent": True}
+                  pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/app-environment-proof.json").write_text(json.dumps(evidence) + "\n")
+                  raise SystemExit(0)
+              time.sleep(0.2)
+          raise SystemExit("Exact packaged debug app did not start within 20 seconds")
+          PYVERIFY
+
+      - name: Observe real warm and cold share route with XCUITest
+        env:
+          CODEXBAR_CI_PACKAGED_APP: ${{ runner.temp }}/widget-synthetic-cli-preflight/app/CodexBar.app
+          CODEXBAR_CI_SEED_ROOT: ${{ runner.temp }}/widget-synthetic-cli-preflight/seed
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          xcodebuild test \
+            -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
+            -scheme WidgetDesktopSmoke \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$proof/WidgetDesktopSmokeDerivedData" \
+            -resultBundlePath "$proof/PackagedShare.xcresult" \
+            -only-testing:WidgetDesktopSmokeUITests/PackagedCodexBarShareUITests \
+            CODEXBAR_CI_PACKAGED_PROOF=1 \
+            CODEXBAR_CI_RUNNER_TEMP="$RUNNER_TEMP" \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGN_STYLE=Manual \
+            CODEXBAR_CI_PACKAGED_APP="$CODEXBAR_CI_PACKAGED_APP" \
+            CODEXBAR_CI_SEED_ROOT="$CODEXBAR_CI_SEED_ROOT" \
+            2>&1 | tee "$proof/packaged-share-xcodebuild.log"
+
+      - name: Clear disposable GUI seed environment
+        if: always()
+        run: |
+          launchctl unsetenv CODEX_HOME || true
+          launchctl unsetenv CODEXBAR_CONFIG || true
+          for key in XCTestConfigurationFilePath XCTestBundlePath XCTestSessionIdentifier TESTING_LIBRARY_VERSION SWIFT_TESTING SWIFT_TESTING_ENABLED; do
+            launchctl unsetenv "$key" || true
+          done
+
       - name: Upload redacted CLI preflight proof
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
@@ -120,5 +216,9 @@ jobs:
             ${{ runner.temp }}/widget-synthetic-cli-preflight/package-source-commit.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/codex-cost.json
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/app-environment-proof.json
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/disposable-debug-defaults.txt
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/packaged-share-xcodebuild.log
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/PackagedShare.xcresult
           if-no-files-found: error
           retention-days: 7
