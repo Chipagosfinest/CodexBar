@@ -9,6 +9,12 @@ extension StatusMenuTests {
     func `native overview share menu opens filtered preview`() throws {
         let environment = ProcessInfo.processInfo.environment
         guard let directoryPath = environment["CODEXBAR_OVERVIEW_SHARE_PROOF_DIR"] else { return }
+        let language = environment["CODEXBAR_OVERVIEW_SHARE_PROOF_LANGUAGE"]?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? "en"
+        guard ["en", "de"].contains(language) else {
+            Issue.record("CODEXBAR_OVERVIEW_SHARE_PROOF_LANGUAGE must be en or de")
+            return
+        }
         let home = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true).standardizedFileURL
         let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).standardizedFileURL
         let outputDirectory = URL(fileURLWithPath: directoryPath, isDirectory: true).standardizedFileURL
@@ -102,12 +108,28 @@ extension StatusMenuTests {
             preferencesSelection: PreferencesSelection(),
             statusBar: self.makeStatusBarForTesting())
         defer { controller.releaseStatusItemsForTesting() }
+        try CodexBarLocalizationOverride.$appLanguage.withValue(language) {
+            try self.openOverviewPreviewAndCapture(
+                controller: controller,
+                outputDirectory: outputDirectory,
+                environment: environment,
+                language: language)
+        }
+    }
+
+    private func openOverviewPreviewAndCapture(
+        controller: StatusItemController,
+        outputDirectory: URL,
+        environment: [String: String],
+        language: String) throws
+    {
         let menu = controller.makeMenu()
         controller.menuWillOpen(menu)
         defer { controller.menuDidClose(menu) }
         let item = try #require(menu.items.first {
             ($0.representedObject as? String) == "overviewShareStats"
         })
+        #expect(item.title == L("Share Usage Snapshot…", language: language))
         let target = try #require(item.target)
         let action = try #require(item.action)
         #expect(NSApplication.shared.sendAction(action, to: target, from: item))
@@ -121,13 +143,15 @@ extension StatusMenuTests {
         try self.capturePreviewAndOptionallyCopy(
             preview,
             outputDirectory: outputDirectory,
-            environment: environment)
+            environment: environment,
+            language: language)
     }
 
     private func capturePreviewAndOptionallyCopy(
         _ preview: ShareStatsWindowController,
         outputDirectory: URL,
-        environment: [String: String]) throws
+        environment: [String: String],
+        language: String) throws
     {
         let window = try #require(preview.window)
         #expect(window.isVisible)
@@ -138,12 +162,16 @@ extension StatusMenuTests {
         content.layoutSubtreeIfNeeded()
         #expect(content.bounds.width > 0)
         #expect(content.bounds.height > 0)
+        let copyImageTitle = L("Copy Image", language: language)
+        #expect(Self.accessibilityLabels(content).contains(copyImageTitle))
         let bitmap = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
         content.cacheDisplay(in: content.bounds, to: bitmap)
         let png = try #require(bitmap.representation(using: .png, properties: [:]))
         #expect(png.starts(with: [0x89, 0x50, 0x4E, 0x47]))
         try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
-        try png.write(to: outputDirectory.appendingPathComponent("overview-share-preview.png"), options: .atomic)
+        try png.write(
+            to: outputDirectory.appendingPathComponent("overview-share-preview\(Self.localeSuffix(language)).png"),
+            options: .atomic)
 
         guard environment["CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF"] == "1" else { return }
         guard environment["CI"] == "true" else {
@@ -178,12 +206,36 @@ extension StatusMenuTests {
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.1))
         window.layoutIfNeeded()
         content.layoutSubtreeIfNeeded()
+        #expect(Self.accessibilityLabels(content).contains(L("Image copied", language: language)))
         let copiedPreview = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
         content.cacheDisplay(in: content.bounds, to: copiedPreview)
         let copiedPreviewPNG = try #require(copiedPreview.representation(using: .png, properties: [:]))
         try copiedPreviewPNG.write(
-            to: outputDirectory.appendingPathComponent("overview-share-preview-copied.png"),
+            to: outputDirectory
+                .appendingPathComponent("overview-share-preview-copied\(Self.localeSuffix(language)).png"),
             options: .atomic)
+    }
+
+    private static func localeSuffix(_ language: String) -> String {
+        language == "en" ? "" : "-\(language)"
+    }
+
+    private static func accessibilityLabels(_ element: Any, depth: Int = 0) -> [String] {
+        guard depth < 30 else { return [] }
+        if let accessible = element as? any NSAccessibilityProtocol {
+            let labels = [accessible.accessibilityLabel()].compactMap(\.self)
+            let children = accessible.accessibilityChildren() ?? []
+            return labels + children.flatMap { self.accessibilityLabels($0, depth: depth + 1) }
+        }
+        // SwiftUI accessibility nodes expose these public selectors without adopting NSAccessibilityProtocol.
+        guard let accessible = element as? NSObject else { return [] }
+        let labelSelector = #selector(NSAccessibilityProtocol.accessibilityLabel)
+        let childrenSelector = #selector(NSAccessibilityProtocol.accessibilityChildren)
+        let label = accessible.responds(to: labelSelector)
+            ? accessible.perform(labelSelector)?.takeUnretainedValue() as? String ?? "" : ""
+        let children = accessible.responds(to: childrenSelector)
+            ? accessible.perform(childrenSelector)?.takeUnretainedValue() as? [Any] ?? [] : []
+        return (label.isEmpty ? [] : [label]) + children.flatMap { self.accessibilityLabels($0, depth: depth + 1) }
     }
 
     @Test
