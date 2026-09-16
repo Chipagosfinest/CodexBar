@@ -21,6 +21,7 @@
   <EnvironmentVariable key="CODEXBAR_CI_WIDGET_FAMILY" value="$(CODEXBAR_CI_WIDGET_FAMILY)" isEnabled="YES"/>
   <EnvironmentVariable key="CODEXBAR_CI_PROVIDER_SWITCH_PROOF" value="$(CODEXBAR_CI_PROVIDER_SWITCH_PROOF)" isEnabled="YES"/>
   <EnvironmentVariable key="CODEXBAR_CI_UPGRADE_CANDIDATE_APP" value="$(CODEXBAR_CI_UPGRADE_CANDIDATE_APP)" isEnabled="YES"/>
+  <EnvironmentVariable key="CODEXBAR_CI_UPGRADE_PHASE" value="$(CODEXBAR_CI_UPGRADE_PHASE)" isEnabled="YES"/>
 </EnvironmentVariables>
   </TestAction>
   <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" allowLocationSimulation="YES"><BuildableProductRunnable runnableDebuggingMode="0"><BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000101" BuildableName="WidgetDesktopSmoke.app" BlueprintName="WidgetDesktopSmoke" ReferencedContainer="container:WidgetDesktopSmoke.xcodeproj"/></BuildableProductRunnable></LaunchAction>

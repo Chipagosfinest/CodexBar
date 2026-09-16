@@ -184,6 +184,8 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         let packagedAppPath = try XCTUnwrap(environment["CODEXBAR_CI_PACKAGED_APP"])
         let runnerTemporaryPath = try XCTUnwrap(environment["CODEXBAR_CI_RUNNER_TEMP"])
         let widgetFamily = environment["CODEXBAR_CI_WIDGET_FAMILY"] ?? "small"
+        let rawUpgradePhase = environment["CODEXBAR_CI_UPGRADE_PHASE"] ?? ""
+        let upgradePhase = rawUpgradePhase.hasPrefix("$(") ? "" : rawUpgradePhase
         let providerProof = environment["CODEXBAR_CI_PROVIDER_SWITCH_PROOF"] ?? "1"
         guard ["0", "1"].contains(providerProof) else {
             XCTFail("Provider proof mode must be explicit")
@@ -203,6 +205,17 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         XCTAssertTrue(
             codexBar.wait(for: .runningBackground, timeout: 10) || codexBar.wait(for: .runningForeground, timeout: 1),
             "The previously proven packaged app must be running for gallery discovery")
+        if upgradePhase == "verify" {
+            try self.verifyRetainedWidgetUpgrade(
+                app: codexBar,
+                runnerTemporaryPath: runnerTemporaryPath,
+                widgetFamily: widgetFamily)
+            return
+        }
+        guard upgradePhase.isEmpty || upgradePhase == "install" else {
+            XCTFail("Upgrade phase must be install or verify")
+            return
+        }
         self.closeSharePreviewIfVisible(in: codexBar)
         let permissionOwner = XCUIApplication(bundleIdentifier: "com.apple.UserNotificationCenter")
         let localNetworkPrompt = permissionOwner.staticTexts.matching(NSPredicate(
@@ -245,7 +258,11 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             let contextPoint = CGPoint(
                 x: desktop.frame.minX + desktop.frame.width * 0.55,
                 y: desktop.frame.minY + desktop.frame.height * 0.6)
-            guard finder.frame.contains(contextPoint),
+            self.attachText(
+                "Finder application frame: \(finder.frame); desktop frame: \(desktop.frame); context point: \(contextPoint)",
+                named: "desktop-context-coordinate-frames")
+            guard desktop.frame.contains(contextPoint),
+                  NSScreen.screens.contains(where: { $0.frame.contains(contextPoint) }),
                   !notificationCenter.windows.allElementsBoundByIndex
                       .contains(where: { $0.frame.contains(contextPoint) })
             else {
@@ -466,48 +483,15 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Claude provider button opened the share preview")
             self.attach("installed-switcher-provider-buttons", app: notificationCenter)
         }
-        if let candidatePath = environment["CODEXBAR_CI_UPGRADE_CANDIDATE_APP"], !candidatePath.isEmpty,
-           !candidatePath.hasPrefix("$(")
-        {
-            try self.replaceBaselineApp(
-                at: packagedAppPath,
-                with: candidatePath,
-                in: runnerTemporaryPath,
-                app: codexBar,
+        if upgradePhase == "install" {
+            try self.recordUpgradeInstall(
                 installed: installed,
-                notificationCenter: notificationCenter)
+                appPath: packagedAppPath,
+                runnerTemporaryPath: runnerTemporaryPath,
+                app: codexBar)
+            return
         }
-        for phase in ["warm", "cold"] {
-            if phase == "cold" {
-                codexBar.terminate()
-                XCTAssertTrue(codexBar.wait(for: .notRunning, timeout: 10))
-            }
-            guard NSScreen.screens.contains(where: { $0.frame.contains(installed.frame) }) else {
-                XCTFail("Installed widget moved outside the captured screen")
-                return
-            }
-            if widgetFamily == "small" {
-                // The small-widget body is a widgetURL target; stay away from provider buttons.
-                installed.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65)).click()
-            } else {
-                let shareOverview = installed.links["Share selected usage and spend overview"]
-                XCTAssertTrue(
-                    shareOverview.waitForExistence(timeout: 5),
-                    "Medium Switcher lacks its Share overview link")
-                guard shareOverview.exists else { return }
-                shareOverview.click()
-            }
-            let preview = codexBar.windows["Share AI Usage"]
-            XCTAssertTrue(preview.waitForExistence(timeout: 20), "Installed widget did not open \(phase) preview")
-            for expected in ["Claude", "110K", "$0.45"] {
-                let text = preview.staticTexts.matching(NSPredicate(
-                    format: "label CONTAINS %@ OR value CONTAINS %@", expected, expected)).firstMatch
-                XCTAssertTrue(text.waitForExistence(timeout: 5), "Installed \(phase) preview lacks \(expected)")
-            }
-            XCTAssertEqual(codexBar.windows.matching(identifier: "Share AI Usage").count, 1)
-            self.attach("installed-widget-share-\(phase)", app: codexBar)
-            self.closeSharePreviewIfVisible(in: codexBar)
-        }
+        self.assertWidgetSharePreviews(installed: installed, app: codexBar, widgetFamily: widgetFamily)
 
         let desktopCandidates = finder.descendants(matching: .any).matching(NSPredicate(
             format: "label CONTAINS[c] %@ OR identifier CONTAINS[c] %@", "Desktop", "Desktop"))
@@ -522,78 +506,104 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             named: "widget-gallery-discovery-boundary")
     }
 
-    private func replaceBaselineApp(
-        at baselinePath: String,
-        with candidatePath: String,
-        in runnerTemporaryPath: String,
-        app: XCUIApplication,
+    private func recordUpgradeInstall(
         installed: XCUIElement,
-        notificationCenter: XCUIApplication) throws
+        appPath: String,
+        runnerTemporaryPath: String,
+        app: XCUIApplication) throws
     {
-        guard Self.isStrictDescendant(candidatePath, of: runnerTemporaryPath),
-              Self.isStrictDescendant(baselinePath, of: runnerTemporaryPath),
-              candidatePath != baselinePath,
-              !Self.isStrictDescendant(candidatePath, of: baselinePath),
-              FileManager.default.fileExists(atPath: candidatePath),
-              app.wait(for: .runningBackground, timeout: 1) || app.wait(for: .runningForeground, timeout: 1)
-        else {
-            XCTFail("Upgrade candidate must be a disposable app and baseline must still be running")
+        let info = try self.bundleMetadata(at: appPath)
+        guard info["CFBundleVersion"] as? String == "146" else {
+            XCTFail("Upgrade install phase requires build 146")
             return
         }
-        let baselineInfo = try self.bundleMetadata(at: baselinePath)
-        let candidateInfo = try self.bundleMetadata(at: candidatePath)
-        guard baselineInfo["CFBundleVersion"] as? String == "146",
-              candidateInfo["CFBundleVersion"] as? String == "147",
-              baselineInfo["CFBundleIdentifier"] as? String == "com.steipete.codexbar.debug",
-              candidateInfo["CFBundleIdentifier"] as? String == "com.steipete.codexbar.debug"
-        else {
-            XCTFail("Upgrade requires the verified build146 baseline and build147 debug candidate")
-            return
-        }
-        let candidateExecutable = try Data(contentsOf: URL(fileURLWithPath: candidatePath)
-            .appendingPathComponent("Contents/MacOS/CodexBar"))
-        let retainedIdentifier = installed.identifier
+        let stateURL = URL(fileURLWithPath: runnerTemporaryPath)
+            .appendingPathComponent("widget-synthetic-cli-preflight/retained-widget-state.json")
+        let state: [String: String] = [
+            "installedIdentifier": installed.identifier,
+            "baselineBuild": "146",
+            "selectedProvider": "claude",
+        ]
+        try JSONSerialization.data(withJSONObject: state, options: [.prettyPrinted])
+            .write(to: stateURL, options: .atomic)
+        self.attach(
+            "baseline-widget-installed-before-upgrade",
+            app: XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui"))
         app.terminate()
-        guard app.wait(for: .notRunning, timeout: 10) else {
-            XCTFail("Baseline debug app did not quit before same-path replacement")
-            return
-        }
-        try FileManager.default.removeItem(atPath: baselinePath)
-        try FileManager.default.moveItem(atPath: candidatePath, toPath: baselinePath)
-        let replacementExecutable = try Data(contentsOf: URL(fileURLWithPath: baselinePath)
-            .appendingPathComponent("Contents/MacOS/CodexBar"))
-        XCTAssertTrue(
-            replacementExecutable == candidateExecutable,
-            "Replacement executable differs from verified candidate")
-        let launch = Process()
-        launch.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        launch.arguments = ["-n", "-g", baselinePath]
-        try launch.run()
-        launch.waitUntilExit()
-        guard launch.terminationStatus == 0,
-              app.wait(for: .runningBackground, timeout: 15) || app.wait(for: .runningForeground, timeout: 1)
-        else {
-            XCTFail("Replacement debug app did not launch at the retained widget path")
-            return
-        }
+        XCTAssertTrue(app.wait(for: .notRunning, timeout: 10), "Baseline app did not quit before workflow replacement")
+    }
+
+    private func verifyRetainedWidgetUpgrade(
+        app: XCUIApplication,
+        runnerTemporaryPath: String,
+        widgetFamily: String) throws
+    {
+        let proof = URL(fileURLWithPath: runnerTemporaryPath).appendingPathComponent("widget-synthetic-cli-preflight")
+        let stateData = try Data(contentsOf: proof.appendingPathComponent("retained-widget-state.json"))
+        let state = try XCTUnwrap(JSONSerialization.jsonObject(with: stateData) as? [String: String])
+        let identifier = try XCTUnwrap(state["installedIdentifier"])
+        XCTAssertEqual(state["baselineBuild"], "146")
+        XCTAssertEqual(state["selectedProvider"], "claude")
+        XCTAssertTrue(identifier.hasPrefix("widget-local:") && identifier.contains("com.steipete.codexbar.debug") &&
+            identifier.contains("CodexBarSwitcherWidget"))
+        let appPath = proof.appendingPathComponent("app/CodexBar.app").path
+        let info = try self.bundleMetadata(at: appPath)
+        XCTAssertEqual(info["CFBundleVersion"] as? String, "147", "Verification phase requires build 147")
         let runningReplacement = NSWorkspace.shared.runningApplications.first {
             $0.bundleIdentifier == "com.steipete.codexbar.debug"
         }
         XCTAssertEqual(
             runningReplacement?.bundleURL?.standardizedFileURL.path,
-            URL(fileURLWithPath: baselinePath).standardizedFileURL.path)
-        XCTAssertEqual(
-            notificationCenter.descendants(matching: .any).matching(identifier: retainedIdentifier).count,
-            1,
-            "Expected the same sole installed Switcher after replacement")
-        XCTAssertEqual(
-            installed.identifier,
-            retainedIdentifier,
-            "Widget identity changed after same-path app replacement")
+            URL(fileURLWithPath: appPath).standardizedFileURL.path)
+        let notificationCenter = XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui")
+        let retained = notificationCenter.descendants(matching: .any).matching(identifier: identifier)
+        let installed = retained.firstMatch
         XCTAssertTrue(
-            installed.debugDescription.contains("110K"),
-            "Retained widget lost Claude snapshot after replacement")
-        self.attach("retained-widget-after-app-replacement", app: notificationCenter)
+            installed.waitForExistence(timeout: 15),
+            "Baseline widget did not remain installed after app replacement")
+        XCTAssertEqual(retained.count, 1, "Expected exactly one installed widget with the baseline identifier")
+        XCTAssertTrue(
+            installed.debugDescription.contains("110K tokens") && installed.debugDescription.contains("$0.45"),
+            "Retained widget did not preserve selected Claude usage")
+        self.attach("retained-widget-after-workflow-replacement", app: notificationCenter)
+        self.assertWidgetSharePreviews(installed: installed, app: app, widgetFamily: widgetFamily)
+    }
+
+    private func assertWidgetSharePreviews(
+        installed: XCUIElement,
+        app: XCUIApplication,
+        widgetFamily: String)
+    {
+        for phase in ["warm", "cold"] {
+            if phase == "cold" {
+                app.terminate()
+                XCTAssertTrue(app.wait(for: .notRunning, timeout: 10))
+            }
+            guard NSScreen.screens.contains(where: { $0.frame.contains(installed.frame) }) else {
+                XCTFail("Installed widget moved outside the captured screen")
+                return
+            }
+            if widgetFamily == "small" {
+                installed.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65)).click()
+            } else {
+                let shareOverview = installed.links["Share selected usage and spend overview"]
+                XCTAssertTrue(
+                    shareOverview.waitForExistence(timeout: 5),
+                    "Medium Switcher lacks its Share overview link")
+                guard shareOverview.exists else { return }
+                shareOverview.click()
+            }
+            let preview = app.windows["Share AI Usage"]
+            XCTAssertTrue(preview.waitForExistence(timeout: 20), "Installed widget did not open \(phase) preview")
+            for expected in ["Claude", "110K", "$0.45"] {
+                let text = preview.staticTexts.matching(NSPredicate(
+                    format: "label CONTAINS %@ OR value CONTAINS %@", expected, expected)).firstMatch
+                XCTAssertTrue(text.waitForExistence(timeout: 5), "Installed \(phase) preview lacks \(expected)")
+            }
+            XCTAssertEqual(app.windows.matching(identifier: "Share AI Usage").count, 1)
+            self.attach("installed-widget-share-\(phase)", app: app)
+            self.closeSharePreviewIfVisible(in: app)
+        }
     }
 
     private func bundleMetadata(at appPath: String) throws -> [String: Any] {

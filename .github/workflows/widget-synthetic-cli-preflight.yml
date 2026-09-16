@@ -396,8 +396,10 @@ jobs:
           set -euo pipefail
           proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
           upgrade_candidate=""
+          upgrade_phase=""
           if test "$UPGRADE_MODE" = 1; then
             upgrade_candidate="$proof/upgrade-candidate/CodexBar.app"
+            upgrade_phase=install
           fi
           xcodebuild test \
             -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
@@ -415,12 +417,98 @@ jobs:
             CODEXBAR_CI_WIDGET_FAMILY="$WIDGET_FAMILY" \
             CODEXBAR_CI_PROVIDER_SWITCH_PROOF="$PROVIDER_SWITCH_PROOF" \
             CODEXBAR_CI_UPGRADE_CANDIDATE_APP="$upgrade_candidate" \
+            CODEXBAR_CI_UPGRADE_PHASE="$upgrade_phase" \
             2>&1 | tee "$proof/widget-gallery-discovery-xcodebuild.log"
           python3 - <<'PYRESULT'
           import os, pathlib, re
           log = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/widget-gallery-discovery-xcodebuild.log").read_text()
           assert re.search(r"Test Case .*testRecordsDesktopWidgetGalleryDiscoveryEvidence.* passed \(", log), "Widget gallery discovery did not execute and pass"
           assert "Test skipped" not in log, "Widget gallery discovery must not report a skip as evidence"
+          PYRESULT
+
+      - name: Replace only proof-owned baseline bundle with verified candidate
+        if: inputs.upgrade_mode == true
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          baseline="$proof/app/CodexBar.app"
+          candidate="$proof/upgrade-candidate/CodexBar.app"
+          backup="$proof/baseline-build146-backup/CodexBar.app"
+          test -f "$proof/retained-widget-state.json"
+          test -d "$baseline"
+          test -d "$candidate"
+          test ! -e "$backup"
+          codesign --verify --deep --strict "$baseline"
+          codesign --verify --deep --strict "$candidate"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$baseline/Contents/Info.plist")" = 146
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$candidate/Contents/Info.plist")" = 147
+          python3 - <<'PYVERIFY'
+          import hashlib, json, os, pathlib
+          proof = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight")
+          metadata = {item["role"]: item for item in json.loads((proof / "package-metadata.json").read_text())}
+          assert set(metadata) == {"baseline", "candidate"}, metadata
+          for role, path, build in [
+              ("baseline", proof / "app/CodexBar.app", "146"),
+              ("candidate", proof / "upgrade-candidate/CodexBar.app", "147"),
+          ]:
+              executable = path / "Contents/MacOS/CodexBar"
+              assert hashlib.sha256(executable.read_bytes()).hexdigest() == metadata[role]["executableSHA256"]
+              assert metadata[role]["app"]["CFBundleVersion"] == build
+          state = json.loads((proof / "retained-widget-state.json").read_text())
+          assert state == {"installedIdentifier": state["installedIdentifier"], "baselineBuild": "146", "selectedProvider": "claude"}
+          PYVERIFY
+          mkdir -p "$(dirname "$backup")"
+          mv "$baseline" "$backup"
+          mv "$candidate" "$baseline"
+          codesign --verify --deep --strict "$baseline"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$baseline/Contents/Info.plist")" = 147
+          python3 - <<'PYREPLACED'
+          import hashlib, json, os, pathlib
+          proof = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight")
+          metadata = {item["role"]: item for item in json.loads((proof / "package-metadata.json").read_text())}
+          app = proof / "app/CodexBar.app"
+          digest = hashlib.sha256((app / "Contents/MacOS/CodexBar").read_bytes()).hexdigest()
+          assert digest == metadata["candidate"]["executableSHA256"]
+          (proof / "workflow-replacement-proof.json").write_text(json.dumps({
+              "baselineBackup": "baseline-build146-backup/CodexBar.app",
+              "replacementPath": "app/CodexBar.app",
+              "candidateExecutableSHA256": digest,
+              "codesignVerifiedAfterMove": True,
+          }, indent=2) + "\n")
+          PYREPLACED
+          open -n -g "$baseline"
+
+      - name: Verify retained widget and actual share after workflow replacement
+        if: inputs.upgrade_mode == true
+        env:
+          CODEXBAR_CI_PACKAGED_APP: ${{ runner.temp }}/widget-synthetic-cli-preflight/app/CodexBar.app
+          CODEXBAR_CI_SEED_ROOT: ${{ runner.temp }}/widget-synthetic-cli-preflight/seed
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          xcodebuild test \
+            -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
+            -scheme WidgetDesktopSmoke \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$proof/WidgetDesktopSmokeDerivedData" \
+            -resultBundlePath "$proof/WidgetUpgradeVerify.xcresult" \
+            -only-testing:WidgetDesktopSmokeUITests/PackagedWidgetGalleryDiscoveryUITests \
+            CODEXBAR_CI_RUNNER_TEMP="$RUNNER_TEMP" \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGN_STYLE=Manual \
+            CODEXBAR_CI_PACKAGED_APP="$CODEXBAR_CI_PACKAGED_APP" \
+            CODEXBAR_CI_SEED_ROOT="$CODEXBAR_CI_SEED_ROOT" \
+            CODEXBAR_CI_WIDGET_FAMILY="$WIDGET_FAMILY" \
+            CODEXBAR_CI_PROVIDER_SWITCH_PROOF=0 \
+            CODEXBAR_CI_UPGRADE_CANDIDATE_APP='' \
+            CODEXBAR_CI_UPGRADE_PHASE=verify \
+            2>&1 | tee "$proof/widget-upgrade-verify-xcodebuild.log"
+          python3 - <<'PYRESULT'
+          import os, pathlib, re
+          log = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/widget-upgrade-verify-xcodebuild.log").read_text()
+          assert re.search(r"Test Case .*testRecordsDesktopWidgetGalleryDiscoveryEvidence.* passed \(", log), "Retained-widget verification did not execute and pass"
+          assert "Test skipped" not in log, "Retained-widget verification must not report a skip as evidence"
           PYRESULT
 
       - name: Record provider configuration after actual app launch
@@ -478,6 +566,10 @@ jobs:
             xcrun xcresulttool get test-results summary --path "$proof/WidgetGalleryDiscovery.xcresult" > "$proof/widget-gallery-discovery-summary.json"
             xcrun xcresulttool export attachments --path "$proof/WidgetGalleryDiscovery.xcresult" --output-path "$proof/widget-gallery-discovery-attachments"
           fi
+          if test -d "$proof/WidgetUpgradeVerify.xcresult"; then
+            xcrun xcresulttool get test-results summary --path "$proof/WidgetUpgradeVerify.xcresult" > "$proof/widget-upgrade-verify-summary.json"
+            xcrun xcresulttool export attachments --path "$proof/WidgetUpgradeVerify.xcresult" --output-path "$proof/widget-upgrade-verify-attachments"
+          fi
 
       - name: Restore disposable runner Notification Center state
         if: always()
@@ -511,6 +603,8 @@ jobs:
             ${{ runner.temp }}/widget-synthetic-cli-preflight/package-metadata.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-selected-provider.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-selection-unified-log.txt
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/retained-widget-state.json
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/workflow-replacement-proof.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status-after-app.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/claude-cost.json
@@ -524,5 +618,9 @@ jobs:
             ${{ runner.temp }}/widget-synthetic-cli-preflight/WidgetGalleryDiscovery.xcresult
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-gallery-discovery-summary.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-gallery-discovery-attachments
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-upgrade-verify-xcodebuild.log
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/WidgetUpgradeVerify.xcresult
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-upgrade-verify-summary.json
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-upgrade-verify-attachments
           if-no-files-found: error
           retention-days: 7
