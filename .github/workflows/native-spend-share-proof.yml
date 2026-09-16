@@ -33,6 +33,13 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
           echo "DEVELOPER_DIR=/Applications/Xcode_26.6.app/Contents/Developer" >> "$GITHUB_ENV"
+      - name: Restore SwiftPM build cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: native-proof-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift') }}
       - name: Build and run focused tests
         env:
           PROOF_FILTER: ${{ matrix.filter }}
@@ -139,7 +146,7 @@ jobs:
               'CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF': '1',
           }
           command = ['swift', 'test', '--skip-build', '--filter',
-                     'StatusMenuTests/native overview share menu opens filtered preview']
+                     'native.*overview.*share.*preview']
           with (base / 'output/menu-preview-tests.log').open('w') as log:
               result = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
           print((base / 'output/menu-preview-tests.log').read_text())
