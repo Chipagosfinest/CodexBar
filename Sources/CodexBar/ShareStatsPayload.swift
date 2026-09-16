@@ -271,7 +271,7 @@ enum ShareStatsBuilder {
             }
         }
         let sanitizedModels = model.groups.filter {
-            $0.modelHistoryCompleteness == .complete
+            $0.modelHistoryCompleteness == .complete && $0.incompleteRequestCount == 0
         }.flatMap { group in
             group.models.compactMap { row -> ShareStatsModelPayload? in
                 let estimatedCost = self.finiteCost(row.totalCost)
