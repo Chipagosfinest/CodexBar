@@ -1,0 +1,79 @@
+name: Widget package proof
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package-widget:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: ${{ github.repository }}
+          ref: fix/widget-share-stats
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Select Xcode 26.6 and record source
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+          echo "DEVELOPER_DIR=/Applications/Xcode_26.6.app/Contents/Developer" >> "$GITHUB_ENV"
+          proof="$RUNNER_TEMP/widget-package-proof"
+          mkdir -p "$proof"
+          git rev-parse HEAD > "$proof/source-commit.txt"
+          printf '%s\n' 'Package and signature proof only; the app and widget were not launched, installed, or registered.' > "$proof/proof-scope.txt"
+          {
+            xcodebuild -version
+            uname -m
+          } > "$proof/toolchain.txt"
+
+      - name: Package debug app with nested widget extension
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-package-proof"
+          ARCHES="$(uname -m)" CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh debug 2>&1 | tee "$proof/package.log"
+
+      - name: Verify packaged app and widget metadata
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-package-proof"
+          app="${GITHUB_WORKSPACE}/CodexBar.app"
+          appex="$app/Contents/PlugIns/CodexBarWidget.appex"
+          app_plist="$app/Contents/Info.plist"
+          widget_plist="$appex/Contents/Info.plist"
+          test -d "$app"
+          test -d "$appex"
+          test -f "$app_plist"
+          test -f "$widget_plist"
+          codesign --verify --deep --strict --verbose=2 "$appex" 2>&1 | tee "$proof/codesign-widget.log"
+          codesign --verify --deep --strict --verbose=2 "$app" 2>&1 | tee "$proof/codesign-app.log"
+          app_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app_plist")"
+          widget_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$widget_plist")"
+          url_scheme="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleURLTypes:0:CFBundleURLSchemes:0' "$app_plist")"
+          extension_point="$(/usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$widget_plist")"
+          test "$app_id" = "com.steipete.codexbar.debug"
+          test "$widget_id" = "com.steipete.codexbar.debug.widget"
+          test "$url_scheme" = "codexbar"
+          test "$extension_point" = "com.apple.widgetkit-extension"
+          cat > "$proof/bundle-metadata.txt" <<EOF
+          app_bundle_id=$app_id
+          widget_bundle_id=$widget_id
+          app_url_scheme=$url_scheme
+          widget_extension_point=$extension_point
+          widget_relative_path=Contents/PlugIns/CodexBarWidget.appex
+          EOF
+          ditto -c -k --sequesterRsrc --keepParent "$app" "$proof/CodexBar-debug-widget-package.zip"
+
+      - name: Upload package proof
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: widget-package-proof
+          path: ${{ runner.temp }}/widget-package-proof
+          if-no-files-found: error
+          retention-days: 7
