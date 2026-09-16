@@ -175,13 +175,23 @@ jobs:
           }
           command = ['swift', 'test', '--skip-build', '--filter',
                      'native.*overview.*share.*preview']
-          with (base / 'output/menu-preview-tests.log').open('w') as log:
-              result = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
-          print((base / 'output/menu-preview-tests.log').read_text())
-          if result.returncode:
-              raise SystemExit(result.returncode)
-          for name in ['overview-share-preview.png', 'overview-share-preview-copied.png']:
-              shutil.copyfile(home / 'output' / name, base / 'output' / name)
+          failures = []
+          for language in ['en', 'de']:
+              suffix = '' if language == 'en' else '-de'
+              environment['CODEXBAR_OVERVIEW_SHARE_PROOF_LANGUAGE'] = language
+              log_path = base / f'output/menu-preview-tests{suffix}.log'
+              with log_path.open('w') as log:
+                  result = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
+              print(log_path.read_text())
+              for stem in ['overview-share-preview', 'overview-share-preview-copied']:
+                  name = f'{stem}{suffix}.png'
+                  source = home / 'output' / name
+                  if source.exists():
+                      shutil.copyfile(source, base / 'output' / name)
+              if result.returncode:
+                  failures.append(language)
+          if failures:
+              raise SystemExit(f'Native menu proof failed: {failures}')
           PY
       - name: Require the expected proof images
         env:
@@ -191,7 +201,7 @@ jobs:
           import os, pathlib
           output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-proof/output'
           images = list(output.glob('*.png'))
-          expected = {'openrouter': 2, 'menu': 3, 'widgets': 9}[os.environ['PROOF_SURFACE']]
+          expected = {'openrouter': 2, 'menu': 5, 'widgets': 9}[os.environ['PROOF_SURFACE']]
           assert len(images) == expected, f'Expected {expected} images, got {len(images)}'
           for image in images:
               assert image.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), image.name
