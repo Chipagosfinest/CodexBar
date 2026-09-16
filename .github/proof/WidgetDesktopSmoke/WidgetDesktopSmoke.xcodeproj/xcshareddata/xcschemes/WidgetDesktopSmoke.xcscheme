@@ -19,6 +19,7 @@
   <EnvironmentVariable key="CODEXBAR_CI_PACKAGED_PROOF" value="$(CODEXBAR_CI_PACKAGED_PROOF)" isEnabled="YES"/>
   <EnvironmentVariable key="CODEXBAR_CI_RUNNER_TEMP" value="$(CODEXBAR_CI_RUNNER_TEMP)" isEnabled="YES"/>
   <EnvironmentVariable key="CODEXBAR_CI_WIDGET_FAMILY" value="$(CODEXBAR_CI_WIDGET_FAMILY)" isEnabled="YES"/>
+  <EnvironmentVariable key="CODEXBAR_CI_PROVIDER_SWITCH_PROOF" value="$(CODEXBAR_CI_PROVIDER_SWITCH_PROOF)" isEnabled="YES"/>
   <EnvironmentVariable key="CODEXBAR_CI_UPGRADE_CANDIDATE_APP" value="$(CODEXBAR_CI_UPGRADE_CANDIDATE_APP)" isEnabled="YES"/>
 </EnvironmentVariables>
   </TestAction>

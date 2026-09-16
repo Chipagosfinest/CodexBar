@@ -184,6 +184,12 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         let packagedAppPath = try XCTUnwrap(environment["CODEXBAR_CI_PACKAGED_APP"])
         let runnerTemporaryPath = try XCTUnwrap(environment["CODEXBAR_CI_RUNNER_TEMP"])
         let widgetFamily = environment["CODEXBAR_CI_WIDGET_FAMILY"] ?? "small"
+        let providerProof = environment["CODEXBAR_CI_PROVIDER_SWITCH_PROOF"] ?? "1"
+        guard ["0", "1"].contains(providerProof) else {
+            XCTFail("Provider proof mode must be explicit")
+            return
+        }
+        let checksProviderSwitching = providerProof == "1"
         guard ["small", "medium"].contains(widgetFamily) else {
             XCTFail("Widget family must be small or medium")
             return
@@ -422,37 +428,44 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         XCTAssertFalse(installed.buttons["Remove"].exists, "Installed widget is still in edit mode")
         let codexProvider = installed.buttons["Codex"]
         let claudeProvider = installed.buttons["Claude"]
-        XCTAssertTrue(codexProvider.waitForExistence(timeout: 5), "Switcher lacks enabled empty Codex button")
         XCTAssertTrue(claudeProvider.waitForExistence(timeout: 5), "Switcher lacks enabled Claude button")
-        guard codexProvider.exists, claudeProvider.exists else { return }
-        claudeProvider.click()
+        guard claudeProvider.exists else { return }
+        if checksProviderSwitching {
+            XCTAssertTrue(codexProvider.waitForExistence(timeout: 5), "Switcher lacks enabled empty Codex button")
+            guard codexProvider.exists else { return }
+            claudeProvider.click()
+        } else {
+            XCTAssertFalse(codexProvider.exists, "Single-provider route fixture unexpectedly has Codex enabled")
+        }
         let populated = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
             installed.debugDescription.contains("110K") && installed.debugDescription.contains("0.45")
         }, object: nil)
         XCTAssertEqual(
             XCTWaiter.wait(for: [populated], timeout: 15),
             .completed,
-            "Claude switch did not render the app-published synthetic token snapshot")
+            "Widget did not render the app-published synthetic Claude snapshot")
         self.attach("installed-switcher-claude-selected", app: notificationCenter)
-        codexProvider.click()
-        let codexEmpty = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
-            installed.debugDescription.contains("Open CodexBar")
-        }, object: nil)
-        XCTAssertEqual(
-            XCTWaiter.wait(for: [codexEmpty], timeout: 15),
-            .completed,
-            "Codex switch did not render its empty state")
-        XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Codex provider button opened the share preview")
-        claudeProvider.click()
-        let claudeUsage = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
-            installed.debugDescription.contains("110K tokens") && installed.debugDescription.contains("$0.45")
-        }, object: nil)
-        XCTAssertEqual(
-            XCTWaiter.wait(for: [claudeUsage], timeout: 15),
-            .completed,
-            "Claude switch did not restore its synthetic usage state")
-        XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Claude provider button opened the share preview")
-        self.attach("installed-switcher-provider-buttons", app: notificationCenter)
+        if checksProviderSwitching {
+            codexProvider.click()
+            let codexEmpty = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+                installed.debugDescription.contains("Open CodexBar")
+            }, object: nil)
+            XCTAssertEqual(
+                XCTWaiter.wait(for: [codexEmpty], timeout: 15),
+                .completed,
+                "Codex switch did not render its empty state")
+            XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Codex provider button opened the share preview")
+            claudeProvider.click()
+            let claudeUsage = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+                installed.debugDescription.contains("110K tokens") && installed.debugDescription.contains("$0.45")
+            }, object: nil)
+            XCTAssertEqual(
+                XCTWaiter.wait(for: [claudeUsage], timeout: 15),
+                .completed,
+                "Claude switch did not restore its synthetic usage state")
+            XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Claude provider button opened the share preview")
+            self.attach("installed-switcher-provider-buttons", app: notificationCenter)
+        }
         if let candidatePath = environment["CODEXBAR_CI_UPGRADE_CANDIDATE_APP"], !candidatePath.isEmpty,
            !candidatePath.hasPrefix("$(")
         {
@@ -505,7 +518,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         }
         self.attachText(summaries.joined(separator: "\n"), named: "accessible-desktop-candidates")
         self.attachText(
-            "A \(widgetFamily) Switcher was added through the real gallery, switched between empty Codex and populated Claude without opening share, and opened populated previews through actual warm and cold widget share clicks. Other families and older-version upgrade behavior remain unverified.",
+            "A \(widgetFamily) Switcher opened populated previews through actual warm and cold widget clicks. Provider-switch proof mode: \(checksProviderSwitching). Inspect replacement evidence separately for any upgrade claim; other families remain unverified.",
             named: "widget-gallery-discovery-boundary")
     }
 

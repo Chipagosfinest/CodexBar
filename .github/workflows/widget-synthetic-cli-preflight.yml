@@ -28,6 +28,11 @@ on:
         options:
           - small
           - medium
+      provider_switch_proof:
+        description: Exercise the Codex/Claude Switcher buttons; disable only for independent Claude-only proof modes
+        required: false
+        default: true
+        type: boolean
       upgrade_mode:
         description: Install build 146, then replace the runner-owned app with build 147 without re-adding the widget
         required: false
@@ -60,6 +65,7 @@ jobs:
       PACKAGE_RUN_ID: ${{ inputs.package_run_id || '35117930549' }}
       EXPECTED_PACKAGE_SHA: ${{ inputs.package_source_sha || 'd223726ffd8d9d60c3eab54af55e730b7291669c' }}
       WIDGET_FAMILY: ${{ inputs.widget_family || 'small' }}
+      PROVIDER_SWITCH_PROOF: ${{ (github.event_name == 'push' || inputs.provider_switch_proof) && '1' || '0' }}
       UPGRADE_MODE: ${{ inputs.upgrade_mode && '1' || '0' }}
       BASELINE_PACKAGE_RUN_ID: ${{ inputs.baseline_package_run_id || '35129543746' }}
       EXPECTED_BASELINE_SHA: ${{ inputs.baseline_package_source_sha || '9db44805dc1e0180993492bffd14ac98dd6a866f' }}
@@ -209,7 +215,8 @@ jobs:
               for key, value in provider.items():
                   if key.lower() in {"apikey", "secretkey", "token", "cookies"}:
                       assert not value, f"generated default unexpectedly contains {key}"
-              provider["enabled"] = provider["id"] in {"codex", "claude"}
+              enabled = ["codex", "claude"] if os.environ["PROVIDER_SWITCH_PROOF"] == "1" else ["claude"]
+              provider["enabled"] = provider["id"] in enabled
           pathlib.Path(os.environ["CODEXBAR_CONFIG"]).write_text(json.dumps(config, indent=2) + "\n")
           PY
           "$CI_CLI" config validate
@@ -218,7 +225,8 @@ jobs:
           python3 - <<'PYPROVIDERS'
           import json, os, pathlib
           providers = json.loads(pathlib.Path(os.environ["CI_PROVIDER_STATUS_JSON"]).read_text())
-          assert [item["provider"] for item in providers if item["enabled"]] == ["codex", "claude"], providers
+          expected = ["codex", "claude"] if os.environ["PROVIDER_SWITCH_PROOF"] == "1" else ["claude"]
+          assert [item["provider"] for item in providers if item["enabled"]] == expected, providers
           PYPROVIDERS
           "$CI_CLI" cost --provider claude --provider-native-only --refresh --format json > "$proof/claude-cost.json"
           export CI_COST_JSON="$proof/claude-cost.json"
@@ -405,6 +413,7 @@ jobs:
             CODEXBAR_CI_PACKAGED_APP="$CODEXBAR_CI_PACKAGED_APP" \
             CODEXBAR_CI_SEED_ROOT="$CODEXBAR_CI_SEED_ROOT" \
             CODEXBAR_CI_WIDGET_FAMILY="$WIDGET_FAMILY" \
+            CODEXBAR_CI_PROVIDER_SWITCH_PROOF="$PROVIDER_SWITCH_PROOF" \
             CODEXBAR_CI_UPGRADE_CANDIDATE_APP="$upgrade_candidate" \
             2>&1 | tee "$proof/widget-gallery-discovery-xcodebuild.log"
           python3 - <<'PYRESULT'
@@ -424,7 +433,8 @@ jobs:
             python3 - <<'PYPROVIDERS'
           import json, os, pathlib
           providers = json.loads(pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/provider-status-after-app.json").read_text())
-          assert [p["provider"] for p in providers if p["enabled"]] == ["codex", "claude"], "App changed explicitly seeded provider scope"
+          expected = ["codex", "claude"] if os.environ["PROVIDER_SWITCH_PROOF"] == "1" else ["claude"]
+          assert [p["provider"] for p in providers if p["enabled"]] == expected, "App changed explicitly seeded provider scope"
           PYPROVIDERS
           fi
 
