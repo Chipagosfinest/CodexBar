@@ -483,10 +483,12 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             let mediumActions = owners.flatMap { pair -> [XCUIElement] in
                 let (identifier, owner) = pair
                 self.attachText(owner.debugDescription, named: "widget-size-context-owner-\(identifier)")
-                return owner.menuItems["Medium"].allElementsBoundByIndex.filter { item in
-                    item.exists && item.frame.width > 0 && item.frame.height > 0 &&
-                        NSScreen.screens.contains(where: { $0.frame.contains(item.frame) })
-                }
+                return owner.menuItems.matching(NSPredicate(
+                    format: "label == %@ OR identifier == %@", "Medium", "Medium")).allElementsBoundByIndex
+                    .filter { item in
+                        item.exists && item.frame.width > 0 && item.frame.height > 0 &&
+                            NSScreen.screens.contains(where: { $0.frame.contains(item.frame) })
+                    }
             }
             guard mediumActions.count == 1, let medium = mediumActions.first else {
                 XCTFail("Expected one observed on-screen Medium widget size action")
