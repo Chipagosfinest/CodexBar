@@ -439,9 +439,31 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             XCTFail("Observed widget gallery Done control was unavailable")
             return
         }
+        let doneReady = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "hittable == true"), object: done)
+        guard XCTWaiter.wait(for: [doneReady], timeout: 5) == .completed else {
+            XCTFail("Observed gallery Done control never became hittable after placement")
+            return
+        }
         done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
         let galleryClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: done)
-        XCTAssertEqual(XCTWaiter.wait(for: [galleryClosed], timeout: 5), .completed)
+        if XCTWaiter.wait(for: [galleryClosed], timeout: 5) != .completed {
+            self.attach("gallery-after-unacknowledged-done", app: notificationCenter)
+            // macOS 26 sometimes ignores the first click while the placement animation settles.
+            // Retry the same observed control once; disappearance remains mandatory.
+            guard done.exists, done.isHittable, done.frame.width > 0, done.frame.height > 0,
+                  NSScreen.screens.contains(where: { $0.frame.contains(done.frame) })
+            else {
+                XCTFail("Gallery did not close and its original Done control is no longer safely actionable")
+                return
+            }
+            done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+            let retryClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: done)
+            guard XCTWaiter.wait(for: [retryClosed], timeout: 5) == .completed else {
+                XCTFail("Gallery remained open after one bounded Done retry")
+                return
+            }
+        }
         // The add sheet and desktop editor have separate Done controls.
         let editorDone = notificationCenter.buttons.matching(identifier: "widget-editor-button").firstMatch
         if editorDone.exists, editorDone.label == "Done" {
