@@ -63,6 +63,9 @@ extension StatusMenuTests {
         #expect(group.totalCost == 1)
         #expect(group.totalTokens == 100)
         #expect(group.dailyPoints.map(\.day) == [bucketStart])
+        let sharePayload = try #require(ShareStatsPayloadFactory.make(model: model, store: store))
+        #expect(sharePayload.providers.map(\.provider) == [.codex])
+        #expect(sharePayload.providers.first?.estimatedCost == 1)
     }
 
     @Test
@@ -133,7 +136,7 @@ extension StatusMenuTests {
     }
 
     @Test
-    func `overview consumes shared publication without starting a loader`() {
+    func `overview consumes shared publication without starting a loader`() throws {
         let settings = self.makeSettings()
         settings.statusChecksEnabled = false
         settings.refreshFrequency = .manual
@@ -206,6 +209,11 @@ extension StatusMenuTests {
         #expect(Set(model.groups.flatMap(\.providers).map(\.id)) == ["codex:first", "codex:second", "claude"])
         #expect(model.groups.first?.totalCost == 12)
         #expect(controller.overviewSpendSubscriptionCount(providers: providers) == 3)
+
+        settings.spendDashboardHiddenSourceIDs = ["codex:second"]
+        let sharePayload = try #require(controller.overviewShareStatsPayload(now: now))
+        #expect(Set(sharePayload.providers.map(\.providerName)) == ["codex:first", "claude"])
+        #expect(sharePayload.currencies.first?.estimatedCost == 9)
 
         guard let claudeMetadata = ProviderRegistry.shared.metadata[.claude] else {
             Issue.record("Claude metadata missing")
@@ -373,6 +381,13 @@ extension StatusMenuTests {
         #expect(Set(overviewRows) == Set(scopes.visible.map { "overviewRow-\($0.rawValue)" }))
         #expect(overviewRows.count == 6)
         #expect(ids.contains("overviewSpendSummary"))
+        #expect(ids.contains("overviewShareStats"))
+        let shareItem = try #require(menu.items.first {
+            ($0.representedObject as? String) == "overviewShareStats"
+        })
+        #expect(shareItem.title == "Share Usage Snapshot…")
+        #expect(shareItem.image != nil)
+        #expect(shareItem.action == #selector(StatusItemController.presentOverviewShareStats))
         #expect(Set(model.groups.first?.providers.map(\.provider) ?? []) == Set(pricedProviders))
         #expect(abs((model.groups.first?.totalCost ?? -1) - 85) < 1e-9)
         #expect(summary.primarySpendText == "~$85.00")
@@ -447,6 +462,13 @@ extension StatusMenuTests {
 
         let menu = controller.makeMenu()
         controller.menuWillOpen(menu)
-        return menu.items.contains { ($0.representedObject as? String) == "overviewSpendSummary" }
+        let hasSpendSummary = menu.items.contains {
+            ($0.representedObject as? String) == "overviewSpendSummary"
+        }
+        let hasShareAction = menu.items.contains {
+            ($0.representedObject as? String) == "overviewShareStats"
+        }
+        #expect(hasShareAction == hasSpendSummary)
+        return hasSpendSummary
     }
 }

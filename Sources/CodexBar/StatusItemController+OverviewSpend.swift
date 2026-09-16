@@ -1,3 +1,4 @@
+import AppKit
 import CodexBarCore
 import Foundation
 import SwiftUI
@@ -136,6 +137,65 @@ struct OverviewSpendSummaryCardView: View {
 }
 
 extension StatusItemController {
+    func makeOverviewShareStatsMenuItem(model: SpendDashboardModel) -> NSMenuItem? {
+        guard ShareStatsPayloadFactory.make(model: model, store: self.store) != nil else { return nil }
+        let title = L("Share Usage Snapshot…")
+        let item = NSMenuItem(
+            title: title,
+            action: #selector(self.presentOverviewShareStats),
+            keyEquivalent: "")
+        item.target = self
+        item.representedObject = "overviewShareStats"
+        if let image = NSImage(systemSymbolName: "square.and.arrow.up", accessibilityDescription: title) {
+            image.isTemplate = true
+            image.size = NSSize(width: 16, height: 16)
+            item.image = image
+        }
+        return item
+    }
+
+    @objc func presentOverviewShareStats() {
+        if let payload = self.overviewShareStatsPayload() {
+            self.overviewShareStatsPresentationTask?.cancel()
+            self.overviewShareStatsPresentationTask = nil
+            ShareStatsPresenter.shared.present(payload: payload)
+            return
+        }
+        guard self.overviewShareStatsPresentationTask == nil else { return }
+
+        let dashboard = self.store.sharedSpendDashboardController()
+        let configuration = SpendDashboardSource.configuration(settings: self.settings, store: self.store)
+        dashboard.update(configuration: configuration)
+        if !dashboard.isRefreshing {
+            dashboard.refresh()
+        }
+        self.overviewShareStatsPresentationTask = Task { @MainActor [weak self, weak dashboard] in
+            defer { self?.overviewShareStatsPresentationTask = nil }
+            guard let dashboard else { return }
+            for _ in 0..<200 where dashboard.isRefreshing {
+                try? await Task.sleep(for: .milliseconds(50))
+                guard !Task.isCancelled else { return }
+            }
+            guard let self else { return }
+            if let payload = self.overviewShareStatsPayload() {
+                ShareStatsPresenter.shared.present(payload: payload)
+            } else {
+                NSApp.activate(ignoringOtherApps: true)
+                self.presentLoginAlert(
+                    title: "Usage snapshot unavailable",
+                    message: "CodexBar couldn't prepare a shareable usage snapshot. "
+                        + "Refresh Usage & Spend and try again.")
+            }
+        }
+    }
+
+    func overviewShareStatsPayload(now: Date = Date()) -> ShareStatsPayload? {
+        let enabledProviders = self.store.enabledFirstPartyProvidersForDisplay()
+        let providers = self.overviewProviderScopes(enabledProviders: enabledProviders).spend
+        let model = self.overviewSpendDashboardModel(providers: providers, now: now)
+        return ShareStatsPayloadFactory.make(model: model, store: self.store)
+    }
+
     func overviewSpendSubscriptionCount(providers: [UsageProvider]) -> Int {
         let providerScope = Set(providers)
         let publication = self.store.spendDashboardPublication
