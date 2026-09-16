@@ -496,7 +496,10 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             let resized = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
                 (320...380).contains(installed.frame.width) && (140...200).contains(installed.frame.height)
             }, object: nil)
-            XCTAssertEqual(XCTWaiter.wait(for: [resized], timeout: 10), .completed, "Medium action did not resize Switcher")
+            XCTAssertEqual(
+                XCTWaiter.wait(for: [resized], timeout: 10),
+                .completed,
+                "Medium action did not resize Switcher")
         }
         let codexProvider = installed.buttons["Codex"]
         let claudeProvider = installed.buttons["Claude"]
@@ -622,6 +625,15 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             installed.debugDescription.contains("110K tokens") && installed.debugDescription.contains("$0.45"),
             "Retained widget did not preserve selected Claude usage")
         self.attach("retained-widget-after-workflow-replacement", app: notificationCenter)
+        // WidgetKit can retain the old rendered archive after an app replacement.
+        // Wait for the new production affordance before attributing a click to the new route.
+        let updatedShare = installed.images["Share selected usage and spend overview"]
+        guard updatedShare.waitForExistence(timeout: 90) else {
+            self.attach("retained-widget-awaiting-new-archive", app: notificationCenter)
+            XCTFail("Retained widget did not adopt the build 147 share affordance within 90 seconds")
+            return
+        }
+        self.attach("retained-widget-new-share-affordance", app: notificationCenter)
         self.assertWidgetSharePreviews(installed: installed, app: app, widgetFamily: widgetFamily)
     }
 
