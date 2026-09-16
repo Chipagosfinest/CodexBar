@@ -203,6 +203,62 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         self.attachText(self.systemWidgetOwnerSummary(), named: "widget-system-owners")
         self.attachSystemOwnerHierarchies()
 
+        let controlCenter = XCUIApplication(bundleIdentifier: "com.apple.controlcenter")
+        let clock = controlCenter.descendants(matching: .any)
+            .matching(identifier: "com.apple.menuextra.clock").firstMatch
+        XCTAssertTrue(clock.waitForExistence(timeout: 5), "Observed clock status item was not accessible")
+        XCTAssertTrue(clock.isHittable, "Observed clock status item was not hittable")
+        guard clock.exists, clock.isHittable else { return }
+        clock.click()
+
+        guard let notificationCenterID = self.waitForNotificationCenterIdentifier() else {
+            XCTFail("Clicking the observed clock did not reveal a public Notification Center owner")
+            return
+        }
+        let notificationCenter = XCUIApplication(bundleIdentifier: notificationCenterID)
+        self.attach("notification-center-open", app: notificationCenter)
+
+        let editWidgets = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+            format: "label CONTAINS[c] %@", "Edit Widgets")).firstMatch
+        XCTAssertTrue(
+            editWidgets.waitForExistence(timeout: 5),
+            "Notification Center lacked an accessible Edit Widgets control")
+        XCTAssertTrue(editWidgets.isHittable, "Accessible Edit Widgets control was not hittable")
+        guard editWidgets.exists, editWidgets.isHittable else { return }
+        editWidgets.click()
+        let editWidgetsClosed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: editWidgets)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [editWidgetsClosed], timeout: 5),
+            .completed,
+            "Edit Widgets remained visible after its action; post-action UI is not a gallery transition")
+        let gallerySearch = notificationCenter.searchFields.firstMatch
+        let galleryDone = notificationCenter.buttons["Done"]
+        var galleryControl: String?
+        for attempt in 0..<10 {
+            if gallerySearch.exists {
+                galleryControl = "search field"
+                break
+            }
+            if galleryDone.exists {
+                galleryControl = "Done button"
+                break
+            }
+            if attempt < 9 {
+                RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+            }
+        }
+        self.attach("after-edit-widgets", app: notificationCenter)
+        self.attachText(self.systemWidgetOwnerSummary(), named: "post-edit-widgets-system-owners")
+        self.attachSystemOwnerHierarchies()
+        self.attachText(
+            galleryControl ?? "No observed gallery search or Done control",
+            named: "post-edit-widgets-gallery-control")
+        self.attachText(
+            self.codexBarGalleryCandidates(in: notificationCenter),
+            named: "post-edit-widgets-codexbar-candidates")
+
         let desktopCandidates = finder.descendants(matching: .any).matching(NSPredicate(
             format: "label CONTAINS[c] %@ OR identifier CONTAINS[c] %@", "Desktop", "Desktop"))
         let summaries = (0..<desktopCandidates.count).compactMap { index -> String? in
@@ -212,8 +268,32 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         }
         self.attachText(summaries.joined(separator: "\n"), named: "accessible-desktop-candidates")
         self.attachText(
-            "Gallery not opened. This diagnostic records public UI candidates only; it is not widget installation proof.",
+            "Edit Widgets was clicked and its control disappeared before the post-action capture. Gallery appearance requires attachment inspection unless an observed search or Done control is recorded. No widget was added; this is not installation proof.",
             named: "widget-gallery-discovery-boundary")
+    }
+
+    private func waitForNotificationCenterIdentifier() -> String? {
+        for attempt in 0..<10 {
+            if let identifier = self.systemOwnerIdentifiers().first(where: {
+                $0.localizedCaseInsensitiveContains("notificationcenter")
+            }) {
+                return identifier
+            }
+            if attempt < 9 {
+                RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+            }
+        }
+        return nil
+    }
+
+    private func codexBarGalleryCandidates(in notificationCenter: XCUIApplication) -> String {
+        let candidates = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+            format: "label CONTAINS[c] %@ OR identifier CONTAINS[c] %@", "CodexBar", "CodexBar"))
+        return (0..<candidates.count).compactMap { index in
+            let candidate = candidates.element(boundBy: index)
+            guard candidate.exists else { return nil }
+            return "\(candidate.elementType) | \(candidate.identifier) | \(candidate.label) | \(candidate.frame)"
+        }.joined(separator: "\n")
     }
 
     private func closeSharePreviewIfVisible(in app: XCUIApplication) {
@@ -232,20 +312,25 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
     }
 
     private func systemWidgetOwnerSummary() -> String {
-        NSWorkspace.shared.runningApplications.compactMap { application -> String? in
-            guard let identifier = application.bundleIdentifier,
-                  identifier == "com.apple.finder" || identifier.localizedCaseInsensitiveContains("controlcenter") ||
-                  identifier.localizedCaseInsensitiveContains("notificationcenter")
-            else { return nil }
-            return "\(identifier) | \(application.localizedName ?? "") | running=\(!application.isTerminated)"
-        }.sorted().joined(separator: "\n")
+        self.systemOwnerIdentifiers().compactMap { identifier in
+            NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == identifier }).map {
+                "\(identifier) | \($0.localizedName ?? "") | running=\(!$0.isTerminated)"
+            }
+        }.joined(separator: "\n")
+    }
+
+    private func systemOwnerIdentifiers() -> [String] {
+        NSWorkspace.shared.runningApplications.compactMap(\.bundleIdentifier).filter {
+            $0 == "com.apple.finder" || $0.localizedCaseInsensitiveContains("controlcenter") ||
+                $0.localizedCaseInsensitiveContains("notificationcenter")
+        }.sorted()
     }
 
     private func attachSystemOwnerHierarchies() {
-        let identifiers = NSWorkspace.shared.runningApplications.compactMap(\.bundleIdentifier).filter {
+        let identifiers = self.systemOwnerIdentifiers().filter {
             $0.localizedCaseInsensitiveContains("controlcenter") || $0
                 .localizedCaseInsensitiveContains("notificationcenter")
-        }.sorted()
+        }
         for identifier in identifiers {
             self.attach("system-owner-\(identifier)", app: XCUIApplication(bundleIdentifier: identifier))
         }
