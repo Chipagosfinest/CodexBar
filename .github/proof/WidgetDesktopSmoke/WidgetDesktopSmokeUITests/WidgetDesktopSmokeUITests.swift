@@ -1,3 +1,4 @@
+import AppKit
 import XCTest
 
 final class WidgetDesktopSmokeUITests: XCTestCase {
@@ -85,16 +86,6 @@ final class PackagedCodexBarShareUITests: XCTestCase {
     private func assertPreview(_ app: XCUIApplication, phase: String) throws {
         let preview = app.windows["Share AI Usage"]
         XCTAssertTrue(preview.waitForExistence(timeout: 20), "No \(phase) share preview")
-
-        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
-        screenshot.name = "packaged-share-\(phase)"
-        screenshot.lifetime = .keepAlways
-        add(screenshot)
-        let hierarchy = XCTAttachment(string: app.debugDescription)
-        hierarchy.name = "packaged-share-\(phase)-hierarchy"
-        hierarchy.lifetime = .keepAlways
-        add(hierarchy)
-
         guard preview.exists else {
             throw NSError(domain: "PackagedShareProof", code: 2)
         }
@@ -111,6 +102,168 @@ final class PackagedCodexBarShareUITests: XCTestCase {
         let costText = preview.staticTexts.matching(
             NSPredicate(format: "label CONTAINS %@ OR value CONTAINS %@", "$0.45", "$0.45")).firstMatch
         XCTAssertTrue(costText.exists, "\(phase) preview lacks synthetic estimated cost")
+
+        let originalCapture = XCTAttachment(screenshot: self.visiblePreviewCapture(
+            preview,
+            phase: "\(phase) before foreground activation"))
+        originalCapture.name = "packaged-share-\(phase)-before-foreground"
+        originalCapture.lifetime = .keepAlways
+        add(originalCapture)
+
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 5), "\(phase) preview app did not become foreground")
+        XCTAssertTrue(preview.isHittable, "\(phase) preview exists but is not ready for a visible capture")
+        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        screenshot.name = "packaged-share-\(phase)"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        let hierarchy = XCTAttachment(string: app.debugDescription)
+        hierarchy.name = "packaged-share-\(phase)-hierarchy"
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
+    }
+
+    private func visiblePreviewCapture(_ preview: XCUIElement, phase: String) -> XCUIScreenshot {
+        var screenshot = XCUIScreen.main.screenshot()
+        for attempt in 0..<10 {
+            if self.hasRenderedPreview(in: preview.frame, screenshot: screenshot) {
+                return screenshot
+            }
+            if attempt < 9 {
+                RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+                screenshot = XCUIScreen.main.screenshot()
+            }
+        }
+        XCTFail("\(phase) preview accessibility is ready but its rendered frame remained black")
+        return screenshot
+    }
+
+    private func hasRenderedPreview(in frame: CGRect, screenshot: XCUIScreenshot) -> Bool {
+        guard let bitmap = NSBitmapImageRep(data: screenshot.pngRepresentation),
+              let screenFrame = NSScreen.main?.frame,
+              screenFrame.width > 0,
+              screenFrame.height > 0
+        else { return false }
+        let scaleX = CGFloat(bitmap.pixelsWide) / screenFrame.width
+        let scaleY = CGFloat(bitmap.pixelsHigh) / screenFrame.height
+        let pixelFrame = CGRect(
+            x: (frame.minX - screenFrame.minX) * scaleX,
+            y: (frame.minY - screenFrame.minY) * scaleY,
+            width: frame.width * scaleX,
+            height: frame.height * scaleY).intersection(CGRect(
+            x: 0,
+            y: 0,
+            width: CGFloat(bitmap.pixelsWide),
+            height: CGFloat(bitmap.pixelsHigh)))
+        guard !pixelFrame.isNull, pixelFrame.width > 2, pixelFrame.height > 2 else { return false }
+        func color(at fraction: CGPoint) -> NSColor? {
+            let x = Int(pixelFrame.minX + pixelFrame.width * fraction.x)
+            let y = Int(pixelFrame.minY + pixelFrame.height * fraction.y)
+            return bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB)
+        }
+        guard let lightMargin = color(at: CGPoint(x: 0.5, y: 0.1)),
+              let darkCard = color(at: CGPoint(x: 0.5, y: 0.35))
+        else { return false }
+        let light = min(lightMargin.redComponent, lightMargin.greenComponent, lightMargin.blueComponent) > 0.6
+        let darkMaximum = max(darkCard.redComponent, darkCard.greenComponent, darkCard.blueComponent)
+        let dark = darkMaximum > 0.05 && darkMaximum < 0.55
+        return light && dark
+    }
+
+    private static func isStrictDescendant(_ child: String, of parent: String) -> Bool {
+        let childComponents = URL(fileURLWithPath: child).resolvingSymlinksInPath().pathComponents
+        let parentComponents = URL(fileURLWithPath: parent).resolvingSymlinksInPath().pathComponents
+        return childComponents.count > parentComponents.count
+            && childComponents.starts(with: parentComponents)
+    }
+}
+
+final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
+    func testRecordsDesktopWidgetGalleryDiscoveryEvidence() throws {
+        let environment = ProcessInfo.processInfo.environment
+        let packagedAppPath = try XCTUnwrap(environment["CODEXBAR_CI_PACKAGED_APP"])
+        let runnerTemporaryPath = try XCTUnwrap(environment["CODEXBAR_CI_RUNNER_TEMP"])
+        guard Self.isStrictDescendant(packagedAppPath, of: runnerTemporaryPath) else {
+            XCTFail("Packaged app must be a disposable runner artifact")
+            return
+        }
+
+        let codexBar = XCUIApplication(bundleIdentifier: "com.steipete.codexbar.debug")
+        XCTAssertTrue(
+            codexBar.wait(for: .runningBackground, timeout: 10) || codexBar.wait(for: .runningForeground, timeout: 1),
+            "The previously proven packaged app must be running for gallery discovery")
+        self.closeSharePreviewIfVisible(in: codexBar)
+
+        let finder = XCUIApplication(bundleIdentifier: "com.apple.finder")
+        finder.activate()
+        XCTAssertTrue(finder.wait(for: .runningForeground, timeout: 10), "Finder did not become foreground")
+        XCTAssertTrue(finder.menuBars.firstMatch.waitForExistence(timeout: 5), "Finder menu bar was not accessible")
+
+        self.attach("finder-before-widget-gallery", app: finder)
+        self.attachText(self.systemWidgetOwnerSummary(), named: "widget-system-owners")
+        self.attachSystemOwnerHierarchies()
+
+        let desktopCandidates = finder.descendants(matching: .any).matching(NSPredicate(
+            format: "label CONTAINS[c] %@ OR identifier CONTAINS[c] %@", "Desktop", "Desktop"))
+        let summaries = (0..<desktopCandidates.count).compactMap { index -> String? in
+            let candidate = desktopCandidates.element(boundBy: index)
+            guard candidate.exists, candidate.frame.width > 0, candidate.frame.height > 0 else { return nil }
+            return "\(candidate.elementType) | \(candidate.identifier) | \(candidate.label) | \(candidate.frame)"
+        }
+        self.attachText(summaries.joined(separator: "\n"), named: "accessible-desktop-candidates")
+        self.attachText(
+            "Gallery not opened. This diagnostic records public UI candidates only; it is not widget installation proof.",
+            named: "widget-gallery-discovery-boundary")
+    }
+
+    private func closeSharePreviewIfVisible(in app: XCUIApplication) {
+        let preview = app.windows["Share AI Usage"]
+        guard preview.exists else { return }
+        app.activate()
+        let close = preview.buttons.matching(identifier: "_XCUI:CloseWindow").firstMatch
+        XCTAssertTrue(close.waitForExistence(timeout: 5), "Visible share preview lacks its accessible close control")
+        guard close.exists else { return }
+        close.click()
+        let closed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: preview)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [closed], timeout: 5),
+            .completed,
+            "Share preview did not close before gallery discovery")
+    }
+
+    private func systemWidgetOwnerSummary() -> String {
+        NSWorkspace.shared.runningApplications.compactMap { application -> String? in
+            guard let identifier = application.bundleIdentifier,
+                  identifier == "com.apple.finder" || identifier.localizedCaseInsensitiveContains("controlcenter") ||
+                  identifier.localizedCaseInsensitiveContains("notificationcenter")
+            else { return nil }
+            return "\(identifier) | \(application.localizedName ?? "") | running=\(!application.isTerminated)"
+        }.sorted().joined(separator: "\n")
+    }
+
+    private func attachSystemOwnerHierarchies() {
+        let identifiers = NSWorkspace.shared.runningApplications.compactMap(\.bundleIdentifier).filter {
+            $0.localizedCaseInsensitiveContains("controlcenter") || $0
+                .localizedCaseInsensitiveContains("notificationcenter")
+        }.sorted()
+        for identifier in identifiers {
+            self.attach("system-owner-\(identifier)", app: XCUIApplication(bundleIdentifier: identifier))
+        }
+    }
+
+    private func attach(_ name: String, app: XCUIApplication) {
+        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        screenshot.name = "\(name)-screen"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        self.attachText(app.debugDescription, named: "\(name)-hierarchy")
+    }
+
+    private func attachText(_ text: String, named name: String) {
+        let attachment = XCTAttachment(string: text)
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 
     private static func isStrictDescendant(_ child: String, of parent: String) -> Bool {

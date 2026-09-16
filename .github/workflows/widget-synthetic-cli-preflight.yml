@@ -1,5 +1,5 @@
 # Finder cross-app UI smoke passed in run 35119627828.
-# Reuses an already validated package artifact; it does not build or launch CodexBar.
+# Reuses an already validated package artifact and launches CodexBar for the GUI proof.
 name: Widget synthetic CLI preflight
 
 on:
@@ -15,6 +15,11 @@ on:
         required: false
         default: d223726ffd8d9d60c3eab54af55e730b7291669c
         type: string
+      widget_gallery_discovery:
+        description: Record public desktop widget-gallery discovery evidence after share proof
+        required: false
+        default: false
+        type: boolean
   push:
     branches: [validation/native-spend-share-proof]
     paths:
@@ -75,7 +80,8 @@ jobs:
           export CODEXBAR_CONFIG="$seed/config.json"
           export CLAUDE_CONFIG_DIR="$seed/claude-config"
           export CI_CLI="$proof/app/CodexBar.app/Contents/Helpers/CodexBarCLI"
-          export EXPECTED_DAY="$(date -u +%F)"
+          EXPECTED_DAY="$(date -u +%F)"
+          export EXPECTED_DAY
           mkdir -p "$CODEX_HOME" "$CLAUDE_CONFIG_DIR/projects/synthetic-widget-proof"
           export CI_CLAUDE_FILE="$CLAUDE_CONFIG_DIR/projects/synthetic-widget-proof/usage.jsonl"
           python3 - <<'PY'
@@ -224,6 +230,35 @@ jobs:
           assert "Test skipped" not in log, "GUI proof must not skip its selected test"
           PYRESULT
 
+      - name: Record desktop widget gallery discovery evidence
+        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true
+        env:
+          CODEXBAR_CI_PACKAGED_APP: ${{ runner.temp }}/widget-synthetic-cli-preflight/app/CodexBar.app
+          CODEXBAR_CI_SEED_ROOT: ${{ runner.temp }}/widget-synthetic-cli-preflight/seed
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          xcodebuild test \
+            -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
+            -scheme WidgetDesktopSmoke \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$proof/WidgetDesktopSmokeDerivedData" \
+            -resultBundlePath "$proof/WidgetGalleryDiscovery.xcresult" \
+            -only-testing:WidgetDesktopSmokeUITests/PackagedWidgetGalleryDiscoveryUITests \
+            CODEXBAR_CI_RUNNER_TEMP="$RUNNER_TEMP" \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGN_STYLE=Manual \
+            CODEXBAR_CI_PACKAGED_APP="$CODEXBAR_CI_PACKAGED_APP" \
+            CODEXBAR_CI_SEED_ROOT="$CODEXBAR_CI_SEED_ROOT" \
+            2>&1 | tee "$proof/widget-gallery-discovery-xcodebuild.log"
+          python3 - <<'PYRESULT'
+          import os, pathlib, re
+          log = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/widget-gallery-discovery-xcodebuild.log").read_text()
+          assert re.search(r"Test Case .*testRecordsDesktopWidgetGalleryDiscoveryEvidence.* passed \(", log), "Widget gallery discovery did not execute and pass"
+          assert "Test skipped" not in log, "Widget gallery discovery must not report a skip as evidence"
+          PYRESULT
+
       - name: Record provider configuration after actual app launch
         if: always()
         run: |
@@ -246,6 +281,10 @@ jobs:
           if test -d "$proof/PackagedShare.xcresult"; then
             xcrun xcresulttool get test-results summary --path "$proof/PackagedShare.xcresult" > "$proof/test-summary.json"
             xcrun xcresulttool export attachments --path "$proof/PackagedShare.xcresult" --output-path "$proof/attachments"
+          fi
+          if test -d "$proof/WidgetGalleryDiscovery.xcresult"; then
+            xcrun xcresulttool get test-results summary --path "$proof/WidgetGalleryDiscovery.xcresult" > "$proof/widget-gallery-discovery-summary.json"
+            xcrun xcresulttool export attachments --path "$proof/WidgetGalleryDiscovery.xcresult" --output-path "$proof/widget-gallery-discovery-attachments"
           fi
 
       - name: Clear disposable GUI seed environment
@@ -274,5 +313,9 @@ jobs:
             ${{ runner.temp }}/widget-synthetic-cli-preflight/PackagedShare.xcresult
             ${{ runner.temp }}/widget-synthetic-cli-preflight/test-summary.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/attachments
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-gallery-discovery-xcodebuild.log
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/WidgetGalleryDiscovery.xcresult
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-gallery-discovery-summary.json
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-gallery-discovery-attachments
           if-no-files-found: error
           retention-days: 7
