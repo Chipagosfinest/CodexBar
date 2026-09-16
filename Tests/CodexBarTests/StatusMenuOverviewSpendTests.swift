@@ -1,9 +1,128 @@
+import AppKit
 import CodexBarCore
 import Foundation
 import Testing
 @testable import CodexBar
 
 extension StatusMenuTests {
+    @Test
+    func `native overview share menu opens filtered preview`() throws {
+        let environment = ProcessInfo.processInfo.environment
+        guard let directoryPath = environment["CODEXBAR_OVERVIEW_SHARE_PROOF_DIR"] else { return }
+        let home = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true).standardizedFileURL
+        let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).standardizedFileURL
+        let outputDirectory = URL(fileURLWithPath: directoryPath, isDirectory: true).standardizedFileURL
+        guard SettingsStore.isRunningTests,
+              environment["CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS"] == "1",
+              environment[CodexCredentialFileAccess.isolationEnvironmentKey] == "1",
+              environment["CODEXBAR_TEST_SESSION_FILE_ISOLATION"] == "1",
+              environment["CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS"] != "1",
+              home.path.hasPrefix(temporaryDirectory.path.trimmingCharacters(in: .init(charactersIn: "/")) + "/"),
+              outputDirectory.path.hasPrefix(home.path.trimmingCharacters(in: .init(charactersIn: "/")) + "/"),
+              NSApplication.shared.delegate == nil
+        else {
+            Issue.record("Native share proof requires an isolated standalone test application")
+            return
+        }
+
+        let settings = testSettingsStore(
+            suiteName: "StatusMenuOverviewSpendTests-native-share",
+            userDefaults: InMemoryUserDefaults(),
+            tokenAccountStore: InMemoryTokenAccountStore())
+        settings.providerDetectionCompleted = true
+        settings.statusChecksEnabled = false
+        settings.refreshFrequency = .manual
+        settings.mergeIcons = true
+        settings.selectedMenuProvider = .codex
+        settings.mergedMenuLastSelectedWasOverview = true
+        settings.costUsageEnabled = true
+        settings.spendDashboardHiddenSourceIDs = ["claude:hidden"]
+        enableTestProviders([.codex, .claude], settings: settings)
+        let store = UsageStore(
+            fetcher: UsageFetcher(environment: [:]),
+            browserDetection: BrowserDetection(cacheTTL: 0),
+            settings: settings,
+            startupBehavior: .testing,
+            environmentBase: [:])
+        let now = Date()
+        let components = settings.costUsageBucketCalendar.dateComponents([.year, .month, .day], from: now)
+        let year = try #require(components.year)
+        let month = try #require(components.month)
+        let dayOfMonth = try #require(components.day)
+        let date = String(format: "%04d-%02d-%02d", year, month, dayOfMonth)
+        func input(id: String, provider: UsageProvider, cost: Double) -> SpendDashboardModel.ProviderInput {
+            SpendDashboardModel.ProviderInput(
+                id: id,
+                provider: provider,
+                displayName: id,
+                snapshot: CostUsageTokenSnapshot(
+                    sessionTokens: nil,
+                    sessionCostUSD: nil,
+                    last30DaysTokens: 10,
+                    last30DaysCostUSD: cost,
+                    daily: [CostUsageDailyReport.Entry(
+                        date: date,
+                        inputTokens: 5,
+                        outputTokens: 5,
+                        totalTokens: 10,
+                        costUSD: cost,
+                        modelsUsed: nil,
+                        modelBreakdowns: nil)],
+                    updatedAt: now))
+        }
+        let inputs = [
+            input(id: "codex:visible", provider: .codex, cost: 2),
+            input(id: "claude:hidden", provider: .claude, cost: 900),
+        ]
+        store.spendDashboardPublication = SpendDashboardPublication(
+            revision: 1,
+            generation: 1,
+            configuration: SpendDashboardSource.configuration(settings: settings, store: store),
+            loadedAt: now,
+            isRefreshing: false,
+            inputs: inputs,
+            sources: inputs.map {
+                SpendSourcePublication(
+                    id: $0.id,
+                    provider: $0.provider,
+                    displayName: $0.displayName,
+                    role: .subscription,
+                    state: .available)
+            })
+        let controller = StatusItemController(
+            store: store,
+            settings: settings,
+            account: AccountInfo(email: nil, plan: nil),
+            updater: DisabledUpdaterController(),
+            preferencesSelection: PreferencesSelection(),
+            statusBar: self.makeStatusBarForTesting())
+        defer { controller.releaseStatusItemsForTesting() }
+        let menu = controller.makeMenu()
+        controller.menuWillOpen(menu)
+        defer { controller.menuDidClose(menu) }
+        let item = try #require(menu.items.first {
+            ($0.representedObject as? String) == "overviewShareStats"
+        })
+        let target = try #require(item.target)
+        let action = try #require(item.action)
+        #expect(NSApplication.shared.sendAction(action, to: target, from: item))
+
+        let preview = try #require(NSApplication.shared.windows.compactMap {
+            $0.windowController as? ShareStatsWindowController
+        }.first { $0.window?.isVisible == true })
+        defer { preview.close() }
+        #expect(preview.payload.providers.map(\.providerName) == ["codex:visible"])
+        #expect(preview.payload.currencies.first?.estimatedCost == 2)
+        let content = try #require(preview.window?.contentView)
+        content.layoutSubtreeIfNeeded()
+        let bitmap = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
+        content.cacheDisplay(in: content.bounds, to: bitmap)
+        let png = try #require(bitmap.representation(using: .png, properties: [:]))
+        #expect(png.starts(with: [0x89, 0x50, 0x4E, 0x47]))
+        try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
+        try png.write(to: outputDirectory.appendingPathComponent("overview-share-preview.png"), options: .atomic)
+    }
+
     @Test
     func `overview spend uses the configured dashboard bucket calendar`() throws {
         let settings = self.makeSettings()
