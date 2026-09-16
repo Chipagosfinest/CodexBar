@@ -198,6 +198,25 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             codexBar.wait(for: .runningBackground, timeout: 10) || codexBar.wait(for: .runningForeground, timeout: 1),
             "The previously proven packaged app must be running for gallery discovery")
         self.closeSharePreviewIfVisible(in: codexBar)
+        let permissionOwner = XCUIApplication(bundleIdentifier: "com.apple.UserNotificationCenter")
+        let localNetworkPrompt = permissionOwner.staticTexts.matching(NSPredicate(
+            format: "value CONTAINS %@ AND value CONTAINS %@", "CodexBar", "local networks")).firstMatch
+        if localNetworkPrompt.exists {
+            self.attach("disposable-local-network-prompt", app: permissionOwner)
+            let deny = permissionOwner.buttons.matching(identifier: "action-button-2").firstMatch
+            guard deny.exists, deny.label == "Don’t Allow" else {
+                XCTFail("Observed local-network prompt lacks its explicit deny control")
+                return
+            }
+            deny.click()
+            let denied = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+                !localNetworkPrompt.exists
+            }, object: nil)
+            guard XCTWaiter.wait(for: [denied], timeout: 5) == .completed else {
+                XCTFail("Disposable local-network prompt remained after denial")
+                return
+            }
+        }
 
         let finder = XCUIApplication(bundleIdentifier: "com.apple.finder")
         finder.activate()
@@ -455,14 +474,14 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         }
         self.attachText(summaries.joined(separator: "\n"), named: "accessible-desktop-candidates")
         self.attachText(
-            "A small Switcher was added through the real gallery, consumed the synthetic shared snapshot, and opened populated previews through actual warm and cold widget clicks. Other sizes, provider switching, and upgrade behavior remain unverified.",
+            "A \(widgetFamily) Switcher was added through the real gallery, switched between empty Codex and populated Claude without opening share, and opened populated previews through actual warm and cold widget share clicks. Other families and older-version upgrade behavior remain unverified.",
             named: "widget-gallery-discovery-boundary")
     }
 
     private func waitForNotificationCenterIdentifier() -> String? {
         for attempt in 0..<10 {
             if let identifier = self.systemOwnerIdentifiers().first(where: {
-                $0.localizedCaseInsensitiveContains("notificationcenter")
+                $0 == "com.apple.notificationcenterui"
             }) {
                 return identifier
             }
