@@ -213,7 +213,7 @@ jobs:
           label=$(/usr/libexec/PlistBuddy -c 'Print :Label' "$agent")
           test "$label" = com.apple.notificationcenterui.agent
           launchctl print-disabled "gui/$(id -u)" > "$proof/gui-disabled-services-before.txt"
-          grep -F "\"$label\" => true" "$proof/gui-disabled-services-before.txt"
+          grep -F "\"$label\" => disabled" "$proof/gui-disabled-services-before.txt"
           launchctl load -w "$agent"
           touch "$proof/notification-center-enabled-by-proof"
           launchctl print "gui/$(id -u)/$label" > "$proof/notification-center-service.txt"
