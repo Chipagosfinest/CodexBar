@@ -167,7 +167,7 @@ extension StatusMenuTests {
             #expect(Self.accessibilityLabels(content).contains(L("Copy Image", language: language)))
         } else {
             print(
-                "Overview share accessibility verification not requested; visual proof relies on compositor screenshots")
+                "Overview share accessibility not verified; visual proof uses compositor screenshots")
         }
         let bitmap = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
         content.cacheDisplay(in: content.bounds, to: bitmap)
