@@ -115,11 +115,17 @@ jobs:
               for key, value in provider.items():
                   if key.lower() in {"apikey", "secretkey", "token", "cookies"}:
                       assert not value, f"generated default unexpectedly contains {key}"
-              provider["enabled"] = provider["id"] == "claude"
+              provider["enabled"] = provider["id"] in {"codex", "claude"}
           pathlib.Path(os.environ["CODEXBAR_CONFIG"]).write_text(json.dumps(config, indent=2) + "\n")
           PY
           "$CI_CLI" config validate
           "$CI_CLI" config providers --format json > "$proof/provider-status.json"
+          export CI_PROVIDER_STATUS_JSON="$proof/provider-status.json"
+          python3 - <<'PYPROVIDERS'
+          import json, os, pathlib
+          providers = json.loads(pathlib.Path(os.environ["CI_PROVIDER_STATUS_JSON"]).read_text())
+          assert [item["provider"] for item in providers if item["enabled"]] == ["codex", "claude"], providers
+          PYPROVIDERS
           "$CI_CLI" cost --provider claude --provider-native-only --refresh --format json > "$proof/claude-cost.json"
           export CI_COST_JSON="$proof/claude-cost.json"
           python3 - <<'PY'
@@ -317,7 +323,7 @@ jobs:
             python3 - <<'PYPROVIDERS'
           import json, os, pathlib
           providers = json.loads(pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/provider-status-after-app.json").read_text())
-          assert [p["provider"] for p in providers if p["enabled"]] == ["claude"], "App changed explicitly seeded provider scope"
+          assert [p["provider"] for p in providers if p["enabled"]] == ["codex", "claude"], "App changed explicitly seeded provider scope"
           PYPROVIDERS
           fi
 

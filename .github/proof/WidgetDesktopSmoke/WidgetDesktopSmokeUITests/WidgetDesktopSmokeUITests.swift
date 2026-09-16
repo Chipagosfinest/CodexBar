@@ -304,7 +304,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             dx: (drop.x - desktopFrame.minX) / desktopFrame.width,
             dy: (drop.y - desktopFrame.minY) / desktopFrame.height))
         switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            .press(forDuration: 1, thenDragTo: target)
+            .click(forDuration: 1, thenDragTo: target)
         self.attach("after-switcher-desktop-drop", app: notificationCenter)
         let done = notificationCenter.buttons.matching(identifier: "widget-add-sheet-done").firstMatch
         guard done.waitForExistence(timeout: 5),
@@ -345,14 +345,39 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             (140...200).contains(installed.frame.width) && (140...200).contains(installed.frame.height),
             "Installed Switcher is not the expected small family")
         XCTAssertFalse(installed.buttons["Remove"].exists, "Installed widget is still in edit mode")
+        let codexProvider = installed.buttons["Codex"]
+        let claudeProvider = installed.buttons["Claude"]
+        XCTAssertTrue(codexProvider.waitForExistence(timeout: 5), "Switcher lacks enabled empty Codex button")
+        XCTAssertTrue(claudeProvider.waitForExistence(timeout: 5), "Switcher lacks enabled Claude button")
+        guard codexProvider.exists, claudeProvider.exists else { return }
+        claudeProvider.click()
         let populated = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
             installed.debugDescription.contains("110K") && installed.debugDescription.contains("0.45")
         }, object: nil)
         XCTAssertEqual(
             XCTWaiter.wait(for: [populated], timeout: 15),
             .completed,
-            "Installed widget did not consume the app-published synthetic token snapshot")
-        self.attach("installed-switcher-populated", app: notificationCenter)
+            "Claude switch did not render the app-published synthetic token snapshot")
+        self.attach("installed-switcher-claude-selected", app: notificationCenter)
+        codexProvider.click()
+        let codexEmpty = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            installed.debugDescription.contains("Open CodexBar")
+        }, object: nil)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [codexEmpty], timeout: 15),
+            .completed,
+            "Codex switch did not render its empty state")
+        XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Codex provider button opened the share preview")
+        claudeProvider.click()
+        let claudeUsage = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            installed.debugDescription.contains("110K tokens") && installed.debugDescription.contains("$0.45")
+        }, object: nil)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [claudeUsage], timeout: 15),
+            .completed,
+            "Claude switch did not restore its synthetic usage state")
+        XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Claude provider button opened the share preview")
+        self.attach("installed-switcher-provider-buttons", app: notificationCenter)
         for phase in ["warm", "cold"] {
             if phase == "cold" {
                 codexBar.terminate()
