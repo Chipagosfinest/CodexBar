@@ -22,3 +22,4 @@ Sources:
 - [Apple Human Interface Guidelines: Menus](https://developer.apple.com/design/human-interface-guidelines/menus)
 - [Apple Human Interface Guidelines: SF Symbols](https://developer.apple.com/design/human-interface-guidelines/sf-symbols)
 - [Apple SwiftUI: ContentTransition](https://developer.apple.com/documentation/swiftui/contenttransition)
+- [Apple Xcode: Preparing your app’s text for translation](https://developer.apple.com/documentation/xcode/preparing-your-apps-text-for-translation) (consulted 2026-09-16; share-flow strings are present in every supported app catalog with locale-specific translations.)

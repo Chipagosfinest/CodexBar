@@ -1580,3 +1580,8 @@
 
 "agent_sessions_hide_unreachable_title" = "Ocultar hosts inacessíveis";
 "agent_sessions_hide_unreachable_subtitle" = "Oculta hosts quando a consulta de suas sessões falha.";
+
+/* Overview share flow */
+"Share Usage Snapshot…" = "Compartilhar resumo de uso…";
+"Usage snapshot unavailable" = "Resumo de uso indisponível";
+"CodexBar couldn't prepare a shareable usage snapshot. Refresh Usage & Spend and try again." = "O CodexBar não conseguiu preparar um resumo de uso para compartilhar. Atualize Uso e gastos e tente novamente.";
