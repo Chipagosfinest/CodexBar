@@ -118,39 +118,7 @@ struct OpenRouterUsageSnapshot: Sendable {
                 .makeRow(label: "API key limit", value: "Unavailable right now"),
             ]))
         }
-        let providerCost: ProviderCostSnapshot? = if self.balance > 0 || self.totalUsage > 0 || self.keyDataFetched {
-            let limit = (self.keyLimit ?? 0) > 0 ? (self.keyLimit ?? 0) : 0
-            let used: Double = if let keyLimit = self.keyLimit, keyLimit > 0, let keyUsed = self.keyUsed {
-                keyUsed
-            } else if let keyUsageMonthly = self.keyUsageMonthly {
-                keyUsageMonthly
-            } else if let keyUsage = self.keyUsage {
-                keyUsage
-            } else {
-                self.totalUsage
-            }
-            let period: String? = if let keyLimit = self.keyLimit, keyLimit > 0 {
-                switch self.keyLimitReset?.lowercased() {
-                case "daily": "Today"
-                case "weekly": "This week"
-                case "monthly": "This month"
-                default: nil
-                }
-            } else if self.keyUsageMonthly != nil {
-                "This month"
-            } else {
-                "Total usage"
-            }
-            ProviderCostSnapshot(
-                used: used,
-                limit: limit,
-                currencyCode: "USD",
-                period: period,
-                balance: self.balance,
-                updatedAt: self.updatedAt)
-        } else {
-            nil
-        }
+        let providerCost = self.makeProviderCost()
         return UsageSnapshot(
             primary: primary,
             secondary: nil,
@@ -163,6 +131,44 @@ struct OpenRouterUsageSnapshot: Sendable {
                 accountEmail: nil,
                 accountOrganization: nil,
                 loginMethod: "Balance: \(currency(self.balance))"))
+    }
+
+    /// Mirrors the `cost` object that `openrouter.js` emits so fixtures exercise the same
+    /// pay-as-you-go presentation path the plugin drives at runtime.
+    private func makeProviderCost() -> ProviderCostSnapshot? {
+        guard self.balance > 0 || self.totalUsage > 0 || self.keyDataFetched else { return nil }
+        let hasKeyLimit = (self.keyLimit ?? 0) > 0
+        let limit = hasKeyLimit ? (self.keyLimit ?? 0) : 0
+        let used: Double
+        if hasKeyLimit, let keyUsed = self.keyUsed {
+            used = keyUsed
+        } else if let keyUsageMonthly = self.keyUsageMonthly {
+            used = keyUsageMonthly
+        } else if let keyUsage = self.keyUsage {
+            used = keyUsage
+        } else {
+            used = self.totalUsage
+        }
+        let period: String?
+        if hasKeyLimit {
+            period = switch self.keyLimitReset?.lowercased() {
+            case "daily": "Today"
+            case "weekly": "This week"
+            case "monthly": "This month"
+            default: nil
+            }
+        } else if self.keyUsageMonthly != nil {
+            period = "This month"
+        } else {
+            period = "Total usage"
+        }
+        return ProviderCostSnapshot(
+            used: used,
+            limit: limit,
+            currencyCode: "USD",
+            period: period,
+            balance: self.balance,
+            updatedAt: self.updatedAt)
     }
 
     private var keyUsed: Double? {

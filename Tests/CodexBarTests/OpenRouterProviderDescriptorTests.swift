@@ -22,7 +22,7 @@ struct OpenRouterProviderDescriptorTests {
                 balance: 24.75,
                 updatedAt: Date()),
             updatedAt: Date())
-        let presentation = OpenRouterProviderDescriptor.descriptor.presentation.costPresentation(snapshot)
+        let presentation = OpenRouterProviderDescriptor.descriptor.presentation.cost(snapshot: snapshot)
         #expect(presentation.menuCardStyle == .payAsYouGoSpend)
     }
 
@@ -40,7 +40,7 @@ struct OpenRouterProviderDescriptorTests {
                 balance: 24.75,
                 updatedAt: Date()),
             updatedAt: Date())
-        let presentation = OpenRouterProviderDescriptor.descriptor.presentation.costPresentation(snapshot)
+        let presentation = OpenRouterProviderDescriptor.descriptor.presentation.cost(snapshot: snapshot)
         #expect(presentation.menuCardStyle == .generic)
     }
 }
