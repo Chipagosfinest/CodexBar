@@ -22,10 +22,11 @@ extension StatusMenuTests {
         let noDelegate = NSApplication.shared.delegate == nil
         guard testProcess, flags, homeBelowTmp, outputBelowHome, noDelegate
         else {
-            Issue.record(
-                "Native share proof requires isolated standalone test application: " +
-                    "testprocess=\(testProcess) flags=\(flags) homeBelowTmp=\(homeBelowTmp) " +
-                    "outputBelowHome=\(outputBelowHome) noDelegate=\(noDelegate)")
+            Issue.record("""
+            Native share proof requires isolated standalone test application:
+            testprocess=\(testProcess) flags=\(flags) homeBelowTmp=\(homeBelowTmp)
+            outputBelowHome=\(outputBelowHome) noDelegate=\(noDelegate)
+            """)
             return
         }
 
