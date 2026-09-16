@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       baseline_release:
-        description: Build pinned 0.60.4 baseline for retained-widget upgrade proof
+        description: Build pinned 0.60.3 baseline for retained-widget upgrade proof
         type: boolean
         default: false
 
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: ${{ inputs.baseline_release && 'steipete/CodexBar' || github.repository }}
-          ref: ${{ inputs.baseline_release && '937b20813cf47340093b6c312331c63a52768097' || 'fix/widget-share-stats' }}
+          ref: ${{ inputs.baseline_release && '9db44805dc1e0180993492bffd14ac98dd6a866f' || 'fix/widget-share-stats' }}
           fetch-depth: 1
           persist-credentials: false
 
@@ -62,7 +62,7 @@ jobs:
           app_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app_plist")"
           widget_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$widget_plist")"
           if [[ "$BASELINE_RELEASE" == "true" ]]; then
-            test "$(cat "$proof/source-commit.txt")" = "937b20813cf47340093b6c312331c63a52768097"
+            test "$(cat "$proof/source-commit.txt")" = "9db44805dc1e0180993492bffd14ac98dd6a866f"
             if /usr/libexec/PlistBuddy -c 'Print :CFBundleURLTypes' "$app_plist" >/dev/null 2>&1; then
               echo "Pinned baseline unexpectedly declares a URL route" >&2
               exit 1

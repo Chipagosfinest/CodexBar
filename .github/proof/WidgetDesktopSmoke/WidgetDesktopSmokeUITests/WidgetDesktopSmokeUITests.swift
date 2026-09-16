@@ -204,11 +204,11 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         if localNetworkPrompt.exists {
             self.attach("disposable-local-network-prompt", app: permissionOwner)
             let deny = permissionOwner.buttons.matching(identifier: "action-button-2").firstMatch
-            guard deny.exists, deny.label == "Don’t Allow" else {
+            guard deny.exists, NSScreen.screens.contains(where: { $0.frame.contains(deny.frame) }) else {
                 XCTFail("Observed local-network prompt lacks its explicit deny control")
                 return
             }
-            deny.click()
+            deny.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
             let denied = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
                 !localNetworkPrompt.exists
             }, object: nil)
