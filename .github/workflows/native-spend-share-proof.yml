@@ -52,6 +52,13 @@ jobs:
             CODEXBAR_TEST_CODEX_FILE_ISOLATION=1 CODEXBAR_TEST_SESSION_FILE_ISOLATION=1 \
             CODEXBAR_SHARE_STATS_SCREENSHOT_DIR="$RUNNER_TEMP/native-proof/output" \
             swift test --jobs 3 --filter "$PROOF_FILTER" 2>&1 | tee "$RUNNER_TEMP/native-proof/output/focused-tests.log"
+      - name: Save successful build before UI proof
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: native-proof-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift') }}
       - name: Render isolated native view proof
         if: ${{ matrix.native != '' }}
         env:
