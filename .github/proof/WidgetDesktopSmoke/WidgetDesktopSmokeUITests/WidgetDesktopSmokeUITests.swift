@@ -273,14 +273,27 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
                 dx: contextPoint.x - finder.frame.minX,
                 dy: contextPoint.y - finder.frame.minY)).rightClick()
             self.attach("desktop-widget-context-menu", app: finder)
-            let edit = finder.menuItems.matching(NSPredicate(
-                format: "label BEGINSWITH %@ OR identifier BEGINSWITH %@",
-                "Edit Widgets",
-                "Edit Widgets")).firstMatch
-            guard edit.waitForExistence(timeout: 5),
-                  NSScreen.screens.contains(where: { $0.frame.contains(edit.frame) })
-            else {
-                XCTFail("Desktop context menu did not expose Apple's Edit Widgets action")
+            // The captured desktop menu is visible while Finder's AX tree is disabled.
+            // Inspect only running system owners and act on a uniquely observed on-screen menu item.
+            let menuOwners = [
+                "com.apple.finder", "com.apple.WindowManager", "com.apple.dock",
+                "com.apple.notificationcenterui", "com.apple.controlcenter",
+            ].filter { identifier in
+                NSWorkspace.shared.runningApplications.contains { $0.bundleIdentifier == identifier }
+            }
+            var visibleActions: [XCUIElement] = []
+            for identifier in menuOwners {
+                let owner = XCUIApplication(bundleIdentifier: identifier)
+                self.attachText(owner.debugDescription, named: "desktop-context-owner-\(identifier)")
+                visibleActions += owner.menuItems.matching(NSPredicate(
+                    format: "label BEGINSWITH %@ OR identifier BEGINSWITH %@ OR value BEGINSWITH %@",
+                    "Edit Widgets", "Edit Widgets", "Edit Widgets")).allElementsBoundByIndex.filter { item in
+                    item.exists && item.frame.width > 0 && item.frame.height > 0 &&
+                        NSScreen.screens.contains(where: { screen in screen.frame.contains(item.frame) })
+                }
+            }
+            guard visibleActions.count == 1, let edit = visibleActions.first else {
+                XCTFail("Expected one on-screen Edit Widgets menu item among observed system owners")
                 return
             }
             edit.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
@@ -402,7 +415,18 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
                 .click(forDuration: 1, thenDragTo: target)
         }
         self.attach("after-switcher-desktop-drop", app: notificationCenter)
-        let done = notificationCenter.buttons.matching(identifier: "widget-add-sheet-done").firstMatch
+        let modernDone = notificationCenter.buttons.matching(identifier: "widget-add-sheet-done").firstMatch
+        let legacyDone = notificationCenter.buttons.matching(NSPredicate(format: "label == %@", "Done"))
+        let done: XCUIElement
+        if modernDone.exists {
+            done = modernDone
+        } else if ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 15, legacyDone.count == 1 {
+            // macOS 15's captured gallery exposes the Done label without the newer identifier.
+            done = legacyDone.firstMatch
+        } else {
+            XCTFail("Widget gallery has no uniquely identified Done control")
+            return
+        }
         guard done.waitForExistence(timeout: 5),
               NSScreen.screens.contains(where: { $0.frame.contains(done.frame) })
         else {
@@ -521,8 +545,8 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             "baselineBuild": "146",
             "selectedProvider": "claude",
         ]
-        let attachment = XCTAttachment(
-            data: try JSONSerialization.data(withJSONObject: state, options: [.prettyPrinted]),
+        let attachment = try XCTAttachment(
+            data: JSONSerialization.data(withJSONObject: state, options: [.prettyPrinted]),
             uniformTypeIdentifier: "public.json")
         attachment.name = "retained-widget-state.json"
         attachment.lifetime = .keepAlways
