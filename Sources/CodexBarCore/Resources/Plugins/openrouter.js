@@ -315,6 +315,40 @@ defineProvider({
       }
     }
 
+    let cost = null;
+    if (creditsData || keyData) {
+      let used = 0;
+      let limit = 0;
+      let period = null;
+      if (keyLimit !== null && keyLimit > 0) {
+        limit = keyLimit;
+        const quotaUsed = keyUsedForQuota();
+        used = quotaUsed !== null && Number.isFinite(quotaUsed) && quotaUsed >= 0 ? quotaUsed : 0;
+        const resetWindow = typeof keyData.limit_reset === "string" ? keyData.limit_reset.trim() : "";
+        if (resetWindow === "daily") period = "Today";
+        else if (resetWindow === "weekly") period = "This week";
+        else if (resetWindow === "monthly") period = "This month";
+      } else if (keyData && typeof keyData.usage_monthly === "number" && Number.isFinite(keyData.usage_monthly)) {
+        used = Math.max(0, keyData.usage_monthly);
+        period = "This month";
+      } else if (keyData && typeof keyData.usage === "number" && Number.isFinite(keyData.usage)) {
+        used = Math.max(0, keyData.usage);
+        period = "Total usage";
+      } else if (creditsData) {
+        used = Math.max(0, creditsData.totalUsage);
+        period = "Total usage";
+      }
+      const balance = creditsData ? creditsData.balance : keyRemaining !== null ? keyRemaining : null;
+
+      cost = {
+        used,
+        limit,
+        currency: "USD",
+        balance,
+        period,
+      };
+    }
+
     const currency = (value) => `$${Math.max(0, value).toFixed(2)}`;
     const details = [];
     if (creditsData) {
@@ -413,6 +447,7 @@ defineProvider({
       identity: creditsData ? { loginMethod: `Balance: ${currency(creditsData.balance)}` } : null,
       details,
     };
+    if (cost) result.cost = cost;
     if (costUsage) result.costUsage = costUsage;
     if (primary) result.primary = primary;
     return result;

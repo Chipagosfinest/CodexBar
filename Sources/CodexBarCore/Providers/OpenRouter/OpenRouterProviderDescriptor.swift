@@ -81,6 +81,12 @@ public enum OpenRouterProviderDescriptor {
                 supportsTokenCost: true,
                 noDataMessage: { "OpenRouter 30-day spend requires a management API key." }),
             presentation: ProviderUsagePresentation(
+                costPresenter: { snapshot in
+                    let style: ProviderCostMenuCardStyle = (snapshot.providerCost?.limit ?? 0) <= 0
+                        ? .payAsYouGoSpend
+                        : .generic
+                    return ProviderCostPresentation(menuCardStyle: style)
+                },
                 menuCard: ProviderMenuCardPresentation(
                     showsCreditsSection: false,
                     primaryDescriptionPlacement: .reset),
