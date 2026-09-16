@@ -4,6 +4,7 @@ import Testing
 @testable import CodexBar
 
 struct ShareStatsPeriodTests {
+    @MainActor
     @Test(arguments: [
         ("UTC", 9, 16),
         ("Pacific/Kiritimati", 9, 16),
@@ -53,5 +54,14 @@ struct ShareStatsPeriodTests {
         let expectedLabel = ShareStatsFormatting.dataThrough(now, calendar: calendar)
         #expect(ShareStatsFormatting.dataThrough(payload) == expectedLabel)
         #expect(ShareStatsFormatting.text(payload).contains("Data through \(expectedLabel)"))
+
+        if zone == "UTC", month == 9, day == 16,
+           let directory = ProcessInfo.processInfo.environment["CODEXBAR_SHARE_STATS_SCREENSHOT_DIR"]
+        {
+            let output = URL(fileURLWithPath: directory, isDirectory: true)
+            try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+            let png = try #require(ShareStatsRenderer.pngData(for: payload))
+            try png.write(to: output.appendingPathComponent("share-period-date.png"), options: .atomic)
+        }
     }
 }
