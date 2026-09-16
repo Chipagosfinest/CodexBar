@@ -5,6 +5,14 @@ name: Widget synthetic CLI preflight
 on:
   workflow_dispatch:
     inputs:
+      runner_os:
+        description: Public GitHub-hosted arm64 macOS runner label
+        required: false
+        default: macos-26
+        type: choice
+        options:
+          - macos-26
+          - macos-15
       package_run_id:
         description: Existing successful Widget package proof run
         required: false
@@ -59,7 +67,7 @@ permissions:
 
 jobs:
   synthetic-cli-preflight:
-    runs-on: macos-26
+    runs-on: ${{ inputs.runner_os || 'macos-26' }}
     timeout-minutes: 15
     env:
       PACKAGE_RUN_ID: ${{ inputs.package_run_id || '35117930549' }}
@@ -69,15 +77,38 @@ jobs:
       UPGRADE_MODE: ${{ inputs.upgrade_mode && '1' || '0' }}
       BASELINE_PACKAGE_RUN_ID: ${{ inputs.baseline_package_run_id || '35129543746' }}
       EXPECTED_BASELINE_SHA: ${{ inputs.baseline_package_source_sha || '9db44805dc1e0180993492bffd14ac98dd6a866f' }}
+      RUNNER_LABEL: ${{ inputs.runner_os || 'macos-26' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
 
-      - name: Select Xcode 26.6
+      - name: Select runner-supported Xcode
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
-          echo "DEVELOPER_DIR=/Applications/Xcode_26.6.app/Contents/Developer" >> "$GITHUB_ENV"
+          set -euo pipefail
+          if test "$RUNNER_LABEL" = macos-26; then
+            sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+          elif test "$RUNNER_LABEL" = macos-15; then
+            test -d "$(xcode-select -p)"
+          else
+            echo "Unsupported runner label: $RUNNER_LABEL" >&2
+            exit 1
+          fi
+          echo "DEVELOPER_DIR=$(xcode-select -p)" >> "$GITHUB_ENV"
+
+      - name: Record and validate runner environment
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          mkdir -p "$proof"
+          test "$(uname -m)" = arm64
+          {
+            printf 'runner_label=%s\n' "$RUNNER_LABEL"
+            sw_vers
+            uname -a
+            xcode-select -p
+            xcodebuild -version
+          } > "$proof/runner-environment.txt"
 
       - name: Download the existing package proof
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
@@ -595,6 +626,7 @@ jobs:
         with:
           name: widget-synthetic-cli-preflight
           path: |
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/runner-environment.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/gui-disabled-services-before.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/notification-center-service.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-storage-proof.json
