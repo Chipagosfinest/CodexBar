@@ -12,16 +12,20 @@ extension StatusMenuTests {
         let home = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true).standardizedFileURL
         let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).standardizedFileURL
         let outputDirectory = URL(fileURLWithPath: directoryPath, isDirectory: true).standardizedFileURL
-        guard SettingsStore.isRunningTests,
-              environment["CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS"] == "1",
-              environment[CodexCredentialFileAccess.isolationEnvironmentKey] == "1",
-              environment["CODEXBAR_TEST_SESSION_FILE_ISOLATION"] == "1",
-              environment["CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS"] != "1",
-              self.isStrictDescendant(home, of: temporaryDirectory),
-              self.isStrictDescendant(outputDirectory, of: home),
-              NSApplication.shared.delegate == nil
+        let testProcess = SettingsStore.isRunningTests
+        let flags = environment["CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS"] == "1" &&
+            environment[CodexCredentialFileAccess.isolationEnvironmentKey] == "1" &&
+            environment["CODEXBAR_TEST_SESSION_FILE_ISOLATION"] == "1" &&
+            environment["CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS"] != "1"
+        let homeBelowTmp = self.isStrictDescendant(home, of: temporaryDirectory)
+        let outputBelowHome = self.isStrictDescendant(outputDirectory, of: home)
+        let noDelegate = NSApplication.shared.delegate == nil
+        guard testProcess, flags, homeBelowTmp, outputBelowHome, noDelegate
         else {
-            Issue.record("Native share proof requires an isolated standalone test application")
+            Issue.record(
+                "Native share proof requires isolated standalone test application: " +
+                    "testprocess=\(testProcess) flags=\(flags) homeBelowTmp=\(homeBelowTmp) " +
+                    "outputBelowHome=\(outputBelowHome) noDelegate=\(noDelegate)")
             return
         }
 
