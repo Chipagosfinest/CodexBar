@@ -154,14 +154,17 @@ jobs:
         if: ${{ matrix.surface == 'menu' }}
         run: |
           python3 - <<'PY'
-          import os, pathlib, shutil, subprocess
+          import os, pathlib, shutil, subprocess, tempfile
           base = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-proof'
-          home = base / 'home'
-          home.mkdir(exist_ok=True)
+          # Darwin Foundation uses the OS per-user temporary root here, not the supplied TMPDIR.
+          darwin_temp = subprocess.check_output(['/usr/bin/getconf', 'DARWIN_USER_TEMP_DIR'], text=True).strip()
+          proof_root = pathlib.Path(tempfile.mkdtemp(prefix='codexbar-share-proof-', dir=darwin_temp))
+          home = proof_root / 'home'
+          home.mkdir()
           environment = {
               'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
               'HOME': str(home), 'CFFIXED_USER_HOME': str(home),
-              'TMPDIR': str(base) + '/', 'DEVELOPER_DIR': os.environ['DEVELOPER_DIR'],
+              'TMPDIR': str(proof_root) + '/', 'DEVELOPER_DIR': os.environ['DEVELOPER_DIR'],
               'CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS': '1',
               'CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS': '0',
               'CODEXBAR_TEST_CODEX_FILE_ISOLATION': '1',
