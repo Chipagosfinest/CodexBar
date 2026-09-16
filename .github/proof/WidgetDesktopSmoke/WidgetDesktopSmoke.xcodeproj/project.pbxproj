@@ -1,0 +1,72 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000000000000000000000011 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000021 /* AppDelegate.swift */; };
+		000000000000000000000012 /* WidgetDesktopSmokeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000022 /* WidgetDesktopSmokeUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		000000000000000000000031 /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = 000000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 000000000000000000000101; remoteInfo = WidgetDesktopSmoke; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		000000000000000000000021 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		000000000000000000000022 /* WidgetDesktopSmokeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDesktopSmokeUITests.swift; sourceTree = "<group>"; };
+		000000000000000000000023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		000000000000000000000024 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		000000000000000000000025 /* WidgetDesktopSmoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WidgetDesktopSmoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000026 /* WidgetDesktopSmokeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WidgetDesktopSmokeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000000000131 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		000000000000000000000132 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		000000000000000000000002 = {isa = PBXGroup; children = (000000000000000000000041 /* WidgetDesktopSmoke */, 000000000000000000000042 /* WidgetDesktopSmokeUITests */, 000000000000000000000043 /* Products */); sourceTree = "<group>"; };
+		000000000000000000000041 /* WidgetDesktopSmoke */ = {isa = PBXGroup; children = (000000000000000000000021 /* AppDelegate.swift */, 000000000000000000000023 /* Info.plist */); path = WidgetDesktopSmoke; sourceTree = "<group>"; };
+		000000000000000000000042 /* WidgetDesktopSmokeUITests */ = {isa = PBXGroup; children = (000000000000000000000022 /* WidgetDesktopSmokeUITests.swift */, 000000000000000000000024 /* Info.plist */); path = WidgetDesktopSmokeUITests; sourceTree = "<group>"; };
+		000000000000000000000043 /* Products */ = {isa = PBXGroup; children = (000000000000000000000025 /* WidgetDesktopSmoke.app */, 000000000000000000000026 /* WidgetDesktopSmokeUITests.xctest */); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		000000000000000000000101 /* WidgetDesktopSmoke */ = {isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000201 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmoke" */; buildPhases = (000000000000000000000121 /* Sources */, 000000000000000000000131 /* Frameworks */); buildRules = (); dependencies = (); name = WidgetDesktopSmoke; productName = WidgetDesktopSmoke; productReference = 000000000000000000000025 /* WidgetDesktopSmoke.app */; productType = "com.apple.product-type.application"; };
+		000000000000000000000102 /* WidgetDesktopSmokeUITests */ = {isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000202 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmokeUITests" */; buildPhases = (000000000000000000000122 /* Sources */, 000000000000000000000132 /* Frameworks */); buildRules = (); dependencies = (000000000000000000000141 /* PBXTargetDependency */); name = WidgetDesktopSmokeUITests; productName = WidgetDesktopSmokeUITests; productReference = 000000000000000000000026 /* WidgetDesktopSmokeUITests.xctest */; productType = "com.apple.product-type.bundle.ui-testing"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		000000000000000000000001 /* Project object */ = {isa = PBXProject; attributes = { LastUpgradeCheck = 2600; TargetAttributes = { 000000000000000000000102 = { TestTargetID = 000000000000000000000101; }; }; }; buildConfigurationList = 000000000000000000000200 /* Build configuration list for PBXProject "WidgetDesktopSmoke" */; compatibilityVersion = "Xcode 16.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = 000000000000000000000002; productRefGroup = 000000000000000000000043 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (000000000000000000000101 /* WidgetDesktopSmoke */, 000000000000000000000102 /* WidgetDesktopSmokeUITests */); };
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		000000000000000000000121 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000011 /* AppDelegate.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		000000000000000000000122 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000012 /* WidgetDesktopSmokeUITests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		000000000000000000000141 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 000000000000000000000101 /* WidgetDesktopSmoke */; targetProxy = 000000000000000000000031 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		000000000000000000000301 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; MACOSX_DEPLOYMENT_TARGET = 14.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Debug; };
+		000000000000000000000302 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; MACOSX_DEPLOYMENT_TARGET = 14.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Release; };
+		000000000000000000000311 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmoke/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; }; name = Debug; };
+		000000000000000000000312 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmoke/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; }; name = Release; };
+		000000000000000000000321 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmokeUITests/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke.ui-tests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_TARGET_NAME = WidgetDesktopSmoke; }; name = Debug; };
+		000000000000000000000322 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmokeUITests/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke.ui-tests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_TARGET_NAME = WidgetDesktopSmoke; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		000000000000000000000200 /* Build configuration list for PBXProject "WidgetDesktopSmoke" */ = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000301 /* Debug */, 000000000000000000000302 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		000000000000000000000201 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmoke" */ = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000311 /* Debug */, 000000000000000000000312 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		000000000000000000000202 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmokeUITests" */ = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000321 /* Debug */, 000000000000000000000322 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = 000000000000000000000001 /* Project object */;
+}

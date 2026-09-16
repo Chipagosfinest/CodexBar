@@ -1,0 +1,52 @@
+name: Widget desktop UI smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [validation/native-spend-share-proof]
+    paths:
+      - .github/workflows/widget-desktop-smoke.yml
+      - .github/proof/WidgetDesktopSmoke/**
+
+permissions:
+  contents: read
+
+jobs:
+  finder-ui-automation-smoke:
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode 26.6
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+          echo "DEVELOPER_DIR=/Applications/Xcode_26.6.app/Contents/Developer" >> "$GITHUB_ENV"
+
+      - name: Run isolated Finder UI automation smoke
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-desktop-smoke"
+          mkdir -p "$proof"
+          xcodebuild test \
+            -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
+            -scheme WidgetDesktopSmoke \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$proof/DerivedData" \
+            -resultBundlePath "$proof/WidgetDesktopSmoke.xcresult" \
+            CODE_SIGN_IDENTITY=- \
+            CODE_SIGN_STYLE=Manual \
+            2>&1 | tee "$proof/xcodebuild.log"
+
+      - name: Upload UI smoke result
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: widget-desktop-ui-smoke
+          path: ${{ runner.temp }}/widget-desktop-smoke
+          if-no-files-found: error
+          retention-days: 7
