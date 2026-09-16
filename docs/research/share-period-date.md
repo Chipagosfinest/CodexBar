@@ -11,3 +11,5 @@ Six real-dashboard regressions cover UTC, UTC+14, spring/fall DST, Santiago's mi
 Primary API reference: [Apple Calendar dateInterval(of:for:)](https://developer.apple.com/documentation/foundation/calendar/dateinterval(of:for:)), accessed 2026-09-16. The calculation uses an instant inside the chart boundary and the calendar's start of day, rather than assuming every day lasts 24 hours.
 
 ![Synthetic September 16 snapshot with corrected footer](assets/share-period-date.png)
+
+Full upstream CI caught the existing architecture allowlist's line anchor moving from 195 to 198 after the payload timezone field was added. The anchor now follows the unchanged model-family sanitizer; its reason, expected provider IDs, and fingerprint are unchanged. Focused architecture/date and full current-head CI are pending this correction.
