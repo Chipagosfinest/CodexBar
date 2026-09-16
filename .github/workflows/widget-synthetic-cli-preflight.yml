@@ -247,6 +247,37 @@ jobs:
           assert "Test skipped" not in log, "GUI proof must not skip its selected test"
           PYRESULT
 
+      - name: Record synthetic widget storage and group entitlements
+        run: |
+          set -euo pipefail
+          python3 - <<'PYSTORAGE'
+          import json, os, pathlib, plistlib, subprocess
+          proof = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight")
+          app = proof / "app/CodexBar.app"
+          extensions = list((app / "Contents/PlugIns").glob("*.appex"))
+          assert len(extensions) == 1, "Expected one packaged widget extension"
+          evidence = {"bundles": [], "snapshots": []}
+          for bundle in [app, extensions[0]]:
+              info = plistlib.loads((bundle / "Contents/Info.plist").read_bytes())
+              result = subprocess.run(["codesign", "-d", "--entitlements", ":-", str(bundle)], check=True, capture_output=True)
+              entitlements = plistlib.loads(result.stdout)
+              evidence["bundles"].append({"id": info["CFBundleIdentifier"], "team": info.get("CodexBarTeamID"), "groups": entitlements.get("com.apple.security.application-groups", [])})
+          base = pathlib.Path.home() / "Library"
+          candidates = {
+              "sharedGroup": base / "Group Containers/Y5PE65HELJ.com.steipete.codexbar.debug/widget-snapshot.json",
+              "appFallback": base / "Application Support/CodexBar/widget-snapshot.json",
+          }
+          for kind, path in candidates.items():
+              item = {"location": kind, "exists": path.is_file()}
+              if path.is_file():
+                  snapshot = json.loads(path.read_text())
+                  item["generatedAt"] = snapshot.get("generatedAt")
+                  item["enabledProviders"] = snapshot.get("enabledProviders")
+                  item["entries"] = [{"provider": entry.get("provider"), "tokenUsage": entry.get("tokenUsage")} for entry in snapshot.get("entries", [])]
+              evidence["snapshots"].append(item)
+          (proof / "widget-storage-proof.json").write_text(json.dumps(evidence, indent=2) + "\n")
+          PYSTORAGE
+
       - name: Record desktop widget gallery discovery evidence
         if: github.event_name == 'push' || inputs.widget_gallery_discovery == true
         env:
@@ -330,6 +361,7 @@ jobs:
           path: |
             ${{ runner.temp }}/widget-synthetic-cli-preflight/gui-disabled-services-before.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/notification-center-service.txt
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-storage-proof.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/package-source-commit.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status-after-app.json

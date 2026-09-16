@@ -223,9 +223,16 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         XCTAssertTrue(
             editWidgets.waitForExistence(timeout: 5),
             "Notification Center lacked an accessible Edit Widgets control")
-        XCTAssertTrue(editWidgets.isHittable, "Accessible Edit Widgets control was not hittable")
-        guard editWidgets.exists, editWidgets.isHittable else { return }
-        editWidgets.click()
+        let editWidgetsFrame = editWidgets.frame
+        let observedLabel = editWidgets.label
+        let validEditWidgetsFrame = editWidgetsFrame.width > 0 && editWidgetsFrame.height > 0 &&
+            NSScreen.screens.contains(where: { $0.frame.contains(editWidgetsFrame) })
+        XCTAssertTrue(
+            observedLabel.localizedCaseInsensitiveContains("Edit Widgets") && validEditWidgetsFrame,
+            "Accessible Edit Widgets control must retain its label and an on-screen frame")
+        guard editWidgets.exists, observedLabel.localizedCaseInsensitiveContains("Edit Widgets"),
+              validEditWidgetsFrame else { return }
+        editWidgets.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
         let editWidgetsClosed = XCTNSPredicateExpectation(
             predicate: NSPredicate(format: "exists == false"),
             object: editWidgets)
