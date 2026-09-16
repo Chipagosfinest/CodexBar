@@ -40,7 +40,7 @@ jobs:
           path: |
             .build
             ~/Library/Caches/org.swift.swiftpm
-          key: native-proof-v2-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Sources/**', 'Tests/**') }}
+          key: native-proof-v2-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Sources/**', 'Tests/**', 'TestsPlugin/**', 'TestsLinux/**') }}
           restore-keys: |
             native-proof-v2-macos26-${{ matrix.surface }}-
             native-proof-macos26-${{ matrix.surface }}-
@@ -68,7 +68,7 @@ jobs:
           path: |
             .build
             ~/Library/Caches/org.swift.swiftpm
-          key: native-proof-v2-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Sources/**', 'Tests/**') }}
+          key: native-proof-v2-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Sources/**', 'Tests/**', 'TestsPlugin/**', 'TestsLinux/**') }}
       - name: Render isolated native view proof
         if: ${{ matrix.native != '' }}
         env:
