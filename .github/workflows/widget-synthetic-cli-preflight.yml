@@ -28,6 +28,21 @@ on:
         options:
           - small
           - medium
+      upgrade_mode:
+        description: Install build 146, then replace the runner-owned app with build 147 without re-adding the widget
+        required: false
+        default: false
+        type: boolean
+      baseline_package_run_id:
+        description: Successful package-proof run containing the build 146 baseline
+        required: false
+        default: "35129543746"
+        type: string
+      baseline_package_source_sha:
+        description: Exact source recorded by the build 146 baseline package artifact
+        required: false
+        default: 9db44805dc1e0180993492bffd14ac98dd6a866f
+        type: string
   push:
     branches: [validation/native-spend-share-proof]
     paths:
@@ -45,6 +60,9 @@ jobs:
       PACKAGE_RUN_ID: ${{ inputs.package_run_id || '35117930549' }}
       EXPECTED_PACKAGE_SHA: ${{ inputs.package_source_sha || 'd223726ffd8d9d60c3eab54af55e730b7291669c' }}
       WIDGET_FAMILY: ${{ inputs.widget_family || 'small' }}
+      UPGRADE_MODE: ${{ inputs.upgrade_mode && '1' || '0' }}
+      BASELINE_PACKAGE_RUN_ID: ${{ inputs.baseline_package_run_id || '35129543746' }}
+      EXPECTED_BASELINE_SHA: ${{ inputs.baseline_package_source_sha || '9db44805dc1e0180993492bffd14ac98dd6a866f' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -64,20 +82,87 @@ jobs:
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/widget-package-proof
 
-      - name: Verify and unpack the exact debug package
+      - name: Download the build 146 baseline package for opt-in upgrade proof
+        if: inputs.upgrade_mode == true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: widget-package-proof
+          repository: ${{ github.repository }}
+          run-id: ${{ env.BASELINE_PACKAGE_RUN_ID }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/widget-upgrade-baseline-package
+
+      - name: Verify and unpack exact debug package artifacts
         run: |
           set -euo pipefail
           proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
-          package="$RUNNER_TEMP/widget-package-proof"
-          test "$(tr -d '\n' < "$package/source-commit.txt")" = "$EXPECTED_PACKAGE_SHA"
-          test "$(awk -F= '/^app_bundle_id=/{print $2}' "$package/bundle-metadata.txt")" = com.steipete.codexbar.debug
-          test "$(awk -F= '/^widget_bundle_id=/{print $2}' "$package/bundle-metadata.txt")" = com.steipete.codexbar.debug.widget
-          mkdir -p "$proof/app"
-          ditto -x -k "$package/CodexBar-debug-widget-package.zip" "$proof/app"
-          app="$proof/app/CodexBar.app"
-          test -x "$app/Contents/Helpers/CodexBarCLI"
-          codesign --verify --deep --strict "$app"
+          candidate_package="$RUNNER_TEMP/widget-package-proof"
+          verify_package() {
+            local package="$1" expected_sha="$2" destination="$3" expected_build="$4"
+            test -f "$package/source-commit.txt"
+            test -f "$package/bundle-metadata.txt"
+            test -f "$package/CodexBar-debug-widget-package.zip"
+            test "$(tr -d '\n' < "$package/source-commit.txt")" = "$expected_sha"
+            test "$(awk -F= '/^app_bundle_id=/{print $2}' "$package/bundle-metadata.txt")" = com.steipete.codexbar.debug
+            test "$(awk -F= '/^widget_bundle_id=/{print $2}' "$package/bundle-metadata.txt")" = com.steipete.codexbar.debug.widget
+            mkdir -p "$destination"
+            ditto -x -k "$package/CodexBar-debug-widget-package.zip" "$destination"
+            local app="$destination/CodexBar.app"
+            local extension="$app/Contents/PlugIns/CodexBarWidget.appex"
+            test -x "$app/Contents/Helpers/CodexBarCLI"
+            test -d "$extension"
+            test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Contents/Info.plist")" = com.steipete.codexbar.debug
+            test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$app/Contents/Info.plist")" = "$expected_build"
+            test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$extension/Contents/Info.plist")" = com.steipete.codexbar.debug.widget
+            test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$extension/Contents/Info.plist")" = "$expected_build"
+            codesign --verify --deep --strict "$app"
+          }
+          if test "$UPGRADE_MODE" = 1; then
+            verify_package "$RUNNER_TEMP/widget-upgrade-baseline-package" "$EXPECTED_BASELINE_SHA" "$proof/app" 146
+            verify_package "$candidate_package" "$EXPECTED_PACKAGE_SHA" "$proof/upgrade-candidate" 147
+          else
+            verify_package "$candidate_package" "$EXPECTED_PACKAGE_SHA" "$proof/app" 147
+          fi
+          python3 - <<'PYMETADATA'
+          import hashlib, json, os, pathlib, plistlib, subprocess
+          proof = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight")
+          records = []
+          packages = [
+              ("baseline", proof / "app/CodexBar.app", os.environ["EXPECTED_BASELINE_SHA"]),
+              ("candidate", proof / "upgrade-candidate/CodexBar.app", os.environ["EXPECTED_PACKAGE_SHA"]),
+          ] if os.environ["UPGRADE_MODE"] == "1" else [
+              ("package", proof / "app/CodexBar.app", os.environ["EXPECTED_PACKAGE_SHA"]),
+          ]
+          for role, root, expected_sha in packages:
+              if not root.is_dir():
+                  continue
+              extension = root / "Contents/PlugIns/CodexBarWidget.appex"
+              app_info = plistlib.loads((root / "Contents/Info.plist").read_bytes())
+              extension_info = plistlib.loads((extension / "Contents/Info.plist").read_bytes())
+              executable = root / "Contents/MacOS/CodexBar"
+              groups = []
+              for bundle in (root, extension):
+                  signed = subprocess.run(["codesign", "-d", "--entitlements", ":-", str(bundle)], check=True, capture_output=True)
+                  entitlements = plistlib.loads(signed.stdout)
+                  current_groups = entitlements.get("com.apple.security.application-groups", [])
+                  assert "Y5PE65HELJ.com.steipete.codexbar.debug" in current_groups, current_groups
+                  groups.append(current_groups)
+              records.append({
+                  "role": role,
+                  "recordedSourceCommit": expected_sha,
+                  "app": {key: app_info.get(key) for key in ("CFBundleIdentifier", "CFBundleShortVersionString", "CFBundleVersion")},
+                  "extension": {key: extension_info.get(key) for key in ("CFBundleIdentifier", "CFBundleShortVersionString", "CFBundleVersion")},
+                  "executableSHA256": hashlib.sha256(executable.read_bytes()).hexdigest(),
+                  "codesignVerified": True,
+                  "signedAppAndExtensionGroups": groups,
+              })
+          assert len(records) == len(packages)
+          (proof / "package-metadata.json").write_text(json.dumps(records, indent=2) + "\n")
+          PYMETADATA
           printf '%s\n' "$EXPECTED_PACKAGE_SHA" > "$proof/package-source-commit.txt"
+          if test "$UPGRADE_MODE" = 1; then
+            printf '%s\n' "$EXPECTED_BASELINE_SHA" > "$proof/baseline-package-source-commit.txt"
+          fi
 
       - name: Seed only runner-owned Claude input and run packaged CLI
         run: |
@@ -219,7 +304,7 @@ jobs:
       # GitHub's image disables this service in configure-system.sh. Restore only
       # this disposable runner's normal desktop UI; no TCC or widget database edits.
       - name: Enable Notification Center for desktop widget proof
-        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true || inputs.widget_family == 'medium'
+        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true || inputs.widget_family == 'medium' || inputs.upgrade_mode == true
         run: |
           set -euo pipefail
           proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
@@ -234,6 +319,7 @@ jobs:
           launchctl print "gui/$(id -u)/$label" > "$proof/notification-center-service.txt"
 
       - name: Observe real warm and cold share route with XCUITest
+        if: inputs.upgrade_mode != true
         env:
           CODEXBAR_CI_PACKAGED_APP: ${{ runner.temp }}/widget-synthetic-cli-preflight/app/CodexBar.app
           CODEXBAR_CI_SEED_ROOT: ${{ runner.temp }}/widget-synthetic-cli-preflight/seed
@@ -294,13 +380,17 @@ jobs:
           PYSTORAGE
 
       - name: Record desktop widget gallery discovery evidence
-        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true || inputs.widget_family == 'medium'
+        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true || inputs.widget_family == 'medium' || inputs.upgrade_mode == true
         env:
           CODEXBAR_CI_PACKAGED_APP: ${{ runner.temp }}/widget-synthetic-cli-preflight/app/CodexBar.app
           CODEXBAR_CI_SEED_ROOT: ${{ runner.temp }}/widget-synthetic-cli-preflight/seed
         run: |
           set -euo pipefail
           proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          upgrade_candidate=""
+          if test "$UPGRADE_MODE" = 1; then
+            upgrade_candidate="$proof/upgrade-candidate/CodexBar.app"
+          fi
           xcodebuild test \
             -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
             -scheme WidgetDesktopSmoke \
@@ -315,6 +405,7 @@ jobs:
             CODEXBAR_CI_PACKAGED_APP="$CODEXBAR_CI_PACKAGED_APP" \
             CODEXBAR_CI_SEED_ROOT="$CODEXBAR_CI_SEED_ROOT" \
             CODEXBAR_CI_WIDGET_FAMILY="$WIDGET_FAMILY" \
+            CODEXBAR_CI_UPGRADE_CANDIDATE_APP="$upgrade_candidate" \
             2>&1 | tee "$proof/widget-gallery-discovery-xcodebuild.log"
           python3 - <<'PYRESULT'
           import os, pathlib, re
@@ -336,6 +427,33 @@ jobs:
           assert [p["provider"] for p in providers if p["enabled"]] == ["codex", "claude"], "App changed explicitly seeded provider scope"
           PYPROVIDERS
           fi
+
+      - name: Capture read-only Switcher selection diagnostics
+        if: always()
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          mkdir -p "$proof"
+          python3 - <<'PYSELECTION'
+          import json, os, pathlib, plistlib, subprocess
+          home = pathlib.Path.home()
+          group = "Y5PE65HELJ.com.steipete.codexbar.debug"
+          result = {}
+          for domain in (group, "com.steipete.codexbar.debug.widget", "com.steipete.codexbar.debug"):
+              read = subprocess.run(["defaults", "read", domain, "widgetSelectedProvider"], capture_output=True, text=True)
+              result[domain] = {"present": read.returncode == 0, "value": read.stdout.strip() if read.returncode == 0 else None}
+          group_plist = home / "Library/Group Containers" / group / "Library/Preferences" / (group + ".plist")
+          result["groupContainerPlist"] = {"exists": group_plist.exists()}
+          if group_plist.exists():
+              result["groupContainerPlist"]["widgetSelectedProvider"] = plistlib.loads(group_plist.read_bytes()).get("widgetSelectedProvider")
+          output = pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/widget-selected-provider.txt")
+          output.write_text(json.dumps(result, indent=2) + "\n")
+          PYSELECTION
+          # The disposable configuration and synthetic JSONL have no credentials. Keep
+          # the query limited to the extension/AppIntent selection path for diagnosis.
+          /usr/bin/log show --last 8m --style compact --predicate \
+            'process CONTAINS[c] "CodexBar" OR eventMessage CONTAINS[c] "AppIntent" OR eventMessage CONTAINS[c] "widgetSelectedProvider"' \
+            > "$proof/widget-selection-unified-log.txt" || true
 
       - name: Export inspectable UI attachments
         if: always()
@@ -379,6 +497,10 @@ jobs:
             ${{ runner.temp }}/widget-synthetic-cli-preflight/notification-center-service.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-storage-proof.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/package-source-commit.txt
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/baseline-package-source-commit.txt
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/package-metadata.json
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-selected-provider.txt
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-selection-unified-log.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status-after-app.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/claude-cost.json

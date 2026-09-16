@@ -227,74 +227,66 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         self.attachText(self.systemWidgetOwnerSummary(), named: "widget-system-owners")
         self.attachSystemOwnerHierarchies()
 
-        let controlCenter = XCUIApplication(bundleIdentifier: "com.apple.controlcenter")
-        let clock = controlCenter.descendants(matching: .any)
-            .matching(identifier: "com.apple.menuextra.clock").firstMatch
-        XCTAssertTrue(clock.waitForExistence(timeout: 5), "Observed clock status item was not accessible")
-        XCTAssertTrue(clock.isHittable, "Observed clock status item was not hittable")
-        guard clock.exists, clock.isHittable else { return }
-        clock.click()
-
-        guard let notificationCenterID = self.waitForNotificationCenterIdentifier() else {
-            XCTFail("Clicking the observed clock did not reveal a public Notification Center owner")
-            return
-        }
-        let notificationCenter = XCUIApplication(bundleIdentifier: notificationCenterID)
-        self.attach("notification-center-open", app: notificationCenter)
+        let notificationCenter = XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui")
         if widgetFamily == "medium" {
-            let banner = notificationCenter.descendants(matching: .any).matching(NSPredicate(
-                format: "label CONTAINS[c] %@", "App Background Activity")).firstMatch
-            if banner.exists {
-                let clearNotifications = notificationCenter.menuButtons.matching(identifier: "xmark").firstMatch
-                guard clearNotifications.exists,
-                      clearNotifications.label == "Clear Notifications…",
-                      NSScreen.screens.contains(where: { $0.frame.contains(clearNotifications.frame) })
-                else {
-                    self.attach("medium-blocked-by-notification-banner", app: notificationCenter)
-                    XCTFail("Observed CI notification banner has no visible public clear control")
-                    return
-                }
-                clearNotifications.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
-                let clearAll = notificationCenter.menuItems["Clear All Notifications"]
-                guard clearAll.waitForExistence(timeout: 5),
-                      NSScreen.screens.contains(where: { $0.frame.contains(clearAll.frame) })
-                else {
-                    self.attach("medium-clear-notifications-menu", app: notificationCenter)
-                    XCTFail("Public clear menu did not expose its observed Clear All Notifications action")
-                    return
-                }
-                clearAll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
-                self.attach("medium-after-clear-notifications", app: notificationCenter)
-                let cleared = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !banner.exists }, object: nil)
-                guard XCTWaiter.wait(for: [cleared], timeout: 5) == .completed else {
-                    XCTFail("Public clear control did not dismiss the CI notification banner")
-                    return
-                }
+            // Apple's desktop context-menu path gives automatic placement room without the Notification Center drawer.
+            let desktop = finder.descendants(matching: .any).matching(NSPredicate(
+                format: "label ==[c] %@", "desktop")).firstMatch
+            guard desktop.exists, desktop.frame.width >= 1024, desktop.frame.height >= 768 else {
+                XCTFail("Expected captured desktop geometry for public widget context menu")
+                return
             }
-        }
+            desktop.coordinate(withNormalizedOffset: CGVector(dx: 0.55, dy: 0.6)).rightClick()
+            self.attach("desktop-widget-context-menu", app: finder)
+            let edit = finder.menuItems.matching(NSPredicate(
+                format: "label BEGINSWITH %@ OR identifier BEGINSWITH %@",
+                "Edit Widgets",
+                "Edit Widgets")).firstMatch
+            guard edit.waitForExistence(timeout: 5),
+                  NSScreen.screens.contains(where: { $0.frame.contains(edit.frame) })
+            else {
+                XCTFail("Desktop context menu did not expose Apple's Edit Widgets action")
+                return
+            }
+            edit.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+        } else {
+            let controlCenter = XCUIApplication(bundleIdentifier: "com.apple.controlcenter")
+            let clock = controlCenter.descendants(matching: .any)
+                .matching(identifier: "com.apple.menuextra.clock").firstMatch
+            XCTAssertTrue(clock.waitForExistence(timeout: 5), "Observed clock status item was not accessible")
+            XCTAssertTrue(clock.isHittable, "Observed clock status item was not hittable")
+            guard clock.exists, clock.isHittable else { return }
+            clock.click()
 
-        let editWidgets = notificationCenter.descendants(matching: .any).matching(NSPredicate(
-            format: "label CONTAINS[c] %@", "Edit Widgets")).firstMatch
-        XCTAssertTrue(
-            editWidgets.waitForExistence(timeout: 5),
-            "Notification Center lacked an accessible Edit Widgets control")
-        let editWidgetsFrame = editWidgets.frame
-        let observedLabel = editWidgets.label
-        let validEditWidgetsFrame = editWidgetsFrame.width > 0 && editWidgetsFrame.height > 0 &&
-            NSScreen.screens.contains(where: { $0.frame.contains(editWidgetsFrame) })
-        XCTAssertTrue(
-            observedLabel.localizedCaseInsensitiveContains("Edit Widgets") && validEditWidgetsFrame,
-            "Accessible Edit Widgets control must retain its label and an on-screen frame")
-        guard editWidgets.exists, observedLabel.localizedCaseInsensitiveContains("Edit Widgets"),
-              validEditWidgetsFrame else { return }
-        editWidgets.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
-        let editWidgetsClosed = XCTNSPredicateExpectation(
-            predicate: NSPredicate(format: "exists == false"),
-            object: editWidgets)
-        XCTAssertEqual(
-            XCTWaiter.wait(for: [editWidgetsClosed], timeout: 5),
-            .completed,
-            "Edit Widgets remained visible after its action; post-action UI is not a gallery transition")
+            guard let notificationCenterID = self.waitForNotificationCenterIdentifier() else {
+                XCTFail("Clicking the observed clock did not reveal a public Notification Center owner")
+                return
+            }
+            XCTAssertEqual(notificationCenterID, "com.apple.notificationcenterui")
+            self.attach("notification-center-open", app: notificationCenter)
+            let editWidgets = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+                format: "label CONTAINS[c] %@", "Edit Widgets")).firstMatch
+            XCTAssertTrue(
+                editWidgets.waitForExistence(timeout: 5),
+                "Notification Center lacked an accessible Edit Widgets control")
+            let editWidgetsFrame = editWidgets.frame
+            let observedLabel = editWidgets.label
+            let validEditWidgetsFrame = editWidgetsFrame.width > 0 && editWidgetsFrame.height > 0 &&
+                NSScreen.screens.contains(where: { $0.frame.contains(editWidgetsFrame) })
+            XCTAssertTrue(
+                observedLabel.localizedCaseInsensitiveContains("Edit Widgets") && validEditWidgetsFrame,
+                "Accessible Edit Widgets control must retain its label and an on-screen frame")
+            guard editWidgets.exists, observedLabel.localizedCaseInsensitiveContains("Edit Widgets"),
+                  validEditWidgetsFrame else { return }
+            editWidgets.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+            let editWidgetsClosed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"),
+                object: editWidgets)
+            XCTAssertEqual(
+                XCTWaiter.wait(for: [editWidgetsClosed], timeout: 5),
+                .completed,
+                "Edit Widgets remained visible after its action; post-action UI is not a gallery transition")
+        }
         let gallerySearch = notificationCenter.searchFields.firstMatch
         let galleryDone = notificationCenter.buttons["Done"]
         var galleryControl: String?
@@ -338,35 +330,42 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             "Switcher preview had no visible frame")
         self.attach("codexbar-switcher-selected-before-actions", app: notificationCenter)
 
-        // This fresh runner's captured desktop has existing widgets at x <= 368,
-        // the gallery below y=256, and Notification Center at x >= 664.
-        // Recheck the actual window frames before using that empty desktop region.
-        let desktop = finder.descendants(matching: .any).matching(NSPredicate(
-            format: "label ==[c] %@", "desktop")).firstMatch
-        XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
-        let desktopFrame = desktop.frame
-        let installedSize = widgetFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(width: 348, height: 168)
-        let drop = CGPoint(x: desktopFrame.midX + (widgetFamily == "medium" ? 36 : 0), y: desktopFrame.minY + 120)
-        let dropFrame = CGRect(
-            x: drop.x - installedSize.width / 2,
-            y: drop.y - installedSize.height / 2,
-            width: installedSize.width,
-            height: installedSize.height)
-        let occupied = notificationCenter.windows.allElementsBoundByIndex.contains {
-            $0.frame.intersects(dropFrame)
+        if widgetFamily == "medium" {
+            // A preview click in the desktop gallery asks macOS to choose an unoccupied placement.
+            switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+        } else {
+            // This fresh runner's captured desktop has existing widgets at x <= 368,
+            // the gallery below y=256, and Notification Center at x >= 664.
+            // Recheck the actual window frames before using that empty desktop region.
+            let desktop = finder.descendants(matching: .any).matching(NSPredicate(
+                format: "label ==[c] %@", "desktop")).firstMatch
+            XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
+            let desktopFrame = desktop.frame
+            let installedSize = widgetFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(
+                width: 348,
+                height: 168)
+            let drop = CGPoint(x: desktopFrame.midX + (widgetFamily == "medium" ? 36 : 0), y: desktopFrame.minY + 120)
+            let dropFrame = CGRect(
+                x: drop.x - installedSize.width / 2,
+                y: drop.y - installedSize.height / 2,
+                width: installedSize.width,
+                height: installedSize.height)
+            let occupied = notificationCenter.windows.allElementsBoundByIndex.contains {
+                $0.frame.intersects(dropFrame)
+            }
+            guard desktopFrame.width == 1024, desktopFrame.height == 768,
+                  desktopFrame.contains(dropFrame), !occupied,
+                  NSScreen.screens.contains(where: { $0.frame.contains(switcherPreview.frame) })
+            else {
+                XCTFail("Captured desktop geometry does not establish a safe empty drop target")
+                return
+            }
+            let target = desktop.coordinate(withNormalizedOffset: CGVector(
+                dx: (drop.x - desktopFrame.minX) / desktopFrame.width,
+                dy: (drop.y - desktopFrame.minY) / desktopFrame.height))
+            switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+                .click(forDuration: 1, thenDragTo: target)
         }
-        guard desktopFrame.width == 1024, desktopFrame.height == 768,
-              desktopFrame.contains(dropFrame), !occupied,
-              NSScreen.screens.contains(where: { $0.frame.contains(switcherPreview.frame) })
-        else {
-            XCTFail("Captured desktop geometry does not establish a safe empty drop target")
-            return
-        }
-        let target = desktop.coordinate(withNormalizedOffset: CGVector(
-            dx: (drop.x - desktopFrame.minX) / desktopFrame.width,
-            dy: (drop.y - desktopFrame.minY) / desktopFrame.height))
-        switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-            .click(forDuration: 1, thenDragTo: target)
         self.attach("after-switcher-desktop-drop", app: notificationCenter)
         let done = notificationCenter.buttons.matching(identifier: "widget-add-sheet-done").firstMatch
         guard done.waitForExistence(timeout: 5),
@@ -442,6 +441,17 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             "Claude switch did not restore its synthetic usage state")
         XCTAssertFalse(codexBar.windows["Share AI Usage"].exists, "Claude provider button opened the share preview")
         self.attach("installed-switcher-provider-buttons", app: notificationCenter)
+        if let candidatePath = environment["CODEXBAR_CI_UPGRADE_CANDIDATE_APP"], !candidatePath.isEmpty,
+           !candidatePath.hasPrefix("$(")
+        {
+            try self.replaceBaselineApp(
+                at: packagedAppPath,
+                with: candidatePath,
+                in: runnerTemporaryPath,
+                app: codexBar,
+                installed: installed,
+                notificationCenter: notificationCenter)
+        }
         for phase in ["warm", "cold"] {
             if phase == "cold" {
                 codexBar.terminate()
@@ -485,6 +495,85 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         self.attachText(
             "A \(widgetFamily) Switcher was added through the real gallery, switched between empty Codex and populated Claude without opening share, and opened populated previews through actual warm and cold widget share clicks. Other families and older-version upgrade behavior remain unverified.",
             named: "widget-gallery-discovery-boundary")
+    }
+
+    private func replaceBaselineApp(
+        at baselinePath: String,
+        with candidatePath: String,
+        in runnerTemporaryPath: String,
+        app: XCUIApplication,
+        installed: XCUIElement,
+        notificationCenter: XCUIApplication) throws
+    {
+        guard Self.isStrictDescendant(candidatePath, of: runnerTemporaryPath),
+              Self.isStrictDescendant(baselinePath, of: runnerTemporaryPath),
+              candidatePath != baselinePath,
+              !Self.isStrictDescendant(candidatePath, of: baselinePath),
+              FileManager.default.fileExists(atPath: candidatePath),
+              app.wait(for: .runningBackground, timeout: 1) || app.wait(for: .runningForeground, timeout: 1)
+        else {
+            XCTFail("Upgrade candidate must be a disposable app and baseline must still be running")
+            return
+        }
+        let baselineInfo = try self.bundleMetadata(at: baselinePath)
+        let candidateInfo = try self.bundleMetadata(at: candidatePath)
+        guard baselineInfo["CFBundleVersion"] as? String == "146",
+              candidateInfo["CFBundleVersion"] as? String == "147",
+              baselineInfo["CFBundleIdentifier"] as? String == "com.steipete.codexbar.debug",
+              candidateInfo["CFBundleIdentifier"] as? String == "com.steipete.codexbar.debug"
+        else {
+            XCTFail("Upgrade requires the verified build146 baseline and build147 debug candidate")
+            return
+        }
+        let candidateExecutable = try Data(contentsOf: URL(fileURLWithPath: candidatePath)
+            .appendingPathComponent("Contents/MacOS/CodexBar"))
+        let retainedIdentifier = installed.identifier
+        app.terminate()
+        guard app.wait(for: .notRunning, timeout: 10) else {
+            XCTFail("Baseline debug app did not quit before same-path replacement")
+            return
+        }
+        try FileManager.default.removeItem(atPath: baselinePath)
+        try FileManager.default.moveItem(atPath: candidatePath, toPath: baselinePath)
+        let replacementExecutable = try Data(contentsOf: URL(fileURLWithPath: baselinePath)
+            .appendingPathComponent("Contents/MacOS/CodexBar"))
+        XCTAssertTrue(
+            replacementExecutable == candidateExecutable,
+            "Replacement executable differs from verified candidate")
+        let launch = Process()
+        launch.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+        launch.arguments = ["-n", "-g", baselinePath]
+        try launch.run()
+        launch.waitUntilExit()
+        guard launch.terminationStatus == 0,
+              app.wait(for: .runningBackground, timeout: 15) || app.wait(for: .runningForeground, timeout: 1)
+        else {
+            XCTFail("Replacement debug app did not launch at the retained widget path")
+            return
+        }
+        let runningReplacement = NSWorkspace.shared.runningApplications.first {
+            $0.bundleIdentifier == "com.steipete.codexbar.debug"
+        }
+        XCTAssertEqual(
+            runningReplacement?.bundleURL?.standardizedFileURL.path,
+            URL(fileURLWithPath: baselinePath).standardizedFileURL.path)
+        XCTAssertEqual(
+            notificationCenter.descendants(matching: .any).matching(identifier: retainedIdentifier).count,
+            1,
+            "Expected the same sole installed Switcher after replacement")
+        XCTAssertEqual(
+            installed.identifier,
+            retainedIdentifier,
+            "Widget identity changed after same-path app replacement")
+        XCTAssertTrue(
+            installed.debugDescription.contains("110K"),
+            "Retained widget lost Claude snapshot after replacement")
+        self.attach("retained-widget-after-app-replacement", app: notificationCenter)
+    }
+
+    private func bundleMetadata(at appPath: String) throws -> [String: Any] {
+        let plist = try Data(contentsOf: URL(fileURLWithPath: appPath).appendingPathComponent("Contents/Info.plist"))
+        return try XCTUnwrap(PropertyListSerialization.propertyList(from: plist, format: nil) as? [String: Any])
     }
 
     private func waitForNotificationCenterIdentifier() -> String? {
