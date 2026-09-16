@@ -20,6 +20,14 @@ on:
         required: false
         default: false
         type: boolean
+      widget_family:
+        description: Installed Switcher family to exercise
+        required: false
+        default: small
+        type: choice
+        options:
+          - small
+          - medium
   push:
     branches: [validation/native-spend-share-proof]
     paths:
@@ -36,6 +44,7 @@ jobs:
     env:
       PACKAGE_RUN_ID: ${{ inputs.package_run_id || '35117930549' }}
       EXPECTED_PACKAGE_SHA: ${{ inputs.package_source_sha || 'd223726ffd8d9d60c3eab54af55e730b7291669c' }}
+      WIDGET_FAMILY: ${{ inputs.widget_family || 'small' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -210,7 +219,7 @@ jobs:
       # GitHub's image disables this service in configure-system.sh. Restore only
       # this disposable runner's normal desktop UI; no TCC or widget database edits.
       - name: Enable Notification Center for desktop widget proof
-        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true
+        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true || inputs.widget_family == 'medium'
         run: |
           set -euo pipefail
           proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
@@ -285,7 +294,7 @@ jobs:
           PYSTORAGE
 
       - name: Record desktop widget gallery discovery evidence
-        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true
+        if: github.event_name == 'push' || inputs.widget_gallery_discovery == true || inputs.widget_family == 'medium'
         env:
           CODEXBAR_CI_PACKAGED_APP: ${{ runner.temp }}/widget-synthetic-cli-preflight/app/CodexBar.app
           CODEXBAR_CI_SEED_ROOT: ${{ runner.temp }}/widget-synthetic-cli-preflight/seed
@@ -305,6 +314,7 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             CODEXBAR_CI_PACKAGED_APP="$CODEXBAR_CI_PACKAGED_APP" \
             CODEXBAR_CI_SEED_ROOT="$CODEXBAR_CI_SEED_ROOT" \
+            CODEXBAR_CI_WIDGET_FAMILY="$WIDGET_FAMILY" \
             2>&1 | tee "$proof/widget-gallery-discovery-xcodebuild.log"
           python3 - <<'PYRESULT'
           import os, pathlib, re

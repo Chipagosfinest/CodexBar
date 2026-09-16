@@ -183,6 +183,11 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         let environment = ProcessInfo.processInfo.environment
         let packagedAppPath = try XCTUnwrap(environment["CODEXBAR_CI_PACKAGED_APP"])
         let runnerTemporaryPath = try XCTUnwrap(environment["CODEXBAR_CI_RUNNER_TEMP"])
+        let widgetFamily = environment["CODEXBAR_CI_WIDGET_FAMILY"] ?? "small"
+        guard ["small", "medium"].contains(widgetFamily) else {
+            XCTFail("Widget family must be small or medium")
+            return
+        }
         guard Self.isStrictDescendant(packagedAppPath, of: runnerTemporaryPath) else {
             XCTFail("Packaged app must be a disposable runner artifact")
             return
@@ -217,6 +222,28 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         }
         let notificationCenter = XCUIApplication(bundleIdentifier: notificationCenterID)
         self.attach("notification-center-open", app: notificationCenter)
+        if widgetFamily == "medium" {
+            let banner = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+                format: "label CONTAINS[c] %@", "App Background Activity")).firstMatch
+            if banner.exists {
+                let clearNotifications = notificationCenter.menuButtons.matching(identifier: "xmark").firstMatch
+                guard clearNotifications.exists,
+                      clearNotifications.label == "Clear Notifications…",
+                      NSScreen.screens.contains(where: { $0.frame.contains(clearNotifications.frame) })
+                else {
+                    self.attach("medium-blocked-by-notification-banner", app: notificationCenter)
+                    XCTFail("Observed CI notification banner has no visible public clear control")
+                    return
+                }
+                clearNotifications.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+                self.attach("medium-after-clear-notifications", app: notificationCenter)
+                let cleared = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !banner.exists }, object: nil)
+                guard XCTWaiter.wait(for: [cleared], timeout: 5) == .completed else {
+                    XCTFail("Public clear control did not dismiss the CI notification banner")
+                    return
+                }
+            }
+        }
 
         let editWidgets = notificationCenter.descendants(matching: .any).matching(NSPredicate(
             format: "label CONTAINS[c] %@", "Edit Widgets")).firstMatch
@@ -274,8 +301,10 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         codexBarCategory.click()
         let switcherPreview = notificationCenter.descendants(matching: .any).matching(NSPredicate(
             format: "identifier CONTAINS %@ AND identifier CONTAINS %@ AND identifier CONTAINS %@",
-            "com.steipete.codexbar.debug", "CodexBarSwitcherWidget", "systemSmall")).firstMatch
-        XCTAssertTrue(switcherPreview.waitForExistence(timeout: 5), "CodexBar small Switcher preview was not available")
+            "com.steipete.codexbar.debug", "CodexBarSwitcherWidget", "system\(widgetFamily.capitalized)")).firstMatch
+        XCTAssertTrue(
+            switcherPreview.waitForExistence(timeout: 5),
+            "CodexBar \(widgetFamily) Switcher preview was not available")
         XCTAssertTrue(
             switcherPreview.frame.width > 0 && switcherPreview.frame.height > 0,
             "Switcher preview had no visible frame")
@@ -288,8 +317,13 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             format: "label ==[c] %@", "desktop")).firstMatch
         XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
         let desktopFrame = desktop.frame
-        let drop = CGPoint(x: desktopFrame.midX, y: desktopFrame.minY + 120)
-        let dropFrame = CGRect(x: drop.x - 90, y: drop.y - 90, width: 180, height: 180)
+        let installedSize = widgetFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(width: 348, height: 168)
+        let drop = CGPoint(x: desktopFrame.midX + (widgetFamily == "medium" ? 36 : 0), y: desktopFrame.minY + 120)
+        let dropFrame = CGRect(
+            x: drop.x - installedSize.width / 2,
+            y: drop.y - installedSize.height / 2,
+            width: installedSize.width,
+            height: installedSize.height)
         let occupied = notificationCenter.windows.allElementsBoundByIndex.contains {
             $0.frame.intersects(dropFrame)
         }
@@ -342,8 +376,10 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             return
         }
         XCTAssertTrue(
-            (140...200).contains(installed.frame.width) && (140...200).contains(installed.frame.height),
-            "Installed Switcher is not the expected small family")
+            widgetFamily == "small"
+                ? (140...200).contains(installed.frame.width) && (140...200).contains(installed.frame.height)
+                : (320...380).contains(installed.frame.width) && (140...200).contains(installed.frame.height),
+            "Installed Switcher is not the expected \(widgetFamily) family")
         XCTAssertFalse(installed.buttons["Remove"].exists, "Installed widget is still in edit mode")
         let codexProvider = installed.buttons["Codex"]
         let claudeProvider = installed.buttons["Claude"]
@@ -383,12 +419,21 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
                 codexBar.terminate()
                 XCTAssertTrue(codexBar.wait(for: .notRunning, timeout: 10))
             }
-            // Small-widget body is a widgetURL target; stay away from provider buttons.
             guard NSScreen.screens.contains(where: { $0.frame.contains(installed.frame) }) else {
                 XCTFail("Installed widget moved outside the captured screen")
                 return
             }
-            installed.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65)).click()
+            if widgetFamily == "small" {
+                // The small-widget body is a widgetURL target; stay away from provider buttons.
+                installed.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65)).click()
+            } else {
+                let shareOverview = installed.links["Share selected usage and spend overview"]
+                XCTAssertTrue(
+                    shareOverview.waitForExistence(timeout: 5),
+                    "Medium Switcher lacks its Share overview link")
+                guard shareOverview.exists else { return }
+                shareOverview.click()
+            }
             let preview = codexBar.windows["Share AI Usage"]
             XCTAssertTrue(preview.waitForExistence(timeout: 20), "Installed widget did not open \(phase) preview")
             for expected in ["Claude", "110K", "$0.45"] {
