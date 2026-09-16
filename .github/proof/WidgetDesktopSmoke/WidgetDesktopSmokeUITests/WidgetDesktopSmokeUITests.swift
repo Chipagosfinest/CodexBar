@@ -275,7 +275,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             self.attach("desktop-widget-context-menu", app: finder)
             // The captured desktop menu is visible while Finder's AX tree is disabled.
             // Inspect only running system owners and act on a uniquely observed on-screen menu item.
-            let menuOwners = [
+            let menuOwners: [String] = [
                 "com.apple.finder", "com.apple.WindowManager", "com.apple.dock",
                 "com.apple.notificationcenterui", "com.apple.controlcenter",
             ].filter { identifier in

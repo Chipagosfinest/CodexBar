@@ -471,7 +471,8 @@ jobs:
               attachment
               for result in manifest
               for attachment in result["attachments"]
-              if attachment["suggestedHumanReadableName"].startswith("retained-widget-state.json")
+              if attachment["suggestedHumanReadableName"].startswith("retained-widget-state_")
+              and attachment["suggestedHumanReadableName"].endswith(".json")
           ]
           assert len(candidates) == 1, f"Expected one retained-widget-state attachment, found {len(candidates)}"
           exported_name = candidates[0]["exportedFileName"]
