@@ -255,6 +255,15 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
                     return
                 }
                 clearNotifications.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+                let clearAll = notificationCenter.menuItems["Clear All Notifications"]
+                guard clearAll.waitForExistence(timeout: 5),
+                      NSScreen.screens.contains(where: { $0.frame.contains(clearAll.frame) })
+                else {
+                    self.attach("medium-clear-notifications-menu", app: notificationCenter)
+                    XCTFail("Public clear menu did not expose its observed Clear All Notifications action")
+                    return
+                }
+                clearAll.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
                 self.attach("medium-after-clear-notifications", app: notificationCenter)
                 let cleared = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !banner.exists }, object: nil)
                 guard XCTWaiter.wait(for: [cleared], timeout: 5) == .completed else {
