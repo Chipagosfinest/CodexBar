@@ -11,10 +11,15 @@ struct CodexBarUsageWidgetView: View {
     let entry: CodexBarWidgetEntry
 
     var body: some View {
+        self.content(for: self.family)
+    }
+
+    @ViewBuilder
+    func content(for family: WidgetFamily) -> some View {
         let providerEntry = self.entry.snapshot.entries.first { $0.provider == self.entry.provider.instanceID }
         Group {
             if let providerEntry {
-                self.content(providerEntry: providerEntry)
+                self.content(providerEntry: providerEntry, family: family)
             } else {
                 self.emptyState
             }
@@ -22,12 +27,12 @@ struct CodexBarUsageWidgetView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .containerBackground(.fill.tertiary, for: .widget)
         .environment(\.widgetUsageShowsUsed, self.entry.snapshot.usageBarsShowUsed)
-        .widgetURL(self.family == .systemSmall ? ShareStatsRoute.overviewURL : nil)
+        .widgetURL(family == .systemSmall ? ShareStatsRoute.overviewURL : nil)
     }
 
     @ViewBuilder
-    private func content(providerEntry: WidgetSnapshot.ProviderEntry) -> some View {
-        switch self.family {
+    private func content(providerEntry: WidgetSnapshot.ProviderEntry, family: WidgetFamily) -> some View {
+        switch family {
         case .systemSmall:
             SmallUsageView(entry: providerEntry)
         case .systemMedium:
@@ -54,10 +59,15 @@ struct CodexBarHistoryWidgetView: View {
     let entry: CodexBarWidgetEntry
 
     var body: some View {
+        self.content(for: self.family)
+    }
+
+    @ViewBuilder
+    func content(for family: WidgetFamily) -> some View {
         let providerEntry = self.entry.snapshot.entries.first { $0.provider == self.entry.provider.instanceID }
         Group {
             if let providerEntry {
-                HistoryView(entry: providerEntry, isLarge: self.family == .systemLarge)
+                HistoryView(entry: providerEntry, isLarge: family == .systemLarge)
             } else {
                 self.emptyState
             }
@@ -112,17 +122,22 @@ struct CodexBarSwitcherWidgetView: View {
     let entry: CodexBarSwitcherEntry
 
     var body: some View {
+        self.content(for: self.family)
+    }
+
+    @ViewBuilder
+    func content(for family: WidgetFamily) -> some View {
         let providerEntry = self.entry.snapshot.entries.first { $0.provider == self.entry.provider.instanceID }
         VStack(alignment: .leading, spacing: 10) {
             ProviderSwitcherRow(
                 providers: self.entry.availableProviders,
                 selected: self.entry.provider,
                 updatedAt: providerEntry?.updatedAt ?? Date(),
-                compact: self.family == .systemSmall,
-                showsTimestamp: self.family != .systemSmall,
-                showsShareAffordance: self.family == .systemSmall)
+                compact: family == .systemSmall,
+                showsTimestamp: family != .systemSmall,
+                showsShareAffordance: family == .systemSmall)
             if let providerEntry {
-                self.content(providerEntry: providerEntry)
+                self.content(providerEntry: providerEntry, family: family)
             } else {
                 self.emptyState
             }
@@ -130,12 +145,12 @@ struct CodexBarSwitcherWidgetView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .containerBackground(.fill.tertiary, for: .widget)
         .environment(\.widgetUsageShowsUsed, self.entry.snapshot.usageBarsShowUsed)
-        .widgetURL(self.family == .systemSmall ? ShareStatsRoute.overviewURL : nil)
+        .widgetURL(family == .systemSmall ? ShareStatsRoute.overviewURL : nil)
     }
 
     @ViewBuilder
-    private func content(providerEntry: WidgetSnapshot.ProviderEntry) -> some View {
-        switch self.family {
+    private func content(providerEntry: WidgetSnapshot.ProviderEntry, family: WidgetFamily) -> some View {
+        switch family {
         case .systemSmall:
             SwitcherSmallUsageView(entry: providerEntry)
         case .systemMedium:

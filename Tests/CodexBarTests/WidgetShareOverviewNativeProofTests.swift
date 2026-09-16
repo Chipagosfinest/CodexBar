@@ -47,27 +47,24 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
         let medium = CGSize(width: 360, height: 160)
         let large = CGSize(width: 360, height: 380)
         let canvases: [Canvas] = [
-            self.canvas("usage-small", small, CodexBarUsageWidgetView(entry: entry), family: .systemSmall),
-            self.canvas("usage-medium", medium, CodexBarUsageWidgetView(entry: entry), family: .systemMedium),
-            self.canvas("usage-large", large, CodexBarUsageWidgetView(entry: entry), family: .systemLarge),
+            self.canvas("usage-small", small, CodexBarUsageWidgetView(entry: entry).content(for: .systemSmall)),
+            self.canvas("usage-medium", medium, CodexBarUsageWidgetView(entry: entry).content(for: .systemMedium)),
+            self.canvas("usage-large", large, CodexBarUsageWidgetView(entry: entry).content(for: .systemLarge)),
             self.canvas("compact-small", small, CodexBarCompactWidgetView(entry: compactEntry)),
             self.canvas(
                 "switcher-small",
                 small,
-                CodexBarSwitcherWidgetView(entry: switcherEntry),
-                family: .systemSmall),
+                CodexBarSwitcherWidgetView(entry: switcherEntry).content(for: .systemSmall)),
             self.canvas(
                 "switcher-medium",
                 medium,
-                CodexBarSwitcherWidgetView(entry: switcherEntry),
-                family: .systemMedium),
+                CodexBarSwitcherWidgetView(entry: switcherEntry).content(for: .systemMedium)),
             self.canvas(
                 "switcher-large",
                 large,
-                CodexBarSwitcherWidgetView(entry: switcherEntry),
-                family: .systemLarge),
-            self.canvas("history-medium", medium, CodexBarHistoryWidgetView(entry: entry), family: .systemMedium),
-            self.canvas("history-large", large, CodexBarHistoryWidgetView(entry: entry), family: .systemLarge),
+                CodexBarSwitcherWidgetView(entry: switcherEntry).content(for: .systemLarge)),
+            self.canvas("history-medium", medium, CodexBarHistoryWidgetView(entry: entry).content(for: .systemMedium)),
+            self.canvas("history-large", large, CodexBarHistoryWidgetView(entry: entry).content(for: .systemLarge)),
         ]
 
         for canvas in canvases {
@@ -110,12 +107,10 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
     private func canvas(
         _ name: String,
         _ size: CGSize,
-        _ view: some View,
-        family: WidgetFamily? = nil) -> Canvas
+        _ view: some View) -> Canvas
     {
         let content = AnyView(
             view
-                .environment(\.widgetFamily, family ?? .systemSmall)
                 .background(Color(nsColor: .windowBackgroundColor)))
         return Canvas(name: name, size: size, content: content)
     }
