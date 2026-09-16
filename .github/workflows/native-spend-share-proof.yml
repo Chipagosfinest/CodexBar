@@ -1,8 +1,13 @@
 name: Native spend and share proof
 
 on:
-  push:
-    branches: [validation/native-spend-share-proof]
+  workflow_dispatch:
+    inputs:
+      surface:
+        description: Native surface to verify
+        type: choice
+        default: all
+        options: [all, openrouter, menu, widgets]
 
 permissions:
   contents: read
@@ -13,20 +18,7 @@ jobs:
     timeout-minutes: 50
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - surface: openrouter
-            branch: fix/openrouter-spend-auth
-            filter: OpenRouterPluginGoldenTests
-            native: CodexBarTests.OpenRouterCreditsFallbackNativeProofTests/test_settingsMetricsKeepAPIKeySpendWhenCreditsReturns403
-          - surface: menu
-            branch: fix/overview-share-stats
-            filter: ShareStatsTests
-            native: ''
-          - surface: widgets
-            branch: fix/widget-share-stats
-            filter: ShareStatsRouteTests
-            native: CodexBarTests.WidgetShareOverviewNativeProofTests/test_shareOverviewWidgetsRenderInsideSyntheticDesktopMargins
+      matrix: ${{ fromJSON(inputs.surface == 'openrouter' && '{"include":[{"surface":"openrouter","branch":"fix/openrouter-spend-auth","filter":"OpenRouterPluginGoldenTests","native":"CodexBarTests.OpenRouterCreditsFallbackNativeProofTests/test_settingsMetricsKeepAPIKeySpendWhenCreditsReturns403"}]}' || inputs.surface == 'menu' && '{"include":[{"surface":"menu","branch":"fix/overview-share-stats","filter":"ShareStatsTests","native":""}]}' || inputs.surface == 'widgets' && '{"include":[{"surface":"widgets","branch":"fix/widget-share-stats","filter":"ShareStatsRouteTests","native":"CodexBarTests.WidgetShareOverviewNativeProofTests/test_shareOverviewWidgetsRenderInsideSyntheticDesktopMargins"}]}' || '{"include":[{"surface":"openrouter","branch":"fix/openrouter-spend-auth","filter":"OpenRouterPluginGoldenTests","native":"CodexBarTests.OpenRouterCreditsFallbackNativeProofTests/test_settingsMetricsKeepAPIKeySpendWhenCreditsReturns403"},{"surface":"menu","branch":"fix/overview-share-stats","filter":"ShareStatsTests","native":""},{"surface":"widgets","branch":"fix/widget-share-stats","filter":"ShareStatsRouteTests","native":"CodexBarTests.WidgetShareOverviewNativeProofTests/test_shareOverviewWidgetsRenderInsideSyntheticDesktopMargins"}]}') }}
     env:
       CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: '1'
       CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS: '0'
@@ -143,6 +135,8 @@ jobs:
               'CODEXBAR_TEST_CODEX_FILE_ISOLATION': '1',
               'CODEXBAR_TEST_SESSION_FILE_ISOLATION': '1',
               'CODEXBAR_OVERVIEW_SHARE_PROOF_DIR': str(home / 'output'),
+              'CI': 'true',
+              'CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF': '1',
           }
           command = ['swift', 'test', '--skip-build', '--filter',
                      'StatusMenuTests/native overview share menu opens filtered preview']
@@ -151,7 +145,8 @@ jobs:
           print((base / 'output/menu-preview-tests.log').read_text())
           if result.returncode:
               raise SystemExit(result.returncode)
-          shutil.copyfile(home / 'output/overview-share-preview.png', base / 'output/overview-share-preview.png')
+          for name in ['overview-share-preview.png', 'overview-share-preview-copied.png']:
+              shutil.copyfile(home / 'output' / name, base / 'output' / name)
           PY
       - name: Require the expected proof images
         env:
@@ -161,7 +156,7 @@ jobs:
           import os, pathlib
           output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-proof/output'
           images = list(output.glob('*.png'))
-          expected = {'openrouter': 2, 'menu': 2, 'widgets': 9}[os.environ['PROOF_SURFACE']]
+          expected = {'openrouter': 2, 'menu': 3, 'widgets': 9}[os.environ['PROOF_SURFACE']]
           assert len(images) == expected, f'Expected {expected} images, got {len(images)}'
           for image in images:
               assert image.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), image.name
