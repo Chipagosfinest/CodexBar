@@ -613,11 +613,17 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             if widgetFamily == "small" {
                 installed.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65)).click()
             } else {
-                let shareOverview = installed.links["Share selected usage and spend overview"]
+                // WidgetKit exposes this SwiftUI Link as a Button in the captured macOS 15 AX tree.
+                let shareOverview = installed.buttons["Share selected usage and spend overview"]
                 XCTAssertTrue(
                     shareOverview.waitForExistence(timeout: 5),
                     "Medium Switcher lacks its Share overview link")
-                guard shareOverview.exists else { return }
+                guard shareOverview.exists, shareOverview.frame.width > 0, shareOverview.frame.height > 0,
+                      installed.frame.contains(shareOverview.frame)
+                else {
+                    XCTFail("Explicit share control must be inside the installed medium widget")
+                    return
+                }
                 shareOverview.click()
             }
             let preview = app.windows["Share AI Usage"]
