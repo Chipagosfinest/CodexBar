@@ -1,0 +1,70 @@
+name: Native proof environment diagnostic
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [validation/native-spend-share-proof]
+    paths: [.github/workflows/native-proof-environment.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  foundation-environment:
+    runs-on: macos-26
+    timeout-minutes: 10
+    steps:
+      - name: Create minimal SwiftPM environment probe
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, pathlib
+          base = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-env'
+          package = base / 'package'
+          (package / 'Tests/EnvironmentProbeTests').mkdir(parents=True)
+          (base / 'home/output').mkdir(parents=True)
+          (package / 'Package.swift').write_text('''// swift-tools-version: 6.0
+          import PackageDescription
+          let package = Package(name: "EnvironmentProbe", platforms: [.macOS(.v15)], targets: [.testTarget(name: "EnvironmentProbeTests")])
+          ''')
+          (package / 'Tests/EnvironmentProbeTests/EnvironmentProbeTests.swift').write_text(r'''import AppKit
+          import Foundation
+          import Testing
+
+          @Test @MainActor
+          func environmentProbe() throws {
+              let home = URL(fileURLWithPath: NSHomeDirectory()).standardizedFileURL.path
+              let tmp = URL(fileURLWithPath: NSTemporaryDirectory()).standardizedFileURL.path
+              let output = URL(fileURLWithPath: home).appendingPathComponent("output").path
+              let homePrefix = home.hasSuffix("/") ? home : home + "/"
+              let tmpPrefix = tmp.hasSuffix("/") ? tmp : tmp + "/"
+              let delegate = NSApplication.shared.delegate.map { String(reflecting: type(of: $0)) } ?? "nil"
+              let values: [String: Any] = ["home": home, "tmp": tmp, "output": output,
+                  "homeBelowTmp": home.hasPrefix(tmpPrefix), "outputBelowHome": output.hasPrefix(homePrefix),
+                  "nsAppDelegate": delegate, "nsAppDelegateIsNil": delegate == "nil",
+                  "processName": ProcessInfo.processInfo.processName]
+              let data = try JSONSerialization.data(withJSONObject: values, options: [.sortedKeys])
+              print(String(decoding: data, as: UTF8.self))
+          }
+          ''')
+          PY
+          proof_base="$RUNNER_TEMP/native-env"
+          proof_home="$proof_base/home"
+          proof_environment=(PATH=/usr/bin:/bin:/usr/sbin:/sbin HOME="$proof_home"
+            CFFIXED_USER_HOME="$proof_home" TMPDIR="$proof_base/" DEVELOPER_DIR="$DEVELOPER_DIR"
+            CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS=1 CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS=0
+            CODEXBAR_TEST_CODEX_FILE_ISOLATION=1 CODEXBAR_TEST_SESSION_FILE_ISOLATION=1)
+          cd "$proof_base/package"
+          env -i "${proof_environment[@]}" /usr/bin/swift test 2>&1 | tee "$proof_home/output/swift-shim.log"
+          env -i "${proof_environment[@]}" "$DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift" \
+            test --skip-build 2>&1 | tee "$proof_home/output/xcode-swift.log"
+      - name: Upload diagnostic output
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: native-proof-environment
+          path: ${{ runner.temp }}/native-env/home/output
+          if-no-files-found: error
+          retention-days: 2
