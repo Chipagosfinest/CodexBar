@@ -184,6 +184,9 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         let packagedAppPath = try XCTUnwrap(environment["CODEXBAR_CI_PACKAGED_APP"])
         let runnerTemporaryPath = try XCTUnwrap(environment["CODEXBAR_CI_RUNNER_TEMP"])
         let widgetFamily = environment["CODEXBAR_CI_WIDGET_FAMILY"] ?? "small"
+        // Install the only gallery family proven on both runner images, then ask macOS
+        // to resize that real installed widget through its public context menu.
+        let galleryFamily = "small"
         let rawUpgradePhase = environment["CODEXBAR_CI_UPGRADE_PHASE"] ?? ""
         let upgradePhase = rawUpgradePhase.hasPrefix("$(") ? "" : rawUpgradePhase
         let providerProof = environment["CODEXBAR_CI_PROVIDER_SWITCH_PROOF"] ?? "1"
@@ -247,7 +250,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         self.attachSystemOwnerHierarchies()
 
         let notificationCenter = XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui")
-        if widgetFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
+        if galleryFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
             // Apple's desktop context-menu path gives automatic placement room without the Notification Center drawer.
             let desktop = finder.descendants(matching: .any).matching(NSPredicate(
                 format: "label ==[c] %@", "desktop")).firstMatch
@@ -369,16 +372,16 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         codexBarCategory.click()
         let switcherPreview = notificationCenter.descendants(matching: .any).matching(NSPredicate(
             format: "identifier CONTAINS %@ AND identifier CONTAINS %@ AND identifier CONTAINS %@",
-            "com.steipete.codexbar.debug", "CodexBarSwitcherWidget", "system\(widgetFamily.capitalized)")).firstMatch
+            "com.steipete.codexbar.debug", "CodexBarSwitcherWidget", "system\(galleryFamily.capitalized)")).firstMatch
         XCTAssertTrue(
             switcherPreview.waitForExistence(timeout: 5),
-            "CodexBar \(widgetFamily) Switcher preview was not available")
+            "CodexBar \(galleryFamily) Switcher preview was not available")
         XCTAssertTrue(
             switcherPreview.frame.width > 0 && switcherPreview.frame.height > 0,
             "Switcher preview had no visible frame")
         self.attach("codexbar-switcher-selected-before-actions", app: notificationCenter)
 
-        if widgetFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
+        if galleryFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
             // A preview click in the desktop gallery asks macOS to choose an unoccupied placement.
             switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
         } else {
@@ -389,12 +392,12 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
                 format: "label ==[c] %@", "desktop")).firstMatch
             XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
             let desktopFrame = desktop.frame
-            let installedSize = widgetFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(
+            let installedSize = galleryFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(
                 width: 348,
                 height: 168)
             // macOS 15's captured widgets occupy the right edge; keep a medium tile wholly left of them.
             let drop = CGPoint(
-                x: widgetFamily == "medium" ? desktopFrame.minX + 400 : desktopFrame.midX,
+                x: galleryFamily == "medium" ? desktopFrame.minX + 400 : desktopFrame.midX,
                 y: desktopFrame.minY + 120)
             let dropFrame = CGRect(
                 x: drop.x - installedSize.width / 2,
@@ -465,11 +468,36 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             return
         }
         XCTAssertTrue(
-            widgetFamily == "small"
+            galleryFamily == "small"
                 ? (140...200).contains(installed.frame.width) && (140...200).contains(installed.frame.height)
                 : (320...380).contains(installed.frame.width) && (140...200).contains(installed.frame.height),
-            "Installed Switcher is not the expected \(widgetFamily) family")
+            "Installed Switcher is not the expected \(galleryFamily) family")
         XCTAssertFalse(installed.buttons["Remove"].exists, "Installed widget is still in edit mode")
+        if widgetFamily == "medium" {
+            installed.rightClick()
+            self.attach("installed-switcher-context-menu-before-medium", app: notificationCenter)
+            let owners = [
+                "com.apple.finder", "com.apple.WindowManager", "com.apple.dock",
+                "com.apple.notificationcenterui", "com.apple.controlcenter",
+            ].map { ($0, XCUIApplication(bundleIdentifier: $0)) }
+            let mediumActions = owners.flatMap { pair -> [XCUIElement] in
+                let (identifier, owner) = pair
+                self.attachText(owner.debugDescription, named: "widget-size-context-owner-\(identifier)")
+                return owner.menuItems["Medium"].allElementsBoundByIndex.filter { item in
+                    item.exists && item.frame.width > 0 && item.frame.height > 0 &&
+                        NSScreen.screens.contains(where: { $0.frame.contains(item.frame) })
+                }
+            }
+            guard mediumActions.count == 1, let medium = mediumActions.first else {
+                XCTFail("Expected one observed on-screen Medium widget size action")
+                return
+            }
+            medium.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+            let resized = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+                (320...380).contains(installed.frame.width) && (140...200).contains(installed.frame.height)
+            }, object: nil)
+            XCTAssertEqual(XCTWaiter.wait(for: [resized], timeout: 10), .completed, "Medium action did not resize Switcher")
+        }
         let codexProvider = installed.buttons["Codex"]
         let claudeProvider = installed.buttons["Claude"]
         XCTAssertTrue(claudeProvider.waitForExistence(timeout: 5), "Switcher lacks enabled Claude button")
