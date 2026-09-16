@@ -22,6 +22,7 @@ struct CodexBarUsageWidgetView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .containerBackground(.fill.tertiary, for: .widget)
         .environment(\.widgetUsageShowsUsed, self.entry.snapshot.usageBarsShowUsed)
+        .widgetURL(self.family == .systemSmall ? ShareStatsRoute.overviewURL : nil)
     }
 
     @ViewBuilder
@@ -91,6 +92,7 @@ struct CodexBarCompactWidgetView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .containerBackground(.fill.tertiary, for: .widget)
+        .widgetURL(ShareStatsRoute.overviewURL)
     }
 
     private var emptyState: some View {
@@ -127,6 +129,7 @@ struct CodexBarSwitcherWidgetView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .containerBackground(.fill.tertiary, for: .widget)
         .environment(\.widgetUsageShowsUsed, self.entry.snapshot.usageBarsShowUsed)
+        .widgetURL(self.family == .systemSmall ? ShareStatsRoute.overviewURL : nil)
     }
 
     @ViewBuilder
@@ -150,6 +153,27 @@ struct CodexBarSwitcherWidgetView: View {
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
+    }
+}
+
+private struct WidgetShareOverviewFooter: View {
+    let launchesSharePreview: Bool
+
+    var body: some View {
+        if self.launchesSharePreview {
+            Link(destination: ShareStatsRoute.overviewURL) {
+                self.label
+            }
+        } else {
+            self.label
+        }
+    }
+
+    private var label: some View {
+        Label("Share overview", systemImage: "square.and.arrow.up")
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+            .accessibilityLabel("Share selected usage and spend overview")
     }
 }
 
@@ -177,6 +201,7 @@ private struct CompactMetricView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            WidgetShareOverviewFooter(launchesSharePreview: false)
         }
     }
 }
@@ -330,6 +355,7 @@ private struct SwitcherSmallUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
+            WidgetShareOverviewFooter(launchesSharePreview: false)
         }
     }
 }
@@ -365,6 +391,7 @@ private struct SwitcherMediumUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
+            WidgetShareOverviewFooter(launchesSharePreview: true)
         }
     }
 }
@@ -419,6 +446,7 @@ private struct SwitcherLargeUsageView: View {
                 color: WidgetColors.color(for: self.entry.provider),
                 currencyCode: self.entry.tokenUsage?.currencyCode)
                 .frame(height: 50)
+            WidgetShareOverviewFooter(launchesSharePreview: true)
         }
     }
 }
@@ -458,6 +486,7 @@ private struct SmallUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
+            WidgetShareOverviewFooter(launchesSharePreview: false)
         }
     }
 }
@@ -494,6 +523,7 @@ private struct MediumUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
+            WidgetShareOverviewFooter(launchesSharePreview: true)
         }
     }
 }
@@ -549,6 +579,7 @@ private struct LargeUsageView: View {
                 color: WidgetColors.color(for: self.entry.provider),
                 currencyCode: self.entry.tokenUsage?.currencyCode)
                 .frame(height: 50)
+            WidgetShareOverviewFooter(launchesSharePreview: true)
         }
     }
 }
@@ -765,6 +796,7 @@ private struct HistoryView: View {
                         tokens: token.last30DaysTokens,
                         currencyCode: token.currencyCode))
             }
+            WidgetShareOverviewFooter(launchesSharePreview: true)
         }
     }
 }
