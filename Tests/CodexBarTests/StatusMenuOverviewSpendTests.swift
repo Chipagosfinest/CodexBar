@@ -118,6 +118,17 @@ extension StatusMenuTests {
         defer { preview.close() }
         #expect(preview.payload.providers.map(\.providerName) == ["codex:visible"])
         #expect(preview.payload.currencies.first?.estimatedCost == 2)
+        try self.capturePreviewAndOptionallyCopy(
+            preview,
+            outputDirectory: outputDirectory,
+            environment: environment)
+    }
+
+    private func capturePreviewAndOptionallyCopy(
+        _ preview: ShareStatsWindowController,
+        outputDirectory: URL,
+        environment: [String: String]) throws
+    {
         let window = try #require(preview.window)
         #expect(window.isVisible)
         window.layoutIfNeeded()
