@@ -1581,3 +1581,8 @@
 
 "agent_sessions_hide_unreachable_title" = "Скрывать недоступные узлы";
 "agent_sessions_hide_unreachable_subtitle" = "Скрывать узлы, если не удалось получить их сеансы.";
+
+/* Overview share flow */
+"Share Usage Snapshot…" = "Поделиться сводкой использования…";
+"Usage snapshot unavailable" = "Сводка использования недоступна";
+"CodexBar couldn't prepare a shareable usage snapshot. Refresh Usage & Spend and try again." = "CodexBar не удалось подготовить сводку использования для отправки. Обновите раздел «Использование и расходы» и повторите попытку.";
