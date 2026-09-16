@@ -487,7 +487,6 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             try self.recordUpgradeInstall(
                 installed: installed,
                 appPath: packagedAppPath,
-                runnerTemporaryPath: runnerTemporaryPath,
                 app: codexBar)
             return
         }
@@ -509,7 +508,6 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
     private func recordUpgradeInstall(
         installed: XCUIElement,
         appPath: String,
-        runnerTemporaryPath: String,
         app: XCUIApplication) throws
     {
         let info = try self.bundleMetadata(at: appPath)
@@ -517,15 +515,18 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             XCTFail("Upgrade install phase requires build 146")
             return
         }
-        let stateURL = URL(fileURLWithPath: runnerTemporaryPath)
-            .appendingPathComponent("widget-synthetic-cli-preflight/retained-widget-state.json")
         let state: [String: String] = [
+            "schemaVersion": "1",
             "installedIdentifier": installed.identifier,
             "baselineBuild": "146",
             "selectedProvider": "claude",
         ]
-        try JSONSerialization.data(withJSONObject: state, options: [.prettyPrinted])
-            .write(to: stateURL, options: .atomic)
+        let attachment = XCTAttachment(
+            data: try JSONSerialization.data(withJSONObject: state, options: [.prettyPrinted]),
+            uniformTypeIdentifier: "public.json")
+        attachment.name = "retained-widget-state.json"
+        attachment.lifetime = .keepAlways
+        add(attachment)
         self.attach(
             "baseline-widget-installed-before-upgrade",
             app: XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui"))

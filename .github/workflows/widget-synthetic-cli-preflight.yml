@@ -56,11 +56,6 @@ on:
         required: false
         default: 9db44805dc1e0180993492bffd14ac98dd6a866f
         type: string
-  push:
-    branches: [validation/native-spend-share-proof]
-    paths:
-      - .github/workflows/widget-synthetic-cli-preflight.yml
-
 permissions:
   actions: read
   contents: read
@@ -457,6 +452,32 @@ jobs:
           assert "Test skipped" not in log, "Widget gallery discovery must not report a skip as evidence"
           PYRESULT
 
+      - name: Extract and validate baseline widget checkpoint attachment
+        if: inputs.upgrade_mode == true
+        run: |
+          set -euo pipefail
+          proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
+          attachments="$proof/upgrade-install-attachments"
+          xcrun xcresulttool export attachments \
+            --path "$proof/WidgetGalleryDiscovery.xcresult" \
+            --output-path "$attachments"
+          export CI_UPGRADE_ATTACHMENTS="$attachments"
+          export CI_UPGRADE_STATE="$proof/retained-widget-state.json"
+          python3 - <<'PYSTATE'
+          import json, os, pathlib
+          attachments = pathlib.Path(os.environ["CI_UPGRADE_ATTACHMENTS"])
+          candidates = [path for path in attachments.rglob("*") if path.is_file() and path.name == "retained-widget-state.json"]
+          assert len(candidates) == 1, f"Expected one retained-widget-state.json attachment, found {len(candidates)}"
+          state = json.loads(candidates[0].read_text())
+          expected_keys = {"schemaVersion", "installedIdentifier", "baselineBuild", "selectedProvider"}
+          assert set(state) == expected_keys, state
+          assert state["schemaVersion"] == "1", state
+          assert state["baselineBuild"] == "146", state
+          assert state["selectedProvider"] == "claude", state
+          assert state["installedIdentifier"].startswith("widget-local:"), state
+          pathlib.Path(os.environ["CI_UPGRADE_STATE"]).write_text(json.dumps(state, indent=2) + "\n")
+          PYSTATE
+
       - name: Replace only proof-owned baseline bundle with verified candidate
         if: inputs.upgrade_mode == true
         run: |
@@ -486,7 +507,12 @@ jobs:
               assert hashlib.sha256(executable.read_bytes()).hexdigest() == metadata[role]["executableSHA256"]
               assert metadata[role]["app"]["CFBundleVersion"] == build
           state = json.loads((proof / "retained-widget-state.json").read_text())
-          assert state == {"installedIdentifier": state["installedIdentifier"], "baselineBuild": "146", "selectedProvider": "claude"}
+          assert state == {
+              "schemaVersion": "1",
+              "installedIdentifier": state["installedIdentifier"],
+              "baselineBuild": "146",
+              "selectedProvider": "claude",
+          }
           PYVERIFY
           mkdir -p "$(dirname "$backup")"
           mv "$baseline" "$backup"
@@ -650,6 +676,7 @@ jobs:
             ${{ runner.temp }}/widget-synthetic-cli-preflight/WidgetGalleryDiscovery.xcresult
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-gallery-discovery-summary.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-gallery-discovery-attachments
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/upgrade-install-attachments
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-upgrade-verify-xcodebuild.log
             ${{ runner.temp }}/widget-synthetic-cli-preflight/WidgetUpgradeVerify.xcresult
             ${{ runner.temp }}/widget-synthetic-cli-preflight/widget-upgrade-verify-summary.json
