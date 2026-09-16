@@ -466,9 +466,19 @@ jobs:
           python3 - <<'PYSTATE'
           import json, os, pathlib
           attachments = pathlib.Path(os.environ["CI_UPGRADE_ATTACHMENTS"])
-          candidates = [path for path in attachments.rglob("*") if path.is_file() and path.name == "retained-widget-state.json"]
-          assert len(candidates) == 1, f"Expected one retained-widget-state.json attachment, found {len(candidates)}"
-          state = json.loads(candidates[0].read_text())
+          manifest = json.loads((attachments / "manifest.json").read_text())
+          candidates = [
+              attachment
+              for result in manifest
+              for attachment in result["attachments"]
+              if attachment["suggestedHumanReadableName"].startswith("retained-widget-state.json")
+          ]
+          assert len(candidates) == 1, f"Expected one retained-widget-state attachment, found {len(candidates)}"
+          exported_name = candidates[0]["exportedFileName"]
+          assert pathlib.PurePath(exported_name).name == exported_name and exported_name != "manifest.json", exported_name
+          payload = attachments / exported_name
+          assert payload.is_file(), payload
+          state = json.loads(payload.read_text())
           expected_keys = {"schemaVersion", "installedIdentifier", "baselineBuild", "selectedProvider"}
           assert set(state) == expected_keys, state
           assert state["schemaVersion"] == "1", state
