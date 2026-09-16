@@ -1,0 +1,175 @@
+name: Native spend and share proof
+
+on:
+  push:
+    branches: [validation/native-spend-share-proof]
+
+permissions:
+  contents: read
+
+jobs:
+  proof:
+    runs-on: macos-26
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - surface: openrouter
+            branch: fix/openrouter-spend-auth
+            filter: OpenRouterPluginGoldenTests
+            native: CodexBarTests.OpenRouterCreditsFallbackNativeProofTests/test_settingsMetricsKeepAPIKeySpendWhenCreditsReturns403
+          - surface: menu
+            branch: fix/overview-share-stats
+            filter: ShareStatsTests
+            native: ''
+          - surface: widgets
+            branch: fix/widget-share-stats
+            filter: ShareStatsRouteTests
+            native: CodexBarTests.WidgetShareOverviewNativeProofTests/test_shareOverviewWidgetsFitDesktopFamilies
+    env:
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: '1'
+      CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS: '0'
+      CODEXBAR_TEST_CODEX_FILE_ISOLATION: '1'
+      CODEXBAR_TEST_SESSION_FILE_ISOLATION: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ matrix.branch }}
+          persist-credentials: false
+      - name: Select repository toolchain
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+          echo "DEVELOPER_DIR=/Applications/Xcode_26.6.app/Contents/Developer" >> "$GITHUB_ENV"
+      - name: Build and run focused tests
+        env:
+          PROOF_FILTER: ${{ matrix.filter }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/native-proof/output"
+          git rev-parse HEAD > "$RUNNER_TEMP/native-proof/output/source-commit.txt"
+          env -i PATH="$PATH" HOME="$HOME" DEVELOPER_DIR="$DEVELOPER_DIR" TMPDIR="$RUNNER_TEMP" CI=true \
+            CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS=1 CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS=0 \
+            CODEXBAR_TEST_CODEX_FILE_ISOLATION=1 CODEXBAR_TEST_SESSION_FILE_ISOLATION=1 \
+            CODEXBAR_SHARE_STATS_SCREENSHOT_DIR="$RUNNER_TEMP/native-proof/output" \
+            swift test --jobs 3 --filter "$PROOF_FILTER" 2>&1 | tee "$RUNNER_TEMP/native-proof/output/focused-tests.log"
+      - name: Render isolated native view proof
+        if: ${{ matrix.native != '' }}
+        env:
+          PROOF_NATIVE_TEST: ${{ matrix.native }}
+        run: |
+          python3 - <<'PY'
+          import http.server, json, os, pathlib, ssl, subprocess, threading
+          base = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-proof'
+          home = base / 'home'
+          home.mkdir(exist_ok=True)
+          developer = os.environ['DEVELOPER_DIR']
+          environment = {
+              'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
+              'HOME': str(home), 'CFFIXED_USER_HOME': str(home),
+              'TMPDIR': str(base), 'DEVELOPER_DIR': developer,
+              'DYLD_FRAMEWORK_PATH': developer + '/Platforms/MacOSX.platform/Developer/Library/Frameworks',
+              'CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS': '1',
+              'CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS': '0',
+              'CODEXBAR_TEST_CODEX_FILE_ISOLATION': '1',
+              'CODEXBAR_TEST_SESSION_FILE_ISOLATION': '1',
+              'CODEXBAR_OPENROUTER_CREDITS_FALLBACK_PROOF_DIR': str(base / 'output'),
+              'CODEXBAR_WIDGET_SHARE_PROOF_DIR': str(base / 'output'),
+          }
+          command = [developer + '/usr/bin/xctest', '-XCTest', os.environ['PROOF_NATIVE_TEST'],
+                     '.build/debug/CodexBarPackageTests.xctest']
+          server = None
+          requests = []
+          if 'OpenRouter' in os.environ['PROOF_NATIVE_TEST']:
+              certificate, key, der = base / 'fixture.pem', base / 'fixture.key', base / 'fixture.der'
+              subprocess.run(['openssl', 'req', '-x509', '-newkey', 'rsa:2048', '-nodes',
+                              '-keyout', str(key), '-out', str(certificate), '-days', '1',
+                              '-subj', '/CN=127.0.0.1', '-addext', 'subjectAltName=IP:127.0.0.1'],
+                             check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+              subprocess.run(['openssl', 'x509', '-in', str(certificate), '-outform', 'DER', '-out', str(der)],
+                             check=True)
+              class Fixture(http.server.BaseHTTPRequestHandler):
+                  def log_message(self, *args):
+                      pass
+                  def do_GET(self):
+                      if self.headers.get('Authorization') != 'Bearer fixture-key':
+                          status, payload = 401, {'error': 'Unexpected fixture authentication'}
+                      elif self.path == '/api/v1/credits':
+                          status, payload = 403, {'error': {'message': 'Management key required'}}
+                      elif self.path == '/api/v1/key':
+                          status, payload = 200, {'data': {'limit': None, 'usage_daily': 1.25,
+                                                         'usage_weekly': 7.5, 'usage_monthly': 18.75}}
+                      else:
+                          status, payload = 404, {'error': 'Unexpected fixture path'}
+                      requests.append({'path': self.path, 'status': status})
+                      data = json.dumps(payload).encode()
+                      self.send_response(status)
+                      self.send_header('Content-Type', 'application/json')
+                      self.send_header('Content-Length', str(len(data)))
+                      self.end_headers()
+                      self.wfile.write(data)
+              server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Fixture)
+              tls = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+              tls.load_cert_chain(certificate, key)
+              server.socket = tls.wrap_socket(server.socket, server_side=True)
+              threading.Thread(target=server.serve_forever, daemon=True).start()
+              environment['CODEXBAR_OPENROUTER_PROOF_TLS_CERT'] = str(der)
+              environment['CODEXBAR_OPENROUTER_PROOF_PORT'] = str(server.server_address[1])
+          try:
+              with (base / 'output/native-tests.log').open('w') as log:
+                  result = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
+          finally:
+              if server:
+                  server.shutdown()
+                  server.server_close()
+                  (base / 'output/transport-requests.json').write_text(json.dumps(requests, indent=2))
+          print((base / 'output/native-tests.log').read_text())
+          raise SystemExit(result.returncode)
+          PY
+      - name: Open the real overview menu preview
+        if: ${{ matrix.surface == 'menu' }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, shutil, subprocess
+          base = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-proof'
+          home = base / 'home'
+          home.mkdir(exist_ok=True)
+          environment = {
+              'PATH': '/usr/bin:/bin:/usr/sbin:/sbin',
+              'HOME': str(home), 'CFFIXED_USER_HOME': str(home),
+              'TMPDIR': str(base) + '/', 'DEVELOPER_DIR': os.environ['DEVELOPER_DIR'],
+              'CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS': '1',
+              'CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS': '0',
+              'CODEXBAR_TEST_CODEX_FILE_ISOLATION': '1',
+              'CODEXBAR_TEST_SESSION_FILE_ISOLATION': '1',
+              'CODEXBAR_OVERVIEW_SHARE_PROOF_DIR': str(home / 'output'),
+          }
+          command = ['swift', 'test', '--skip-build', '--filter',
+                     'StatusMenuTests/native overview share menu opens filtered preview']
+          with (base / 'output/menu-preview-tests.log').open('w') as log:
+              result = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
+          print((base / 'output/menu-preview-tests.log').read_text())
+          if result.returncode:
+              raise SystemExit(result.returncode)
+          shutil.copyfile(home / 'output/overview-share-preview.png', base / 'output/overview-share-preview.png')
+          PY
+      - name: Require the expected proof images
+        env:
+          PROOF_SURFACE: ${{ matrix.surface }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib
+          output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-proof/output'
+          images = list(output.glob('*.png'))
+          expected = {'openrouter': 2, 'menu': 2, 'widgets': 9}[os.environ['PROOF_SURFACE']]
+          assert len(images) == expected, f'Expected {expected} images, got {len(images)}'
+          for image in images:
+              assert image.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), image.name
+          PY
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: native-proof-${{ matrix.surface }}
+          path: ${{ runner.temp }}/native-proof/output
+          if-no-files-found: error
+          retention-days: 7
