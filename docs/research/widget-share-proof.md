@@ -18,7 +18,7 @@ The native host simulates 16-point margins around 160 × 160, 360 × 160, and 36
 | Usage Medium | [PNG](assets/widget-share/share-overview-usage-medium.png) |
 | Usage Small | [PNG](assets/widget-share/share-overview-usage-small.png) |
 
-These captures verify production layout content in an NSHostingView. They do not verify an installed WidgetKit container, wallpaper-dependent rendering, system-supplied margins, or an actual desktop click into a warm/cold app. The later installed small Switcher proof below covers one real system container and warm/cold widget clicks. Other families, provider switching, upgrades from older widgets, the prerequisite menu-sharing PR #3677, and current-head CI remain separate gates.
+These captures verify production layout content in an NSHostingView. They do not verify an installed WidgetKit container, wallpaper-dependent rendering, system-supplied margins, or an actual desktop click into a warm/cold app. The later installed small Switcher proof below covers one real system container and warm/cold widget clicks. Other families, upgrades from older widgets, the prerequisite menu-sharing PR #3677, and current-head CI remain separate gates.
 
 The URL contains no account, provider, usage, spend, callback, or file data. Opening the preview does not upload or copy an image; Copy Image remains an explicit action in the app.
 
@@ -48,4 +48,16 @@ The test opened the real macOS widget gallery, selected CodexBar's small Switche
 
 Root inspected the installed widget and preview PNGs alongside accessibility evidence. This proves a newly added small Switcher, its real system container, consumption of the shared snapshot, and the retained widget's warm/cold share route on the disposable macOS 26.6.2 runner. The footer date still belongs to the independent #3692 correction. The sparse fixture's Today label truncates; full accessibility text remains present, and this capture does not establish dense real-system layout quality.
 
-Provider button switching, medium/large explicit share links, other installed widget families, VoiceOver, and upgrade of a widget created by an older app version remain unverified. Retaining the widget across an app restart is not an upgrade test. No real account, credential, user clipboard, or user desktop was used. The test temporarily restored Notification Center on the fresh runner because runner-images disables it, and restored that original disabled state afterward.
+The macOS 15 provider-button proof below supplements this single-provider run. Medium/large explicit share links, other installed widget families, VoiceOver, and upgrade of a widget created by an older app version remain unverified. Retaining the widget across an app restart is not an upgrade test. No real account, credential, user clipboard, or user desktop was used. The test temporarily restored Notification Center on the fresh runner because runner-images disables it, and restored that original disabled state afterward.
+
+## Installed provider switching alongside sharing
+
+[Run 35133736627](https://github.com/Chipagosfinest/CodexBar/actions/runs/35133736627), observed 2026-09-16, passed the named installed-widget test with zero failures or skips on macOS 15.7.9 arm64. Harness `5679870778607dd172e357ded0e115f4e66f8125` ran the unchanged package from product source `d223726ffd8d9d60c3eab54af55e730b7291669c`; Xcode 16.4 compiled only the external UI harness.
+
+With both Codex and Claude enabled, actual installed small-Switcher button clicks selected Claude (110K tokens/$0.45), Codex (the expected empty local fixture), and Claude again. Assertions required each transition and required that provider clicks did not open the share preview. The shared group selection ended as `claude`. The same installed widget then opened one populated preview through its body while the app was running and after termination. Root verified named test results, source identity, selection diagnostics, the populated widget image, and the cold-preview image. No direct defaults write forced the widget selection.
+
+![Installed small Switcher after actual Claude button selection on macOS 15](assets/widget-share/installed-provider-switch-macos15.png)
+
+![Cold preview after actual provider switching and installed-widget click](assets/widget-share/installed-provider-switch-cold-macos15.png)
+
+This establishes provider buttons and the new whole-tile share action working together on macOS 15.7.9. The same button fixture still fails on macOS 26.6.2 with both the candidate and unmodified v0.60.3 baseline, where logs show an unresolved enum parameter. Identical packaged intent metadata and this OS comparison narrow the investigation; they do not establish an Apple defect or certify macOS 26 provider switching. The previously documented reporting-date footer is independently corrected by #3692. Both snapshots contain synthetic data only.
