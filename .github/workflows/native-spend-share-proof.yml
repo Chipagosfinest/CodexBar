@@ -40,6 +40,9 @@ jobs:
             .build
             ~/Library/Caches/org.swift.swiftpm
           key: native-proof-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift') }}
+          restore-keys: |
+            native-proof-macos26-${{ matrix.surface }}-
+            native-proof-macos26-
       - name: Build and run focused tests
         env:
           PROOF_FILTER: ${{ matrix.filter }}
