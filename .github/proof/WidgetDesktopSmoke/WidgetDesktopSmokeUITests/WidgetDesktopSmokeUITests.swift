@@ -247,7 +247,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         self.attachSystemOwnerHierarchies()
 
         let notificationCenter = XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui")
-        if widgetFamily == "medium" {
+        if widgetFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
             // Apple's desktop context-menu path gives automatic placement room without the Notification Center drawer.
             let desktop = finder.descendants(matching: .any).matching(NSPredicate(
                 format: "label ==[c] %@", "desktop")).firstMatch
@@ -378,7 +378,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             "Switcher preview had no visible frame")
         self.attach("codexbar-switcher-selected-before-actions", app: notificationCenter)
 
-        if widgetFamily == "medium" {
+        if widgetFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
             // A preview click in the desktop gallery asks macOS to choose an unoccupied placement.
             switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
         } else {
@@ -392,7 +392,10 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             let installedSize = widgetFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(
                 width: 348,
                 height: 168)
-            let drop = CGPoint(x: desktopFrame.midX + (widgetFamily == "medium" ? 36 : 0), y: desktopFrame.minY + 120)
+            // macOS 15's captured widgets occupy the right edge; keep a medium tile wholly left of them.
+            let drop = CGPoint(
+                x: widgetFamily == "medium" ? desktopFrame.minX + 400 : desktopFrame.midX,
+                y: desktopFrame.minY + 120)
             let dropFrame = CGRect(
                 x: drop.x - installedSize.width / 2,
                 y: drop.y - installedSize.height / 2,
