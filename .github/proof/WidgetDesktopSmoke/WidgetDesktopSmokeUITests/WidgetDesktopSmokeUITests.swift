@@ -266,6 +266,116 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             self.codexBarGalleryCandidates(in: notificationCenter),
             named: "post-edit-widgets-codexbar-candidates")
 
+        let codexBarCategory = notificationCenter.buttons["CodexBar"]
+        XCTAssertTrue(
+            codexBarCategory.waitForExistence(timeout: 5),
+            "Widget gallery lacked the observed CodexBar category")
+        guard codexBarCategory.exists else { return }
+        codexBarCategory.click()
+        let switcherPreview = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier CONTAINS %@ AND identifier CONTAINS %@ AND identifier CONTAINS %@",
+            "com.steipete.codexbar.debug", "CodexBarSwitcherWidget", "systemSmall")).firstMatch
+        XCTAssertTrue(switcherPreview.waitForExistence(timeout: 5), "CodexBar small Switcher preview was not available")
+        XCTAssertTrue(
+            switcherPreview.frame.width > 0 && switcherPreview.frame.height > 0,
+            "Switcher preview had no visible frame")
+        self.attach("codexbar-switcher-selected-before-actions", app: notificationCenter)
+
+        // This fresh runner's captured desktop has existing widgets at x <= 368,
+        // the gallery below y=256, and Notification Center at x >= 664.
+        // Recheck the actual window frames before using that empty desktop region.
+        let desktop = finder.descendants(matching: .any).matching(NSPredicate(
+            format: "label ==[c] %@", "desktop")).firstMatch
+        XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
+        let desktopFrame = desktop.frame
+        let drop = CGPoint(x: desktopFrame.midX, y: desktopFrame.minY + 120)
+        let dropFrame = CGRect(x: drop.x - 90, y: drop.y - 90, width: 180, height: 180)
+        let occupied = notificationCenter.windows.allElementsBoundByIndex.contains {
+            $0.frame.intersects(dropFrame)
+        }
+        guard desktopFrame.width == 1024, desktopFrame.height == 768,
+              desktopFrame.contains(dropFrame), !occupied,
+              NSScreen.screens.contains(where: { $0.frame.contains(switcherPreview.frame) })
+        else {
+            XCTFail("Captured desktop geometry does not establish a safe empty drop target")
+            return
+        }
+        let target = desktop.coordinate(withNormalizedOffset: CGVector(
+            dx: (drop.x - desktopFrame.minX) / desktopFrame.width,
+            dy: (drop.y - desktopFrame.minY) / desktopFrame.height))
+        switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            .press(forDuration: 1, thenDragTo: target)
+        self.attach("after-switcher-desktop-drop", app: notificationCenter)
+        let done = notificationCenter.buttons.matching(identifier: "widget-add-sheet-done").firstMatch
+        guard done.waitForExistence(timeout: 5),
+              NSScreen.screens.contains(where: { $0.frame.contains(done.frame) })
+        else {
+            XCTFail("Observed widget gallery Done control was unavailable")
+            return
+        }
+        done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+        let galleryClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: done)
+        XCTAssertEqual(XCTWaiter.wait(for: [galleryClosed], timeout: 5), .completed)
+        // The add sheet and desktop editor have separate Done controls.
+        let editorDone = notificationCenter.buttons.matching(identifier: "widget-editor-button").firstMatch
+        if editorDone.exists, editorDone.label == "Done" {
+            guard NSScreen.screens.contains(where: { $0.frame.contains(editorDone.frame) }) else {
+                XCTFail("Desktop editor Done control is outside the screen")
+                return
+            }
+            editorDone.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+        }
+        let editingEnded = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            !editorDone.exists || editorDone.label != "Done"
+        }, object: nil)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [editingEnded], timeout: 5),
+            .completed,
+            "Desktop remained in widget editing mode")
+
+        let installed = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND identifier CONTAINS %@ AND identifier CONTAINS %@",
+            "widget-local:", "com.steipete.codexbar.debug", "CodexBarSwitcherWidget")).firstMatch
+        guard installed.waitForExistence(timeout: 15) else {
+            self.attach("installed-switcher-missing", app: notificationCenter)
+            XCTFail("Dragging the gallery preview did not create an installed desktop Switcher")
+            return
+        }
+        XCTAssertTrue(
+            (140...200).contains(installed.frame.width) && (140...200).contains(installed.frame.height),
+            "Installed Switcher is not the expected small family")
+        XCTAssertFalse(installed.buttons["Remove"].exists, "Installed widget is still in edit mode")
+        let populated = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            installed.debugDescription.contains("110K") && installed.debugDescription.contains("0.45")
+        }, object: nil)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [populated], timeout: 15),
+            .completed,
+            "Installed widget did not consume the app-published synthetic token snapshot")
+        self.attach("installed-switcher-populated", app: notificationCenter)
+        for phase in ["warm", "cold"] {
+            if phase == "cold" {
+                codexBar.terminate()
+                XCTAssertTrue(codexBar.wait(for: .notRunning, timeout: 10))
+            }
+            // Small-widget body is a widgetURL target; stay away from provider buttons.
+            guard NSScreen.screens.contains(where: { $0.frame.contains(installed.frame) }) else {
+                XCTFail("Installed widget moved outside the captured screen")
+                return
+            }
+            installed.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65)).click()
+            let preview = codexBar.windows["Share AI Usage"]
+            XCTAssertTrue(preview.waitForExistence(timeout: 20), "Installed widget did not open \(phase) preview")
+            for expected in ["Claude", "110K", "$0.45"] {
+                let text = preview.staticTexts.matching(NSPredicate(
+                    format: "label CONTAINS %@ OR value CONTAINS %@", expected, expected)).firstMatch
+                XCTAssertTrue(text.waitForExistence(timeout: 5), "Installed \(phase) preview lacks \(expected)")
+            }
+            XCTAssertEqual(codexBar.windows.matching(identifier: "Share AI Usage").count, 1)
+            self.attach("installed-widget-share-\(phase)", app: codexBar)
+            self.closeSharePreviewIfVisible(in: codexBar)
+        }
+
         let desktopCandidates = finder.descendants(matching: .any).matching(NSPredicate(
             format: "label CONTAINS[c] %@ OR identifier CONTAINS[c] %@", "Desktop", "Desktop"))
         let summaries = (0..<desktopCandidates.count).compactMap { index -> String? in
@@ -275,7 +385,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         }
         self.attachText(summaries.joined(separator: "\n"), named: "accessible-desktop-candidates")
         self.attachText(
-            "Edit Widgets was clicked and its control disappeared before the post-action capture. Gallery appearance requires attachment inspection unless an observed search or Done control is recorded. No widget was added; this is not installation proof.",
+            "A small Switcher was added through the real gallery, consumed the synthetic shared snapshot, and opened populated previews through actual warm and cold widget clicks. Other sizes, provider switching, and upgrade behavior remain unverified.",
             named: "widget-gallery-discovery-boundary")
     }
 
