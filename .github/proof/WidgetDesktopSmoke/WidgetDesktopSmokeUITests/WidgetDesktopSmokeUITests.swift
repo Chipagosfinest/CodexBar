@@ -236,7 +236,19 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
                 XCTFail("Expected captured desktop geometry for public widget context menu")
                 return
             }
-            desktop.coordinate(withNormalizedOffset: CGVector(dx: 0.55, dy: 0.6)).rightClick()
+            let contextPoint = CGPoint(
+                x: desktop.frame.minX + desktop.frame.width * 0.55,
+                y: desktop.frame.minY + desktop.frame.height * 0.6)
+            guard finder.frame.contains(contextPoint),
+                  !notificationCenter.windows.allElementsBoundByIndex
+                      .contains(where: { $0.frame.contains(contextPoint) })
+            else {
+                XCTFail("Captured desktop context point is occupied")
+                return
+            }
+            finder.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
+                dx: contextPoint.x - finder.frame.minX,
+                dy: contextPoint.y - finder.frame.minY)).rightClick()
             self.attach("desktop-widget-context-menu", app: finder)
             let edit = finder.menuItems.matching(NSPredicate(
                 format: "label BEGINSWITH %@ OR identifier BEGINSWITH %@",
