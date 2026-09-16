@@ -286,7 +286,7 @@ private struct ProviderSwitcherRow: View {
     let showsShareAffordance: Bool
 
     var body: some View {
-        HStack(spacing: self.compact ? 4 : 6) {
+        HStack(spacing: self.compact ? 2 : 6) {
             ForEach(self.providers, id: \.self) { provider in
                 ProviderSwitchChip(
                     provider: provider,
@@ -323,18 +323,24 @@ private struct ProviderSwitchChip: View {
                 Text(label)
                     .font(self.compact ? .caption2.weight(.semibold) : .caption.weight(.semibold))
                     .foregroundStyle(self.selected ? Color.primary : Color.secondary)
-                    .padding(.horizontal, self.compact ? 6 : 8)
+                    .lineLimit(self.compact ? 1 : nil)
+                    .minimumScaleFactor(self.compact ? 0.85 : 1)
+                    .padding(.horizontal, self.compact ? 3 : 8)
                     .padding(.vertical, self.compact ? 3 : 4)
                     .background(Capsule().fill(background))
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(self.longLabel)
         } else {
             Text(label)
                 .font(self.compact ? .caption2.weight(.semibold) : .caption.weight(.semibold))
                 .foregroundStyle(self.selected ? Color.primary : Color.secondary)
-                .padding(.horizontal, self.compact ? 6 : 8)
+                .lineLimit(self.compact ? 1 : nil)
+                .minimumScaleFactor(self.compact ? 0.85 : 1)
+                .padding(.horizontal, self.compact ? 3 : 8)
                 .padding(.vertical, self.compact ? 3 : 4)
                 .background(Capsule().fill(background))
+                .accessibilityLabel(self.longLabel)
         }
     }
 
