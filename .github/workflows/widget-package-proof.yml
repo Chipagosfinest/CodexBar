@@ -2,6 +2,9 @@ name: Widget package proof
 
 on:
   workflow_dispatch:
+  push:
+    branches: [validation/native-spend-share-proof]
+    paths: [.github/workflows/widget-package-proof.yml]
 
 permissions:
   contents: read
