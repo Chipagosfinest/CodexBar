@@ -250,94 +250,42 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         self.attachSystemOwnerHierarchies()
 
         let notificationCenter = XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui")
-        if galleryFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
-            // Apple's desktop context-menu path gives automatic placement room without the Notification Center drawer.
-            let desktop = finder.descendants(matching: .any).matching(NSPredicate(
-                format: "label ==[c] %@", "desktop")).firstMatch
-            guard desktop.exists, desktop.frame.width >= 1024, desktop.frame.height >= 768 else {
-                XCTFail("Expected captured desktop geometry for public widget context menu")
-                return
-            }
-            let contextPoint = CGPoint(
-                x: desktop.frame.minX + desktop.frame.width * 0.55,
-                y: desktop.frame.minY + desktop.frame.height * 0.6)
-            self.attachText(
-                "Finder application frame: \(finder.frame); desktop frame: \(desktop.frame); context point: \(contextPoint)",
-                named: "desktop-context-coordinate-frames")
-            guard desktop.frame.contains(contextPoint),
-                  NSScreen.screens.contains(where: { $0.frame.contains(contextPoint) }),
-                  !notificationCenter.windows.allElementsBoundByIndex
-                      .contains(where: { $0.frame.contains(contextPoint) })
-            else {
-                XCTFail("Captured desktop context point is occupied")
-                return
-            }
-            finder.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(
-                dx: contextPoint.x - finder.frame.minX,
-                dy: contextPoint.y - finder.frame.minY)).rightClick()
-            self.attach("desktop-widget-context-menu", app: finder)
-            // The captured desktop menu is visible while Finder's AX tree is disabled.
-            // Inspect only running system owners and act on a uniquely observed on-screen menu item.
-            let menuOwners: [String] = [
-                "com.apple.finder", "com.apple.WindowManager", "com.apple.dock",
-                "com.apple.notificationcenterui", "com.apple.controlcenter",
-            ].filter { identifier in
-                NSWorkspace.shared.runningApplications.contains { $0.bundleIdentifier == identifier }
-            }
-            var visibleActions: [XCUIElement] = []
-            for identifier in menuOwners {
-                let owner = XCUIApplication(bundleIdentifier: identifier)
-                self.attachText(owner.debugDescription, named: "desktop-context-owner-\(identifier)")
-                visibleActions += owner.menuItems.matching(NSPredicate(
-                    format: "label BEGINSWITH %@ OR identifier BEGINSWITH %@ OR value BEGINSWITH %@",
-                    "Edit Widgets", "Edit Widgets", "Edit Widgets")).allElementsBoundByIndex.filter { item in
-                    item.exists && item.frame.width > 0 && item.frame.height > 0 &&
-                        NSScreen.screens.contains(where: { screen in screen.frame.contains(item.frame) })
-                }
-            }
-            guard visibleActions.count == 1, let edit = visibleActions.first else {
-                XCTFail("Expected one on-screen Edit Widgets menu item among observed system owners")
-                return
-            }
-            edit.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
-        } else {
-            let controlCenter = XCUIApplication(bundleIdentifier: "com.apple.controlcenter")
-            let clock = controlCenter.descendants(matching: .any)
-                .matching(identifier: "com.apple.menuextra.clock").firstMatch
-            XCTAssertTrue(clock.waitForExistence(timeout: 5), "Observed clock status item was not accessible")
-            XCTAssertTrue(clock.isHittable, "Observed clock status item was not hittable")
-            guard clock.exists, clock.isHittable else { return }
-            clock.click()
+        let controlCenter = XCUIApplication(bundleIdentifier: "com.apple.controlcenter")
+        let clock = controlCenter.descendants(matching: .any)
+            .matching(identifier: "com.apple.menuextra.clock").firstMatch
+        XCTAssertTrue(clock.waitForExistence(timeout: 5), "Observed clock status item was not accessible")
+        XCTAssertTrue(clock.isHittable, "Observed clock status item was not hittable")
+        guard clock.exists, clock.isHittable else { return }
+        clock.click()
 
-            guard let notificationCenterID = self.waitForNotificationCenterIdentifier() else {
-                XCTFail("Clicking the observed clock did not reveal a public Notification Center owner")
-                return
-            }
-            XCTAssertEqual(notificationCenterID, "com.apple.notificationcenterui")
-            self.attach("notification-center-open", app: notificationCenter)
-            let editWidgets = notificationCenter.descendants(matching: .any).matching(NSPredicate(
-                format: "label CONTAINS[c] %@", "Edit Widgets")).firstMatch
-            XCTAssertTrue(
-                editWidgets.waitForExistence(timeout: 5),
-                "Notification Center lacked an accessible Edit Widgets control")
-            let editWidgetsFrame = editWidgets.frame
-            let observedLabel = editWidgets.label
-            let validEditWidgetsFrame = editWidgetsFrame.width > 0 && editWidgetsFrame.height > 0 &&
-                NSScreen.screens.contains(where: { $0.frame.contains(editWidgetsFrame) })
-            XCTAssertTrue(
-                observedLabel.localizedCaseInsensitiveContains("Edit Widgets") && validEditWidgetsFrame,
-                "Accessible Edit Widgets control must retain its label and an on-screen frame")
-            guard editWidgets.exists, observedLabel.localizedCaseInsensitiveContains("Edit Widgets"),
-                  validEditWidgetsFrame else { return }
-            editWidgets.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
-            let editWidgetsClosed = XCTNSPredicateExpectation(
-                predicate: NSPredicate(format: "exists == false"),
-                object: editWidgets)
-            XCTAssertEqual(
-                XCTWaiter.wait(for: [editWidgetsClosed], timeout: 5),
-                .completed,
-                "Edit Widgets remained visible after its action; post-action UI is not a gallery transition")
+        guard let notificationCenterID = self.waitForNotificationCenterIdentifier() else {
+            XCTFail("Clicking the observed clock did not reveal a public Notification Center owner")
+            return
         }
+        XCTAssertEqual(notificationCenterID, "com.apple.notificationcenterui")
+        self.attach("notification-center-open", app: notificationCenter)
+        let editWidgets = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+            format: "label CONTAINS[c] %@", "Edit Widgets")).firstMatch
+        XCTAssertTrue(
+            editWidgets.waitForExistence(timeout: 5),
+            "Notification Center lacked an accessible Edit Widgets control")
+        let editWidgetsFrame = editWidgets.frame
+        let observedLabel = editWidgets.label
+        let validEditWidgetsFrame = editWidgetsFrame.width > 0 && editWidgetsFrame.height > 0 &&
+            NSScreen.screens.contains(where: { $0.frame.contains(editWidgetsFrame) })
+        XCTAssertTrue(
+            observedLabel.localizedCaseInsensitiveContains("Edit Widgets") && validEditWidgetsFrame,
+            "Accessible Edit Widgets control must retain its label and an on-screen frame")
+        guard editWidgets.exists, observedLabel.localizedCaseInsensitiveContains("Edit Widgets"),
+              validEditWidgetsFrame else { return }
+        editWidgets.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+        let editWidgetsClosed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == false"),
+            object: editWidgets)
+        XCTAssertEqual(
+            XCTWaiter.wait(for: [editWidgetsClosed], timeout: 5),
+            .completed,
+            "Edit Widgets remained visible after its action; post-action UI is not a gallery transition")
         let gallerySearch = notificationCenter.searchFields.firstMatch
         let galleryDone = notificationCenter.buttons["Done"]
         var galleryControl: String?
@@ -381,45 +329,40 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
             "Switcher preview had no visible frame")
         self.attach("codexbar-switcher-selected-before-actions", app: notificationCenter)
 
-        if galleryFamily == "medium", ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26 {
-            // A preview click in the desktop gallery asks macOS to choose an unoccupied placement.
-            switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
-        } else {
-            // This fresh runner's captured desktop has existing widgets at x <= 368,
-            // the gallery below y=256, and Notification Center at x >= 664.
-            // Recheck the actual window frames before using that empty desktop region.
-            let desktop = finder.descendants(matching: .any).matching(NSPredicate(
-                format: "label ==[c] %@", "desktop")).firstMatch
-            XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
-            let desktopFrame = desktop.frame
-            let installedSize = galleryFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(
-                width: 348,
-                height: 168)
-            // macOS 15's captured widgets occupy the right edge; keep a medium tile wholly left of them.
-            let drop = CGPoint(
-                x: galleryFamily == "medium" ? desktopFrame.minX + 400 : desktopFrame.midX,
-                y: desktopFrame.minY + 120)
-            let dropFrame = CGRect(
-                x: drop.x - installedSize.width / 2,
-                y: drop.y - installedSize.height / 2,
-                width: installedSize.width,
-                height: installedSize.height)
-            let occupied = notificationCenter.windows.allElementsBoundByIndex.contains {
-                $0.frame.intersects(dropFrame)
-            }
-            guard desktopFrame.width == 1024, desktopFrame.height == 768,
-                  desktopFrame.contains(dropFrame), !occupied,
-                  NSScreen.screens.contains(where: { $0.frame.contains(switcherPreview.frame) })
-            else {
-                XCTFail("Captured desktop geometry does not establish a safe empty drop target")
-                return
-            }
-            let target = desktop.coordinate(withNormalizedOffset: CGVector(
-                dx: (drop.x - desktopFrame.minX) / desktopFrame.width,
-                dy: (drop.y - desktopFrame.minY) / desktopFrame.height))
-            switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-                .click(forDuration: 1, thenDragTo: target)
+        // This fresh runner's captured desktop has existing widgets at x <= 368,
+        // the gallery below y=256, and Notification Center at x >= 664.
+        // Recheck the actual window frames before using that empty desktop region.
+        let desktop = finder.descendants(matching: .any).matching(NSPredicate(
+            format: "label ==[c] %@", "desktop")).firstMatch
+        XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
+        let desktopFrame = desktop.frame
+        let installedSize = galleryFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(
+            width: 348,
+            height: 168)
+        // macOS 15's captured widgets occupy the right edge; keep a medium tile wholly left of them.
+        let drop = CGPoint(
+            x: galleryFamily == "medium" ? desktopFrame.minX + 400 : desktopFrame.midX,
+            y: desktopFrame.minY + 120)
+        let dropFrame = CGRect(
+            x: drop.x - installedSize.width / 2,
+            y: drop.y - installedSize.height / 2,
+            width: installedSize.width,
+            height: installedSize.height)
+        let occupied = notificationCenter.windows.allElementsBoundByIndex.contains {
+            $0.frame.intersects(dropFrame)
         }
+        guard desktopFrame.width == 1024, desktopFrame.height == 768,
+              desktopFrame.contains(dropFrame), !occupied,
+              NSScreen.screens.contains(where: { $0.frame.contains(switcherPreview.frame) })
+        else {
+            XCTFail("Captured desktop geometry does not establish a safe empty drop target")
+            return
+        }
+        let target = desktop.coordinate(withNormalizedOffset: CGVector(
+            dx: (drop.x - desktopFrame.minX) / desktopFrame.width,
+            dy: (drop.y - desktopFrame.minY) / desktopFrame.height))
+        switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            .click(forDuration: 1, thenDragTo: target)
         self.attach("after-switcher-desktop-drop", app: notificationCenter)
         let modernDone = notificationCenter.buttons.matching(identifier: "widget-add-sheet-done").firstMatch
         let legacyDone = notificationCenter.buttons.matching(NSPredicate(format: "label == %@", "Done"))
@@ -449,7 +392,7 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         let galleryClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: done)
         if XCTWaiter.wait(for: [galleryClosed], timeout: 5) != .completed {
             self.attach("gallery-after-unacknowledged-done", app: notificationCenter)
-            // macOS 26 sometimes ignores the first click while the placement animation settles.
+            // macOS 26 captures sometimes retain the gallery after the first Done click.
             // Retry the same observed control once; disappearance remains mandatory.
             guard done.exists, done.isHittable, done.frame.width > 0, done.frame.height > 0,
                   NSScreen.screens.contains(where: { $0.frame.contains(done.frame) })
@@ -498,19 +441,11 @@ final class PackagedWidgetGalleryDiscoveryUITests: XCTestCase {
         if widgetFamily == "medium" {
             installed.rightClick()
             self.attach("installed-switcher-context-menu-before-medium", app: notificationCenter)
-            let owners = [
-                "com.apple.finder", "com.apple.WindowManager", "com.apple.dock",
-                "com.apple.notificationcenterui", "com.apple.controlcenter",
-            ].map { ($0, XCUIApplication(bundleIdentifier: $0)) }
-            let mediumActions = owners.flatMap { pair -> [XCUIElement] in
-                let (identifier, owner) = pair
-                self.attachText(owner.debugDescription, named: "widget-size-context-owner-\(identifier)")
-                return owner.menuItems.matching(NSPredicate(
-                    format: "label == %@ OR identifier == %@", "Medium", "Medium")).allElementsBoundByIndex
-                    .filter { item in
-                        item.exists && item.frame.width > 0 && item.frame.height > 0 &&
-                            NSScreen.screens.contains(where: { $0.frame.contains(item.frame) })
-                    }
+            // The observed menu belongs to Notification Center and exposes AppKit title text.
+            let mediumActions = notificationCenter.menuItems.matching(NSPredicate(
+                format: "title == %@", "Medium")).allElementsBoundByIndex.filter { item in
+                item.exists && item.frame.width > 0 && item.frame.height > 0 &&
+                    NSScreen.screens.contains(where: { $0.frame.contains(item.frame) })
             }
             guard mediumActions.count == 1, let medium = mediumActions.first else {
                 XCTFail("Expected one observed on-screen Medium widget size action")
