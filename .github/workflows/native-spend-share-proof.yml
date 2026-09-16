@@ -34,34 +34,41 @@ jobs:
           sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
           echo "DEVELOPER_DIR=/Applications/Xcode_26.6.app/Contents/Developer" >> "$GITHUB_ENV"
       - name: Restore SwiftPM build cache
+        id: build-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: |
             .build
             ~/Library/Caches/org.swift.swiftpm
-          key: native-proof-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift') }}
+          key: native-proof-v2-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Sources/**', 'Tests/**') }}
           restore-keys: |
+            native-proof-v2-macos26-${{ matrix.surface }}-
             native-proof-macos26-${{ matrix.surface }}-
             native-proof-macos26-
       - name: Build and run focused tests
         env:
           PROOF_FILTER: ${{ matrix.filter }}
+          PROOF_BUILD_CACHE_HIT: ${{ steps.build-cache.outputs.cache-hit }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/native-proof/output"
           git rev-parse HEAD > "$RUNNER_TEMP/native-proof/output/source-commit.txt"
+          build_flags=(--jobs 3)
+          if [[ "$PROOF_BUILD_CACHE_HIT" == "true" ]]; then
+            build_flags=(--skip-build)
+          fi
           env -i PATH="$PATH" HOME="$HOME" DEVELOPER_DIR="$DEVELOPER_DIR" TMPDIR="$RUNNER_TEMP" CI=true \
             CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS=1 CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS=0 \
             CODEXBAR_TEST_CODEX_FILE_ISOLATION=1 CODEXBAR_TEST_SESSION_FILE_ISOLATION=1 \
             CODEXBAR_SHARE_STATS_SCREENSHOT_DIR="$RUNNER_TEMP/native-proof/output" \
-            swift test --jobs 3 --filter "$PROOF_FILTER" 2>&1 | tee "$RUNNER_TEMP/native-proof/output/focused-tests.log"
+            swift test "${build_flags[@]}" --filter "$PROOF_FILTER" 2>&1 | tee "$RUNNER_TEMP/native-proof/output/focused-tests.log"
       - name: Save successful build before UI proof
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: |
             .build
             ~/Library/Caches/org.swift.swiftpm
-          key: native-proof-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift') }}
+          key: native-proof-v2-macos26-${{ matrix.surface }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Sources/**', 'Tests/**') }}
       - name: Render isolated native view proof
         if: ${{ matrix.native != '' }}
         env:
