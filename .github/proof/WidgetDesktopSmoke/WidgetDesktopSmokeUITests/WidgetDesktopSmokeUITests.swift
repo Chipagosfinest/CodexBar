@@ -8,8 +8,12 @@ final class WidgetDesktopSmokeUITests: XCTestCase {
 
         let menuBar = finder.menuBars.firstMatch
         XCTAssertTrue(menuBar.waitForExistence(timeout: 5), "Finder menu bar was not accessible")
-        add(XCTAttachment(screenshot: finder.screenshot()))
-        add(XCTAttachment(string: finder.debugDescription))
+        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        let hierarchy = XCTAttachment(string: finder.debugDescription)
+        hierarchy.lifetime = .keepAlways
+        add(hierarchy)
 
         let fileMenu = menuBar.menuBarItems["File"]
         guard fileMenu.exists else { return }
