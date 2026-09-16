@@ -100,16 +100,16 @@ final class PackagedCodexBarShareUITests: XCTestCase {
         }
         XCTAssertEqual(app.windows.matching(identifier: "Share AI Usage").count, 1)
         XCTAssertTrue(preview.frame.width > 0 && preview.frame.height > 0)
-        let codexText = preview.staticTexts.matching(
-            NSPredicate(format: "label CONTAINS[c] %@", "Codex")).firstMatch
+        let claudeText = preview.staticTexts.matching(
+            NSPredicate(format: "label CONTAINS[c] %@ OR value CONTAINS[c] %@", "Claude", "Claude")).firstMatch
         XCTAssertTrue(
-            codexText.waitForExistence(timeout: 5),
-            "\(phase) preview lacks accessible Codex content; inspect attachment")
+            claudeText.waitForExistence(timeout: 5),
+            "\(phase) preview lacks accessible Claude content; inspect attachment")
         let tokenText = preview.staticTexts.matching(
-            NSPredicate(format: "label CONTAINS %@", "110K")).firstMatch
+            NSPredicate(format: "label CONTAINS %@ OR value CONTAINS %@", "110K", "110K")).firstMatch
         XCTAssertTrue(tokenText.exists, "\(phase) preview lacks synthetic token text")
         let costText = preview.staticTexts.matching(
-            NSPredicate(format: "label CONTAINS %@", "$0.38")).firstMatch
+            NSPredicate(format: "label CONTAINS %@ OR value CONTAINS %@", "$0.45", "$0.45")).firstMatch
         XCTAssertTrue(costText.exists, "\(phase) preview lacks synthetic estimated cost")
     }
 

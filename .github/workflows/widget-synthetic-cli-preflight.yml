@@ -65,7 +65,7 @@ jobs:
           codesign --verify --deep --strict "$app"
           printf '%s\n' "$EXPECTED_PACKAGE_SHA" > "$proof/package-source-commit.txt"
 
-      - name: Seed only runner-owned Codex input and run packaged CLI
+      - name: Seed only runner-owned Claude input and run packaged CLI
         run: |
           set -euo pipefail
           proof="$RUNNER_TEMP/widget-synthetic-cli-preflight"
@@ -73,18 +73,31 @@ jobs:
           export TZ=UTC
           export CODEX_HOME="$seed/codex-home"
           export CODEXBAR_CONFIG="$seed/config.json"
+          export CLAUDE_CONFIG_DIR="$seed/claude-config"
           export CI_CLI="$proof/app/CodexBar.app/Contents/Helpers/CodexBarCLI"
           export EXPECTED_DAY="$(date -u +%F)"
-          mkdir -p "$CODEX_HOME/sessions/$(date -u +%Y/%m/%d)"
-          export CI_SESSION_FILE="$CODEX_HOME/sessions/$(date -u +%Y/%m/%d)/synthetic-widget-proof.jsonl"
+          mkdir -p "$CODEX_HOME" "$CLAUDE_CONFIG_DIR/projects/synthetic-widget-proof"
+          export CI_CLAUDE_FILE="$CLAUDE_CONFIG_DIR/projects/synthetic-widget-proof/usage.jsonl"
           python3 - <<'PY'
           import datetime, json, os, pathlib
           now = datetime.datetime.now(datetime.timezone.utc)
-          rows = [
-              {"type":"turn_context","timestamp":now.isoformat().replace("+00:00","Z"),"payload":{"model":"gpt-5.4","turn_id":"synthetic-ci-only"}},
-              {"type":"event_msg","timestamp":now.isoformat().replace("+00:00","Z"),"payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":100000,"cached_input_tokens":10000,"output_tokens":10000,"reasoning_output_tokens":0}}}},
-          ]
-          pathlib.Path(os.environ["CI_SESSION_FILE"]).write_text("".join(json.dumps(row, separators=(",", ":")) + "\n" for row in rows))
+          row = {
+              "type": "assistant",
+              "timestamp": now.isoformat().replace("+00:00", "Z"),
+              "sessionId": "synthetic-ci-only",
+              "requestId": "synthetic-request-only",
+              "message": {
+                  "id": "synthetic-message-only",
+                  "model": "claude-sonnet-4-5",
+                  "usage": {
+                      "input_tokens": 100000,
+                      "output_tokens": 10000,
+                      "cache_creation_input_tokens": 0,
+                      "cache_read_input_tokens": 0,
+                  },
+              },
+          }
+          pathlib.Path(os.environ["CI_CLAUDE_FILE"]).write_text(json.dumps(row, separators=(",", ":")) + "\n")
           PY
           generated_default="$seed/generated-default-config.json"
           "$CI_CLI" config dump > "$generated_default"
@@ -96,28 +109,28 @@ jobs:
               for key, value in provider.items():
                   if key.lower() in {"apikey", "secretkey", "token", "cookies"}:
                       assert not value, f"generated default unexpectedly contains {key}"
-              provider["enabled"] = provider["id"] == "codex"
+              provider["enabled"] = provider["id"] == "claude"
           pathlib.Path(os.environ["CODEXBAR_CONFIG"]).write_text(json.dumps(config, indent=2) + "\n")
           PY
           "$CI_CLI" config validate
           "$CI_CLI" config providers --format json > "$proof/provider-status.json"
-          "$CI_CLI" cost --provider codex --provider-native-only --refresh --format json > "$proof/codex-cost.json"
-          export CI_COST_JSON="$proof/codex-cost.json"
+          "$CI_CLI" cost --provider claude --provider-native-only --refresh --format json > "$proof/claude-cost.json"
+          export CI_COST_JSON="$proof/claude-cost.json"
           python3 - <<'PY'
           import json, os, pathlib
           payload = json.loads(pathlib.Path(os.environ["CI_COST_JSON"]).read_text())
           assert isinstance(payload, list) and len(payload) == 1, payload
           cost = payload[0]
-          assert cost["provider"] == "codex", cost
+          assert cost["provider"] == "claude", cost
           assert cost["source"] == "local", cost
           assert cost.get("error") is None, cost
           today = [entry for entry in cost["daily"] if entry["date"] == os.environ["EXPECTED_DAY"]]
           assert len(today) == 1, cost
           assert today[0]["totalTokens"] == 110000, today[0]
-          assert float(today[0]["totalCost"]) > 0, today[0]
+          assert abs(float(today[0]["totalCost"]) - 0.45) < 1e-9, today[0]
           totals = cost["totals"]
           assert totals["totalTokens"] == 110000, totals
-          assert float(totals["totalCost"]) > 0, totals
+          assert abs(float(totals["totalCost"]) - 0.45) < 1e-9, totals
           PY
 
       - name: Configure disposable debug app and GUI seed environment
@@ -129,6 +142,7 @@ jobs:
           test -d "$app"
           test -f "$seed/config.json"
           test -d "$seed/codex-home"
+          test -f "$seed/claude-config/projects/synthetic-widget-proof/usage.jsonl"
           domain=com.steipete.codexbar.debug
           defaults write "$domain" tokenCostUsageEnabled -bool YES
           defaults write "$domain" debugDisableKeychainAccess -bool YES
@@ -136,7 +150,7 @@ jobs:
           # suppress macOS notification authorization, which may still block the GUI run.
           defaults write "$domain" adaptiveActivityScanConsent -string declined
           defaults write "$domain" appLanguage -string en
-          defaults write "$domain" selectedMenuProvider -string codex
+          defaults write "$domain" selectedMenuProvider -string claude
           for key in statusChecksEnabled sessionQuotaNotificationsEnabled quotaWarningNotificationsEnabled predictivePaceWarningNotificationsEnabled agentSessionsEnabled iCloudSyncEnabled openCodexUsageLogsEnabled; do
             defaults write "$domain" "$key" -bool NO
           done
@@ -148,12 +162,14 @@ jobs:
           done
           launchctl setenv CODEX_HOME "$seed/codex-home"
           launchctl setenv CODEXBAR_CONFIG "$seed/config.json"
+          launchctl setenv CLAUDE_CONFIG_DIR "$seed/claude-config"
           # Start the exact app outside XCTest. A macOS notification prompt remains a
           # real first-launch gate; the XCUITest result retains a screen attachment if it blocks.
           open -n -g "$app"
           export CODEXBAR_CI_APP_EXECUTABLE="$app/Contents/MacOS/CodexBar"
           export CODEXBAR_CI_EXPECTED_CODEX_HOME="$seed/codex-home"
           export CODEXBAR_CI_EXPECTED_CONFIG="$seed/config.json"
+          export CODEXBAR_CI_EXPECTED_CLAUDE_CONFIG_DIR="$seed/claude-config"
           python3 - <<'PYVERIFY'
           import json, os, pathlib, subprocess, time
           deadline = time.monotonic() + 20
@@ -167,8 +183,9 @@ jobs:
                       continue
                   assert "CODEX_HOME=" + os.environ["CODEXBAR_CI_EXPECTED_CODEX_HOME"] in data, "App did not inherit synthetic Codex root"
                   assert "CODEXBAR_CONFIG=" + os.environ["CODEXBAR_CI_EXPECTED_CONFIG"] in data, "App did not inherit synthetic config"
+                  assert "CLAUDE_CONFIG_DIR=" + os.environ["CODEXBAR_CI_EXPECTED_CLAUDE_CONFIG_DIR"] in data, "App did not inherit synthetic Claude root"
                   assert not any(key + "=" in data for key in forbidden), "Test flags reached the packaged app"
-                  evidence = {"pid": int(pid), "exactPackagedExecutable": True, "syntheticEnvironmentVerified": True, "testFlagsAbsent": True}
+                  evidence = {"pid": int(pid), "exactPackagedExecutable": True, "syntheticClaudeEnvironmentVerified": True, "testFlagsAbsent": True}
                   pathlib.Path(os.environ["RUNNER_TEMP"], "widget-synthetic-cli-preflight/app-environment-proof.json").write_text(json.dumps(evidence) + "\n")
                   raise SystemExit(0)
               time.sleep(0.2)
@@ -219,6 +236,7 @@ jobs:
         run: |
           launchctl unsetenv CODEX_HOME || true
           launchctl unsetenv CODEXBAR_CONFIG || true
+          launchctl unsetenv CLAUDE_CONFIG_DIR || true
           for key in XCTestConfigurationFilePath XCTestBundlePath XCTestSessionIdentifier TESTING_LIBRARY_VERSION SWIFT_TESTING SWIFT_TESTING_ENABLED; do
             launchctl unsetenv "$key" || true
           done
@@ -231,7 +249,7 @@ jobs:
           path: |
             ${{ runner.temp }}/widget-synthetic-cli-preflight/package-source-commit.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/provider-status.json
-            ${{ runner.temp }}/widget-synthetic-cli-preflight/codex-cost.json
+            ${{ runner.temp }}/widget-synthetic-cli-preflight/claude-cost.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/app-environment-proof.json
             ${{ runner.temp }}/widget-synthetic-cli-preflight/disposable-debug-defaults.txt
             ${{ runner.temp }}/widget-synthetic-cli-preflight/packaged-share-xcodebuild.log
