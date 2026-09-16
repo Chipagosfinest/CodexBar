@@ -8,15 +8,15 @@ The native host simulates 16-point margins around 160 × 160, 360 × 160, and 36
 
 | Layout | Native capture |
 | --- | --- |
-| Compact Small | [PNG](../../.github/pr-proof/widget-share/share-overview-compact-small.png) |
-| History Large | [PNG](../../.github/pr-proof/widget-share/share-overview-history-large.png) |
-| History Medium | [PNG](../../.github/pr-proof/widget-share/share-overview-history-medium.png) |
-| Switcher Large | [PNG](../../.github/pr-proof/widget-share/share-overview-switcher-large.png) |
-| Switcher Medium | [PNG](../../.github/pr-proof/widget-share/share-overview-switcher-medium.png) |
-| Switcher Small | [PNG](../../.github/pr-proof/widget-share/share-overview-switcher-small.png) |
-| Usage Large | [PNG](../../.github/pr-proof/widget-share/share-overview-usage-large.png) |
-| Usage Medium | [PNG](../../.github/pr-proof/widget-share/share-overview-usage-medium.png) |
-| Usage Small | [PNG](../../.github/pr-proof/widget-share/share-overview-usage-small.png) |
+| Compact Small | [PNG](assets/widget-share/share-overview-compact-small.png) |
+| History Large | [PNG](assets/widget-share/share-overview-history-large.png) |
+| History Medium | [PNG](assets/widget-share/share-overview-history-medium.png) |
+| Switcher Large | [PNG](assets/widget-share/share-overview-switcher-large.png) |
+| Switcher Medium | [PNG](assets/widget-share/share-overview-switcher-medium.png) |
+| Switcher Small | [PNG](assets/widget-share/share-overview-switcher-small.png) |
+| Usage Large | [PNG](assets/widget-share/share-overview-usage-large.png) |
+| Usage Medium | [PNG](assets/widget-share/share-overview-usage-medium.png) |
+| Usage Small | [PNG](assets/widget-share/share-overview-usage-small.png) |
 
 These captures verify production layout content in an NSHostingView. They do not verify an installed WidgetKit container, wallpaper-dependent rendering, system-supplied margins, or an actual desktop click into a warm/cold app. Those installed-runtime checks remain outstanding, along with the prerequisite menu-sharing PR #3677 and current-head CI.
 
