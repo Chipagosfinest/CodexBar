@@ -119,7 +119,8 @@ struct CodexBarSwitcherWidgetView: View {
                 selected: self.entry.provider,
                 updatedAt: providerEntry?.updatedAt ?? Date(),
                 compact: self.family == .systemSmall,
-                showsTimestamp: self.family != .systemSmall)
+                showsTimestamp: self.family != .systemSmall,
+                showsShareAffordance: self.family == .systemSmall)
             if let providerEntry {
                 self.content(providerEntry: providerEntry)
             } else {
@@ -156,15 +157,9 @@ struct CodexBarSwitcherWidgetView: View {
     }
 }
 
-private struct WidgetShareOverviewFooter: View {
-    let launchesSharePreview: Bool
-
+private struct WidgetShareOverviewLink: View {
     var body: some View {
-        if self.launchesSharePreview {
-            Link(destination: ShareStatsRoute.overviewURL) {
-                self.label
-            }
-        } else {
+        Link(destination: ShareStatsRoute.overviewURL) {
             self.label
         }
     }
@@ -177,6 +172,15 @@ private struct WidgetShareOverviewFooter: View {
     }
 }
 
+private struct WidgetShareOverviewAffordance: View {
+    var body: some View {
+        Image(systemName: "square.and.arrow.up")
+            .font(.system(size: 9, weight: .medium))
+            .foregroundStyle(.secondary)
+            .accessibilityLabel("Share selected usage and spend overview")
+    }
+}
+
 private struct CompactMetricView: View {
     let entry: WidgetSnapshot.ProviderEntry
     let metric: CompactMetric
@@ -184,7 +188,11 @@ private struct CompactMetricView: View {
     var body: some View {
         let display = CompactMetricFormatter.display(for: self.entry, metric: self.metric)
         VStack(alignment: .leading, spacing: 8) {
-            HeaderView(provider: self.entry.provider, updatedAt: self.entry.updatedAt)
+            HeaderView(
+                provider: self.entry.provider,
+                updatedAt: self.entry.updatedAt,
+                showsShareAffordance: true,
+                showsTimestamp: false)
             VStack(alignment: .leading, spacing: 2) {
                 Text(display.value)
                     .font(.title2)
@@ -201,7 +209,6 @@ private struct CompactMetricView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            WidgetShareOverviewFooter(launchesSharePreview: false)
         }
     }
 }
@@ -261,6 +268,7 @@ private struct ProviderSwitcherRow: View {
     let updatedAt: Date
     let compact: Bool
     let showsTimestamp: Bool
+    let showsShareAffordance: Bool
 
     var body: some View {
         HStack(spacing: self.compact ? 4 : 6) {
@@ -276,6 +284,9 @@ private struct ProviderSwitcherRow: View {
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.trailing)
+            } else if self.showsShareAffordance {
+                Spacer(minLength: 0)
+                WidgetShareOverviewAffordance()
             }
         }
     }
@@ -355,7 +366,6 @@ private struct SwitcherSmallUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
-            WidgetShareOverviewFooter(launchesSharePreview: false)
         }
     }
 }
@@ -391,7 +401,7 @@ private struct SwitcherMediumUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
-            WidgetShareOverviewFooter(launchesSharePreview: true)
+            WidgetShareOverviewLink()
         }
     }
 }
@@ -446,7 +456,7 @@ private struct SwitcherLargeUsageView: View {
                 color: WidgetColors.color(for: self.entry.provider),
                 currencyCode: self.entry.tokenUsage?.currencyCode)
                 .frame(height: 50)
-            WidgetShareOverviewFooter(launchesSharePreview: true)
+            WidgetShareOverviewLink()
         }
     }
 }
@@ -456,7 +466,11 @@ private struct SmallUsageView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HeaderView(provider: self.entry.provider, updatedAt: self.entry.updatedAt)
+            HeaderView(
+                provider: self.entry.provider,
+                updatedAt: self.entry.updatedAt,
+                showsShareAffordance: true,
+                showsTimestamp: false)
             ForEach(WidgetUsageRow.rows(
                 for: self.entry,
                 limit: WidgetUsageRow.smallWidgetRowLimit(for: self.entry)))
@@ -486,7 +500,6 @@ private struct SmallUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
-            WidgetShareOverviewFooter(launchesSharePreview: false)
         }
     }
 }
@@ -523,7 +536,7 @@ private struct MediumUsageView: View {
             if let balance = extraUsageBalanceLine(for: entry) {
                 balance
             }
-            WidgetShareOverviewFooter(launchesSharePreview: true)
+            WidgetShareOverviewLink()
         }
     }
 }
@@ -579,7 +592,7 @@ private struct LargeUsageView: View {
                 color: WidgetColors.color(for: self.entry.provider),
                 currencyCode: self.entry.tokenUsage?.currencyCode)
                 .frame(height: 50)
-            WidgetShareOverviewFooter(launchesSharePreview: true)
+            WidgetShareOverviewLink()
         }
     }
 }
@@ -796,7 +809,7 @@ private struct HistoryView: View {
                         tokens: token.last30DaysTokens,
                         currencyCode: token.currencyCode))
             }
-            WidgetShareOverviewFooter(launchesSharePreview: true)
+            WidgetShareOverviewLink()
         }
     }
 }
@@ -804,6 +817,8 @@ private struct HistoryView: View {
 private struct HeaderView: View {
     let provider: ProviderInstanceID
     let updatedAt: Date
+    var showsShareAffordance = false
+    var showsTimestamp = true
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
@@ -812,10 +827,15 @@ private struct HeaderView: View {
                 .font(.body)
                 .fontWeight(.semibold)
             Spacer()
-            Text(self.updatedAt, style: .relative)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.trailing)
+            if self.showsShareAffordance {
+                WidgetShareOverviewAffordance()
+            }
+            if self.showsTimestamp {
+                Text(self.updatedAt, style: .relative)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.trailing)
+            }
         }
     }
 }

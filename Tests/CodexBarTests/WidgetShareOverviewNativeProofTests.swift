@@ -11,10 +11,10 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
     private struct Canvas {
         let name: String
         let size: CGSize
-        let view: AnyView
+        let content: AnyView
     }
 
-    func test_shareOverviewWidgetsFitDesktopFamilies() throws {
+    func test_shareOverviewWidgetsRenderInsideSyntheticDesktopMargins() throws {
         let environment = ProcessInfo.processInfo.environment
         guard let directory = environment["CODEXBAR_WIDGET_SHARE_PROOF_DIR"] else {
             throw XCTSkip("Set CODEXBAR_WIDGET_SHARE_PROOF_DIR to render the synthetic widget proof.")
@@ -30,6 +30,9 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let snapshot = WidgetPreviewData.snapshot()
         let entry = CodexBarWidgetEntry(date: Date(), provider: .codex, snapshot: snapshot)
+        let worstCaseEntry = try XCTUnwrap(snapshot.entries.first { $0.provider == .codex })
+        XCTAssertEqual(WidgetUsageRow.rows(for: worstCaseEntry).count, 2)
+        XCTAssertNotNil(worstCaseEntry.codeReviewRemainingPercent)
         let compactEntry = CodexBarCompactEntry(
             date: Date(),
             provider: .codex,
@@ -38,7 +41,7 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
         let switcherEntry = CodexBarSwitcherEntry(
             date: Date(),
             provider: .codex,
-            availableProviders: [.codex, .claude],
+            availableProviders: [.codex, .claude, .cursor],
             snapshot: snapshot)
         let small = CGSize(width: 160, height: 160)
         let medium = CGSize(width: 360, height: 160)
@@ -68,7 +71,18 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
         ]
 
         for canvas in canvases {
-            let hosting = NSHostingView(rootView: canvas.view)
+            // WidgetKit supplies context-dependent margins. This host does not, so model a
+            // conservative desktop inset explicitly; an installed-widget capture remains required.
+            let margins = EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+            let contentSize = CGSize(
+                width: canvas.size.width - margins.leading - margins.trailing,
+                height: canvas.size.height - margins.top - margins.bottom)
+
+            let rendered = canvas.content
+                .frame(width: contentSize.width, height: contentSize.height)
+                .padding(margins)
+                .frame(width: canvas.size.width, height: canvas.size.height)
+            let hosting = NSHostingView(rootView: rendered)
             hosting.appearance = NSAppearance(named: .aqua)
             hosting.frame = NSRect(origin: .zero, size: canvas.size)
             let window = NSWindow(
@@ -86,8 +100,6 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
             window.layoutIfNeeded()
             hosting.layoutSubtreeIfNeeded()
             RunLoop.current.run(until: Date().addingTimeInterval(0.1))
-            XCTAssertEqual(hosting.bounds.size.width, canvas.size.width, accuracy: 0.5)
-            XCTAssertEqual(hosting.bounds.size.height, canvas.size.height, accuracy: 0.5)
             let image = try XCTUnwrap(hosting.bitmapImageRepForCachingDisplay(in: hosting.bounds))
             hosting.cacheDisplay(in: hosting.bounds, to: image)
             try XCTUnwrap(image.representation(using: .png, properties: [:]))
@@ -104,8 +116,7 @@ final class WidgetShareOverviewNativeProofTests: XCTestCase {
         let content = AnyView(
             view
                 .environment(\.widgetFamily, family ?? .systemSmall)
-                .frame(width: size.width, height: size.height)
                 .background(Color(nsColor: .windowBackgroundColor)))
-        return Canvas(name: name, size: size, view: content)
+        return Canvas(name: name, size: size, content: content)
     }
 }
