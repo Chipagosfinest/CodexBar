@@ -2,9 +2,11 @@ name: Widget package proof
 
 on:
   workflow_dispatch:
-  push:
-    branches: [validation/native-spend-share-proof]
-    paths: [.github/workflows/widget-package-proof.yml]
+    inputs:
+      baseline_release:
+        description: Build pinned 0.60.4 baseline for retained-widget upgrade proof
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -16,8 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          repository: ${{ github.repository }}
-          ref: fix/widget-share-stats
+          repository: ${{ inputs.baseline_release && 'steipete/CodexBar' || github.repository }}
+          ref: ${{ inputs.baseline_release && '937b20813cf47340093b6c312331c63a52768097' || 'fix/widget-share-stats' }}
           fetch-depth: 1
           persist-credentials: false
 
@@ -42,6 +44,8 @@ jobs:
           ARCHES="$(uname -m)" CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh debug 2>&1 | tee "$proof/package.log"
 
       - name: Verify packaged app and widget metadata
+        env:
+          BASELINE_RELEASE: ${{ inputs.baseline_release }}
         run: |
           set -euo pipefail
           proof="$RUNNER_TEMP/widget-package-proof"
@@ -57,11 +61,20 @@ jobs:
           codesign --verify --deep --strict --verbose=2 "$app" 2>&1 | tee "$proof/codesign-app.log"
           app_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app_plist")"
           widget_id="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$widget_plist")"
-          url_scheme="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleURLTypes:0:CFBundleURLSchemes:0' "$app_plist")"
+          if [[ "$BASELINE_RELEASE" == "true" ]]; then
+            test "$(cat "$proof/source-commit.txt")" = "937b20813cf47340093b6c312331c63a52768097"
+            if /usr/libexec/PlistBuddy -c 'Print :CFBundleURLTypes' "$app_plist" >/dev/null 2>&1; then
+              echo "Pinned baseline unexpectedly declares a URL route" >&2
+              exit 1
+            fi
+            url_scheme="absent-in-baseline"
+          else
+            url_scheme="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleURLTypes:0:CFBundleURLSchemes:0' "$app_plist")"
+            test "$url_scheme" = "codexbar"
+          fi
           extension_point="$(/usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$widget_plist")"
           test "$app_id" = "com.steipete.codexbar.debug"
           test "$widget_id" = "com.steipete.codexbar.debug.widget"
-          test "$url_scheme" = "codexbar"
           test "$extension_point" = "com.apple.widgetkit-extension"
           cat > "$proof/bundle-metadata.txt" <<EOF
           app_bundle_id=$app_id
