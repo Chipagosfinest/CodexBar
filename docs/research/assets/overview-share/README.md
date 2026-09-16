@@ -25,3 +25,7 @@ The layout correction follows [Apple NSWindow.layoutIfNeeded](https://developer.
 - [German after copy: Bild kopiert](overview-share-window-copied-de.png)
 
 **The run failed overall:** its accessibility traversal returned an empty array before and after copy in both languages. These captures resolve the earlier missing-toolbar visual uncertainty, but do not resolve the accessibility-probe failure or establish VoiceOver behavior. Do not report this run as passing. Installed-widget dispatch remains a separate unverified boundary.
+
+## Proof boundary correction
+
+The native menu/copy proof retains exact localized menu-title, selected-payload, actual keyboard action, clipboard change, PNG/TIFF and image-dimension checks. Its workflow now requires actual compositor captures before and after copy in both languages, with visual inspection. Recursive accessibility-tree enumeration is a distinct opt-in via `CODEXBAR_OVERVIEW_ACCESSIBILITY_PROOF=1`; default runs explicitly state that accessibility was not verified. This does not certify VoiceOver behavior or turn the prior failed run into a passing result.
