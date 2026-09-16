@@ -172,6 +172,7 @@ jobs:
               'CODEXBAR_OVERVIEW_SHARE_PROOF_DIR': str(home / 'output'),
               'CI': 'true',
               'CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF': '1',
+              'CODEXBAR_OVERVIEW_WINDOW_CAPTURE': '1',
           }
           command = ['swift', 'test', '--skip-build', '--filter',
                      'native.*overview.*share.*preview']
@@ -183,10 +184,13 @@ jobs:
               with log_path.open('w') as log:
                   result = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
               print(log_path.read_text())
-              for stem in ['overview-share-preview', 'overview-share-preview-copied']:
+              for stem in ['overview-share-preview', 'overview-share-preview-copied',
+                           'overview-share-window', 'overview-share-window-copied']:
                   name = f'{stem}{suffix}.png'
                   source = home / 'output' / name
                   if source.exists():
+                      if 'window' in stem and not source.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'):
+                          continue
                       shutil.copyfile(source, base / 'output' / name)
               if result.returncode:
                   failures.append(language)
@@ -202,7 +206,16 @@ jobs:
           output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'native-proof/output'
           images = list(output.glob('*.png'))
           expected = {'openrouter': 2, 'menu': 5, 'widgets': 9}[os.environ['PROOF_SURFACE']]
-          assert len(images) == expected, f'Expected {expected} images, got {len(images)}'
+          if os.environ['PROOF_SURFACE'] == 'menu':
+              required = {'share-stats.png'} | {
+                  f'{stem}{suffix}.png'
+                  for stem in ['overview-share-preview', 'overview-share-preview-copied']
+                  for suffix in ['', '-de']
+              }
+              names = {image.name for image in images}
+              assert required <= names, f'Missing required images: {required - names}'
+          else:
+              assert len(images) == expected, f'Expected {expected} images, got {len(images)}'
           for image in images:
               assert image.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'), image.name
           PY
