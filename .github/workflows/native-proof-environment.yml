@@ -37,7 +37,7 @@ jobs:
           func environmentProbe() throws {
               let home = URL(fileURLWithPath: NSHomeDirectory()).standardizedFileURL.path
               let tmp = URL(fileURLWithPath: NSTemporaryDirectory()).standardizedFileURL.path
-              let output = URL(fileURLWithPath: home).appendingPathComponent("output").path
+              let output = URL(fileURLWithPath: ProcessInfo.processInfo.environment["CODEXBAR_OVERVIEW_SHARE_PROOF_DIR"] ?? "/missing-probe-output").standardizedFileURL.path
               let homePrefix = home.hasSuffix("/") ? home : home + "/"
               let tmpPrefix = tmp.hasSuffix("/") ? tmp : tmp + "/"
               let delegate = NSApplication.shared.delegate.map { String(reflecting: type(of: $0)) } ?? "nil"
@@ -54,6 +54,7 @@ jobs:
           proof_home="$proof_base/home"
           proof_environment=(PATH=/usr/bin:/bin:/usr/sbin:/sbin HOME="$proof_home"
             CFFIXED_USER_HOME="$proof_home" TMPDIR="$proof_base/" DEVELOPER_DIR="$DEVELOPER_DIR"
+            CODEXBAR_OVERVIEW_SHARE_PROOF_DIR="$proof_home/output"
             CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS=1 CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS=0
             CODEXBAR_TEST_CODEX_FILE_ISOLATION=1 CODEXBAR_TEST_SESSION_FILE_ISOLATION=1)
           cd "$proof_base/package"
