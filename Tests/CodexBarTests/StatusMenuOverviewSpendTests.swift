@@ -173,6 +173,17 @@ extension StatusMenuTests {
             to: outputDirectory.appendingPathComponent("overview-share-preview\(Self.localeSuffix(language)).png"),
             options: .atomic)
 
+        let windowCaptureEnabled = environment["CODEXBAR_OVERVIEW_WINDOW_CAPTURE"] == "1"
+        if windowCaptureEnabled {
+            guard environment["CI"] == "true" else {
+                Issue.record("CODEXBAR_OVERVIEW_WINDOW_CAPTURE=1 requires CI=true")
+                return
+            }
+            Self.captureWindow(
+                window,
+                to: outputDirectory.appendingPathComponent("overview-share-window\(Self.localeSuffix(language)).png"))
+        }
+
         guard environment["CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF"] == "1" else { return }
         guard environment["CI"] == "true" else {
             Issue
@@ -214,6 +225,54 @@ extension StatusMenuTests {
             to: outputDirectory
                 .appendingPathComponent("overview-share-preview-copied\(Self.localeSuffix(language)).png"),
             options: .atomic)
+        if windowCaptureEnabled {
+            Self.captureWindow(
+                window,
+                to: outputDirectory
+                    .appendingPathComponent("overview-share-window-copied\(Self.localeSuffix(language)).png"))
+        }
+    }
+
+    private static func captureWindow(_ window: NSWindow, to output: URL) {
+        var captured = false
+        defer {
+            if !captured, FileManager.default.fileExists(atPath: output.path) {
+                do {
+                    try FileManager.default.removeItem(at: output)
+                } catch {
+                    print("Overview share window capture unavailable: output cleanup failed")
+                }
+            }
+        }
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
+        process.arguments = ["-x", "-o", "-l", String(window.windowNumber), output.path]
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+        let completed = DispatchSemaphore(value: 0)
+        process.terminationHandler = { _ in completed.signal() }
+        do {
+            try process.run()
+        } catch {
+            print("Overview share window capture unavailable: spawn failed")
+            return
+        }
+        guard completed.wait(timeout: .now() + 5) == .success else {
+            process.terminate()
+            _ = completed.wait(timeout: .now() + 1)
+            print("Overview share window capture unavailable: timed out")
+            return
+        }
+        guard process.terminationStatus == 0 else {
+            print("Overview share window capture unavailable: exit \(process.terminationStatus)")
+            return
+        }
+        guard let data = try? Data(contentsOf: output), data.starts(with: [0x89, 0x50, 0x4E, 0x47]) else {
+            print("Overview share window capture unavailable: invalid PNG")
+            return
+        }
+        captured = true
+        print("Overview share window capture succeeded")
     }
 
     private static func localeSuffix(_ language: String) -> String {
