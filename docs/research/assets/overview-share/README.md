@@ -14,3 +14,14 @@ Current source `b7d76395a` additionally checks the actual menu title and preview
 The layout correction follows [Apple NSWindow.layoutIfNeeded](https://developer.apple.com/documentation/appkit/nswindow/layoutifneeded()), accessed 2026-09-16. Accessibility traversal follows [Apple accessibilityChildren](https://developer.apple.com/documentation/AppKit/NSAccessibility-c.protocol/accessibilityChildren) and the repository's existing SwiftUI-node fallback. No manual hosting-view size was assigned.
 
 ![Synthetic exported usage image](share-stats.png)
+
+## Composited window captures — verified 2026-09-16
+
+[Run 35083394374](https://github.com/Chipagosfinest/CodexBar/actions/runs/35083394374), source `34cd766684da8ebf7ce242d6f7729234e4a3fddf`, produced the actual window captures below. Visual inspection confirms the full controls and success feedback in English and German. The menu, filtered payload, Return-key activation, and PNG/TIFF clipboard assertions passed.
+
+- [English before copy](overview-share-window.png)
+- [English after copy: Image copied](overview-share-window-copied.png)
+- [German before copy: Bild kopieren](overview-share-window-de.png)
+- [German after copy: Bild kopiert](overview-share-window-copied-de.png)
+
+**The run failed overall:** its accessibility traversal returned an empty array before and after copy in both languages. These captures resolve the earlier missing-toolbar visual uncertainty, but do not resolve the accessibility-probe failure or establish VoiceOver behavior. Do not report this run as passing. Installed-widget dispatch remains a separate unverified boundary.
