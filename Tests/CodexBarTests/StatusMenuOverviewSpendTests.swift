@@ -6,7 +6,7 @@ import Testing
 
 extension StatusMenuTests {
     @Test
-    func `native overview share menu opens filtered preview`() async throws {
+    func `native overview share menu opens filtered preview`() throws {
         let environment = ProcessInfo.processInfo.environment
         guard let directoryPath = environment["CODEXBAR_OVERVIEW_SHARE_PROOF_DIR"] else { return }
         let home = URL(fileURLWithPath: NSHomeDirectory(), isDirectory: true).standardizedFileURL
@@ -118,8 +118,26 @@ extension StatusMenuTests {
         defer { preview.close() }
         #expect(preview.payload.providers.map(\.providerName) == ["codex:visible"])
         #expect(preview.payload.currencies.first?.estimatedCost == 2)
-        let content = try #require(preview.window?.contentView)
+        try self.capturePreviewAndOptionallyCopy(
+            preview,
+            outputDirectory: outputDirectory,
+            environment: environment)
+    }
+
+    private func capturePreviewAndOptionallyCopy(
+        _ preview: ShareStatsWindowController,
+        outputDirectory: URL,
+        environment: [String: String]) throws
+    {
+        let window = try #require(preview.window)
+        #expect(window.isVisible)
+        window.layoutIfNeeded()
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.1))
+        window.layoutIfNeeded()
+        let content = try #require(window.contentView)
         content.layoutSubtreeIfNeeded()
+        #expect(content.bounds.width > 0)
+        #expect(content.bounds.height > 0)
         let bitmap = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
         content.cacheDisplay(in: content.bounds, to: bitmap)
         let png = try #require(bitmap.representation(using: .png, properties: [:]))
@@ -134,7 +152,6 @@ extension StatusMenuTests {
                     "CODEXBAR_OVERVIEW_COPY_BUTTON_PROOF=1 requires CI=true before writing to the general pasteboard")
             return
         }
-        let window = try #require(preview.window)
         let pasteboard = NSPasteboard.general
         let changeCountBeforeCopy = pasteboard.changeCount
         let returnKey = try #require(NSEvent.keyEvent(
@@ -158,7 +175,8 @@ extension StatusMenuTests {
         #expect(copiedBitmap.pixelsWide == 1200)
         #expect(copiedBitmap.pixelsHigh == 630)
 
-        try await Task.sleep(for: .milliseconds(100))
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.1))
+        window.layoutIfNeeded()
         content.layoutSubtreeIfNeeded()
         let copiedPreview = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
         content.cacheDisplay(in: content.bounds, to: copiedPreview)
