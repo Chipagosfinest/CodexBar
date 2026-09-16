@@ -26,7 +26,7 @@ jobs:
           - surface: widgets
             branch: fix/widget-share-stats
             filter: ShareStatsRouteTests
-            native: CodexBarTests.WidgetShareOverviewNativeProofTests/test_shareOverviewWidgetsFitDesktopFamilies
+            native: CodexBarTests.WidgetShareOverviewNativeProofTests/test_shareOverviewWidgetsRenderInsideSyntheticDesktopMargins
     env:
       CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: '1'
       CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS: '0'
