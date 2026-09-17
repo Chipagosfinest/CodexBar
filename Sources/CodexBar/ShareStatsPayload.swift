@@ -372,6 +372,8 @@ enum ShareStatsPayloadFactory {
 }
 
 enum ShareStatsFormatting {
+    /// Plural-safe subscription count for the share card. The single-subscription card is the
+    /// most common one there is, and it used to read "1 subscriptions".
     static func subscriptionSummary(count: Int) -> String {
         count == 1 ? "1 subscription" : "\(count) subscriptions"
     }
