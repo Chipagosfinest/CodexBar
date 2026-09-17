@@ -66,9 +66,8 @@ struct ShareStatsCardView: View {
     }
 
     /// Spend leads. It is the number the card exists to communicate and the reason someone
-    /// shares a snapshot at all; tokens are supporting context. Both columns run the same
-    /// label / value / detail rhythm so their baselines line up instead of drifting apart the
-    /// way two independently-spaced stacks did.
+    /// shares a snapshot at all; tokens are supporting context. Both columns anchor from the
+    /// top with the same label / value / detail hierarchy.
     private var hero: some View {
         HStack(alignment: .top, spacing: 52) {
             VStack(alignment: .leading, spacing: 2) {
@@ -114,14 +113,13 @@ struct ShareStatsCardView: View {
         return self.spendText(for: currency)
     }
 
-    /// Coverage for the headline currency, plus a pointer to any currency the hero cannot show.
-    /// Native currencies are never summed, so extra ones stay discoverable in the rows below.
+    /// Coverage for the headline currency, plus explicit totals for secondary currencies so
+    /// multi-currency users never lose spend visibility when subscription rows overflow.
     private var spendCoverageText: String {
-        guard let currency = self.primaryCurrency else { return "No spend recorded" }
-        let coverage = "\(currency.currencyCode) \u{00B7} \(currency.coveredDayCount)/\(self.coverageDenominator)"
-        let hiddenCount = self.payload.currencies.count - 1
-        guard hiddenCount > 0 else { return coverage }
-        return "\(coverage) \u{00B7} +\(hiddenCount) more in rows below"
+        ShareStatsFormatting.spendCoverage(
+            currencies: self.payload.currencies,
+            coverageDenominator: self.coverageDenominator,
+            spendFormatter: { self.spendText(for: $0) })
     }
 
     private var subscriptionSummary: String {
