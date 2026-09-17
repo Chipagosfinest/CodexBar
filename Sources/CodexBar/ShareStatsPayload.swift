@@ -54,6 +54,9 @@ struct ShareStatsPayload: Sendable, Equatable {
     let days: Int
     let periodEnd: Date
     let periodEndTimeZone: TimeZone
+    /// Daily spend totals for the headline currency, oldest first. Aggregate only: a day's total
+    /// across every provider, carrying no provider, model or account identity.
+    let dailySpend: [Double]
     let providers: [ShareStatsProviderPayload]
     let topModels: [ShareStatsModelPayload]
     let currencies: [ShareStatsCurrencyPayload]
@@ -70,7 +73,8 @@ struct ShareStatsPayload: Sendable, Equatable {
         totalTokens: Int?,
         hasPartialTokens: Bool = false,
         hasPartialModels: Bool = false,
-        periodEndTimeZone: TimeZone = .current)
+        periodEndTimeZone: TimeZone = .current,
+        dailySpend: [Double] = [])
     {
         self.days = days
         self.periodEnd = periodEnd
@@ -81,6 +85,7 @@ struct ShareStatsPayload: Sendable, Equatable {
         self.totalTokens = totalTokens
         self.hasPartialTokens = hasPartialTokens
         self.hasPartialModels = hasPartialModels
+        self.dailySpend = dailySpend
     }
 
     var modelRankingDetail: String {
@@ -311,6 +316,11 @@ enum ShareStatsBuilder {
             periodGroup.chartDomain.lowerBound,
             periodGroup.chartDomain.upperBound.addingTimeInterval(-1))
         let periodEnd = periodGroup.calendar.startOfDay(for: lastIncludedInstant)
+        // One value per covered day for the headline currency: every provider's spend on that day,
+        // summed. Aggregate by construction, so it carries nothing the rows do not already show.
+        let dailySpend = Dictionary(grouping: periodGroup.dailyPoints, by: \.day)
+            .sorted { $0.key < $1.key }
+            .map { _, points in points.reduce(0) { $0 + $1.cost } }
         let payload = ShareStatsPayload(
             days: model.requestedDays,
             periodEnd: periodEnd,
@@ -320,7 +330,8 @@ enum ShareStatsBuilder {
             totalTokens: totalTokens,
             hasPartialTokens: hasPartialTokens,
             hasPartialModels: hasPartialModels,
-            periodEndTimeZone: periodGroup.timeZone)
+            periodEndTimeZone: periodGroup.timeZone,
+            dailySpend: dailySpend)
         return payload.hasShareableData ? payload : nil
     }
 
