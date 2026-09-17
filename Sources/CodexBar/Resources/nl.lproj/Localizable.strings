@@ -1584,3 +1584,6 @@
 "Share Usage Snapshot…" = "Gebruiksoverzicht delen…";
 "Usage snapshot unavailable" = "Gebruiksoverzicht niet beschikbaar";
 "CodexBar couldn't prepare a shareable usage snapshot. Refresh Usage & Spend and try again." = "CodexBar kon geen deelbaar gebruiksoverzicht maken. Vernieuw Gebruik en uitgaven en probeer het opnieuw.";
+"Incomplete" = "Onvolledig";
+"Est. subtotal (%@): %@" = "Geschat subtotaal (%@): %@";
+"Excluded requests with missing final usage: %d" = "Uitgesloten verzoeken zonder definitieve gebruiksgegevens: %d";
