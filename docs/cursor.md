@@ -36,6 +36,9 @@ mode never reads Cursor.app credentials; macOS uses its cookie ladder, while Lin
      reads the Cursor database directly and does not persist the app token.
    - When an already-cached cookie exposes a different email or subject, CodexBar logs the mismatch and keeps the
      chosen Cursor.app identity on the usage snapshot/card. It does not combine app usage with browser identity.
+   - Temporary transport failures keep the previous usage measurement and its timestamp for an unchanged account,
+     including when the network message is localized. The same policy applies to stored sessions; rejected sessions
+     still follow the normal sign-in recovery path.
 
 2) **Cached cookie header**
    - Stored after successful browser import.
@@ -136,6 +139,8 @@ Two totals are reported from the same events:
 API-list-price estimates are not estimates of actual Cursor charges: they do not apply plan-specific Cursor Token Rates, regional adjustments, or legacy billing rules. `chargedCents` and Cursor-metered totals remain separate and unchanged. In Overview, history coverage describes the included sources' established history; a selected subscription without spend still makes amounts partial and remains disclosed in the subscription count, without erasing another source's known history days.
 
 Caching: the app holds the snapshot for an in-memory hourly TTL, keyed by the history window plus the cookie source and resolved account (manual-cookie hash or auto-mode account fingerprint), so switching accounts or pasting a new cookie invalidates it immediately.
+
+If Auto fetches usage with a cookie that the app still cannot confirm for the current account, the result stays unpublished. An unchanged account scope waits for the next normal or manual refresh instead of repeatedly forcing another request. Real account, history-window, provider, or cost-timezone changes still request a replacement; a successful fetch that confirms its own cookie can publish immediately.
 
 ## Snapshot mapping
 - Primary: plan usage percent (included plan).
