@@ -8,7 +8,9 @@ struct ShareStatsRouteHandoff: Equatable {
 
     private var pending: (route: ShareStatsRoute, enqueuedAt: Date)?
 
-    var pendingRoute: ShareStatsRoute? { self.pending?.route }
+    var pendingRoute: ShareStatsRoute? {
+        self.pending?.route
+    }
 
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.pending?.route == rhs.pending?.route && lhs.pending?.enqueuedAt == rhs.pending?.enqueuedAt
