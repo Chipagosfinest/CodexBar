@@ -322,14 +322,17 @@ defineProvider({
       let period = null;
       let hasUsageSignal = false;
       if (keyLimit !== null && keyLimit > 0) {
-        hasUsageSignal = true;
         limit = keyLimit;
         const quotaUsed = keyUsedForQuota();
-        used = quotaUsed !== null && Number.isFinite(quotaUsed) && quotaUsed >= 0 ? quotaUsed : 0;
+        if (quotaUsed !== null && Number.isFinite(quotaUsed) && quotaUsed >= 0) {
+          used = quotaUsed;
+          hasUsageSignal = true;
+        }
         const resetWindow = typeof keyData.limit_reset === "string" ? keyData.limit_reset.trim() : "";
         if (resetWindow === "daily") period = "Today";
         else if (resetWindow === "weekly") period = "This week";
         else if (resetWindow === "monthly") period = "This month";
+        else period = "Total usage";
       } else if (keyData && typeof keyData.usage_monthly === "number" && Number.isFinite(keyData.usage_monthly)) {
         used = Math.max(0, keyData.usage_monthly);
         hasUsageSignal = true;
@@ -343,11 +346,11 @@ defineProvider({
         hasUsageSignal = true;
         period = "Total usage";
       }
-      const balance = creditsData ? creditsData.balance : keyRemaining !== null ? keyRemaining : null;
+      const balance = creditsData ? creditsData.balance : null;
 
       // Never fabricate a confident "$0.00" when no endpoint actually reported usage:
       // a degraded credits call plus a bare key object would otherwise render as real spend.
-      if (hasUsageSignal || balance !== null) {
+      if (hasUsageSignal) {
         cost = {
           used,
           limit,

@@ -12,7 +12,9 @@ enum OpenRouterLimitTestSupport {
     static func snapshot(
         engine: ProviderPluginEngineKind = .quickJS,
         keyBody: String = Self.keyBody,
-        keyStatus: Int = 200) async throws -> UsageSnapshot
+        keyStatus: Int = 200,
+        creditsBody: String? = nil,
+        creditsStatus: Int = 200) async throws -> UsageSnapshot
     {
         let transport = ProviderHTTPTransportHandler { request in
             #expect(request.httpMethod == "GET")
@@ -21,8 +23,8 @@ enum OpenRouterLimitTestSupport {
             let statusCode: Int
             switch request.url?.absoluteString {
             case "https://openrouter.ai/api/v1/credits":
-                body = #"{"data":{"total_credits":5,"total_usage":3.10}}"#
-                statusCode = 200
+                body = creditsBody ?? #"{"data":{"total_credits":5,"total_usage":3.10}}"#
+                statusCode = creditsStatus
             case "https://openrouter.ai/api/v1/key":
                 body = keyBody
                 statusCode = keyStatus
