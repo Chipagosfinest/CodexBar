@@ -31,7 +31,7 @@ struct ShareStatsCardView: View {
                 .frame(height: 1)
                 .padding(.vertical, 17)
             self.rankings
-                .frame(height: 286, alignment: .center)
+                .frame(height: 286, alignment: .top)
             Spacer(minLength: 10)
             self.footer
         }
@@ -52,16 +52,6 @@ struct ShareStatsCardView: View {
                     .font(.system(size: 26, weight: .semibold, design: .rounded))
             }
             Spacer()
-            Text(self.periodLabel)
-                .font(.system(size: 14, weight: .semibold, design: .rounded))
-                .tracking(1.8)
-                .foregroundStyle(self.secondary)
-                .padding(.horizontal, 15)
-                .padding(.vertical, 9)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(self.secondary.opacity(0.45), lineWidth: 1)
-                }
         }
     }
 
@@ -190,10 +180,6 @@ struct ShareStatsCardView: View {
 
     private var isAllTime: Bool {
         self.payload.days >= SpendDashboardSource.scanDays
-    }
-
-    private var periodLabel: String {
-        self.isAllTime ? "ALL" : "\(self.payload.days) DAYS"
     }
 
     private var spendLabel: String {
