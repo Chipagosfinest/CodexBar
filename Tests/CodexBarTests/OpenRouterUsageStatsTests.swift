@@ -181,7 +181,36 @@ struct OpenRouterPluginGoldenTests {
         #expect(usage.detailRow(label: "Today")?.value == "$0.12")
         #expect(usage.detailRow(label: "This week")?.value == "$0.74")
         #expect(usage.detailRow(label: "This month")?.value == "$4.56")
-        #expect(usage.detailRow(label: "Rate limit")?.value == "120 requests / 10s")
+        // key.rate_limit is deprecated upstream and is no longer surfaced.
+        #expect(usage.detailRow(label: "Rate limit") == nil)
+    }
+
+    /// OpenRouter returns `rate_limit: {requests: -1, interval: "10s", note: "This field is
+    /// deprecated and safe to ignore."}` on live accounts. That rendered as "-1 requests / 10s",
+    /// and a shape change in a field we are told to ignore used to throw, degrading the whole
+    /// API key section — limit, usage and reset window included.
+    @Test
+    func `deprecated key rate limit is ignored without degrading the section`() async throws {
+        let transport = Self.transport(creditsStatus: 403, keyBody: #"""
+        {"data":{
+          "limit":50,
+          "limit_remaining":50,
+          "usage":0,
+          "usage_monthly":0,
+          "limit_reset":"monthly",
+          "rate_limit":{"requests":-1,"interval":"10s","note":"This field is deprecated and safe to ignore."}
+        }}
+        """#)
+        let runtime = try ProviderPluginRuntime(bundledPlugin: "openrouter", transport: transport)
+
+        let usage = try await runtime.fetchUsage(
+            settings: [OpenRouterSettingsReader.apiURLEnvironmentKey: "https://openrouter.test/api/v1"],
+            secrets: [OpenRouterSettingsReader.envKey: "sk-or-v1-test"])
+
+        #expect(usage.detailRow(label: "Rate limit") == nil)
+        #expect(usage.detailRow(label: "API key limit")?.value == "$50.00")
+        #expect(usage.detailRow(label: "API key remaining")?.value == "$50.00")
+        #expect(usage.detailRow(label: "Reset window")?.value == "monthly")
     }
 
     @Test

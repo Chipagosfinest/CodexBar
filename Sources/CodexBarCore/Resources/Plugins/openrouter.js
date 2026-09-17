@@ -100,16 +100,6 @@ defineProvider({
           typeof candidate.limit_reset !== "string"
         )
           throw new TypeError("key.limit_reset must be a string");
-        if (
-          candidate.rate_limit !== null &&
-          candidate.rate_limit !== undefined &&
-          (!candidate.rate_limit ||
-            typeof candidate.rate_limit !== "object" ||
-            !Number.isInteger(candidate.rate_limit.requests) ||
-            typeof candidate.rate_limit.interval !== "string")
-        ) {
-          throw new TypeError("key.rate_limit is invalid");
-        }
         keyData = candidate;
       }
     } catch (error) {
@@ -367,13 +357,8 @@ defineProvider({
           points.push({ label, value });
         }
       }
-      if (keyData.rate_limit && typeof keyData.rate_limit === "object") {
-        const requests = keyData.rate_limit.requests;
-        const interval = keyData.rate_limit.interval;
-        if (Number.isInteger(requests) && typeof interval === "string") {
-          rows.push({ label: "Rate limit", value: `${requests} requests / ${interval}` });
-        }
-      }
+      // key.rate_limit is deprecated upstream: OpenRouter returns requests:-1 alongside a note
+      // saying the field is safe to ignore, which rendered as "-1 requests / 10s".
       const section = { title: "API key", rows };
       if (points.length) {
         section.chart = { kind: "bars", title: "Key spend", unit: "USD", points };
