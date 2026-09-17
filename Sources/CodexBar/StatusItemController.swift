@@ -170,6 +170,9 @@ final class StatusItemController: NSObject, NSMenuDelegate, StatusItemControllin
     var closedMenuRebuildRequests = MenuRebuildRequestRegistry<ObjectIdentifier>()
     var openMenuRebuildTasks: [ObjectIdentifier: Task<Void, Never>] = [:]
     var overviewShareStatsPresentationTask: Task<Void, Never>?
+    /// Identifies the in-flight share presentation so a task that resumes after it was
+    /// superseded clears only its own handle, never its successor's.
+    var overviewShareStatsPresentationGeneration: UInt64 = 0
     var openMenuRebuildRequests = MenuRebuildRequestRegistry<ObjectIdentifier>()
     var menuIdentitySignatures: [ObjectIdentifier: String] = [:]
     var codexAccountMenuProjectionRevalidationTask: Task<Void, Never>?

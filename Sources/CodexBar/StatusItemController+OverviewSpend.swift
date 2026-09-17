@@ -169,8 +169,14 @@ extension StatusItemController {
         if !dashboard.isRefreshing {
             dashboard.refresh()
         }
+        self.overviewShareStatsPresentationGeneration &+= 1
+        let generation = self.overviewShareStatsPresentationGeneration
         self.overviewShareStatsPresentationTask = Task { @MainActor [weak self, weak dashboard] in
-            defer { self?.overviewShareStatsPresentationTask = nil }
+            defer {
+                if self?.overviewShareStatsPresentationGeneration == generation {
+                    self?.overviewShareStatsPresentationTask = nil
+                }
+            }
             guard let dashboard else { return }
             for _ in 0..<200 where dashboard.isRefreshing {
                 try? await Task.sleep(for: .milliseconds(50))
