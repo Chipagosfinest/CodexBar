@@ -149,6 +149,34 @@ struct ShareStatsTests {
         #expect(name?.displayName == "Pro 20x")
     }
 
+    /// OpenRouter reports `model_permaslug` values such as "openai/gpt-5.6", so a blanket slash
+    /// rejection dropped every gateway model from shared cards.
+    @Test(arguments: [
+        ("openai/gpt-5.6", "GPT"),
+        ("anthropic/claude-sonnet-4", "Claude"),
+        ("x-ai/grok-4-fast", "Grok"),
+        ("google/gemini-2.5-pro", "Gemini"),
+        ("deepseek/deepseek-v4.1-flash", "DeepSeek"),
+        ("qwen/qwen3.8-max", "Qwen"),
+    ])
+    func `gateway namespaced model identifiers map to public families`(testCase: (String, String)) {
+        #expect(ShareStatsSanitizer.modelName(testCase.0) == testCase.1)
+    }
+
+    /// The vendor segment is a convenience, not an escape hatch: the result is still only ever a
+    /// label from the fixed family table, and anything deeper or malformed stays rejected.
+    @Test(arguments: [
+        "openai/models/gpt-5.6",
+        "/gpt-5.6",
+        "openai/",
+        "Users/alec/gpt-5.6",
+        "acme/unknown-model-1",
+        "openai//gpt-5.6",
+    ])
+    func `gateway model identifiers reject anything but one known vendor segment`(raw: String) {
+        #expect(ShareStatsSanitizer.modelName(raw) == nil)
+    }
+
     @Test
     func `bedrock regional model identifiers map to public families`() {
         #expect(ShareStatsSanitizer.modelName("us.amazon.nova-2-lite-v1:0") == "Amazon Nova")

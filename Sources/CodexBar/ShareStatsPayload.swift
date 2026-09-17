@@ -214,11 +214,22 @@ enum ShareStatsSanitizer {
             (["whisper-"], "Whisper"),
         ]
         guard !normalized.contains("://"),
-              !normalized.contains("/"),
               !normalized.contains("\\")
         else { return nil }
+        // Gateways namespace their catalogue as `vendor/model` (OpenRouter reports
+        // `openai/gpt-5.6`), so rejecting every name containing a slash dropped their entire
+        // model breakdown from shared cards. Accept exactly one leading vendor segment and
+        // match the family on the remainder; anything deeper is still refused.
+        let slugComponents = familyName.split(separator: "/", omittingEmptySubsequences: false)
+        let matchable: String
+        switch slugComponents.count {
+        case 1: matchable = familyName
+        case 2 where !slugComponents[0].isEmpty && !slugComponents[1].isEmpty:
+            matchable = String(slugComponents[1])
+        default: return nil
+        }
         return publicModelFamilies.first { family in
-            family.prefixes.contains(where: familyName.hasPrefix)
+            family.prefixes.contains(where: matchable.hasPrefix)
         }?.label
     }
 
