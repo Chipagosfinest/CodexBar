@@ -31,11 +31,20 @@ struct CLIOutputTests {
         #expect((json["primary"] as? [String: Double]) == ["usedPercent": 0])
         #expect(Set(json.keys) == [
             "primary", "secondary", "tertiary", "details", "updatedAt", "identity", "loginMethod",
+            "providerCost",
         ])
         let decoded = try JSONDecoder().decode(UsageSnapshot.self, from: data)
         #expect(decoded.details == snapshot.details)
         #expect(decoded.primary?.usedPercent == 0)
         #expect(decoded.identity?.loginMethod == "Balance: $1.90")
+        // The plugin now emits `cost`, so the spending cap reaches the menu card as provider cost:
+        // $30 monthly key limit, nothing drawn against it, and the $1.90 credits balance alongside.
+        let cost = try #require(decoded.providerCost)
+        #expect(cost.limit == 30)
+        #expect(cost.used == 0)
+        #expect(cost.currencyCode == "USD")
+        #expect(cost.period == "This month")
+        #expect(cost.balance == 1.90)
     }
 
     @Test
