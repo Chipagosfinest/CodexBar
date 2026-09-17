@@ -139,28 +139,26 @@ struct OpenRouterUsageSnapshot: Sendable {
         guard self.balance > 0 || self.totalUsage > 0 || self.keyDataFetched else { return nil }
         let hasKeyLimit = (self.keyLimit ?? 0) > 0
         let limit = hasKeyLimit ? (self.keyLimit ?? 0) : 0
-        let used: Double
-        if hasKeyLimit, let keyUsed = self.keyUsed {
-            used = keyUsed
+        let used: Double = if hasKeyLimit, let keyUsed = self.keyUsed {
+            keyUsed
         } else if let keyUsageMonthly = self.keyUsageMonthly {
-            used = keyUsageMonthly
+            keyUsageMonthly
         } else if let keyUsage = self.keyUsage {
-            used = keyUsage
+            keyUsage
         } else {
-            used = self.totalUsage
+            self.totalUsage
         }
-        let period: String?
-        if hasKeyLimit {
-            period = switch self.keyLimitReset?.lowercased() {
+        let period: String? = if hasKeyLimit {
+            switch self.keyLimitReset?.lowercased() {
             case "daily": "Today"
             case "weekly": "This week"
             case "monthly": "This month"
             default: nil
             }
         } else if self.keyUsageMonthly != nil {
-            period = "This month"
+            "This month"
         } else {
-            period = "Total usage"
+            "Total usage"
         }
         return ProviderCostSnapshot(
             used: used,
