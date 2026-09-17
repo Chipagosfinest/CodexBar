@@ -136,6 +136,13 @@ struct OverviewSpendSummaryCardView: View {
     }
 }
 
+/// The in-flight overview share presentation. `generation` identifies it so a task that resumes
+/// after being superseded clears only its own handle and never its successor's.
+struct OverviewSharePresentation {
+    var task: Task<Void, Never>?
+    var generation: UInt64 = 0
+}
+
 extension StatusItemController {
     func makeOverviewShareStatsMenuItem(model: SpendDashboardModel) -> NSMenuItem? {
         guard ShareStatsPayloadFactory.make(model: model, store: self.store) != nil else { return nil }
@@ -156,12 +163,12 @@ extension StatusItemController {
 
     @objc func presentOverviewShareStats() {
         if let payload = self.overviewShareStatsPayload() {
-            self.overviewShareStatsPresentationTask?.cancel()
-            self.overviewShareStatsPresentationTask = nil
+            self.overviewSharePresentation.task?.cancel()
+            self.overviewSharePresentation.task = nil
             ShareStatsPresenter.shared.present(payload: payload)
             return
         }
-        guard self.overviewShareStatsPresentationTask == nil else { return }
+        guard self.overviewSharePresentation.task == nil else { return }
 
         let dashboard = self.store.sharedSpendDashboardController()
         let configuration = SpendDashboardSource.configuration(settings: self.settings, store: self.store)
@@ -169,8 +176,14 @@ extension StatusItemController {
         if !dashboard.isRefreshing {
             dashboard.refresh()
         }
-        self.overviewShareStatsPresentationTask = Task { @MainActor [weak self, weak dashboard] in
-            defer { self?.overviewShareStatsPresentationTask = nil }
+        self.overviewSharePresentation.generation &+= 1
+        let generation = self.overviewSharePresentation.generation
+        self.overviewSharePresentation.task = Task { @MainActor [weak self, weak dashboard] in
+            defer {
+                if self?.overviewSharePresentation.generation == generation {
+                    self?.overviewSharePresentation.task = nil
+                }
+            }
             guard let dashboard else { return }
             for _ in 0..<200 where dashboard.isRefreshing {
                 try? await Task.sleep(for: .milliseconds(50))

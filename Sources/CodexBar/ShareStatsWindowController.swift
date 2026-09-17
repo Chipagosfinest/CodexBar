@@ -155,6 +155,7 @@ private struct ShareStatsPreviewView: View {
         guard self.copyImage() else {
             self.imageCopyFeedback = .failed
             self.statusMessage = self.imageCopyFeedback.title
+            self.imageCopyResetTask = self.makeCopyFeedbackResetTask()
             return
         }
         if !self.reduceMotion {
@@ -165,7 +166,14 @@ private struct ShareStatsPreviewView: View {
             self.imageCopyFeedback = .copied
         }
         self.statusMessage = self.imageCopyFeedback.title
-        self.imageCopyResetTask = Task { @MainActor in
+        self.imageCopyResetTask = self.makeCopyFeedbackResetTask()
+    }
+
+    /// Returns the button to its idle label after a beat. Failure needs this as much as success:
+    /// without it a single failed copy leaves "Could not copy image" on the control, and on its
+    /// accessibility label, until the window is closed and reopened.
+    private func makeCopyFeedbackResetTask() -> Task<Void, Never> {
+        Task { @MainActor in
             try? await Task.sleep(for: .seconds(0.9))
             guard !Task.isCancelled else { return }
             if !self.reduceMotion {
