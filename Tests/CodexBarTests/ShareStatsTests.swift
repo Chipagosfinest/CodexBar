@@ -10,6 +10,49 @@ struct ShareStatsTests {
         #expect(ShareStatsFormatting.subscriptionSummary(count: scenario.0) == scenario.1)
     }
 
+    /// The trend is one value per covered day for the headline currency, summed across every
+    /// provider on that day and ordered oldest first, so the sparkline reads left to right.
+    @Test
+    func `daily spend trend aggregates every provider per day in chronological order`() throws {
+        let calendar = Calendar(identifier: .gregorian)
+        func day(_ d: Int) throws -> Date {
+            try #require(calendar.date(from: DateComponents(year: 2026, month: 8, day: d)))
+        }
+        func point(_ provider: UsageProvider, _ id: String, _ d: Date, _ cost: Double)
+            -> SpendDashboardModel.DailyPoint
+        {
+            SpendDashboardModel.DailyPoint(
+                sourceID: id, provider: provider, providerName: id,
+                day: d, cost: cost, stackStart: 0, stackEnd: cost)
+        }
+        // Deliberately out of order, with two providers sharing the middle day.
+        let points = [
+            try point(.codex, "codex", day(22), 5),
+            try point(.codex, "codex", day(20), 1),
+            try point(.claude, "claude", day(21), 2),
+            try point(.codex, "codex", day(21), 3),
+        ]
+        let group = SpendDashboardModel.CurrencyGroup(
+            currencyCode: "USD",
+            providers: [
+                SpendDashboardModel.ProviderRow(
+                    id: "codex", rank: 1, provider: .codex, displayName: "Codex",
+                    totalTokens: 100, totalCost: 11, coveredDayCount: 3),
+            ],
+            models: [],
+            projects: [],
+            dailyPoints: points,
+            totalTokens: 100,
+            totalCost: 11,
+            coveredDayCount: 3,
+            chartDomain: try day(20)...day(22),
+            modelHistoryCompleteness: .complete)
+        let payload = try #require(ShareStatsBuilder.make(
+            model: SpendDashboardModel(requestedDays: 30, groups: [group])))
+
+        #expect(payload.dailySpend == [1, 5, 5])
+    }
+
     @Test
     func `spend coverage preserves secondary currency when subscriptions overflow`() {
         let usd = ShareStatsCurrencyPayload(

@@ -91,6 +91,16 @@ struct ShareStatsCardView: View {
                 Text(self.subscriptionSummary)
                     .font(.system(size: 16, weight: .medium, design: .rounded))
                     .foregroundStyle(self.secondary)
+                if self.spendTrend.count > 1 {
+                    // Labelled because it plots spend, not the token count directly above it.
+                    Text("DAILY SPEND")
+                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .tracking(1.2)
+                        .foregroundStyle(self.secondary)
+                        .padding(.top, 6)
+                    ShareStatsSparkline(values: self.spendTrend, accent: self.accent)
+                        .frame(width: 382, height: 30)
+                }
             }
             .frame(width: 390, alignment: .leading)
         }
@@ -113,6 +123,14 @@ struct ShareStatsCardView: View {
             currencies: self.payload.currencies,
             coverageDenominator: self.coverageDenominator,
             spendFormatter: { self.spendText(for: $0) })
+    }
+
+    /// A flat or single-point series has no shape worth drawing, and inventing one would imply
+    /// movement that is not in the data.
+    private var spendTrend: [Double] {
+        let values = self.payload.dailySpend
+        guard values.count > 1, let lo = values.min(), let hi = values.max(), hi > lo else { return [] }
+        return values
     }
 
     private var subscriptionSummary: String {
@@ -342,6 +360,49 @@ private struct ShareStatsProviderRow: View {
             metrics.append("Spend unavailable")
         }
         return metrics.isEmpty ? "connected" : metrics.joined(separator: " · ")
+    }
+}
+
+/// A minimal filled sparkline: no axes, no labels, no gridlines. The hero already states the period
+/// and the total, so this only has to carry the shape of the spend over the window.
+private struct ShareStatsSparkline: View {
+    let values: [Double]
+    let accent: Color
+
+    var body: some View {
+        GeometryReader { proxy in
+            let w = proxy.size.width
+            let h = proxy.size.height
+            let lo = self.values.min() ?? 0
+            let hi = self.values.max() ?? 1
+            let span = hi - lo
+            let step = self.values.count > 1 ? w / CGFloat(self.values.count - 1) : w
+            let points = self.values.enumerated().map { index, value in
+                CGPoint(
+                    x: CGFloat(index) * step,
+                    y: h - (span > 0 ? CGFloat((value - lo) / span) : 0.5) * h)
+            }
+            ZStack {
+                Path { path in
+                    guard let first = points.first else { return }
+                    path.move(to: CGPoint(x: first.x, y: h))
+                    path.addLine(to: first)
+                    for point in points.dropFirst() { path.addLine(to: point) }
+                    path.addLine(to: CGPoint(x: points[points.count - 1].x, y: h))
+                    path.closeSubpath()
+                }
+                .fill(LinearGradient(
+                    colors: [self.accent.opacity(0.28), self.accent.opacity(0.02)],
+                    startPoint: .top,
+                    endPoint: .bottom))
+                Path { path in
+                    guard let first = points.first else { return }
+                    path.move(to: first)
+                    for point in points.dropFirst() { path.addLine(to: point) }
+                }
+                .stroke(self.accent, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+            }
+        }
     }
 }
 
