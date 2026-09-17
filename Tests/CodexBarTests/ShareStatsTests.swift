@@ -5,16 +5,9 @@ import Testing
 @testable import CodexBar
 
 struct ShareStatsTests {
-    @Test(arguments: [
-        (0, "0 subscriptions"),
-        (1, "1 subscription"),
-        (2, "2 subscriptions"),
-        (12, "12 subscriptions"),
-    ])
-    func `share card subscription summary is plural safe`(testCase: (Int, String)) {
-        let (count, expected) = testCase
-        #expect(ShareStatsFormatting.subscriptionSummary(count: count) == expected)
-    }
+    @Test(arguments: [(0, "0 subscriptions"), (1, "1 subscription"), (2, "2 subscriptions"), (12, "12 subscriptions")])
+    func `subscription captions use the singular only for one subscription`(_ scenario: (Int, String)) {
+        #expect(ShareStatsFormatting.subscriptionSummary(count: scenario.0) == scenario.1)
 
     @Test
     func `spend coverage preserves secondary currency when subscriptions overflow`() {
