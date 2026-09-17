@@ -30,9 +30,9 @@ struct ShareStatsCardView: View {
                 .fill(self.secondary.opacity(0.22))
                 .frame(height: 1)
                 .padding(.vertical, 17)
-            Spacer(minLength: 0)
             self.rankings
-            Spacer(minLength: 0)
+                .frame(height: 286, alignment: .center)
+            Spacer(minLength: 10)
             self.footer
         }
         .padding(.horizontal, 52)
@@ -76,13 +76,15 @@ struct ShareStatsCardView: View {
                     .tracking(1.8)
                     .foregroundStyle(self.secondary)
                 Text(self.primarySpendText)
-                    .font(.system(size: 104, weight: .semibold, design: .rounded))
+                    .font(.system(size: 76, weight: .semibold, design: .rounded))
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.72)
                 Text(self.spendCoverageText)
                     .font(.system(size: 16, weight: .medium, design: .rounded))
                     .foregroundStyle(self.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -92,7 +94,7 @@ struct ShareStatsCardView: View {
                     .tracking(1.8)
                     .foregroundStyle(self.secondary)
                 Text(self.trackedTokensText)
-                    .font(.system(size: 56, weight: .semibold, design: .rounded))
+                    .font(.system(size: 42, weight: .semibold, design: .rounded))
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.72)
@@ -102,6 +104,7 @@ struct ShareStatsCardView: View {
             }
             .frame(width: 390, alignment: .leading)
         }
+        .frame(height: 140, alignment: .top)
     }
 
     private var primaryCurrency: ShareStatsCurrencyPayload? {
