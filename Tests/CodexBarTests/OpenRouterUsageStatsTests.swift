@@ -605,6 +605,33 @@ struct OpenRouterPluginGoldenTests {
         #expect(cost.daily.first?.estimatedRequestCount == 2)
     }
 
+    /// OpenRouter counts reasoning tokens alongside completion tokens rather than inside them, so
+    /// a reasoning model routinely reports more reasoning than completion tokens. The plugin used
+    /// to throw on that shape, which discarded the entire 30-day window over one ordinary row and
+    /// left spend history reading "Unavailable right now".
+    @Test
+    func `reasoning tokens may exceed completion tokens`() async throws {
+        let activityBody = #"""
+        {"data":[{
+          "date":"2026-08-17",
+          "model_permaslug":"openai/gpt-5.6",
+          "endpoint_id":"endpoint-a",
+          "prompt_tokens":469,
+          "completion_tokens":389,
+          "reasoning_tokens":405,
+          "requests":1,
+          "usage":0.5,
+          "byok_usage_inference":0
+        }]}
+        """#
+        let usage = try await Self.fetch(activityBody: activityBody)
+        let cost = try #require(usage.costUsage)
+
+        #expect(cost.last30DaysCostUSD == 0.5)
+        #expect(cost.last30DaysTokens == 858)
+        #expect(cost.daily.count == 1)
+    }
+
     @Test
     func `BYOK only activity is labeled as estimated spend`() async throws {
         let activityBody = #"""

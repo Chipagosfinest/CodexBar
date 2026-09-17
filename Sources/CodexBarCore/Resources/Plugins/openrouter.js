@@ -202,9 +202,9 @@ defineProvider({
                 throw new TypeError(`activity.data[${index}].${field} must be a nonnegative safe integer`);
               }
             }
-            if (reasoningTokens !== null && reasoningTokens > outputTokens) {
-              throw new TypeError(`activity.data[${index}].reasoning_tokens must not exceed completion_tokens`);
-            }
+            // OpenRouter reports reasoning_tokens alongside completion_tokens, not as a subset of
+            // them, so a reasoning model legitimately returns more reasoning than completion tokens.
+            // Rejecting that shape threw away the whole 30-day window over one ordinary row.
             if (meteredCost < 0 || estimatedCost < 0 || !Number.isFinite(cost)) {
               throw new TypeError(`activity.data[${index}] spend must be finite and nonnegative`);
             }
