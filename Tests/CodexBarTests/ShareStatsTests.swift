@@ -20,18 +20,18 @@ struct ShareStatsTests {
     func `spend coverage preserves secondary currency when subscriptions overflow`() {
         let usd = ShareStatsCurrencyPayload(
             currencyCode: "USD",
-            coveredDayCount: 30,
             estimatedCost: 120.0,
+            coveredDayCount: 30,
             isPartial: false)
         let eur = ShareStatsCurrencyPayload(
             currencyCode: "EUR",
-            coveredDayCount: 30,
             estimatedCost: 45.0,
+            coveredDayCount: 30,
             isPartial: false)
         let gbp = ShareStatsCurrencyPayload(
             currencyCode: "GBP",
-            coveredDayCount: 30,
             estimatedCost: 15.0,
+            coveredDayCount: 30,
             isPartial: false)
 
         let formatter: (ShareStatsCurrencyPayload) -> String = { curr in
