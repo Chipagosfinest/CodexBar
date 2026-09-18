@@ -22,22 +22,32 @@ struct ShareStatsTests {
             -> SpendDashboardModel.DailyPoint
         {
             SpendDashboardModel.DailyPoint(
-                sourceID: id, provider: provider, providerName: id,
-                day: d, cost: cost, stackStart: 0, stackEnd: cost)
+                sourceID: id,
+                provider: provider,
+                providerName: id,
+                day: d,
+                cost: cost,
+                stackStart: 0,
+                stackEnd: cost)
         }
         // Deliberately out of order, with two providers sharing the middle day.
-        let points = [
-            try point(.codex, "codex", day(22), 5),
-            try point(.codex, "codex", day(20), 1),
-            try point(.claude, "claude", day(21), 2),
-            try point(.codex, "codex", day(21), 3),
+        let points = try [
+            point(.codex, "codex", day(22), 5),
+            point(.codex, "codex", day(20), 1),
+            point(.claude, "claude", day(21), 2),
+            point(.codex, "codex", day(21), 3),
         ]
-        let group = SpendDashboardModel.CurrencyGroup(
+        let group = try SpendDashboardModel.CurrencyGroup(
             currencyCode: "USD",
             providers: [
                 SpendDashboardModel.ProviderRow(
-                    id: "codex", rank: 1, provider: .codex, displayName: "Codex",
-                    totalTokens: 100, totalCost: 11, coveredDayCount: 3),
+                    id: "codex",
+                    rank: 1,
+                    provider: .codex,
+                    displayName: "Codex",
+                    totalTokens: 100,
+                    totalCost: 11,
+                    coveredDayCount: 3),
             ],
             models: [],
             projects: [],
@@ -45,7 +55,7 @@ struct ShareStatsTests {
             totalTokens: 100,
             totalCost: 11,
             coveredDayCount: 3,
-            chartDomain: try day(20)...day(22),
+            chartDomain: day(20)...day(22),
             modelHistoryCompleteness: .complete)
         let payload = try #require(ShareStatsBuilder.make(
             model: SpendDashboardModel(requestedDays: 30, groups: [group])))

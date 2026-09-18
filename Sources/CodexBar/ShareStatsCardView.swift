@@ -387,7 +387,9 @@ private struct ShareStatsSparkline: View {
                     guard let first = points.first else { return }
                     path.move(to: CGPoint(x: first.x, y: h))
                     path.addLine(to: first)
-                    for point in points.dropFirst() { path.addLine(to: point) }
+                    for point in points.dropFirst() {
+                        path.addLine(to: point)
+                    }
                     path.addLine(to: CGPoint(x: points[points.count - 1].x, y: h))
                     path.closeSubpath()
                 }
@@ -398,7 +400,9 @@ private struct ShareStatsSparkline: View {
                 Path { path in
                     guard let first = points.first else { return }
                     path.move(to: first)
-                    for point in points.dropFirst() { path.addLine(to: point) }
+                    for point in points.dropFirst() {
+                        path.addLine(to: point)
+                    }
                 }
                 .stroke(self.accent, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
             }
