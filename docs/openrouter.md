@@ -82,6 +82,8 @@ The OpenRouter menu card shows:
 Management-key counters do not produce a key-spend summary: those keys can report zero key usage while the account
 has activity. Account credits and available Activity history retain their own scope and reporting period.
 
+Shared usage cards and copied statistics group recognized gateway model identifiers such as `openai/gpt-4o` under public family labels such as “GPT,” with usage attributed to OpenRouter. Raw namespaces and model names are omitted; shared model rankings still require complete eligible history.
+
 The **API key limit** is a spending cap, not your prepaid account balance. Configured positive limits show
 “Spending cap, not balance” beneath the amount. Both values remain visible even when the cap exceeds the balance:
 a $30 key limit with $30 remaining is **100% left**, independently of a $1.90 account balance from $5 in credits
