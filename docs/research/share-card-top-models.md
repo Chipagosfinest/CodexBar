@@ -9,7 +9,7 @@ Payload: three USD subscriptions (Codex, Claude, Antigravity). Antigravity is un
 | Image | What it shows |
 |---|---|
 | `before-partial.png` | 0.61.0 / main behavior: group incompleteness drops every model, empty copy, header `BY USAGE` |
-| `after-partial.png` | this PR: retained GPT / Claude / Gemini rows, header `PARTIAL` |
+| `after-partial.png` | this PR: retained GPT / Claude / Gemini rows, header `PARTIAL`, no numeric ranks |
 
 Not a production-bundle render. Layout and typography match this branch.
 
