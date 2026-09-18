@@ -371,6 +371,121 @@ struct ShareStatsTests {
     }
 
     @Test
+    func `selected day in an unpriced group does not export as the advertised window ranking`() throws {
+        let day = Self.date
+        let group = SpendDashboardModel.CurrencyGroup(
+            currencyCode: "USD",
+            providers: [
+                SpendDashboardModel.ProviderRow(
+                    id: "codex",
+                    rank: 1,
+                    provider: .codex,
+                    displayName: "Codex",
+                    totalTokens: 10,
+                    totalCost: 2,
+                    coveredDayCount: 7),
+                SpendDashboardModel.ProviderRow(
+                    id: "antigravity",
+                    rank: 2,
+                    provider: .antigravity,
+                    displayName: "Antigravity",
+                    totalTokens: 4,
+                    totalCost: nil,
+                    coveredDayCount: 3),
+            ],
+            models: [
+                SpendDashboardModel.ModelRow(
+                    rank: 1,
+                    provider: .codex,
+                    providerName: "Codex",
+                    modelName: "gpt-5.4",
+                    totalTokens: 3,
+                    totalCost: 1),
+            ],
+            projects: [],
+            dailyPoints: [],
+            totalTokens: nil,
+            totalCost: nil,
+            coveredDayCount: 7,
+            chartDomain: day...day,
+            modelHistoryCompleteness: .incomplete,
+            selectedDay: day)
+        let payload = try #require(ShareStatsBuilder.make(
+            model: SpendDashboardModel(requestedDays: 7, groups: [group], selectedDay: day)))
+
+        #expect(payload.providers.count == 2)
+        #expect(payload.days == 7)
+        #expect(payload.topModels.isEmpty)
+        #expect(!ShareStatsFormatting.text(payload).contains("Top models"))
+    }
+
+    @Test @MainActor
+    func `builder payload renders a partial model card through the production exporter`() throws {
+        let group = SpendDashboardModel.CurrencyGroup(
+            currencyCode: "USD",
+            providers: [
+                SpendDashboardModel.ProviderRow(
+                    id: "codex",
+                    rank: 1,
+                    provider: .codex,
+                    displayName: "Codex",
+                    totalTokens: 10,
+                    totalCost: 2,
+                    coveredDayCount: 7),
+                SpendDashboardModel.ProviderRow(
+                    id: "antigravity",
+                    rank: 2,
+                    provider: .antigravity,
+                    displayName: "Antigravity",
+                    totalTokens: 4,
+                    totalCost: nil,
+                    coveredDayCount: 3),
+            ],
+            models: [
+                SpendDashboardModel.ModelRow(
+                    rank: 1,
+                    provider: .codex,
+                    providerName: "Codex",
+                    modelName: "gpt-5.4",
+                    totalTokens: 10,
+                    totalCost: 2),
+                SpendDashboardModel.ModelRow(
+                    rank: 2,
+                    provider: .antigravity,
+                    providerName: "Antigravity",
+                    modelName: "gemini-2.5-flash",
+                    totalTokens: 4,
+                    totalCost: nil),
+            ],
+            projects: [],
+            dailyPoints: [],
+            totalTokens: nil,
+            totalCost: nil,
+            coveredDayCount: 7,
+            chartDomain: Self.date...Self.date,
+            modelHistoryCompleteness: .incomplete)
+        let payload = try #require(ShareStatsBuilder.make(
+            model: SpendDashboardModel(requestedDays: 7, groups: [group])))
+        let copied = ShareStatsFormatting.text(payload)
+        let data = try #require(ShareStatsRenderer.pngData(for: payload))
+
+        #expect(payload.hasPartialModels)
+        #expect(copied.contains("Top models (partial):"))
+        #expect(copied.contains("GPT (Codex)"))
+        #expect(copied.contains("Gemini (Antigravity)"))
+        #expect(data.starts(with: [0x89, 0x50, 0x4E, 0x47]))
+        if let directory = ProcessInfo.processInfo.environment["CODEXBAR_SHARE_STATS_SCREENSHOT_DIR"] {
+            let output = URL(fileURLWithPath: directory, isDirectory: true)
+            try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+            try data.write(to: output.appendingPathComponent("builder-partial.png"), options: .atomic)
+            try copied.write(
+                to: output.appendingPathComponent("builder-partial.txt"),
+                atomically: true,
+                encoding: .utf8)
+        }
+    }
+
+    @Test
     func `incomplete request rows stay out of shared rankings`() throws {
         let group = SpendDashboardModel.CurrencyGroup(
             currencyCode: "USD",

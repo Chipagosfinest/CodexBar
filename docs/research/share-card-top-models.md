@@ -11,7 +11,7 @@ Payload: three USD subscriptions (Codex, Claude, Antigravity). Antigravity is un
 | `before-partial.png` | 0.61.0 / main behavior: group incompleteness drops every model, empty copy, header `BY USAGE` |
 | `after-partial.png` | this PR: retained GPT / Claude / Gemini rows, header `PARTIAL`, no numeric ranks |
 
-Not a production-bundle render. Layout and typography match this branch.
+The layout images above still use a copied `ShareStatsCardView`. Production-path coverage is `builder payload renders a partial model card through the production exporter`: `ShareStatsBuilder.make` → `ShareStatsRenderer.pngData` (`NSHostingView`) → copied text. Set `CODEXBAR_SHARE_STATS_SCREENSHOT_DIR` to persist that PNG and `.txt`.
 
 ## Live 0.61.0 check (installed Homebrew cask)
 

@@ -286,7 +286,9 @@ enum ShareStatsBuilder {
         // which blanked Codex/Claude families whenever an unpriced USD source made the group
         // incomplete. Keep the window-level incomplete-request guard so a selected complete
         // day inside an incomplete range cannot be exported as the advertised period ranking.
-        let sanitizedModels = model.groups.filter { $0.incompleteRequestCount == 0 }.flatMap { group in
+        let sanitizedModels = model.groups.filter {
+            $0.incompleteRequestCount == 0 && $0.selectedDay == nil
+        }.flatMap { group in
             group.models.compactMap { row -> ShareStatsModelPayload? in
                 let estimatedCost = self.finiteCost(row.totalCost)
                 guard row.incompleteRequestCount == 0,
