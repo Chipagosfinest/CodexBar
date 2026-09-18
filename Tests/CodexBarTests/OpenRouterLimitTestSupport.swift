@@ -41,7 +41,11 @@ enum OpenRouterLimitTestSupport {
     }
 
     @MainActor
-    static func model(_ snapshot: UsageSnapshot, showUsed: Bool = false) throws -> UsageMenuCardView.Model {
+    static func model(
+        _ snapshot: UsageSnapshot,
+        showUsed: Bool = false,
+        showSummary: Bool = false) throws -> UsageMenuCardView.Model
+    {
         let metadata = try #require(ProviderDefaults.metadata[.openrouter])
         return UsageMenuCardView.Model.make(.init(
             provider: .openrouter,
@@ -57,7 +61,7 @@ enum OpenRouterLimitTestSupport {
             lastError: nil,
             usageBarsShowUsed: showUsed,
             resetTimeDisplayStyle: .countdown,
-            tokenCostUsageEnabled: false,
+            tokenCostUsageEnabled: showSummary,
             showOptionalCreditsAndExtraUsage: true,
             hidePersonalInfo: true,
             usesLiveSubtitle: false,

@@ -82,10 +82,20 @@ public enum OpenRouterProviderDescriptor {
                 noDataMessage: { "OpenRouter 30-day spend requires a management API key." }),
             presentation: ProviderUsagePresentation(
                 costPresenter: { snapshot in
-                    let style: ProviderCostMenuCardStyle = (snapshot.providerCost?.limit ?? 0) <= 0
-                        ? .payAsYouGoSpend
-                        : .generic
-                    return ProviderCostPresentation(menuCardStyle: style)
+                    var replacedRows: [String: Set<String>] = [:]
+                    if snapshot.providerCost?.balance != nil {
+                        replacedRows["Credits"] = ["Remaining"]
+                    }
+                    if snapshot.providerCost?.period == "This month (API key)" {
+                        replacedRows["API key"] = ["This month"]
+                    }
+                    if snapshot.providerCost?.period == "Total account usage" {
+                        replacedRows["Credits", default: []].insert("Used")
+                    }
+                    return ProviderCostPresentation(
+                        showsGenericFallback: false,
+                        menuCardStyle: .payAsYouGoSpend,
+                        replacedDetailRows: replacedRows)
                 },
                 menuCard: ProviderMenuCardPresentation(
                     showsCreditsSection: false,

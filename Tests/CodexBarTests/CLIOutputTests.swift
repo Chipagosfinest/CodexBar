@@ -7,7 +7,11 @@ import Testing
 struct CLIOutputTests {
     @Test(arguments: BundledPluginTestSupport.engines)
     func `OpenRouter text and JSON retain independent cap and balance`(engine: ProviderPluginEngineKind) async throws {
-        let snapshot = try await OpenRouterLimitTestSupport.snapshot(engine: engine)
+        let snapshot = try await OpenRouterLimitTestSupport.snapshot(engine: engine, keyBody: #"""
+        {"data":{"limit":30,"limit_remaining":30,"usage":0,"rate_limit":{
+          "requests":-1,"interval":"10s","note":"This field is deprecated and safe to ignore."
+        }}}
+        """#)
         let text = CLIRenderer.renderText(
             provider: .openrouter,
             snapshot: snapshot,
@@ -19,6 +23,7 @@ struct CLIOutputTests {
         #expect(text.contains("Balance: $1.90"))
         #expect(text.contains("100% left"))
         #expect(!text.contains("API key budget"))
+        #expect(!text.contains("Rate limit"))
 
         let data = try JSONEncoder().encode(snapshot)
         let json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
@@ -28,23 +33,15 @@ struct CLIOutputTests {
             "label": "API key limit", "value": "$30.00", "secondaryValue": "Spending cap, not balance",
         ])
         #expect(rows[1] == ["label": "API key remaining", "value": "$30.00"])
+        #expect(!rows.contains { $0["label"] == "Rate limit" })
         #expect((json["primary"] as? [String: Double]) == ["usedPercent": 0])
         #expect(Set(json.keys) == [
             "primary", "secondary", "tertiary", "details", "updatedAt", "identity", "loginMethod",
-            "providerCost",
         ])
         let decoded = try JSONDecoder().decode(UsageSnapshot.self, from: data)
         #expect(decoded.details == snapshot.details)
         #expect(decoded.primary?.usedPercent == 0)
         #expect(decoded.identity?.loginMethod == "Balance: $1.90")
-        // The plugin now emits `cost`, so the spending cap reaches the menu card as provider cost:
-        // $30 monthly key limit, nothing drawn against it, and the $1.90 credits balance alongside.
-        let cost = try #require(decoded.providerCost)
-        #expect(cost.limit == 30)
-        #expect(cost.used == 0)
-        #expect(cost.currencyCode == "USD")
-        #expect(cost.period == "This month")
-        #expect(cost.balance == 1.90)
     }
 
     @Test
