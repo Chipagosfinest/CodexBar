@@ -55,7 +55,7 @@ struct ShareStatsTests {
             totalTokens: 100,
             totalCost: 11,
             coveredDayCount: 3,
-            chartDomain: day(20)...day(22),
+            chartDomain: day(20)...day(23),
             modelHistoryCompleteness: .complete)
         let payload = try #require(ShareStatsBuilder.make(
             model: SpendDashboardModel(requestedDays: 30, groups: [group])))
@@ -106,7 +106,16 @@ struct ShareStatsTests {
         ]
         let group = try SpendDashboardModel.CurrencyGroup(
             currencyCode: "USD",
-            providers: [],
+            providers: [
+                SpendDashboardModel.ProviderRow(
+                    id: "codex",
+                    rank: 1,
+                    provider: .codex,
+                    displayName: "Codex",
+                    totalTokens: 100,
+                    totalCost: 30.0,
+                    coveredDayCount: 3),
+            ],
             models: [],
             projects: [],
             dailyPoints: points,
@@ -114,12 +123,62 @@ struct ShareStatsTests {
             totalTokens: 100,
             totalCost: 30.0,
             coveredDayCount: 3,
-            chartDomain: day(20)...day(22),
+            chartDomain: day(20)...day(23),
             modelHistoryCompleteness: .complete)
         let payload = try #require(ShareStatsBuilder.make(
             model: SpendDashboardModel(requestedDays: 30, groups: [group])))
 
         #expect(payload.dailySpend == [10.0, 0.0, 20.0])
+    }
+
+    @Test
+    func `daily spend trend suppresses sparkline when unpriced days exist`() throws {
+        let calendar = Calendar(identifier: .gregorian)
+        func day(_ d: Int) throws -> Date {
+            try #require(calendar.date(from: DateComponents(year: 2026, month: 8, day: d)))
+        }
+        let summaries = try [
+            SpendDashboardModel.DailySummary(
+                day: day(20),
+                providers: [],
+                requestCount: 1,
+                totalCost: 10.0),
+            SpendDashboardModel.DailySummary(
+                day: day(21),
+                providers: [],
+                requestCount: 1,
+                totalCost: nil),
+            SpendDashboardModel.DailySummary(
+                day: day(22),
+                providers: [],
+                requestCount: 2,
+                totalCost: 20.0),
+        ]
+        let group = try SpendDashboardModel.CurrencyGroup(
+            currencyCode: "USD",
+            providers: [
+                SpendDashboardModel.ProviderRow(
+                    id: "codex",
+                    rank: 1,
+                    provider: .codex,
+                    displayName: "Codex",
+                    totalTokens: 100,
+                    totalCost: 30.0,
+                    coveredDayCount: 3),
+            ],
+            models: [],
+            projects: [],
+            dailyPoints: [],
+            dailySummaries: summaries,
+            totalTokens: 100,
+            totalCost: 30.0,
+            coveredDayCount: 3,
+            chartDomain: day(20)...day(23),
+            modelHistoryCompleteness: .incomplete)
+        let payload = try #require(ShareStatsBuilder.make(
+            model: SpendDashboardModel(requestedDays: 30, groups: [group])))
+
+        #expect(payload.dailySpend.isEmpty)
     }
 
     @Test

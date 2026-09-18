@@ -356,9 +356,12 @@ enum ShareStatsBuilder {
         periodEnd: Date) -> [Double]
     {
         if !group.dailySummaries.isEmpty {
+            guard !group.dailySummaries.contains(where: { $0.totalCost == nil }) else {
+                return []
+            }
             return group.dailySummaries
                 .sorted { $0.day < $1.day }
-                .map { $0.totalCost ?? 0.0 }
+                .compactMap(\.totalCost)
         }
         let pointsByDay = Dictionary(grouping: group.dailyPoints, by: \.day)
         var current = group.calendar.startOfDay(for: group.chartDomain.lowerBound)
