@@ -357,8 +357,6 @@ defineProvider({
           points.push({ label, value });
         }
       }
-      // key.rate_limit is deprecated upstream: OpenRouter returns requests:-1 alongside a note
-      // saying the field is safe to ignore, which rendered as "-1 requests / 10s".
       const section = { title: "API key", rows };
       if (points.length) {
         section.chart = { kind: "bars", title: "Key spend", unit: "USD", points };
