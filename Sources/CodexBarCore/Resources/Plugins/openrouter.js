@@ -100,16 +100,6 @@ defineProvider({
           typeof candidate.limit_reset !== "string"
         )
           throw new TypeError("key.limit_reset must be a string");
-        if (
-          candidate.rate_limit !== null &&
-          candidate.rate_limit !== undefined &&
-          (!candidate.rate_limit ||
-            typeof candidate.rate_limit !== "object" ||
-            !Number.isInteger(candidate.rate_limit.requests) ||
-            typeof candidate.rate_limit.interval !== "string")
-        ) {
-          throw new TypeError("key.rate_limit is invalid");
-        }
         keyData = candidate;
       }
     } catch (error) {
@@ -202,9 +192,8 @@ defineProvider({
                 throw new TypeError(`activity.data[${index}].${field} must be a nonnegative safe integer`);
               }
             }
-            if (reasoningTokens !== null && reasoningTokens > outputTokens) {
-              throw new TypeError(`activity.data[${index}].reasoning_tokens must not exceed completion_tokens`);
-            }
+            // Activity may report more reasoning than completion tokens. Preserve both counters;
+            // token totals remain prompt plus completion.
             if (meteredCost < 0 || estimatedCost < 0 || !Number.isFinite(cost)) {
               throw new TypeError(`activity.data[${index}] spend must be finite and nonnegative`);
             }
@@ -365,13 +354,6 @@ defineProvider({
         if (value !== null) {
           rows.push({ label, value: currency(value) });
           points.push({ label, value });
-        }
-      }
-      if (keyData.rate_limit && typeof keyData.rate_limit === "object") {
-        const requests = keyData.rate_limit.requests;
-        const interval = keyData.rate_limit.interval;
-        if (Number.isInteger(requests) && typeof interval === "string") {
-          rows.push({ label: "Rate limit", value: `${requests} requests / ${interval}` });
         }
       }
       const section = { title: "API key", rows };

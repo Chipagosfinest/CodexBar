@@ -149,31 +149,49 @@ struct ShareStatsTests {
         #expect(name?.displayName == "Pro 20x")
     }
 
-    /// OpenRouter reports `model_permaslug` values such as "openai/gpt-5.6", so a blanket slash
-    /// rejection dropped every gateway model from shared cards.
     @Test(arguments: [
-        ("openai/gpt-5.6", "GPT"),
+        ("openai/gpt-4o", "GPT"),
+        ("  OPENAI/GPT-4o  ", "GPT"),
         ("anthropic/claude-sonnet-4", "Claude"),
         ("x-ai/grok-4-fast", "Grok"),
         ("google/gemini-2.5-pro", "Gemini"),
-        ("deepseek/deepseek-v4.1-flash", "DeepSeek"),
-        ("qwen/qwen3.8-max", "Qwen"),
+        ("deepseek/deepseek-fixture-1", "DeepSeek"),
+        ("qwen/qwen-fixture-1", "Qwen"),
+        ("openai/o1", "o1"),
+        ("openai/o3", "o3"),
+        ("openai/o4-mini", "o4"),
+        ("acme/gpt-private-fixture", "GPT"),
+        ("openai/gpt-fixture:free", "GPT"),
+        ("bedrock/us.anthropic.claude-fixture-v1:0", "Claude"),
+        ("gateway/global.amazon.nova-fixture-v1:0", "Amazon Nova"),
     ])
     func `gateway namespaced model identifiers map to public families`(testCase: (String, String)) {
         #expect(ShareStatsSanitizer.modelName(testCase.0) == testCase.1)
     }
 
-    /// The vendor segment is a convenience, not an escape hatch: the result is still only ever a
-    /// label from the fixed family table, and anything deeper or malformed stays rejected.
     @Test(arguments: [
-        "openai/models/gpt-5.6",
-        "/gpt-5.6",
+        "openai/models/gpt-fixture",
+        "/gpt-fixture",
         "openai/",
-        "Users/alec/gpt-5.6",
+        "Users/alice/gpt-fixture",
+        "Users/gpt-fixture",
+        "home/gpt-fixture",
+        "private/gpt-fixture",
         "acme/unknown-model-1",
-        "openai//gpt-5.6",
+        "openai//gpt-fixture",
+        "https://host/gpt-fixture",
+        "file://gpt-fixture",
+        "C:\\models\\gpt-fixture",
+        "person@example.test/gpt-fixture",
+        "acme\nteam/gpt-fixture",
+        "acme\u{1F}/gpt-fixture",
+        "550e8400-e29b-41d4-a716-446655440000/gpt-fixture",
+        "abcdefabcdefabcdefabcdef/gpt-fixture",
+        "acme%2Fteam/gpt-fixture",
+        "example/reasoning-model",
+        String(repeating: "x", count: 65) + "/gpt-fixture",
     ])
-    func `gateway model identifiers reject anything but one known vendor segment`(raw: String) {
+    func `gateway model identifiers retain whole input privacy and shape checks`(raw: String) {
         #expect(ShareStatsSanitizer.modelName(raw) == nil)
     }
 
