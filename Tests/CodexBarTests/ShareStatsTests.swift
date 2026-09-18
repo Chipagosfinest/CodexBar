@@ -315,7 +315,7 @@ struct ShareStatsTests {
     }
 
     @Test
-    func `partial model history does not enter shared rankings`() throws {
+    func `retained models still enter shared rankings when sibling coverage is incomplete`() throws {
         let group = SpendDashboardModel.CurrencyGroup(
             currencyCode: "USD",
             providers: [
@@ -327,6 +327,14 @@ struct ShareStatsTests {
                     totalTokens: 10,
                     totalCost: 2,
                     coveredDayCount: 7),
+                SpendDashboardModel.ProviderRow(
+                    id: "antigravity",
+                    rank: 2,
+                    provider: .antigravity,
+                    displayName: "Antigravity",
+                    totalTokens: 4,
+                    totalCost: nil,
+                    coveredDayCount: 3),
             ],
             models: [
                 SpendDashboardModel.ModelRow(
@@ -336,6 +344,13 @@ struct ShareStatsTests {
                     modelName: "gpt-5.4",
                     totalTokens: 10,
                     totalCost: 2),
+                SpendDashboardModel.ModelRow(
+                    rank: 2,
+                    provider: .antigravity,
+                    providerName: "Antigravity",
+                    modelName: "gemini-2.5-flash",
+                    totalTokens: 4,
+                    totalCost: nil),
             ],
             projects: [],
             dailyPoints: [],
@@ -347,7 +362,51 @@ struct ShareStatsTests {
         let payload = try #require(ShareStatsBuilder.make(
             model: SpendDashboardModel(requestedDays: 7, groups: [group])))
 
+        #expect(payload.providers.count == 2)
+        #expect(payload.hasPartialModels)
+        #expect(payload.topModels.map(\.modelName) == ["GPT", "Gemini"])
+        #expect(payload.topModels.first?.totalTokens == 10)
+        #expect(payload.topModels.last?.estimatedCost == nil)
+        #expect(ShareStatsFormatting.text(payload).contains("Top models (partial):"))
+    }
+
+    @Test
+    func `incomplete request rows stay out of shared rankings`() throws {
+        let group = SpendDashboardModel.CurrencyGroup(
+            currencyCode: "USD",
+            providers: [
+                SpendDashboardModel.ProviderRow(
+                    id: "codex",
+                    rank: 1,
+                    provider: .codex,
+                    displayName: "Codex",
+                    totalTokens: 10,
+                    totalCost: 2,
+                    coveredDayCount: 7,
+                    incompleteRequestCount: 3),
+            ],
+            models: [
+                SpendDashboardModel.ModelRow(
+                    rank: 1,
+                    provider: .codex,
+                    providerName: "Codex",
+                    modelName: "gpt-5.4",
+                    totalTokens: 10,
+                    totalCost: 2,
+                    incompleteRequestCount: 3),
+            ],
+            projects: [],
+            dailyPoints: [],
+            totalTokens: 10,
+            totalCost: 2,
+            coveredDayCount: 7,
+            chartDomain: Self.date...Self.date,
+            modelHistoryCompleteness: .incomplete)
+        let payload = try #require(ShareStatsBuilder.make(
+            model: SpendDashboardModel(requestedDays: 7, groups: [group])))
+
         #expect(payload.providers.count == 1)
+        #expect(payload.hasPartialModels)
         #expect(payload.topModels.isEmpty)
     }
 

@@ -140,7 +140,9 @@ struct ShareStatsCardView: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 6) {
-                    self.sectionHeader("TOP MODELS", detail: "BY USAGE")
+                    self.sectionHeader(
+                        "TOP MODELS",
+                        detail: self.payload.hasPartialModels ? "PARTIAL" : "BY USAGE")
                     if self.payload.topModels.isEmpty {
                         Text("No model-level history in this local snapshot")
                             .font(.system(size: 18, weight: .medium, design: .rounded))
