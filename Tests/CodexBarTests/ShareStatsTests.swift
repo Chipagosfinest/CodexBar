@@ -64,6 +64,65 @@ struct ShareStatsTests {
     }
 
     @Test
+    func `daily spend trend preserves covered zero days`() throws {
+        let calendar = Calendar(identifier: .gregorian)
+        func day(_ d: Int) throws -> Date {
+            try #require(calendar.date(from: DateComponents(year: 2026, month: 8, day: d)))
+        }
+        let points = try [
+            SpendDashboardModel.DailyPoint(
+                sourceID: "codex",
+                provider: .codex,
+                providerName: "Codex",
+                day: day(20),
+                cost: 10.0,
+                stackStart: 0,
+                stackEnd: 10.0),
+            SpendDashboardModel.DailyPoint(
+                sourceID: "codex",
+                provider: .codex,
+                providerName: "Codex",
+                day: day(22),
+                cost: 20.0,
+                stackStart: 0,
+                stackEnd: 20.0),
+        ]
+        let summaries = try [
+            SpendDashboardModel.DailySummary(
+                day: day(20),
+                providers: [],
+                requestCount: 1,
+                totalCost: 10.0),
+            SpendDashboardModel.DailySummary(
+                day: day(21),
+                providers: [],
+                requestCount: 0,
+                totalCost: 0.0),
+            SpendDashboardModel.DailySummary(
+                day: day(22),
+                providers: [],
+                requestCount: 2,
+                totalCost: 20.0),
+        ]
+        let group = try SpendDashboardModel.CurrencyGroup(
+            currencyCode: "USD",
+            providers: [],
+            models: [],
+            projects: [],
+            dailyPoints: points,
+            dailySummaries: summaries,
+            totalTokens: 100,
+            totalCost: 30.0,
+            coveredDayCount: 3,
+            chartDomain: day(20)...day(22),
+            modelHistoryCompleteness: .complete)
+        let payload = try #require(ShareStatsBuilder.make(
+            model: SpendDashboardModel(requestedDays: 30, groups: [group])))
+
+        #expect(payload.dailySpend == [10.0, 0.0, 20.0])
+    }
+
+    @Test
     func `spend coverage preserves secondary currency when subscriptions overflow`() {
         let usd = ShareStatsCurrencyPayload(
             currencyCode: "USD",

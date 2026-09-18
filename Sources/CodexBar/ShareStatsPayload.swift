@@ -336,10 +336,8 @@ enum ShareStatsBuilder {
             periodGroup.chartDomain.upperBound.addingTimeInterval(-1))
         let periodEnd = periodGroup.calendar.startOfDay(for: lastIncludedInstant)
         // One value per covered day for the headline currency: every provider's spend on that day,
-        // summed. Aggregate by construction, so it carries nothing the rows do not already show.
-        let dailySpend = Dictionary(grouping: periodGroup.dailyPoints, by: \.day)
-            .sorted { $0.key < $1.key }
-            .map { _, points in points.reduce(0) { $0 + $1.cost } }
+        // summed. Preserves covered calendar zero days so sparse activity does not distort the trend.
+        let dailySpend = self.extractDailySpend(from: periodGroup, periodEnd: periodEnd)
         let payload = ShareStatsPayload(
             days: model.requestedDays,
             periodEnd: periodEnd,
@@ -351,6 +349,31 @@ enum ShareStatsBuilder {
             periodEndTimeZone: periodGroup.timeZone,
             dailySpend: dailySpend)
         return payload.hasShareableData ? payload : nil
+    }
+
+    private static func extractDailySpend(
+        from group: SpendDashboardModel.CurrencyGroup,
+        periodEnd: Date) -> [Double]
+    {
+        if !group.dailySummaries.isEmpty {
+            return group.dailySummaries
+                .sorted { $0.day < $1.day }
+                .map { $0.totalCost ?? 0.0 }
+        }
+        let pointsByDay = Dictionary(grouping: group.dailyPoints, by: \.day)
+        var current = group.calendar.startOfDay(for: group.chartDomain.lowerBound)
+        let end = periodEnd
+        guard current <= end else {
+            return pointsByDay.sorted { $0.key < $1.key }.map { _, pts in pts.reduce(0.0) { $0 + $1.cost } }
+        }
+        var result: [Double] = []
+        while current <= end {
+            let cost = pointsByDay[current]?.reduce(0.0) { $0 + $1.cost } ?? 0.0
+            result.append(cost)
+            guard let next = group.calendar.date(byAdding: .day, value: 1, to: current) else { break }
+            current = next
+        }
+        return result
     }
 
     private static func finiteCost(_ value: Double?) -> Double? {
