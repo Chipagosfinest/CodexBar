@@ -282,10 +282,11 @@ enum ShareStatsBuilder {
             }
         }
         // Settings already lists retained `group.models` when sibling providers in the same
-        // currency are unpriced or incomplete. The share card used to drop the whole ranking
-        // in that case, so Codex/Claude families vanished whenever Antigravity (or any other
-        // unpriced USD source) made the group incomplete.
-        let sanitizedModels = model.groups.flatMap { group in
+        // currency are unpriced. The share card used to also require complete model history,
+        // which blanked Codex/Claude families whenever an unpriced USD source made the group
+        // incomplete. Keep the window-level incomplete-request guard so a selected complete
+        // day inside an incomplete range cannot be exported as the advertised period ranking.
+        let sanitizedModels = model.groups.filter { $0.incompleteRequestCount == 0 }.flatMap { group in
             group.models.compactMap { row -> ShareStatsModelPayload? in
                 let estimatedCost = self.finiteCost(row.totalCost)
                 guard row.incompleteRequestCount == 0,
