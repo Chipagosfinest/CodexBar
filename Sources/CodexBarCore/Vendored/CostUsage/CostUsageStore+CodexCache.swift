@@ -63,12 +63,15 @@ extension CostUsageStore {
     func loadCodexReadView(calendar: Calendar, purpose: CostUsageStoreReadPurpose) -> CostUsageStoreReadView {
         self.retainedCodexBaseline = nil
         _ = self.removeLegacyCodexArtifactIfPresent()
-        return self.withDatabase(default: CostUsageStoreReadView(cache: CostUsageCache())) { database in
+        return self.withDatabase(default: CostUsageStoreReadView(
+            cache: CostUsageCache(),
+            purpose: purpose))
+        { database in
             let recorder = self.scopedReadWorkRecorderForTesting
             guard let before = try self.databaseStamp(database) else {
                 self.retainedCodexRead = nil
                 self.requiresReadReopen = true
-                return CostUsageStoreReadView(cache: CostUsageCache())
+                return CostUsageStoreReadView(cache: CostUsageCache(), purpose: purpose)
             }
             if let retained = self.retainedCodexRead,
                retained.stamp == before,
@@ -76,11 +79,11 @@ extension CostUsageStore {
             {
                 guard retained.decoded.timeZoneIdentifier == nil
                     || retained.decoded.timeZoneIdentifier == calendar.timeZone.identifier
-                else { return CostUsageStoreReadView(cache: CostUsageCache()) }
+                else { return CostUsageStoreReadView(cache: CostUsageCache(), purpose: purpose) }
                 recorder?.recordReadViewConversion(database: database)
-                return CostUsageStoreReadView(cache: Self.reconciledCodexCache(
-                    retained.decoded,
-                    persistence: retained.persistence))
+                return CostUsageStoreReadView(
+                    cache: Self.reconciledCodexCache(retained.decoded, persistence: retained.persistence),
+                    purpose: retained.purpose)
             }
             let (snapshot, retryPresence) = try Self.inReadTransaction(database) {
                 let snapshot = try CostUsageStoreSnapshot(
@@ -88,7 +91,8 @@ extension CostUsageStore {
                         CostUsageStoreMetadata.self, database: database, table: "scan_metadata") ?? .empty,
                     files: Self.readFiles(database, recorder: recorder),
                     tokenSnapshots: [],
-                    usageRows: purpose == .report ? Self.readUsageRows(database, path: nil, recorder: recorder) : [],
+                    usageRows: purpose == .report ? Self
+                        .readUsageRows(database, path: nil, recorder: recorder) : [],
                     fileDayAggregates: purpose != .status ? Self.readFileDayAggregates(database, path: nil) : [],
                     dayAggregates: purpose != .status
                         ? Self.readDayAggregates(database, sinceDay: nil, untilDay: nil) : [],
@@ -112,11 +116,11 @@ extension CostUsageStore {
                 self.retainedCodexRead = nil
                 // Re-enter open-time compatibility validation on the next access, after this handle's use ends.
                 self.requiresReadReopen = after == nil
-                return CostUsageStoreReadView(cache: CostUsageCache())
+                return CostUsageStoreReadView(cache: CostUsageCache(), purpose: purpose)
             }
             guard snapshot.metadata.timeZoneIdentifier == nil
                 || snapshot.metadata.timeZoneIdentifier == calendar.timeZone.identifier
-            else { return CostUsageStoreReadView(cache: CostUsageCache()) }
+            else { return CostUsageStoreReadView(cache: CostUsageCache(), purpose: purpose) }
             // Identity/anchor reconciliation touches the filesystem; do not pin a SQLite reader during it.
             let decoded = Self.decodeCodexCache(
                 from: snapshot,
@@ -133,9 +137,9 @@ extension CostUsageStore {
                     purpose: purpose)
             }
             recorder?.recordReadViewConversion(database: database)
-            return CostUsageStoreReadView(cache: Self.reconciledCodexCache(
-                decoded,
-                persistence: persistence))
+            return CostUsageStoreReadView(
+                cache: Self.reconciledCodexCache(decoded, persistence: persistence),
+                purpose: purpose)
         }
     }
 
@@ -535,6 +539,14 @@ extension CostUsageStore {
                 codexNextUsageRowIndex: details.hasExactUsageRowIndex == true ? file.scanState.nextUsageRowIndex : nil,
                 codexPendingPricing: buffers.first { $0.kind == .pricingEvidence }.flatMap {
                     try? JSONDecoder().decode([String: CostUsageScanner.CodexPricingEvidence].self, from: $0.payload)
+                },
+                codexPendingSourcePricing: buffers.first { $0.kind == .sourcePricingEvidence }.map {
+                    (try? JSONDecoder().decode(
+                        [CostUsageScanner.CodexSourcePricingKey: CostUsageScanner.CodexPricingEvidence].self,
+                        from: $0.payload)) ?? [:]
+                },
+                codexPendingSourcePricingAnchor: buffers.first { $0.kind == .sourcePricingAnchor }.flatMap {
+                    try? JSONDecoder().decode(CostUsageCodexTokenIndexAnchor.self, from: $0.payload)
                 },
                 codexTokenSnapshots: details.hasTokenSnapshots && tokenSnapshotsLoaded ? tokenSnapshots : nil,
                 codexTokenCheckpoints: details.hasTokenSnapshots && tokenSnapshotsLoaded
@@ -1350,6 +1362,14 @@ extension CostUsageStore {
     }
 
     private func persistBuffers(path: String, usage: CostUsageFileUsage) {
+        let sourcePricing = usage.codexPendingSourcePricing.flatMap { try? JSONEncoder().encode($0) }
+        _ = self.replaceBufferedLines(path: path, kind: .sourcePricingEvidence, lines: sourcePricing.map {
+            [CostUsageStoreBufferedLine(path: path, kind: .sourcePricingEvidence, lineIndex: 0, payload: $0)]
+        } ?? [])
+        let sourceAnchor = usage.codexPendingSourcePricingAnchor.flatMap { try? JSONEncoder().encode($0) }
+        _ = self.replaceBufferedLines(path: path, kind: .sourcePricingAnchor, lines: sourceAnchor.map {
+            [CostUsageStoreBufferedLine(path: path, kind: .sourcePricingAnchor, lineIndex: 0, payload: $0)]
+        } ?? [])
         let pricing = usage.codexPendingPricing.flatMap { try? JSONEncoder().encode($0) }
         _ = self.replaceBufferedLines(path: path, kind: .pricingEvidence, lines: pricing.map {
             [CostUsageStoreBufferedLine(path: path, kind: .pricingEvidence, lineIndex: 0, payload: $0)]

@@ -189,7 +189,7 @@ extension StatusItemController {
                 try? await Task.sleep(for: .milliseconds(50))
                 guard !Task.isCancelled else { return }
             }
-            guard let self else { return }
+            guard !Task.isCancelled, let self else { return }
             if let payload = self.overviewShareStatsPayload() {
                 ShareStatsPresenter.shared.present(payload: payload)
             } else {
@@ -277,6 +277,8 @@ extension StatusItemController {
                 providerScope: Set(providers))
         }
         let inputs = providers.compactMap { provider -> SpendDashboardModel.ProviderInput? in
+            // Provider-level snapshots cannot honor account-level source exclusions before publication.
+            guard self.settings.spendDashboardHiddenSourceIDs.isEmpty else { return nil }
             guard let snapshot = self.store.tokenSnapshotForCurrentProviderConfig(for: provider)?.snapshot else {
                 return nil
             }

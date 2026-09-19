@@ -185,7 +185,7 @@ struct UsageMenuCardView: View {
         var creditsProgressPercent: Double?, creditsScaleText: String?
         var creditsHintText: String?
         var creditsHintCopyText: String?
-        var codexResetCredits: CodexResetCreditsPresentation?
+        var limitResetCredits: LimitResetCreditsPresentation?
         let providerCost: ProviderCostSection?
         let tokenUsage: TokenUsageSection?
         let placeholder: String?
@@ -714,11 +714,11 @@ private struct UsageMenuCardUsageContentView: View {
             } else {
                 self.metricRows(self.model.metrics)
             }
-            if let resetCredits = self.model.codexResetCredits {
+            if let resetCredits = self.model.limitResetCredits {
                 if !self.model.metrics.isEmpty, self.showsSectionDividers {
                     Divider()
                 }
-                CodexResetCreditsContent(presentation: resetCredits)
+                LimitResetCreditsContent(presentation: resetCredits)
             }
             if let dashboard = self.model.inlineUsageDashboard {
                 InlineUsageDashboardContent(model: dashboard)
@@ -728,7 +728,7 @@ private struct UsageMenuCardUsageContentView: View {
             } else if !self.model.usageNotes.isEmpty {
                 UsageNotesContent(notes: self.model.usageNotes)
             } else if let placeholder = self.model.placeholder, self.model.metrics.isEmpty,
-                      self.model.codexResetCredits == nil
+                      self.model.limitResetCredits == nil
             {
                 Text(placeholder)
                     .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
@@ -955,9 +955,8 @@ extension UsageMenuCardView.Model {
         let showsProviderCost = menuCard.showsProviderCost(context: ProviderCostVisibilityContext(
             snapshot: extraUsageSnapshot,
             showOptionalUsage: input.showOptionalCreditsAndExtraUsage))
-        let providerCostStyle = extraUsageSnapshot.map {
-            presentation.cost(snapshot: $0).menuCardStyle
-        } ?? .generic
+        let costPresentation = extraUsageSnapshot.map { presentation.cost(snapshot: $0) }
+        let providerCostStyle = costPresentation?.menuCardStyle ?? .generic
         let providerCostFollowsSummaryStyle = Self.providerCostFollowsSummaryStyle(
             cost: extraUsageCost,
             style: providerCostStyle,
@@ -1010,7 +1009,9 @@ extension UsageMenuCardView.Model {
             metrics: metrics,
             usageNotes: usageNotes,
             subscriptionNotes: Self.subscriptionMetadataNotes(snapshot: input.snapshot, provider: input.provider),
-            providerDetails: Self.visibleProviderDetails(input: input),
+            providerDetails: Self.visibleProviderDetails(
+                input: input,
+                replacedRows: providerCost == nil ? [:] : costPresentation?.replacedDetailRows ?? [:]),
             openAIAPIUsage: openAIAPIUsage,
             inlineUsageDashboard: inlineUsageDashboard,
             creditsText: creditsText,
@@ -1020,7 +1021,7 @@ extension UsageMenuCardView.Model {
             creditsScaleText: creditsScaleText,
             creditsHintText: codexCreditLimitDetail ?? redacted.creditsHintText,
             creditsHintCopyText: codexCreditLimitDetail ?? redacted.creditsHintCopyText,
-            codexResetCredits: Self.codexResetCredits(input: input),
+            limitResetCredits: Self.limitResetCredits(input: input),
             providerCost: providerCost,
             tokenUsage: tokenUsage,
             placeholder: placeholder,
@@ -1040,8 +1041,19 @@ extension UsageMenuCardView.Model {
         return input.snapshot?.providerCost
     }
 
-    private static func visibleProviderDetails(input: Input) -> [ProviderDetailSection] {
+    private static func visibleProviderDetails(
+        input: Input,
+        replacedRows: [String: Set<String>]) -> [ProviderDetailSection]
+    {
         var details = input.snapshot?.details ?? []
+        if !replacedRows.isEmpty {
+            details = details.compactMap { section in
+                guard let title = section.title, let labels = replacedRows[title] else { return section }
+                let rows = section.rows.filter { !labels.contains($0.label) }
+                guard !rows.isEmpty || section.chart != nil else { return nil }
+                return try? ProviderDetailSection(title: section.title, rows: rows, chart: section.chart)
+            }
+        }
         let policy = ProviderDescriptorRegistry.descriptor(for: input.provider).presentation.optionalDetails
         if !input.costSummaryInlineEnabled, !policy.costSummaryTitles.isEmpty {
             details.removeAll { section in
@@ -1055,6 +1067,13 @@ extension UsageMenuCardView.Model {
                 details.removeAll { section in
                     section.title.map(policy.hiddenTitlesWithoutOptionalUsage.contains) == true
                 }
+            }
+        }
+        if input.provider == .grok {
+            details = details.compactMap { section in
+                let rows = section.rows.filter { $0.label != "Limit Reset Credits" }
+                guard !rows.isEmpty || section.chart != nil else { return nil }
+                return try? ProviderDetailSection(title: section.title, rows: rows, chart: section.chart)
             }
         }
         if input.provider == .sub2api {

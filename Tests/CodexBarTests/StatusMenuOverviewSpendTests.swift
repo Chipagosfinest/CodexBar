@@ -36,6 +36,18 @@ extension StatusMenuTests {
             return
         }
 
+        let application = NSApplication.shared
+        let previousApplication = NSWorkspace.shared.frontmostApplication
+        let previousPolicy = application.activationPolicy()
+        try #require(application.setActivationPolicy(.regular))
+        application.finishLaunching()
+        defer {
+            _ = application.setActivationPolicy(previousPolicy)
+            if NSWorkspace.shared.frontmostApplication?.processIdentifier == ProcessInfo.processInfo.processIdentifier {
+                previousApplication?.activate()
+            }
+        }
+
         let settings = testSettingsStore(
             suiteName: "StatusMenuOverviewSpendTests-native-share",
             userDefaults: InMemoryUserDefaults(),
@@ -162,12 +174,11 @@ extension StatusMenuTests {
         content.layoutSubtreeIfNeeded()
         #expect(content.bounds.width > 0)
         #expect(content.bounds.height > 0)
-        let accessibilityProofEnabled = environment["CODEXBAR_OVERVIEW_ACCESSIBILITY_PROOF"] == "1"
-        if accessibilityProofEnabled {
-            #expect(Self.accessibilityLabels(content).contains(L("Copy Image", language: language)))
-        } else {
-            print(
-                "Overview share accessibility not verified; visual proof uses compositor screenshots")
+        if environment["CODEXBAR_OVERVIEW_EXTERNAL_PROOF"] == "1" {
+            try self.waitForOverviewShareInspection(
+                window: window,
+                outputDirectory: outputDirectory,
+                language: language)
         }
         let bitmap = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
         content.cacheDisplay(in: content.bounds, to: bitmap)
@@ -222,9 +233,6 @@ extension StatusMenuTests {
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.1))
         window.layoutIfNeeded()
         content.layoutSubtreeIfNeeded()
-        if accessibilityProofEnabled {
-            #expect(Self.accessibilityLabels(content).contains(L("Image copied", language: language)))
-        }
         let copiedPreview = try #require(content.bitmapImageRepForCachingDisplay(in: content.bounds))
         content.cacheDisplay(in: content.bounds, to: copiedPreview)
         let copiedPreviewPNG = try #require(copiedPreview.representation(using: .png, properties: [:]))
@@ -286,22 +294,29 @@ extension StatusMenuTests {
         language == "en" ? "" : "-\(language)"
     }
 
-    private static func accessibilityLabels(_ element: Any, depth: Int = 0) -> [String] {
-        guard depth < 30 else { return [] }
-        if let accessible = element as? any NSAccessibilityProtocol {
-            let labels = [accessible.accessibilityLabel()].compactMap(\.self)
-            let children = accessible.accessibilityChildren() ?? []
-            return labels + children.flatMap { self.accessibilityLabels($0, depth: depth + 1) }
+    private func waitForOverviewShareInspection(
+        window: NSWindow,
+        outputDirectory: URL,
+        language: String) throws
+    {
+        try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
+        let state = ["pid": ProcessInfo.processInfo.processIdentifier, "window": Int32(window.windowNumber)]
+        try JSONEncoder().encode(state).write(
+            to: outputDirectory.appendingPathComponent("state.json"),
+            options: .atomic)
+        let receipt = outputDirectory.appendingPathComponent("accessibility-labels.json")
+        let deadline = Date().addingTimeInterval(300)
+        let application = NSApplication.shared
+        while !FileManager.default.fileExists(atPath: receipt.path), Date() < deadline {
+            if let event = application.nextEvent(
+                matching: .any, until: Date().addingTimeInterval(0.02), inMode: .default, dequeue: true)
+            { application.sendEvent(event) }
+            _ = RunLoop.main.run(mode: .default, before: Date().addingTimeInterval(0.02))
         }
-        // SwiftUI accessibility nodes expose these public selectors without adopting NSAccessibilityProtocol.
-        guard let accessible = element as? NSObject else { return [] }
-        let labelSelector = #selector(NSAccessibilityProtocol.accessibilityLabel)
-        let childrenSelector = #selector(NSAccessibilityProtocol.accessibilityChildren)
-        let label = accessible.responds(to: labelSelector)
-            ? accessible.perform(labelSelector)?.takeUnretainedValue() as? String ?? "" : ""
-        let children = accessible.responds(to: childrenSelector)
-            ? accessible.perform(childrenSelector)?.takeUnretainedValue() as? [Any] ?? [] : []
-        return (label.isEmpty ? [] : [label]) + children.flatMap { self.accessibilityLabels($0, depth: depth + 1) }
+        // SwiftUI's accessibility tree is lazy; inspect through the external AX client that builds it.
+        let labels = try JSONDecoder().decode([String].self, from: Data(contentsOf: receipt))
+        #expect(labels.contains(L("Copy Image", language: language)))
+        #expect(labels.contains(L("Copy Stats", language: language)))
     }
 
     @Test
@@ -453,6 +468,49 @@ extension StatusMenuTests {
         #expect(request.configuration.costUsageEnabled)
         #expect(request.configuration.providerIDs == [UsageProvider.codex.rawValue])
         #expect(controller.overviewSpendDashboardModel(providers: [.codex], now: now).groups.first?.totalCost == 4)
+    }
+
+    @Test(arguments: ["codex", "codex:account", "claude:hidden"])
+    func `initial overview waits for source filtering before sharing`(hiddenSource: String) {
+        let settings = self.makeSettings()
+        settings.statusChecksEnabled = false
+        settings.refreshFrequency = .manual
+        settings.costUsageEnabled = true
+        settings.costSummaryDisplayStyle = .both
+        enableTestProviders([.codex], settings: settings)
+        let store = self.makeCodexStore(settings: settings, dashboardAuthorized: false)
+        let now = Date(timeIntervalSince1970: 1_787_079_600)
+        store._setTokenSnapshotForTesting(CostUsageTokenSnapshot(
+            sessionTokens: 10,
+            sessionCostUSD: 2,
+            last30DaysTokens: 10,
+            last30DaysCostUSD: 2,
+            daily: [.init(
+                date: "2026-08-17",
+                inputTokens: 5,
+                outputTokens: 5,
+                totalTokens: 10,
+                costUSD: 2,
+                modelsUsed: nil,
+                modelBreakdowns: nil)],
+            updatedAt: now), provider: .codex)
+        let controller = StatusItemController(
+            store: store,
+            settings: settings,
+            account: AccountInfo(email: nil, plan: nil),
+            updater: DisabledUpdaterController(),
+            preferencesSelection: PreferencesSelection(),
+            statusBar: self.makeStatusBarForTesting())
+        defer { controller.releaseStatusItemsForTesting() }
+
+        #expect(store.spendDashboardPublication.configuration == nil)
+        #expect(controller.overviewShareStatsPayload(now: now)?.currencies.first?.estimatedCost == 2)
+        settings.spendDashboardHiddenSourceIDs = [hiddenSource]
+
+        #expect(controller.overviewShareStatsPayload(now: now) == nil)
+        let model = controller.overviewSpendDashboardModel(providers: [.codex], now: now)
+        #expect(model.groups.isEmpty)
+        #expect(controller.makeOverviewShareStatsMenuItem(model: model) == nil)
     }
 
     @Test

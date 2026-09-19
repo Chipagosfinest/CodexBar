@@ -77,6 +77,9 @@ Usage source picker:
   refresh is running discards the old workspace's result.
 - System Account promotion fails closed when a managed selection differs from the auth file's default workspace.
   CodexBar keeps that selection managed rather than silently promoting the default or rewriting Codex-owned auth.
+- In the segmented layout, selecting an account refreshes its card while the menu stays open. Delayed results stay
+  scoped to that selection. An open chart submenu or highlighted menu command can defer the update until the submenu
+  closes or the highlight clears.
 - Reusing OpenCode OAuth enables remote account quota, not OpenCode session token/cost ingestion. See
   [OpenCode with Codex or OpenAI](opencode.md#using-opencode-with-codex-or-openai) for the current history boundary.
 
@@ -255,6 +258,10 @@ and stable account numbers distinguish rows while usable workspace labels remain
     and replay bodies. File cursor metadata, including JSONL resume state, remains available for progress tracking.
     Fresh and cached fetches use progress metadata to recognize retained reports during catch-up, skipping
     detail-row decoding that would be discarded. Reports without a matching retained result still load exact details.
+    During historical catch-up, a validated reporting window can publish once its discovery, parser, materialization,
+    and fork-ownership checks are complete. Metadata-only reads do not establish day coverage; unresolved or unparsed
+    work retains the previous report. Cached publication is attempted before duty-cycle and resource-pause sleeps and
+    after bounded passes, preserving power limits and actual cache timestamps rather than stamping publication as a new scan.
     A native scan loads exact usage rows once, deferring raw token history and checkpoints until a file changes
     or a fork needs its ancestors. A single-use receipt binds those deferred reads and saves to the original
     connection, database identity and SQLite change observations,
@@ -266,6 +273,13 @@ and stable account numbers distinguish rows while usable workspace labels remain
     remains transient. Scanner and writer connections keep separate ownership.
   - Saved day/model aggregates group each file's usage rows in one pass per aggregate build. Packed token totals,
     authoritative costs (including zero), and standard/priority estimation buckets retain their existing meanings.
+  - Excess cached request rows trigger bounded revalidation of readable, unchanged session files. Ordered source
+    replay determines the request sequence; matching token totals alone cannot establish a request partition.
+    Unanimous saved pricing survives partial scans and restarts. Files with authoritative monetary amounts, existing
+    unpriced markers, or conflicting saved pricing retain their rows without automatic rewriting. Recovered requests
+    without matching historical pricing remain unpriced. The repair retains the existing database and scan checkpoints.
+    Resumes retain the original target anchor alongside the parsed-prefix anchor and follow the scanner's existing
+    append-only log contract; identity changes, anchor mismatches, and unexplained same-size large-file edits invalidate pricing.
   - Fully read empty session fragments retain completion records even when another file contributes the same session.
     They contribute no usage and reparse from the start if they grow. Usage-bearing duplicates and incomplete fragments
     keep their existing accounting and retry rules. Existing 0.56.4 cost caches are adopted without rebuilding
