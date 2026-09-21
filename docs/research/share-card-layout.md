@@ -36,3 +36,16 @@ as "that is all there is". Reverted.
 Not a production-bundle render: the app itself was not built for these. The view code is byte-identical
 to the branch, so layout and typography are faithful, but a maintainer wanting output from a signed
 build should treat these as the layout argument rather than the final artifact.
+
+## Production-path proof (added 2026-09-21)
+
+The images above go through `ImageRenderer`, not the app's own exporter. `Tests/CodexBarTests/
+ShareStatsLayoutProductionRenderTests.swift` renders the same three payload shapes through
+`ShareStatsRenderer.pngData` — the literal `NSHostingView` renderer `ShareStatsExporter.saveImage`/
+`copyImage` call in production — and asserts each PNG is non-trivial (`> 10_000` bytes, ruling out a
+blank frame). Run with `CODEXBAR_SHARE_STATS_SCREENSHOT_DIR=<dir> swift test --filter
+ShareStatsLayoutProductionRenderTests` to regenerate; committed output below.
+
+| sparse | dense | multi |
+|---|---|---|
+| ![sparse](assets/production-sparse.png) | ![dense](assets/production-dense.png) | ![multi](assets/production-multi.png) |
