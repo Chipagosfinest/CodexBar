@@ -91,16 +91,19 @@ struct ShareStatsTests {
             SpendDashboardModel.DailySummary(
                 day: day(20),
                 providers: [],
+                totalTokens: nil,
                 requestCount: 1,
                 totalCost: 10.0),
             SpendDashboardModel.DailySummary(
                 day: day(21),
                 providers: [],
+                totalTokens: nil,
                 requestCount: 0,
                 totalCost: 0.0),
             SpendDashboardModel.DailySummary(
                 day: day(22),
                 providers: [],
+                totalTokens: nil,
                 requestCount: 2,
                 totalCost: 20.0),
         ]
@@ -141,16 +144,19 @@ struct ShareStatsTests {
             SpendDashboardModel.DailySummary(
                 day: day(20),
                 providers: [],
+                totalTokens: nil,
                 requestCount: 1,
                 totalCost: 10.0),
             SpendDashboardModel.DailySummary(
                 day: day(21),
                 providers: [],
+                totalTokens: nil,
                 requestCount: 1,
                 totalCost: nil),
             SpendDashboardModel.DailySummary(
                 day: day(22),
                 providers: [],
+                totalTokens: nil,
                 requestCount: 2,
                 totalCost: 20.0),
         ]
