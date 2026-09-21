@@ -48,4 +48,4 @@ ShareStatsLayoutProductionRenderTests` to regenerate; committed output below.
 
 | sparse | dense | multi |
 |---|---|---|
-| ![sparse](assets/production-sparse.png) | ![dense](assets/production-dense.png) | ![multi](assets/production-multi.png) |
+| ![sparse](share-card-layout/assets/production-sparse.png) | ![dense](share-card-layout/assets/production-dense.png) | ![multi](share-card-layout/assets/production-multi.png) |
