@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CodexBar · Two menu-bar signal directions</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f0e8;
+      --sheet: #fffdf7;
+      --ink: #222722;
+      --muted: #69716c;
+      --rule: #d6d5ca;
+      --blue: #396d8a;
+      --green: #36775e;
+      --amber: #bd9444;
+      --soft-blue: #e7eff1;
+      --soft-green: #e9f0e8;
+      --mono: "SF Mono", ui-monospace, Menlo, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Avenir Next", "Segoe UI", sans-serif;
+      --hand: "Noteworthy", "Bradley Hand", "Comic Sans MS", cursive;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font: 15px/1.45 var(--sans);
+      background:
+        radial-gradient(ellipse at 16% 9%, #ffffff77, transparent 34rem),
+        radial-gradient(ellipse at 87% 90%, #d9e2d788, transparent 30rem),
+        var(--paper);
+    }
+    main { max-width: 1160px; margin: 0 auto; padding: 34px 28px 48px; }
+    .eyebrow { margin: 0 0 8px; color: var(--blue); font-size: 11px; font-weight: 750; letter-spacing: .15em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 48px); line-height: 1.02; letter-spacing: -.045em; font-weight: 730; }
+    .intro { max-width: 650px; margin: 14px 0 24px; color: #535c56; font-size: 16px; }
+    .note { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 23px; color: var(--muted); font: 11px var(--mono); }
+    .note::before { content: "✳"; color: var(--amber); font: 17px var(--hand); }
+    .directions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+    .direction {
+      position: relative;
+      padding: 19px 19px 20px;
+      background: var(--sheet);
+      border: 1.5px solid #aeb4ac;
+      border-radius: 4px 13px 5px 11px;
+      box-shadow: 2px 3px 0 #d3d0c5, 0 12px 26px #25382b0b;
+    }
+    .direction:nth-child(2) { transform: rotate(.28deg); border-radius: 12px 4px 11px 5px; }
+    .direction:nth-child(1) { transform: rotate(-.22deg); }
+    .direction::before {
+      content: ""; position: absolute; top: -7px; left: 42%; width: 74px; height: 17px;
+      background: #e0dba8cc; transform: rotate(-2deg); clip-path: polygon(2% 8%, 98% 0, 100% 90%, 0 100%);
+    }
+    .direction:nth-child(2)::before { left: 53%; background: #c9dfe1cc; transform: rotate(2deg); }
+    .direction-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 2px 15px; }
+    .direction-head h2 { margin: 0; font-size: 20px; letter-spacing: -.025em; }
+    .letter { color: var(--blue); font: 700 12px var(--mono); }
+    .tag { color: var(--muted); font: 10px var(--mono); white-space: nowrap; }
+    .menu-bar {
+      height: 39px; padding: 0 13px; display: flex; align-items: center; justify-content: space-between;
+      color: #f6f7f4; background: #343a3d; border-radius: 3px 3px 1px 1px;
+      font: 12px var(--sans); box-shadow: inset 0 -1px #131719;
+    }
+    .menu-left { display: flex; align-items: center; gap: 13px; opacity: .87; }
+    .apple { font-size: 15px; }
+    .menu-right { display: flex; align-items: center; gap: 10px; }
+    .clock { color: #d1d6d3; font: 10px var(--mono); }
+    .signal { display: inline-flex; gap: 6px; align-items: center; font-weight: 650; white-space: nowrap; }
+    .signal-a { color: #f3f3ee; }
+    .signal-b { color: #d8e7dc; }
+    .signal-b .dot { width: 8px; height: 8px; background: #75bd8f; border-radius: 50%; box-shadow: 0 0 0 3px #75bd8f23; }
+    .popover {
+      width: min(100%, 340px); margin: 0 auto; padding: 14px 17px 13px;
+      background: #fffef9; border: 1px solid #bbc1b9; border-top: 0;
+      border-radius: 0 0 9px 9px; box-shadow: 0 13px 18px #18211a16;
+    }
+    .pop-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 11px; }
+    .provider { color: var(--ink); font-size: 13px; font-weight: 720; }
+    .tiny-icon { color: #727a74; font: 14px var(--hand); }
+    .hero { display: flex; align-items: center; gap: 13px; padding: 15px 0 12px; }
+    .ring {
+      flex: none; width: 55px; height: 55px; display: grid; place-items: center; position: relative;
+      border-radius: 50%; background: conic-gradient(var(--green) 0 82%, #e3e5dc 82% 100%);
+      transform: rotate(-32deg);
+    }
+    .ring::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; background: #fffef9; }
+    .ring span { position: relative; z-index: 1; transform: rotate(32deg); font: 10px var(--mono); font-weight: 700; }
+    .hero-copy { min-width: 0; }
+    .hero-value { margin: 0; font-size: 22px; line-height: 1.1; font-weight: 730; letter-spacing: -.04em; }
+    .hero-label { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
+    .caption { padding-top: 9px; display: flex; justify-content: space-between; gap: 10px; border-top: 1px dashed #d7d7cb; color: var(--muted); font-size: 10px; }
+    .caption strong { color: var(--ink); font-weight: 620; }
+    .sketch-line { width: 100%; height: 52px; margin: 9px 0 1px; display: block; overflow: visible; }
+    .pace { display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--muted); }
+    .pace-mark { width: 25px; height: 0; border-top: 2px dashed var(--blue); }
+    .pace b { color: var(--blue); font-weight: 650; }
+    .state-hero { display: flex; align-items: baseline; gap: 8px; padding: 15px 0 7px; }
+    .state-title { font-size: 25px; font-weight: 730; line-height: 1; letter-spacing: -.045em; }
+    .state-glyph { color: var(--green); font: 22px var(--hand); transform: rotate(-9deg); }
+    .state-note { color: var(--muted); font-size: 11px; margin: 0 0 9px; }
+    .context-row { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin: 10px 0 5px; }
+    .context-row strong { font-size: 13px; }
+    .context-row span { color: var(--muted); font-size: 10px; }
+    .measure { height: 8px; position: relative; border: 1px solid #aab5ad; border-radius: 99px; background: #edf0e9; overflow: visible; }
+    .measure-fill { height: 100%; width: 82%; border-radius: 99px; background: #5d9c77; }
+    .measure-pace { position: absolute; left: 67%; top: -4px; bottom: -4px; border-left: 2px dashed var(--blue); }
+    .measure-key { display: flex; gap: 13px; margin-top: 6px; color: var(--muted); font-size: 9px; }
+    .measure-key i { display: inline-block; width: 8px; height: 6px; margin-right: 4px; background: #5d9c77; border-radius: 2px; }
+    .measure-key .pace-mark { display: inline-block; width: 9px; margin-right: 4px; border-top: 1px dashed var(--blue); vertical-align: 3px; }
+    .footnote { margin: 9px 0 0; color: #818780; font-size: 9px; }
+    .annotation { display: flex; align-items: flex-start; gap: 9px; margin: 15px 2px 1px; color: #454e48; font-size: 12px; }
+    .annotation span { color: var(--blue); font: 16px var(--hand); line-height: 1.1; transform: rotate(-7deg); }
+    .takeaway {
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px;
+      margin: 24px 2px 0; padding: 15px 0 0; border-top: 1px solid #c9c9bd;
+    }
+    .takeaway div { font-size: 12px; color: #505a53; }
+    .takeaway strong { display: block; margin-bottom: 2px; color: var(--ink); font-size: 13px; }
+    .vs { color: #848981; font: 12px var(--hand); }
+    .decision { margin: 20px 2px 0; color: #59635c; font-size: 12px; }
+    .decision b { color: var(--ink); }
+    @media (max-width: 760px) {
+      main { padding: 26px 15px 34px; }
+      .directions { grid-template-columns: 1fr; gap: 18px; }
+      .direction:nth-child(n) { transform: none; }
+      .takeaway { grid-template-columns: 1fr; gap: 10px; }
+      .vs { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">CodexBar · menu-bar signal study</p>
+    <h1>How much should<br>the bar tell you?</h1>
+    <p class="intro">Two versions of the same live quota. One gives you the number before you click. The other saves the number for the overview and uses the bar to tell you how things feel.</p>
+    <p class="note">Illustrative quota data · not live account usage</p>
+
+    <section class="directions" aria-label="Two menu-bar signal directions">
+      <article class="direction">
+        <header class="direction-head">
+          <h2><span class="letter">A /</span> Number first</h2>
+          <span class="tag">PRECISE GLANCE</span>
+        </header>
+        <div class="menu-bar" aria-label="Mac menu bar showing Codex 82 percent left">
+          <div class="menu-left"><span class="apple">●</span><strong>CodexBar</strong><span>File</span><span>View</span></div>
+          <div class="menu-right"><span>⌁</span><span class="signal signal-a">Codex&nbsp; 82% left</span><span class="clock">4:41 PM</span></div>
+        </div>
+        <div class="popover">
+          <div class="pop-title"><span class="provider">Codex</span><span>Updated just now <span class="tiny-icon">↻</span></span></div>
+          <div class="hero">
+            <div class="ring"><span>82%</span></div>
+            <div class="hero-copy"><p class="hero-value">Weekly allowance</p><p class="hero-label">82% left · resets in 6d 23h</p></div>
+          </div>
+          <div class="caption"><span>Window</span><strong>Provider reported</strong></div>
+          <svg class="sketch-line" viewBox="0 0 300 52" role="img" aria-label="Illustrative recent quota use line">
+            <path d="M2 40 C25 38 32 34 48 36 S72 27 90 30 113 24 128 27 145 17 163 20 190 12 204 16 229 15 245 12 274 9 298 8" fill="none" stroke="#5d9c77" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M2 40 C25 38 32 34 48 36 S72 27 90 30 113 24 128 27 145 17 163 20 190 12 204 16 229 15 245 12 274 9 298 8" fill="none" stroke="#5d9c77" stroke-width="5" opacity=".09" stroke-linecap="round" />
+            <path d="M2 48H298" fill="none" stroke="#d8d9d0" stroke-dasharray="2 4" />
+          </svg>
+          <div class="pace"><span class="pace-mark"></span><span><b>Steady pace</b> · more headroom than expected</span></div>
+          <p class="footnote">Allowance is a plan limit, not token count or dollars.</p>
+        </div>
+        <p class="annotation"><span>↳</span><span style="color:inherit;font:inherit;transform:none">You know exactly where you stand without opening the menu. The tradeoff: a precise number takes a little more space and attention.</span></p>
+      </article>
+
+      <article class="direction">
+        <header class="direction-head">
+          <h2><span class="letter">B /</span> State first</h2>
+          <span class="tag">QUIETER GLANCE</span>
+        </header>
+        <div class="menu-bar" aria-label="Mac menu bar showing Codex on track">
+          <div class="menu-left"><span class="apple">●</span><strong>CodexBar</strong><span>File</span><span>View</span></div>
+          <div class="menu-right"><span>⌁</span><span class="signal signal-b"><i class="dot"></i> Codex&nbsp; On track</span><span class="clock">4:41 PM</span></div>
+        </div>
+        <div class="popover">
+          <div class="pop-title"><span class="provider">Codex · Weekly</span><span>Updated just now <span class="tiny-icon">↻</span></span></div>
+          <div class="state-hero"><span class="state-title">Plenty of room</span><span class="state-glyph">✳</span></div>
+          <p class="state-note">Your current pace is comfortably within this window.</p>
+          <div class="context-row"><strong>82% left</strong><span>resets in 6d 23h</span></div>
+          <div class="measure"><div class="measure-fill"></div><div class="measure-pace" title="Illustrative expected pace"></div></div>
+          <div class="measure-key"><span><i></i> allowance left</span><span><span class="pace-mark"></span> expected pace</span></div>
+          <svg class="sketch-line" viewBox="0 0 300 52" role="img" aria-label="Illustrative recent quota use line">
+            <path d="M2 41 C21 40 32 33 49 36 S76 28 94 31 116 23 133 27 155 20 174 22 201 13 216 17 240 12 257 13 279 7 298 9" fill="none" stroke="#396d8a" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M2 48H298" fill="none" stroke="#d8d9d0" stroke-dasharray="2 4" />
+            <circle cx="257" cy="13" r="3" fill="#396d8a" />
+          </svg>
+          <div class="caption"><span>Window</span><strong>Provider reported</strong></div>
+          <p class="footnote">Allowance is a plan limit, not token count or dollars.</p>
+        </div>
+        <p class="annotation"><span>↳</span><span style="color:inherit;font:inherit;transform:none">The bar feels calmer; the overview gives you a more human read and pace context. The tradeoff: exact remaining usage takes a click.</span></p>
+      </article>
+    </section>
+
+    <section class="takeaway" aria-label="Comparison summary">
+      <div><strong>A · Number first</strong>Best when you check the limit often and want the exact figure at a glance.</div>
+      <span class="vs">same data, different promise →</span>
+      <div><strong>B · State first</strong>Best when the bar should stay quiet and help you decide whether to look closer.</div>
+    </section>
+    <p class="decision"><b>My read:</b> B suits the compact menu-bar slot; keep the exact number prominent at the top of its popover. If the number is genuinely a frequently checked constraint, A may earn its extra prominence. Neither direction mixes quota with estimated dollar value.</p>
+  </main>
+</body>
+</html>
