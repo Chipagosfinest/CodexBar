@@ -61,6 +61,12 @@ struct OverviewMenuCardRowView: View {
                         showsSectionDividers: Self.showsSectionDividers,
                         compactMetrics: self.layout == .compact)
                 }
+                if let tokenUsage = self.model.tokenUsage {
+                    OverviewActivityReadout(
+                        provider: self.model.provider,
+                        tokenUsage: tokenUsage,
+                        width: self.width)
+                }
             }
             if let storageText {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -84,6 +90,54 @@ struct OverviewMenuCardRowView: View {
 
     private var hasUsageBlock: Bool {
         self.model.hasUsageContent
+    }
+}
+
+private struct OverviewActivityReadout: View {
+    let provider: UsageProvider
+    let tokenUsage: UsageMenuCardView.Model.TokenUsageSection
+    let width: CGFloat
+    @Environment(\.menuItemHighlighted) private var isHighlighted
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 9) {
+            Image(systemName: "waveform.path")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                .frame(width: 16)
+                .padding(.top, 1)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 5) {
+                    Text(UsageMenuCardView.Model.tokenUsageHeader(provider: self.provider))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                    if self.tokenUsage.isRefreshing {
+                        ProgressView()
+                            .controlSize(.mini)
+                            .accessibilityLabel(L("Refreshing"))
+                    }
+                }
+                Text(self.tokenUsage.monthLine)
+                    .font(.footnote.monospacedDigit())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+                if let hint = self.tokenUsage.hintLine?.components(separatedBy: "\n").first,
+                   !hint.isEmpty
+                {
+                    Text(hint)
+                        .font(.caption2)
+                        .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                        .lineLimit(1)
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
+        .padding(.top, 3)
+        .padding(.bottom, 7)
+        .frame(width: self.width, alignment: .leading)
+        .accessibilityElement(children: .combine)
     }
 }
 
