@@ -35,6 +35,15 @@
     .fresh { color:#8d9ca5; font-size:10px }
     .fresh i { display:inline-block; width:6px;height:6px;margin:0 5px 1px 0;border-radius:50%;background:var(--mint);box-shadow:0 0 10px #73e0c088 }
     .card { position:relative; margin-top:11px; padding:12px 12px 11px; border:1px solid #293740; border-radius:12px; background:linear-gradient(125deg,#19232b,#141c23); box-shadow:inset 0 1px #ffffff08 }
+    .total { margin-top:12px; padding:13px 13px 12px; border:1px solid #34504e; border-radius:13px; background:radial-gradient(ellipse at 86% 0,#24433c88,transparent 60%),linear-gradient(135deg,#172722,#152028 78%); box-shadow:inset 0 1px #ffffff0d,0 7px 16px #0002 }
+    .total-top,.total-meta { display:flex; justify-content:space-between; align-items:center; gap:8px }
+    .total-label { color:#bfcec9; font-size:10px; font-weight:650; letter-spacing:.08em; text-transform:uppercase }
+    .range { padding:3px 7px; border:1px solid #40514f; border-radius:99px; color:#a9bbb6; font-size:9px }
+    .total-number { display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin:8px 0 5px }
+    .total-number strong { color:#f2fbf7; font-size:27px; font-weight:720; letter-spacing:-.055em; font-variant-numeric:tabular-nums }
+    .total-number span { color:#b0c0c3; font:10px var(--mono); white-space:nowrap }
+    .total-meta { color:#b4c4c3; font-size:9px }
+    .total-foot { margin-top:6px; color:#819893; font-size:9px }
     .card:before { content:""; position:absolute; left:-1px; top:13px; bottom:13px; width:2px; border-radius:0 2px 2px 0; background:var(--accent) }
     .cardhead { display:flex; justify-content:space-between; align-items:center; gap:8px }
     .provider { display:flex; align-items:center; gap:7px; min-width:0; font-size:13px; font-weight:700 }
@@ -83,6 +92,12 @@
       <div>
         <div class="popover">
           <div class="topline"><div class="title"><i class="logo">C</i> Usage overview</div><div class="fresh"><i></i>Updated just now</div></div>
+          <section class="total" aria-label="Illustrative overall spend summary">
+            <div class="total-top"><span class="total-label">Usage &amp; spend</span><span class="range">Last 30 days</span></div>
+            <div class="total-number"><strong>~$210.40</strong><span>7.3M tokens</span></div>
+            <div class="total-meta"><span>2 of 3 providers have spend</span><span>Partial</span></div>
+            <div class="total-foot">Metered + list-price estimate · 30/30 days covered</div>
+          </section>
           <article class="card" style="--accent:var(--mint)">
             <div class="cardhead"><div class="provider"><span class="provider-mark">C</span>Codex <span class="plan">Pro · weekly</span></div><span class="updated">resets in 6d 23h</span></div>
             <div class="usage"><strong><em>82%</em> left</strong><span>weekly allowance</span></div>

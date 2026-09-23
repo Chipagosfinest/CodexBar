@@ -5,6 +5,7 @@ import SwiftUI
 
 struct OverviewSpendSummary: Equatable {
     let primarySpendText: String
+    let spendAmounts: [String]
     let providerCoverageText: String
     let tokenText: String?
     let historyCoverageText: String
@@ -31,15 +32,17 @@ struct OverviewSpendSummary: Equatable {
         self.isPartial = isPartial
 
         if model.groups.isEmpty {
+            self.spendAmounts = []
             self.primarySpendText = providerCount > 0 && resolvedKnownCostProviderCount == providerCount
                 ? L("No usage yet")
                 : L("Spend unavailable")
         } else {
-            self.primarySpendText = model.groups.map { group in
+            self.spendAmounts = model.groups.map { group in
                 let text = spendDashboardGroupCostText(group)
                 guard isPartial, group.totalCost != nil, !text.hasPrefix("~") else { return text }
                 return "~\(text)"
-            }.joined(separator: " · ")
+            }
+            self.primarySpendText = self.spendAmounts.joined(separator: " · ")
         }
         self.providerCoverageText = L(
             "%d of %d subscriptions have spend",
@@ -95,45 +98,81 @@ struct OverviewSpendSummaryCardView: View {
     let summary: OverviewSpendSummary
     let days: Int
     let width: CGFloat
+    @Environment(\.menuItemHighlighted) private var isHighlighted
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
-            HStack(spacing: 6) {
+        VStack(alignment: .leading, spacing: 9) {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Image(systemName: "chart.bar.xaxis")
+                    .font(.system(size: 12, weight: .semibold))
+                    .accessibilityHidden(true)
                 Text(L("Usage & Spend"))
                     .font(.headline.weight(.semibold))
-                Text("·")
+                Spacer(minLength: 4)
                 Text(spendDashboardDayRangeText(self.days))
+                    .font(.caption.weight(.medium))
             }
-            .foregroundStyle(.secondary)
+            .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
 
-            Text(self.summary.primarySpendText)
-                .font(.system(.title2, design: .rounded, weight: .bold))
-                .monospacedDigit()
-                .lineLimit(2)
+            if self.summary.spendAmounts.count > 1 {
+                VStack(alignment: .leading, spacing: 1) {
+                    ForEach(Array(self.summary.spendAmounts.enumerated()), id: \.offset) { _, amount in
+                        self.amountText(amount, size: 21)
+                    }
+                }
+            } else {
+                self.amountText(self.summary.primarySpendText, size: 27)
+            }
 
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: self.summary.isPartial ? "circle.lefthalf.filled" : "checkmark.circle.fill")
+                    .foregroundStyle(
+                        self.summary.isPartial
+                            ? MenuHighlightStyle.secondary(self.isHighlighted)
+                            : Color.green)
+                    .accessibilityHidden(true)
                 Text(self.summary.providerCoverageText)
                 if let tokenText = self.summary.tokenText {
-                    Text("·")
+                    Text("/")
+                        .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                     Text(tokenText)
                 }
             }
             .font(.caption)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
             .lineLimit(1)
 
-            Text("\(self.summary.historyCoverageText) · \(self.summary.provenanceText)")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-            Text(self.summary.pricingCoverageText)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
+            HStack(spacing: 6) {
+                Text(self.summary.provenanceText)
+                Text("·")
+                Text(self.summary.historyCoverageText)
+            }
+            .font(.caption2)
+            .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+            .lineLimit(1)
+            .minimumScaleFactor(0.85)
         }
         .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
-        .padding(.vertical, 10)
+        .padding(.vertical, 11)
         .frame(width: self.width, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 11, style: .continuous)
+                .fill(self.isHighlighted ? Color.white.opacity(0.07) : Color.primary.opacity(0.035))
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 11, style: .continuous)
+                .strokeBorder(Color.primary.opacity(self.isHighlighted ? 0.12 : 0.075), lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private func amountText(_ text: String, size: CGFloat) -> some View {
+        Text(text)
+            .font(.system(size: size, weight: .bold, design: .rounded))
+            .monospacedDigit()
+            .foregroundStyle(MenuHighlightStyle.primary(self.isHighlighted))
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
     }
 }
 
