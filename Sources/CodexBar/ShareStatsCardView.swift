@@ -15,10 +15,10 @@ struct ShareStatsCardView: View {
         VStack(alignment: .leading, spacing: 0) {
             self.header
             self.hero
-                .padding(.top, 49)
+                .padding(.top, 42)
             self.mix
-                .padding(.top, 50)
-            Spacer(minLength: 24)
+                .padding(.top, 39)
+            Spacer(minLength: 20)
             self.footer
         }
         .padding(.horizontal, 58)
@@ -32,7 +32,7 @@ struct ShareStatsCardView: View {
     private var header: some View {
         HStack(alignment: .center) {
             HStack(spacing: 11) {
-                ShareStatsMark(colors: self.visibleModels.map(self.color(for:)))
+                ShareStatsMark(colors: Array(self.mixSegments.prefix(3)).map(\.color))
                     .frame(width: 26, height: 26)
                 Text("CodexBar")
                     .font(.system(size: 21, weight: .semibold, design: .rounded))
@@ -46,59 +46,27 @@ struct ShareStatsCardView: View {
     }
 
     private var hero: some View {
-        HStack(alignment: .bottom, spacing: 35) {
-            VStack(alignment: .leading, spacing: 7) {
-                Text(self.trackedTokensText)
-                    .font(.system(size: 112, weight: .semibold, design: .rounded))
-                    .monospacedDigit()
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.66)
-                    .contentTransition(.numericText())
-                Text("TOKENS TRACKED")
-                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                    .tracking(1.6)
-                    .foregroundStyle(self.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            Rectangle()
-                .fill(self.secondary.opacity(0.27))
-                .frame(width: 1, height: 76)
-                .padding(.bottom, 4)
-
-            VStack(alignment: .leading, spacing: 8) {
-                Text("COST CONTEXT")
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                    .tracking(1.3)
-                    .foregroundStyle(self.secondary)
-                ForEach(self.payload.currencies) { currency in
-                    HStack(spacing: 7) {
-                        Text(self.spendText(for: currency))
-                            .font(.system(size: 25, weight: .semibold, design: .rounded))
-                            .monospacedDigit()
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.75)
-                        Text(self.provenanceLabel(currency.provenance))
-                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundStyle(self.secondary)
-                            .lineLimit(1)
-                    }
-                }
-                if self.payload.currencies.isEmpty {
-                    Text("No cost data")
-                        .font(.system(size: 17, weight: .medium, design: .rounded))
-                        .foregroundStyle(self.secondary)
-                }
-            }
-            .frame(width: 330, alignment: .leading)
-            .padding(.bottom, 8)
+        HStack(alignment: .firstTextBaseline, spacing: 19) {
+            Text(self.trackedTokensText)
+                .font(.system(size: 138, weight: .semibold, design: .rounded))
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.52)
+                .contentTransition(.numericText())
+                .layoutPriority(1)
+            Text("TOKENS\nTRACKED")
+                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .tracking(1.5)
+                .foregroundStyle(self.secondary)
+                .fixedSize()
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var mix: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .firstTextBaseline) {
-                Text(self.payload.hasPartialModels ? "KNOWN MODEL MIX" : "MODEL MIX")
+                Text(self.payload.hasPartialModels ? "KNOWN MODEL FAMILY MIX" : "MODEL FAMILY MIX")
                     .font(.system(size: 13, weight: .bold, design: .rounded))
                     .tracking(1.5)
                     .foregroundStyle(self.secondary)
@@ -111,21 +79,35 @@ struct ShareStatsCardView: View {
             }
 
             GeometryReader { geometry in
-                HStack(spacing: 3) {
+                HStack(spacing: 4) {
                     ForEach(Array(self.mixSegments.enumerated()), id: \.offset) { _, segment in
-                        Capsule(style: .continuous)
+                        let width = max(
+                            4,
+                            (geometry.size.width - CGFloat((self.mixSegments.count - 1) * 4)) * segment.share)
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
                             .fill(segment.color)
-                            .frame(width: max(
-                                3,
-                                (geometry.size.width - CGFloat((self.mixSegments.count - 1) * 3)) * segment.share))
+                            .frame(width: width)
+                            .overlay(alignment: .bottomLeading) {
+                                if width > 155 {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("\(segment.sharePercent)%")
+                                            .font(.system(size: 38, weight: .semibold, design: .rounded))
+                                            .monospacedDigit()
+                                        Text(segment.name)
+                                            .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                            .lineLimit(1)
+                                    }
+                                    .foregroundStyle(self.background)
+                                    .padding(16)
+                                }
+                            }
                     }
                     if self.mixSegments.isEmpty {
-                        Capsule(style: .continuous).fill(self.track)
+                        RoundedRectangle(cornerRadius: 8, style: .continuous).fill(self.track)
                     }
                 }
             }
-            .frame(height: 13)
-            .background(self.track, in: Capsule())
+            .frame(height: 125)
 
             HStack(alignment: .top, spacing: 24) {
                 ForEach(Array(self.mixSegments.enumerated()), id: \.offset) { _, segment in
@@ -138,7 +120,7 @@ struct ShareStatsCardView: View {
                             Text(segment.name)
                                 .font(.system(size: 15, weight: .semibold, design: .rounded))
                                 .lineLimit(1)
-                            Text("\(segment.sharePercent)% · \(segment.tokenText)")
+                            Text("\(segment.sharePercent)% · \(segment.tokenText) tokens")
                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                                 .monospacedDigit()
                                 .foregroundStyle(self.secondary)
@@ -148,7 +130,49 @@ struct ShareStatsCardView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
+            self.costContext
+                .padding(.top, 8)
         }
+    }
+
+    private var costContext: some View {
+        HStack(alignment: .top, spacing: 15) {
+            Text("COST CONTEXT")
+                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .tracking(1.3)
+                .foregroundStyle(self.secondary)
+                .padding(.top, 2)
+            if self.payload.currencies.isEmpty {
+                Text("No cost data")
+                    .foregroundStyle(self.secondary)
+            } else {
+                VStack(alignment: .leading, spacing: 5) {
+                    ForEach(Array(self.payload.currencies.prefix(2))) { currency in
+                        let coverage = ShareStatsFormatting.coverageFraction(
+                            covered: currency.coveredDayCount,
+                            payload: self.payload)
+                        HStack(spacing: 6) {
+                            Text(currency.currencyCode)
+                                .foregroundStyle(self.secondary)
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                            Text(self.spendText(for: currency))
+                                .foregroundStyle(self.primary)
+                                .monospacedDigit()
+                            Text("· \(coverage) · \(self.provenanceLabel(currency.provenance))")
+                                .foregroundStyle(self.secondary)
+                        }
+                        .lineLimit(1)
+                    }
+                    if self.payload.currencies.count > 2 {
+                        Text("+\(self.payload.currencies.count - 2) more currencies in copied stats")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(self.secondary)
+                    }
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .font(.system(size: 15, weight: .medium, design: .rounded))
     }
 
     private var footer: some View {
@@ -159,7 +183,7 @@ struct ShareStatsCardView: View {
             Text("·")
             Text("Through \(ShareStatsFormatting.dataThrough(self.payload))")
             Spacer()
-            Text("\(self.payload.providers.count) providers")
+            Text("\(Set(self.payload.providers.map(\.provider)).count) providers")
         }
         .font(.system(size: 12, weight: .medium, design: .rounded))
         .foregroundStyle(self.secondary)
@@ -169,26 +193,31 @@ struct ShareStatsCardView: View {
         }
     }
 
-    private var visibleModels: [ShareStatsModelPayload] {
-        Array(self.payload.topModels.prefix(4))
-    }
-
     private var mixSegments: [ShareStatsMixSegment] {
-        let models = self.payload.topModels.filter { ($0.totalTokens ?? 0) > 0 }
-        let displayed = Array(models.prefix(4))
-        let total = models.reduce(0.0) { $0 + Double($1.totalTokens ?? 0) }
-        guard total > 0 else { return [] }
-        var segments = displayed.map { model in
-            ShareStatsMixSegment(
-                name: model.modelName,
-                share: Double(model.totalTokens ?? 0) / total,
-                tokenText: ShareStatsFormatting.compactCount(model.totalTokens ?? 0),
-                color: self.color(for: model))
+        let families = Dictionary(
+            grouping: self.payload.topModels.filter { ($0.totalTokens ?? 0) > 0 },
+            by: \.modelName)
+        let models = families.compactMap { name, rows -> (name: String, tokens: Int)? in
+            guard let tokens = CheckedSum.integers(rows.compactMap(\.totalTokens)) else { return nil }
+            return (name: name, tokens: tokens)
+        }.sorted { lhs, rhs in
+            lhs.tokens == rhs.tokens ? lhs.name < rhs.name : lhs.tokens > rhs.tokens
         }
-        let remainder = models.dropFirst(displayed.count).reduce(0.0) { $0 + Double($1.totalTokens ?? 0) }
+        guard models.count == families.count else { return [] }
+        let displayed = Array(models.prefix(4))
+        let total = models.reduce(0.0) { $0 + Double($1.tokens) }
+        guard total > 0 else { return [] }
+        var segments = displayed.enumerated().map { index, model in
+            ShareStatsMixSegment(
+                name: model.name,
+                share: Double(model.tokens) / total,
+                tokenText: ShareStatsFormatting.compactCount(model.tokens),
+                color: ShareStatsPalette.color(at: index))
+        }
+        let remainder = models.dropFirst(displayed.count).reduce(0.0) { $0 + Double($1.tokens) }
         if remainder > 0 {
             segments.append(ShareStatsMixSegment(
-                name: "Other models",
+                name: "Other model families",
                 share: remainder / total,
                 tokenText: ShareStatsFormatting.compactCount(Int(remainder)),
                 color: self.secondary))
@@ -218,18 +247,11 @@ struct ShareStatsCardView: View {
 
     private func provenanceLabel(_ provenance: CostProvenance) -> String {
         switch provenance {
-        case .listPriceEstimate: "list-price estimate"
+        case .listPriceEstimate: "API value estimate · not billed"
         case .vendorMetered: "provider reported"
         case .mixed: "mixed basis"
         case .unknown: "basis unknown"
         }
-    }
-
-    private func color(for model: ShareStatsModelPayload) -> Color {
-        guard let index = self.payload.providers.firstIndex(where: { $0.provider == model.provider }) else {
-            return self.secondary
-        }
-        return ShareStatsPalette.color(at: index)
     }
 }
 
