@@ -109,8 +109,17 @@ final class SpendDashboardScreenshotRenderTests: XCTestCase {
             requestedDays: SpendDashboardSource.scanDays,
             now: now,
             calendar: calendar)
+        let today = SpendDashboardModel.build(inputs: [claude, cursor], requestedDays: 1, now: now, calendar: calendar)
+        let seven = SpendDashboardModel.build(inputs: [claude, cursor], requestedDays: 7, now: now, calendar: calendar)
         let thirtyGroup = try XCTUnwrap(thirty.groups.first)
         let allGroup = try XCTUnwrap(allTime.groups.first)
+        let horizons = [today, seven, thirty, allTime].map { model in
+            OverviewSpendHorizon(
+                days: model.requestedDays,
+                summary: OverviewSpendSummary(model: model, providerCount: 2))
+        }
+        XCTAssertEqual(horizons.map(\.label), ["Today", "7d", "30d", "All"])
+        XCTAssertEqual(horizons.map(\.summary.primarySpendText), ["~$0.40", "~$0.40", "~$0.40", "~$1.60"])
         XCTAssertFalse(thirtyGroup.models.contains { $0.modelName == "MiniMax-M3" })
         XCTAssertTrue(allGroup.models.contains { $0.modelName == "MiniMax-M3" })
 
@@ -200,7 +209,8 @@ final class SpendDashboardScreenshotRenderTests: XCTestCase {
             thirtyGroup: thirtyGroup,
             allGroup: allGroup,
             hourlyGroup: hourlyGroup,
-            selectedGroup: selectedGroup)
+            selectedGroup: selectedGroup,
+            horizons: horizons)
         for (name, view) in renders {
             let data = try XCTUnwrap(Self.pngData(for: view), "render failed for \(name)")
             let url = directory.appendingPathComponent("\(name).png")
@@ -311,7 +321,8 @@ final class SpendDashboardScreenshotRenderTests: XCTestCase {
         thirtyGroup: SpendDashboardModel.CurrencyGroup,
         allGroup: SpendDashboardModel.CurrencyGroup,
         hourlyGroup: SpendDashboardModel.CurrencyGroup,
-        selectedGroup: SpendDashboardModel.CurrencyGroup) -> [(String, AnyView)]
+        selectedGroup: SpendDashboardModel.CurrencyGroup,
+        horizons: [OverviewSpendHorizon]) -> [(String, AnyView)]
     {
         [
             ("usage-spend-30d", AnyView(self.chrome(selectedDays: 30, group: thirtyGroup))),
@@ -339,7 +350,8 @@ final class SpendDashboardScreenshotRenderTests: XCTestCase {
                     OverviewSpendSummaryCardView(
                         summary: OverviewSpendSummary(model: thirty, providerCount: 2),
                         days: 30,
-                        width: 320)
+                        width: 320,
+                        horizons: horizons)
                         .padding(.vertical, 8)
                         .background(Color(nsColor: .windowBackgroundColor)))),
         ]

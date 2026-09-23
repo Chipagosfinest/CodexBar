@@ -593,6 +593,21 @@ extension StatusItemController {
         let spendModel = self.overviewSpendDashboardModel(providers: spendProviders)
         let spendProviderCount = self.overviewSpendSubscriptionCount(providers: spendProviders)
         if spendProviderCount > 0 {
+            let horizons = [1, 7, 30, SpendDashboardSource.scanDays].map { days in
+                let model = self.overviewSpendDashboardModel(
+                    providers: spendProviders,
+                    requestedDays: days)
+                let knownCounts = self.overviewSpendKnownSubscriptionCounts(
+                    providers: spendProviders,
+                    model: model)
+                return OverviewSpendHorizon(
+                    days: days,
+                    summary: OverviewSpendSummary(
+                        model: model,
+                        providerCount: spendProviderCount,
+                        knownCostProviderCount: knownCounts.cost,
+                        knownTokenProviderCount: knownCounts.tokens))
+            }
             let knownCounts = self.overviewSpendKnownSubscriptionCounts(
                 providers: spendProviders,
                 model: spendModel)
@@ -605,7 +620,8 @@ extension StatusItemController {
                 OverviewSpendSummaryCardView(
                     summary: spendSummary,
                     days: spendModel.requestedDays,
-                    width: menuWidth),
+                    width: menuWidth,
+                    horizons: horizons),
                 id: "overviewSpendSummary",
                 width: menuWidth,
                 heightCacheScope: "overviewSpendSummary",

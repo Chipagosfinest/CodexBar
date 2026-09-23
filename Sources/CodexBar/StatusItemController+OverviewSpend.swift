@@ -94,10 +94,29 @@ struct OverviewSpendSummary: Equatable {
     }
 }
 
+struct OverviewSpendHorizon: Identifiable {
+    let days: Int
+    let summary: OverviewSpendSummary
+
+    var id: Int {
+        self.days
+    }
+
+    var label: String {
+        switch self.days {
+        case 1: L("Today")
+        case 7: L("7d")
+        case 30: L("30d")
+        default: L("All")
+        }
+    }
+}
+
 struct OverviewSpendSummaryCardView: View {
     let summary: OverviewSpendSummary
     let days: Int
     let width: CGFloat
+    var horizons: [OverviewSpendHorizon] = []
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
     var body: some View {
@@ -109,19 +128,34 @@ struct OverviewSpendSummaryCardView: View {
                 Text(L("Usage & Spend"))
                     .font(.headline.weight(.semibold))
                 Spacer(minLength: 4)
-                Text(spendDashboardDayRangeText(self.days))
+                Text(L("Total"))
                     .font(.caption.weight(.medium))
             }
             .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
 
-            if self.summary.spendAmounts.count > 1 {
+            if self.horizons.isEmpty, self.summary.spendAmounts.count > 1 {
                 VStack(alignment: .leading, spacing: 1) {
                     ForEach(Array(self.summary.spendAmounts.enumerated()), id: \.offset) { _, amount in
                         self.amountText(amount, size: 21)
                     }
                 }
-            } else {
+            } else if self.horizons.isEmpty {
                 self.amountText(self.summary.primarySpendText, size: 27)
+            } else {
+                HStack(alignment: .top, spacing: 4) {
+                    ForEach(self.horizons) { horizon in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(horizon.label)
+                                .font(.caption2.weight(.medium))
+                                .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                            self.amountText(horizon.summary.primarySpendText, size: 14)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityElement(children: .combine)
+                        .help(
+                            "\(horizon.label): \(horizon.summary.primarySpendText). \(horizon.summary.providerCoverageText). \(horizon.summary.historyCoverageText)")
+                    }
+                }
             }
 
             HStack(spacing: 6) {
@@ -293,8 +327,10 @@ extension StatusItemController {
 
     func overviewSpendDashboardModel(
         providers: [UsageProvider],
-        now: Date = Date()) -> SpendDashboardModel
+        now: Date = Date(),
+        requestedDays: Int? = nil) -> SpendDashboardModel
     {
+        let requestedDays = requestedDays ?? self.settings.costUsageHistoryDays
         let publication = self.store.spendDashboardPublication
         if let configuration = publication.configuration {
             guard configuration.menuOwnershipFingerprint == SpendDashboardSource.currentMenuOwnershipFingerprint(
@@ -303,13 +339,13 @@ extension StatusItemController {
             else {
                 return SpendDashboardModel.build(
                     inputs: [],
-                    requestedDays: self.settings.costUsageHistoryDays,
+                    requestedDays: requestedDays,
                     now: now,
                     calendar: self.settings.costUsageBucketCalendar,
                     preferredCurrencyCode: self.settings.preferredCurrencyCode)
             }
             return publication.model(
-                requestedDays: self.settings.costUsageHistoryDays,
+                requestedDays: requestedDays,
                 now: now,
                 calendar: self.settings.costUsageBucketCalendar,
                 preferredCurrencyCode: self.settings.preferredCurrencyCode,
@@ -330,7 +366,7 @@ extension StatusItemController {
         }
         return SpendDashboardModel.build(
             inputs: inputs,
-            requestedDays: self.settings.costUsageHistoryDays,
+            requestedDays: requestedDays,
             now: now,
             calendar: self.settings.costUsageBucketCalendar,
             preferredCurrencyCode: self.settings.preferredCurrencyCode)
