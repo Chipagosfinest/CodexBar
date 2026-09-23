@@ -219,14 +219,18 @@ struct ProviderPagerHeader: View {
                     FreshnessLabel(updatedAt: self.updatedAt)
                         .layoutPriority(0)
                 }
-                Spacer(minLength: 4)
                 if let pager, pager.isPageable {
                     ProviderPagerControls(pager: pager, size: self.size)
                         .layoutPriority(1)
                 }
+                Spacer(minLength: 4)
+                WidgetShareOverviewButton()
             }
             if self.size == .small {
-                FreshnessLabel(updatedAt: self.updatedAt)
+                HStack {
+                    FreshnessLabel(updatedAt: self.updatedAt)
+                    Spacer(minLength: 0)
+                }
             }
         }
     }
@@ -269,7 +273,7 @@ private struct ProviderPageButton: View {
                     Button(intent: SwitchWidgetProviderIntent(provider: choice)) { self.glyph }
                 }
             }
-            .buttonStyle(.plain)
+            .buttonStyle(WidgetControlButtonStyle())
             .accessibilityLabel(Text(ProviderPageButtonLabel.text(for: self.provider)))
         } else {
             self.glyph.opacity(0.4)

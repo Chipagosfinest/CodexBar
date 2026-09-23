@@ -398,10 +398,11 @@ struct TileHeader: View {
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
                     .layoutPriority(1)
-                Spacer(minLength: 0)
                 if self.size != .small {
                     FreshnessLabel(updatedAt: self.updatedAt)
                 }
+                Spacer(minLength: 0)
+                WidgetShareOverviewButton()
             }
             if self.size == .small {
                 FreshnessLabel(updatedAt: self.updatedAt)
@@ -414,6 +415,38 @@ struct TileHeader: View {
             return self.provider.rawValue.capitalized
         }
         return ProviderTitle.text(for: provider, size: self.size)
+    }
+}
+
+struct WidgetShareOverviewButton: View {
+    var body: some View {
+        Link(destination: ShareStatsRoute.overviewURL) {
+            Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .frame(width: 26, height: 26)
+                .background(
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(Color.primary.opacity(0.07)))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                }
+        }
+        .buttonStyle(WidgetControlButtonStyle())
+        .accessibilityLabel(Text("Share usage overview"))
+        .accessibilityHint(Text("Opens the share preview in CodexBar"))
+    }
+}
+
+struct WidgetControlButtonStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.78 : 1)
+            .scaleEffect(configuration.isPressed && !self.reduceMotion ? 0.96 : 1)
+            .animation(self.reduceMotion ? nil : .easeOut(duration: 0.14), value: configuration.isPressed)
     }
 }
 

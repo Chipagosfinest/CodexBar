@@ -118,6 +118,7 @@ private struct ShareStatsPreviewView: View {
                 }
                 .keyboardShortcut(.defaultAction)
                 .accessibilityLabel(self.imageCopyFeedback.title)
+                .buttonStyle(SharePreviewButtonStyle(prominent: true))
 
                 Button {
                     self.copyText()
@@ -125,6 +126,7 @@ private struct ShareStatsPreviewView: View {
                 } label: {
                     Label(L("Copy Stats"), systemImage: "doc.on.doc")
                 }
+                .buttonStyle(SharePreviewButtonStyle(prominent: false))
 
                 Button {
                     if self.saveImage() {
@@ -133,6 +135,7 @@ private struct ShareStatsPreviewView: View {
                 } label: {
                     Label(L("Save..."), systemImage: "square.and.arrow.down")
                 }
+                .buttonStyle(SharePreviewButtonStyle(prominent: false))
 
                 Spacer()
 
@@ -184,6 +187,31 @@ private struct ShareStatsPreviewView: View {
                 self.imageCopyFeedback = .idle
             }
         }
+    }
+}
+
+private struct SharePreviewButtonStyle: ButtonStyle {
+    let prominent: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 13, weight: .semibold))
+            .padding(.horizontal, 15)
+            .padding(.vertical, 10)
+            .foregroundStyle(self.prominent ? Color.white : Color.primary.opacity(0.82))
+            .background {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(self.prominent
+                        ? Color(red: 0.78, green: 0.37, blue: 0.23)
+                        : Color.primary.opacity(configuration.isPressed ? 0.11 : 0.055))
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(Color.primary.opacity(self.prominent ? 0.08 : 0.09), lineWidth: 1)
+            }
+            .scaleEffect(configuration.isPressed && !self.reduceMotion ? 0.985 : 1)
+            .animation(self.reduceMotion ? nil : .easeOut(duration: 0.14), value: configuration.isPressed)
     }
 }
 

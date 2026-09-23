@@ -52,25 +52,17 @@ struct ShareStatsCardView: View {
                     .font(.system(size: 26, weight: .semibold, design: .rounded))
             }
             Spacer()
-            Text("LOCAL SNAPSHOT")
-                .font(.system(size: 14, weight: .semibold, design: .rounded))
-                .tracking(1.8)
+            Text("Usage · \(self.periodLabel)")
+                .font(.system(size: 18, weight: .medium, design: .rounded))
                 .foregroundStyle(self.secondary)
-                .padding(.horizontal, 15)
-                .padding(.vertical, 9)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(self.secondary.opacity(0.45), lineWidth: 1)
-                }
         }
     }
 
     private var hero: some View {
-        HStack(alignment: .bottom, spacing: 52) {
+        HStack(alignment: .center, spacing: 52) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("TRACKED TOKENS · \(self.periodLabel)")
-                    .font(.system(size: 20, weight: .semibold, design: .rounded))
-                    .tracking(1.8)
+                Text("Tokens tracked")
+                    .font(.system(size: 22, weight: .medium, design: .rounded))
                     .foregroundStyle(self.secondary)
                 Text(self.trackedTokensText)
                     .font(.system(size: 104, weight: .semibold, design: .rounded))
@@ -81,44 +73,38 @@ struct ShareStatsCardView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 9) {
-                Text("EST. \(self.spendLabel)")
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .tracking(1.2)
+                Text("Estimated spend")
+                    .font(.system(size: 22, weight: .medium, design: .rounded))
                     .foregroundStyle(self.secondary)
-                ForEach(self.payload.currencies.prefix(2)) { currency in
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("\(currency.currencyCode) · \(currency.coveredDayCount)/\(self.coverageDenominator)")
-                            .font(.system(size: 17, weight: .semibold, design: .rounded))
-                            .foregroundStyle(self.secondary)
-                        Spacer()
-                        Text(self.spendText(for: currency))
-                            .font(.system(size: 32, weight: .semibold, design: .rounded))
-                            .monospacedDigit()
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.72)
+                if self.payload.currencies.isEmpty {
+                    Text("No spend data available")
+                        .font(.system(size: 20, weight: .medium, design: .rounded))
+                        .foregroundStyle(self.secondary)
+                } else {
+                    ForEach(self.payload.currencies) { currency in
+                        HStack(alignment: .firstTextBaseline) {
+                            Text("\(currency.currencyCode) · \(currency.coveredDayCount)/\(self.coverageDenominator)")
+                                .font(.system(size: 17, weight: .semibold, design: .rounded))
+                                .foregroundStyle(self.secondary)
+                            Spacer()
+                            Text(self.spendText(for: currency))
+                                .font(.system(size: 32, weight: .semibold, design: .rounded))
+                                .monospacedDigit()
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.72)
+                        }
                     }
                 }
-                Text(self.currencySummary)
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(self.secondary)
             }
             .frame(width: 390, alignment: .leading)
         }
-        .frame(height: 132, alignment: .bottom)
-    }
-
-    private var currencySummary: String {
-        let hiddenCount = self.payload.currencies.count - min(self.payload.currencies.count, 2)
-        return hiddenCount > 0
-            ? "+\(hiddenCount) more currencies · see subscription rows"
-            : ShareStatsFormatting.subscriptionSummary(count: self.payload.providers.count)
-            + " · native currencies kept separate"
+        .frame(height: 150, alignment: .center)
     }
 
     private var rankings: some View {
         HStack(alignment: .top, spacing: 46) {
             VStack(alignment: .leading, spacing: 6) {
-                self.sectionHeader("SUBSCRIPTIONS", detail: "\(self.payload.providers.count) CONNECTED")
+                self.sectionHeader("Providers", detail: "\(self.payload.providers.count)")
                 ForEach(
                     Array(self.payload.providers.prefix(self.providerDisplayLimit).enumerated()),
                     id: \.offset)
@@ -140,9 +126,9 @@ struct ShareStatsCardView: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 6) {
-                    self.sectionHeader("TOP MODELS", detail: self.payload.modelRankingDetail)
+                    self.sectionHeader("Top models", detail: self.payload.hasPartialModels ? "Partial" : "By usage")
                     if self.payload.topModels.isEmpty {
-                        Text("No model-level history in this local snapshot")
+                        Text("No model breakdown recorded")
                             .font(.system(size: 18, weight: .medium, design: .rounded))
                             .foregroundStyle(self.secondary)
                             .padding(.top, 4)
@@ -158,10 +144,6 @@ struct ShareStatsCardView: View {
                         }
                     }
                 }
-                Text("Only aggregate usage, plan tier, and estimated spend are included.")
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(self.secondary)
-                    .padding(.top, 18)
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
         }
@@ -176,11 +158,7 @@ struct ShareStatsCardView: View {
     }
 
     private var periodLabel: String {
-        self.isAllTime ? "ALL" : "\(self.payload.days) DAYS"
-    }
-
-    private var spendLabel: String {
-        self.isAllTime ? "ALL-TIME SPEND" : "\(self.payload.days)-DAY SPEND"
+        self.isAllTime ? "All time" : "\(self.payload.days) days"
     }
 
     private var trackedTokensText: String {
@@ -209,24 +187,21 @@ struct ShareStatsCardView: View {
     private func sectionHeader(_ title: String, detail: String) -> some View {
         HStack(alignment: .firstTextBaseline) {
             Text(title)
-                .font(.system(size: 18, weight: .semibold, design: .rounded))
-                .tracking(1.5)
+                .font(.system(size: 20, weight: .semibold, design: .rounded))
             Spacer()
             Text(detail)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .tracking(1.0)
+                .font(.system(size: 16, weight: .medium, design: .rounded))
         }
         .foregroundStyle(self.secondary)
     }
 
     private var footer: some View {
         HStack(spacing: 12) {
-            Label("LOCAL · AGGREGATE ONLY", systemImage: "lock.shield")
+            Label("Local snapshot · no account details", systemImage: "lock.shield")
             Spacer()
-            Text("DATA THROUGH \(ShareStatsFormatting.dataThrough(self.payload).uppercased())")
+            Text("Through \(ShareStatsFormatting.dataThrough(self.payload))")
         }
         .font(.system(size: 14, weight: .medium, design: .rounded))
-        .tracking(0.7)
         .foregroundStyle(self.secondary)
     }
 }
