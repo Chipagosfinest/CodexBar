@@ -590,6 +590,7 @@ private struct UsageMenuCardUsageContentView: View {
     var showsSectionDividers = true
     var compactMetrics = false
     var showsSupplementalContent = true
+    var showsInlineUsageDashboard = true
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
     /// Doubao ships Coding Plan and Agent Plan subscriptions, each with personal
@@ -659,7 +660,9 @@ private struct UsageMenuCardUsageContentView: View {
     @ViewBuilder
     private var supplementalContent: some View {
         if let dashboard = self.model.inlineUsageDashboard {
-            InlineUsageDashboardContent(model: dashboard)
+            if self.showsInlineUsageDashboard {
+                InlineUsageDashboardContent(model: dashboard)
+            }
             if !self.model.subscriptionNotes.isEmpty {
                 UsageNotesContent(notes: self.model.subscriptionNotes)
             }
@@ -689,6 +692,7 @@ struct UsageMenuCardUsageSectionView: View {
     var showsSectionDividers = true
     var compactMetrics = false
     var showsSupplementalContent = true
+    var showsInlineUsageDashboard = true
     @Environment(\.menuCardRefreshMonitor) private var refreshMonitor
 
     var body: some View {
@@ -699,7 +703,8 @@ struct UsageMenuCardUsageSectionView: View {
             showBottomDivider: self.showBottomDivider,
             showsSectionDividers: self.showsSectionDividers,
             compactMetrics: self.compactMetrics,
-            showsSupplementalContent: self.showsSupplementalContent)
+            showsSupplementalContent: self.showsSupplementalContent,
+            showsInlineUsageDashboard: self.showsInlineUsageDashboard)
             .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
             .padding(.top, UsageMenuCardLayout.usageSectionTopPadding)
             .padding(.bottom, self.bottomPadding)

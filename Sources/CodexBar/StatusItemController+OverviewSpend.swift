@@ -151,6 +151,11 @@ struct OverviewSpendSummaryCardView: View {
             .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
             .lineLimit(1)
             .minimumScaleFactor(0.85)
+
+            Text(self.summary.pricingCoverageText)
+                .font(.caption2)
+                .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
         .padding(.vertical, 11)

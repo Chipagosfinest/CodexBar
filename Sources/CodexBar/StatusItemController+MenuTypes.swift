@@ -60,7 +60,8 @@ struct OverviewMenuCardRowView: View {
                         width: self.width,
                         showsSectionDividers: Self.showsSectionDividers,
                         compactMetrics: self.layout == .compact,
-                        showsSupplementalContent: self.model.tokenUsage.map { _ in false } ?? true)
+                        showsSupplementalContent: true,
+                        showsInlineUsageDashboard: self.model.tokenUsage == nil)
                 }
                 if let tokenUsage = self.model.tokenUsage {
                     OverviewActivityReadout(
@@ -123,13 +124,13 @@ private struct OverviewActivityReadout: View {
                     .font(.footnote.monospacedDigit())
                     .lineLimit(1)
                     .minimumScaleFactor(0.85)
-                if let hint = self.tokenUsage.hintLine?.components(separatedBy: "\n").first,
+                if let hint = self.tokenUsage.hintLine,
                    !hint.isEmpty
                 {
                     Text(hint)
                         .font(.caption2)
                         .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
-                        .lineLimit(1)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
             Spacer(minLength: 0)
