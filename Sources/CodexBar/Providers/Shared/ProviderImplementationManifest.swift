@@ -85,5 +85,8 @@ enum ProviderImplementationManifest {
         TypeSafeProviderImplementation(),
         HyperProviderImplementation(),
         GitKrakenProviderImplementation(),
+        DevPassProviderImplementation(),
+        AtlasCloudProviderImplementation(),
+        VercelProviderImplementation(),
     ]
 }

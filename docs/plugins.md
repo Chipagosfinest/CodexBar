@@ -230,6 +230,9 @@ displayable usage or identity remains invalid unless `empty: true` is explicitly
 
 ## TypeScript
 
+DevPass's bundled `devpass.ts` reads the documented LLM Gateway key-status API for billing-cycle and premium weekly
+credits. Swift only registers the provider and its API-key setting. See [DevPass](devpass.md).
+
 Moonshot's bundled `moonshot.ts` runs on both engines. Its Swift descriptor resolves the regional credential and passes
 the selected origin as `BASE_URL`; the plugin validates the fixed International/China origins and uses
 `ctx.format.currency` for identity-only balance and deficit text. See [Moonshot](moonshot.md).
@@ -309,6 +312,12 @@ cache and browser import, and Off fails before either is accessed.
 Call `ctx.browser.rejectCookie(domain)` after the server rejects a session. The host checks the declared domain and
 evicts only the cached entry observed by that fetch (each domain is pinned for the fetch lifetime); a newer session and other domains remain intact. Manual headers
 are never erased. User plugins have no persistent cookie cache, so rejection is a validated no-op for them.
+
+## API balance bundled providers
+
+[Atlas Cloud](atlascloud.md) and [Vercel AI Gateway](vercel.md) use fixed-origin bearer GETs for documented
+account/team balances. Their bundled JavaScript returns generic details without fabricated quota windows;
+Swift provides registration and the shared API-key settings field. Scripts classify HTTP failures and the host bounds retries.
 
 ## GitKraken AI bundled provider
 

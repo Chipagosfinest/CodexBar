@@ -21,6 +21,9 @@ struct CLIProviderSelectionTests {
             "|kiro|",
             "|warp|",
             "|ollama|",
+            "|devpass|",
+            "|atlascloud|",
+            "|vercel|",
             "|both|",
             "|all]",
         ]
