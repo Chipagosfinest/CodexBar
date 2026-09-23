@@ -30,17 +30,20 @@ private struct ShareStatsModelFamilyKey: Hashable {
 struct ShareStatsCurrencyPayload: Sendable, Equatable, Identifiable {
     let currencyCode: String
     let estimatedCost: Double?
+    let provenance: CostProvenance
     let coveredDayCount: Int
     let isPartial: Bool
 
     init(
         currencyCode: String,
         estimatedCost: Double?,
+        provenance: CostProvenance = .unknown,
         coveredDayCount: Int,
         isPartial: Bool = false)
     {
         self.currencyCode = currencyCode
         self.estimatedCost = estimatedCost
+        self.provenance = provenance
         self.coveredDayCount = coveredDayCount
         self.isPartial = isPartial
     }
@@ -298,6 +301,7 @@ enum ShareStatsBuilder {
             ShareStatsCurrencyPayload(
                 currencyCode: $0.currencyCode,
                 estimatedCost: self.finiteCost($0.totalCost),
+                provenance: $0.provenance,
                 coveredDayCount: $0.coveredDayCount,
                 isPartial: $0.hasPartialCost)
         }

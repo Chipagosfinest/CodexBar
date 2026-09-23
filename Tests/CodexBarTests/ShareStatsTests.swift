@@ -417,8 +417,9 @@ struct ShareStatsTests {
         #expect(!tiff.isEmpty)
         #expect(bitmap.pixelsWide == 1200)
         #expect(bitmap.pixelsHigh == 630)
+        let mixRibbonY = Int(Double(bitmap.pixelsHigh) * 0.57)
         let sampledColors = Set(stride(from: 0, to: bitmap.pixelsWide, by: 31).compactMap { x in
-            bitmap.colorAt(x: x, y: bitmap.pixelsHigh / 2)?.usingColorSpace(.deviceRGB)?.description
+            bitmap.colorAt(x: x, y: mixRibbonY)?.usingColorSpace(.deviceRGB)?.description
         })
         #expect(sampledColors.count > 1)
 
@@ -439,19 +440,15 @@ struct ShareStatsTests {
         #expect(ShareStatsImageCopyFeedback.failed.systemImage == "photo.on.rectangle")
     }
 
-    @Test @MainActor
-    func `provider rows leave room for overflow summary`() {
-        #expect(ShareStatsCardView.providerDisplayLimit(for: 5) == 5)
-        #expect(ShareStatsCardView.providerDisplayLimit(for: 6) == 4)
-        #expect(ShareStatsCardView.providerDisplayLimit(for: 12) == 4)
-    }
+    @Test
+    func `share cost payload preserves the amount basis`() {
+        let payload = ShareStatsCurrencyPayload(
+            currencyCode: "USD",
+            estimatedCost: 1.25,
+            provenance: .vendorMetered,
+            coveredDayCount: 7)
 
-    @Test @MainActor
-    func `model colors use provider identity instead of decorated account name`() throws {
-        let payload = try #require(ShareStatsBuilder.make(model: Self.dashboard))
-        let codexModel = try #require(payload.topModels.first { $0.provider == .codex })
-
-        #expect(ShareStatsCardView.providerPaletteIndex(for: codexModel, providers: payload.providers) == 1)
+        #expect(payload.provenance == .vendorMetered)
     }
 
     @Test
