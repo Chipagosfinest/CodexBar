@@ -59,7 +59,8 @@ struct OverviewMenuCardRowView: View {
                         bottomPadding: 6,
                         width: self.width,
                         showsSectionDividers: Self.showsSectionDividers,
-                        compactMetrics: self.layout == .compact)
+                        compactMetrics: self.layout == .compact,
+                        showsSupplementalContent: self.model.tokenUsage.map { _ in false } ?? true)
                 }
                 if let tokenUsage = self.model.tokenUsage {
                     OverviewActivityReadout(

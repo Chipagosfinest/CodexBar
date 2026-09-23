@@ -157,11 +157,11 @@ struct OverviewSpendSummaryCardView: View {
         .frame(width: self.width, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 11, style: .continuous)
-                .fill(self.isHighlighted ? Color.white.opacity(0.07) : Color.primary.opacity(0.035))
+                .fill(self.isHighlighted ? Color.white.opacity(0.055) : Color.primary.opacity(0.02))
         }
         .overlay {
             RoundedRectangle(cornerRadius: 11, style: .continuous)
-                .strokeBorder(Color.primary.opacity(self.isHighlighted ? 0.12 : 0.075), lineWidth: 1)
+                .strokeBorder(Color.primary.opacity(self.isHighlighted ? 0.1 : 0.04), lineWidth: 1)
         }
         .accessibilityElement(children: .combine)
     }
