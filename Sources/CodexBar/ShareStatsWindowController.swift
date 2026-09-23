@@ -203,15 +203,23 @@ private struct SharePreviewButtonStyle: ButtonStyle {
             .background {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(self.prominent
-                        ? Color(red: 0.78, green: 0.37, blue: 0.23)
-                        : Color.primary.opacity(configuration.isPressed ? 0.11 : 0.055))
+                        ? Color(red: 0.86, green: 0.40, blue: 0.25)
+                        : Color.primary.opacity(configuration.isPressed ? 0.14 : 0.075))
             }
             .overlay {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(Color.primary.opacity(self.prominent ? 0.08 : 0.09), lineWidth: 1)
+                    .stroke(
+                        self.prominent
+                            ? Color(red: 1.0, green: 0.71, blue: 0.53).opacity(0.55)
+                            : Color.primary.opacity(0.13),
+                        lineWidth: 1)
             }
-            .scaleEffect(configuration.isPressed && !self.reduceMotion ? 0.985 : 1)
-            .animation(self.reduceMotion ? nil : .easeOut(duration: 0.14), value: configuration.isPressed)
+            .shadow(color: .black.opacity(self.prominent ? 0.22 : 0.10), radius: 0, y: configuration.isPressed ? 0 : 3)
+            .scaleEffect(configuration.isPressed && !self.reduceMotion ? 0.975 : 1)
+            .offset(y: configuration.isPressed && !self.reduceMotion ? 2 : 0)
+            .animation(
+                self.reduceMotion ? nil : .spring(response: 0.24, dampingFraction: 0.62),
+                value: configuration.isPressed)
     }
 }
 

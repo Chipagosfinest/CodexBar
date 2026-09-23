@@ -25,9 +25,9 @@ struct ShareStatsCardView: View {
         VStack(alignment: .leading, spacing: 0) {
             self.header
             self.hero
-                .padding(.top, 16)
+                .padding(.top, 18)
             Rectangle()
-                .fill(self.secondary.opacity(0.22))
+                .fill(self.secondary.opacity(0.16))
                 .frame(height: 1)
                 .padding(.vertical, 17)
             self.rankings
@@ -71,6 +71,10 @@ struct ShareStatsCardView: View {
                     .minimumScaleFactor(0.72)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 25)
+            .overlay(alignment: .leading) {
+                Capsule().fill(self.accent).frame(width: 7, height: 92)
+            }
 
             VStack(alignment: .leading, spacing: 9) {
                 Text("Estimated spend")
@@ -98,12 +102,25 @@ struct ShareStatsCardView: View {
             }
             .frame(width: 390, alignment: .leading)
         }
+        .padding(.horizontal, 26)
         .frame(height: 150, alignment: .center)
+        .background {
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(LinearGradient(
+                    colors: [Color(red: 0.17, green: 0.12, blue: 0.10), Color(red: 0.12, green: 0.10, blue: 0.095)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing))
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(Color.white.opacity(0.09), lineWidth: 1)
+        }
+        .shadow(color: .black.opacity(0.18), radius: 0, y: 5)
     }
 
     private var rankings: some View {
         HStack(alignment: .top, spacing: 46) {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 11) {
                 self.sectionHeader("Providers", detail: "\(self.payload.providers.count)")
                 ForEach(
                     Array(self.payload.providers.prefix(self.providerDisplayLimit).enumerated()),
@@ -125,7 +142,7 @@ struct ShareStatsCardView: View {
             .frame(width: 554, alignment: .topLeading)
 
             VStack(alignment: .leading, spacing: 0) {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 10) {
                     self.sectionHeader("Top models", detail: self.payload.hasPartialModels ? "Partial" : "By usage")
                     if self.payload.topModels.isEmpty {
                         Text("No model breakdown recorded")
@@ -238,13 +255,14 @@ private struct ShareStatsModelRow: View {
                 .foregroundStyle(Color(red: 0.78, green: 0.74, blue: 0.69))
                 .lineLimit(1)
         }
-        .padding(.horizontal, 9)
-        .frame(height: 48)
-        .background(Color.white.opacity(0.035), in: RoundedRectangle(cornerRadius: 9))
+        .padding(.horizontal, 12)
+        .frame(height: 58)
+        .background(self.color.opacity(0.10), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 9)
-                .stroke(Color.white.opacity(0.10), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(self.color.opacity(0.26), lineWidth: 1)
         }
+        .shadow(color: .black.opacity(0.14), radius: 0, y: 2)
     }
 
     private var detail: String {
@@ -291,13 +309,14 @@ private struct ShareStatsProviderRow: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.82)
         }
-        .padding(.horizontal, 9)
-        .frame(height: 44)
-        .background(Color.white.opacity(0.035), in: RoundedRectangle(cornerRadius: 9))
+        .padding(.horizontal, 12)
+        .frame(height: 54)
+        .background(self.color.opacity(0.11), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 9)
-                .stroke(Color.white.opacity(0.10), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(self.color.opacity(0.28), lineWidth: 1)
         }
+        .shadow(color: .black.opacity(0.16), radius: 0, y: 2)
     }
 
     private var detail: String {

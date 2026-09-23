@@ -423,15 +423,16 @@ struct WidgetShareOverviewButton: View {
         Link(destination: ShareStatsRoute.overviewURL) {
             Image(systemName: "square.and.arrow.up")
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color(red: 0.98, green: 0.68, blue: 0.48))
                 .frame(width: 26, height: 26)
                 .background(
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(Color.primary.opacity(0.07)))
+                        .fill(Color(red: 0.93, green: 0.43, blue: 0.27).opacity(0.17)))
                 .overlay {
                     RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                        .stroke(Color(red: 0.98, green: 0.60, blue: 0.39).opacity(0.34), lineWidth: 1)
                 }
+                .shadow(color: .black.opacity(0.20), radius: 0, y: 2)
         }
         .buttonStyle(WidgetControlButtonStyle())
         .accessibilityLabel(Text("Share usage overview"))
@@ -444,9 +445,12 @@ struct WidgetControlButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .opacity(configuration.isPressed ? 0.78 : 1)
-            .scaleEffect(configuration.isPressed && !self.reduceMotion ? 0.96 : 1)
-            .animation(self.reduceMotion ? nil : .easeOut(duration: 0.14), value: configuration.isPressed)
+            .opacity(configuration.isPressed ? 0.92 : 1)
+            .scaleEffect(configuration.isPressed && !self.reduceMotion ? 0.94 : 1)
+            .offset(y: configuration.isPressed && !self.reduceMotion ? 1.5 : 0)
+            .animation(
+                self.reduceMotion ? nil : .spring(response: 0.22, dampingFraction: 0.62),
+                value: configuration.isPressed)
     }
 }
 
