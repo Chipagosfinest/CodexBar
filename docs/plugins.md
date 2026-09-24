@@ -230,6 +230,17 @@ displayable usage or identity remains invalid unless `empty: true` is explicitly
 
 ## TypeScript
 
+llmman's bundled `llmman.ts` reads a local `llmman serve` daemon's node report for loaded-model memory. Its API key is
+optional, so the plugin sends it itself instead of declaring host-owned `auth`. See [llmman](llmman.md).
+
+Chutes' bundled `chutes.ts` owns subscription usage and best-effort quota detail requests on both engines. It preserves
+subscription context and explicitly permits empty usage responses. Swift supplies credentials and validated API origins.
+See [Chutes](chutes.md).
+
+ai&'s bundled `aiand.ts` follows paired log cursors and sums decimal costs with integer arithmetic before the final
+display conversion. Empty windows omit cost; capped or incomplete pagination retains estimated confidence.
+See [ai&](aiand.md).
+
 DevPass's bundled `devpass.ts` reads the documented LLM Gateway key-status API for billing-cycle and premium weekly
 credits. Swift only registers the provider and its API-key setting. See [DevPass](devpass.md).
 
@@ -266,7 +277,7 @@ change to instance ID, normalized origins, auth mode/header, secure setting name
 invalidates approval before the next request. There is no bulk approval or import path.
 
 Bundled first-party plugins do not use the interactive plugin-approval flow. The private-network HTTP policy is therefore
-accepted for bundled code only for LLM Proxy, LiteLLM, and Bifrost, whose configured gateways permit exactly those
+accepted for bundled code only for LLM Proxy, LiteLLM, Bifrost, and llmman, whose configured endpoints permit exactly those
 targets. Other bundled providers fail manifest validation if they request that policy.
 
 `codexbar plugins list` shows locally discovered plugins. `codexbar plugins fetch <id>` displays the same approval
