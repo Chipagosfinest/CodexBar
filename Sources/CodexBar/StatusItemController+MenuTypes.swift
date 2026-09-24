@@ -60,7 +60,6 @@ struct OverviewMenuCardRowView: View {
                         width: self.width,
                         showsSectionDividers: Self.showsSectionDividers,
                         compactMetrics: self.layout == .compact,
-                        showsSupplementalContent: true,
                         showsInlineUsageDashboard: self.model.tokenUsage == nil)
                 }
                 if let tokenUsage = self.model.tokenUsage {

@@ -589,7 +589,6 @@ private struct UsageMenuCardUsageContentView: View {
     let showBottomDivider: Bool
     var showsSectionDividers = true
     var compactMetrics = false
-    var showsSupplementalContent = true
     var showsInlineUsageDashboard = true
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
@@ -646,9 +645,7 @@ private struct UsageMenuCardUsageContentView: View {
                 }
                 LimitResetCreditsContent(presentation: resetCredits)
             }
-            if self.showsSupplementalContent,
-               self.model.showsOverviewSupplementalContent(compact: self.compactMetrics)
-            {
+            if self.model.showsOverviewSupplementalContent(compact: self.compactMetrics) {
                 self.supplementalContent
             }
             if self.showBottomDivider {
@@ -675,7 +672,7 @@ private struct UsageMenuCardUsageContentView: View {
                 .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                 .font(.subheadline)
         }
-        if self.showsSupplementalContent, !self.model.providerDetails.isEmpty {
+        if !self.model.providerDetails.isEmpty {
             ProviderDetailSectionsContent(
                 sections: self.model.providerDetails,
                 chartColor: self.model.progressColor)
@@ -691,7 +688,6 @@ struct UsageMenuCardUsageSectionView: View {
     let width: CGFloat
     var showsSectionDividers = true
     var compactMetrics = false
-    var showsSupplementalContent = true
     var showsInlineUsageDashboard = true
     @Environment(\.menuCardRefreshMonitor) private var refreshMonitor
 
@@ -703,7 +699,6 @@ struct UsageMenuCardUsageSectionView: View {
             showBottomDivider: self.showBottomDivider,
             showsSectionDividers: self.showsSectionDividers,
             compactMetrics: self.compactMetrics,
-            showsSupplementalContent: self.showsSupplementalContent,
             showsInlineUsageDashboard: self.showsInlineUsageDashboard)
             .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
             .padding(.top, UsageMenuCardLayout.usageSectionTopPadding)
