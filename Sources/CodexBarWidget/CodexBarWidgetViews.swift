@@ -224,7 +224,9 @@ struct ProviderPagerHeader: View {
                         .layoutPriority(1)
                 }
                 Spacer(minLength: 4)
-                WidgetShareOverviewButton()
+                if self.size != .small {
+                    WidgetShareOverviewButton()
+                }
             }
             if self.size == .small {
                 HStack {

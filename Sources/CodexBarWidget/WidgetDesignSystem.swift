@@ -402,7 +402,9 @@ struct TileHeader: View {
                     FreshnessLabel(updatedAt: self.updatedAt)
                 }
                 Spacer(minLength: 0)
-                WidgetShareOverviewButton()
+                if self.size != .small {
+                    WidgetShareOverviewButton()
+                }
             }
             if self.size == .small {
                 FreshnessLabel(updatedAt: self.updatedAt)

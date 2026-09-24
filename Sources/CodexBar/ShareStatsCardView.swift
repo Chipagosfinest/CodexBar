@@ -178,7 +178,7 @@ struct ShareStatsCardView: View {
     private var footer: some View {
         HStack(spacing: 8) {
             Circle().fill(Color(red: 0.34, green: 0.78, blue: 0.66)).frame(width: 6, height: 6)
-            Text("LOCAL USAGE LOGS")
+            Text("LOCAL SNAPSHOT")
                 .tracking(0.8)
             Text("·")
             Text("Through \(ShareStatsFormatting.dataThrough(self.payload))")

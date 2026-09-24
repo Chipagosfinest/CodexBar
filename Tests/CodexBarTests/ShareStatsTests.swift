@@ -71,8 +71,8 @@ struct ShareStatsTests {
 
         #expect(payload.days == SpendDashboardSource.scanDays)
         #expect(text.contains("My AI subscriptions · all time"))
-        #expect(text.contains("GBP: £12.00 estimated · coverage 10/all"))
-        #expect(text.contains("Claude: 300 tokens · ~£12.00 est · 10/all"))
+        #expect(text.contains("GBP: £12.00 estimated · coverage 10 days"))
+        #expect(text.contains("Claude: 300 tokens · ~£12.00 est · 10 days"))
         #expect(!text.contains("last \(SpendDashboardSource.scanDays) days"))
         #expect(!text.contains("/\(SpendDashboardSource.scanDays) days"))
     }
