@@ -1,6 +1,7 @@
 import AppKit
 import CodexBarCore
 import Foundation
+import SwiftUI
 import Testing
 @testable import CodexBar
 
@@ -441,14 +442,111 @@ struct ShareStatsTests {
     }
 
     @Test
-    func `share cost payload preserves the amount basis`() {
-        let payload = ShareStatsCurrencyPayload(
+    func `builder carries each currency's cost basis into the share payload`() throws {
+        let group = SpendDashboardModel.CurrencyGroup(
             currencyCode: "USD",
-            estimatedCost: 1.25,
-            provenance: .vendorMetered,
-            coveredDayCount: 7)
+            providers: [
+                SpendDashboardModel.ProviderRow(
+                    id: "cursor",
+                    rank: 1,
+                    provider: .cursor,
+                    displayName: "Cursor",
+                    totalTokens: 100,
+                    totalCost: 1.25,
+                    coveredDayCount: 7),
+            ],
+            models: [],
+            dailyPoints: [],
+            totalTokens: 100,
+            totalCost: 1.25,
+            coveredDayCount: 7,
+            chartDomain: Self.date...Self.date,
+            modelHistoryCompleteness: .complete,
+            provenance: .vendorMetered)
+        let payload = try #require(ShareStatsBuilder.make(
+            model: SpendDashboardModel(requestedDays: 7, groups: [group])))
 
-        #expect(payload.provenance == .vendorMetered)
+        #expect(payload.currencies.map(\.provenance) == [.vendorMetered])
+    }
+
+    @Test @MainActor
+    func `model mix merges same-named models across providers and folds the tail`() {
+        let payload = Self.mixPayload(models: [
+            ("claude-sonnet-4", .claude, 400),
+            ("claude-sonnet-4", .openrouter, 200),
+            ("gpt-5.4", .codex, 200),
+            ("gemini-2.5-pro", .gemini, 100),
+            ("grok-4", .grok, 60),
+            ("qwen-3", .openrouter, 40),
+        ])
+
+        let segments = ShareStatsCardView.mixSegments(for: payload, otherColor: .gray)
+
+        #expect(segments.map(\.name) == [
+            "claude-sonnet-4",
+            "gpt-5.4",
+            "gemini-2.5-pro",
+            "grok-4",
+            "Other model families",
+        ])
+        #expect(segments.map(\.sharePercent) == [60, 20, 10, 6, 4])
+        #expect(segments.first?.tokenText == ShareStatsFormatting.compactCount(600))
+    }
+
+    @Test @MainActor
+    func `model mix is empty without positive token history`() {
+        #expect(ShareStatsCardView.mixSegments(for: Self.mixPayload(models: []), otherColor: .gray).isEmpty)
+        #expect(ShareStatsCardView.mixSegments(
+            for: Self.mixPayload(models: [("gpt-5.4", .codex, 0)]),
+            otherColor: .gray).isEmpty)
+    }
+
+    @Test @MainActor
+    func `model mix fails closed when a family total overflows`() {
+        let payload = Self.mixPayload(models: [
+            ("gpt-5.4", .codex, Int.max),
+            ("gpt-5.4", .openrouter, 1),
+            ("claude-sonnet-4", .claude, 10),
+        ])
+
+        #expect(ShareStatsCardView.mixSegments(for: payload, otherColor: .gray).isEmpty)
+    }
+
+    @Test
+    func `share route accepts only the exact widget URL`() throws {
+        #expect(ShareStatsRoute.parse(ShareStatsRoute.overviewURL) == .overview)
+        for raw in [
+            "codexbar://share-stats",
+            "codexbar://share-stats?version=2",
+            "codexbar://share-stats?version=1&provider=codex",
+            "codexbar://share-stats?version=1#fragment",
+            "codexbar://settings?version=1",
+            "codexbar://share-stats/extra?version=1",
+            "https://share-stats?version=1",
+        ] {
+            let url = try #require(URL(string: raw))
+            #expect(ShareStatsRoute.parse(url) == nil, "\(raw)")
+        }
+    }
+
+    @Test
+    func `share route handoff waits for the status controller on cold launch`() {
+        var handoff = ShareStatsRouteHandoff()
+        var delivered: [ShareStatsRoute] = []
+
+        #expect(!handoff.deliverIfPossible { _ in Issue.record("nothing is pending"); return true })
+
+        handoff.enqueue(.overview)
+        #expect(!handoff.deliverIfPossible { _ in false })
+        #expect(handoff.pendingRoute == .overview)
+
+        #expect(handoff.deliverIfPossible { route in
+            delivered.append(route)
+            return true
+        })
+        #expect(delivered == [.overview])
+        #expect(handoff.pendingRoute == nil)
+        #expect(!handoff.deliverIfPossible { _ in true })
     }
 
     @Test
@@ -460,6 +558,26 @@ struct ShareStatsTests {
     }
 
     private static let date = Date(timeIntervalSince1970: 1_783_382_400)
+
+    private static func mixPayload(
+        models: [(name: String, provider: UsageProvider, tokens: Int)]) -> ShareStatsPayload
+    {
+        ShareStatsPayload(
+            days: 30,
+            periodEnd: self.date,
+            providers: [],
+            topModels: models.map { model in
+                ShareStatsModelPayload(
+                    provider: model.provider,
+                    providerName: model.provider.rawValue,
+                    modelName: model.name,
+                    currencyCode: "USD",
+                    totalTokens: model.tokens,
+                    estimatedCost: nil)
+            },
+            currencies: [],
+            totalTokens: nil)
+    }
 
     private static func hash(_ value: String, into fingerprint: inout UInt64) {
         for byte in value.utf8 {

@@ -194,8 +194,15 @@ struct ShareStatsCardView: View {
     }
 
     private var mixSegments: [ShareStatsMixSegment] {
+        Self.mixSegments(for: self.payload, otherColor: self.secondary)
+    }
+
+    /// Groups models by display name across serving providers, keeps the four largest
+    /// families, and folds the rest into one "Other" segment. Fails closed to an empty
+    /// mix when any family total overflows.
+    static func mixSegments(for payload: ShareStatsPayload, otherColor: Color) -> [ShareStatsMixSegment] {
         let families = Dictionary(
-            grouping: self.payload.topModels.filter { ($0.totalTokens ?? 0) > 0 },
+            grouping: payload.topModels.filter { ($0.totalTokens ?? 0) > 0 },
             by: \.modelName)
         let models = families.compactMap { name, rows -> (name: String, tokens: Int)? in
             guard let tokens = CheckedSum.integers(rows.compactMap(\.totalTokens)) else { return nil }
@@ -220,7 +227,7 @@ struct ShareStatsCardView: View {
                 name: "Other model families",
                 share: remainder / total,
                 tokenText: ShareStatsFormatting.compactCount(Int(remainder)),
-                color: self.secondary))
+                color: otherColor))
         }
         return segments
     }
@@ -255,7 +262,7 @@ struct ShareStatsCardView: View {
     }
 }
 
-private struct ShareStatsMixSegment {
+struct ShareStatsMixSegment {
     let name: String
     let share: Double
     let tokenText: String

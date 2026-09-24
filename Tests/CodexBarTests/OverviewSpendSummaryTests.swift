@@ -40,6 +40,7 @@ struct OverviewSpendSummaryTests {
             providerCount: 4)
 
         #expect(summary.primarySpendText == "~$759.56")
+        #expect(summary.spendAmounts == ["~$759.56"])
         #expect(summary.providerCoverageText == "3 of 4 subscriptions have spend")
         #expect(summary.tokenText == "~\(15.7.formatted())M tokens")
         #expect(summary.historyCoverageText == "Coverage: 30 / 30")
@@ -70,6 +71,8 @@ struct OverviewSpendSummaryTests {
 
         #expect(summary.primarySpendText.contains("$12.00"))
         #expect(summary.primarySpendText.contains("€8.00"))
+        #expect(summary.spendAmounts.count == 2)
+        #expect(summary.primarySpendText == summary.spendAmounts.joined(separator: " · "))
         #expect(summary.providerCoverageText == "2 of 2 subscriptions have spend")
         #expect(summary.tokenText == "3K tokens")
         #expect(summary.historyCoverageText == "Coverage: 7 / 7")
@@ -91,6 +94,7 @@ struct OverviewSpendSummaryTests {
             providerCount: 1)
 
         #expect(summary.primarySpendText == "Spend unavailable")
+        #expect(summary.spendAmounts == ["Spend unavailable"])
         #expect(summary.providerCoverageText == "0 of 1 subscriptions have spend")
         #expect(summary.pricingCoverageText == "Priced 0 · Unpriced 1 · Unmetered 0 · Estimated 0")
         #expect(summary.provenanceText == "Spend unavailable")
