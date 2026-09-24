@@ -424,9 +424,13 @@ enum ShareStatsFormatting {
     }
 
     static func coverageFraction(covered: Int, payload: ShareStatsPayload) -> String {
-        self.isAllTime(payload)
-            ? "\(covered) days"
-            : "\(covered)/\(payload.days) days"
+        if !self.isAllTime(payload) {
+            "\(covered)/\(payload.days) days"
+        } else if covered == 1 {
+            "1 day"
+        } else {
+            "\(covered) days"
+        }
     }
 
     static func text(_ payload: ShareStatsPayload) -> String {

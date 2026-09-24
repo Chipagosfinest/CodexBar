@@ -77,6 +77,19 @@ struct ShareStatsTests {
         #expect(!text.contains("/\(SpendDashboardSource.scanDays) days"))
     }
 
+    @Test(arguments: [(0, "0 days"), (1, "1 day"), (10, "10 days")])
+    func `all-time coverage counts days with singular grammar`(covered: Int, expected: String) {
+        let payload = ShareStatsPayload(
+            days: SpendDashboardSource.scanDays,
+            periodEnd: Self.date,
+            providers: [],
+            topModels: [],
+            currencies: [],
+            totalTokens: nil)
+
+        #expect(ShareStatsFormatting.coverageFraction(covered: covered, payload: payload) == expected)
+    }
+
     @Test
     func `payload sanitizer excludes emails identifiers paths and prompts`() throws {
         let model = Self.dashboard(models: [
