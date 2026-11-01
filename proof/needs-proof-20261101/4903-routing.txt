@@ -1,0 +1,3 @@
+Auto source with saved cookieSource=auto: ollama.api -> ollama.web
+Auto source with saved cookieSource=manual: ollama.web
+Auto source with saved cookieSource=off: ollama.api

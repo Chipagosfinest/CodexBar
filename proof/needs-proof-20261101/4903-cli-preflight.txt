@@ -1,0 +1,10 @@
+PR #4903
+Source HEAD: 11935aee6ec16fe23595dbddaada349562218547
+Executable SHA256: f746fba330c0981faf397764073c59111e8c4009c311cd8de4311e89b9df137f
+Command: CodexBarCLI usage --provider ollama --source api --json --no-color
+Config: isolated synthetic enabled provider without credentials. No browser import.
+Exit: 1
+STDOUT:
+[{"provider":"ollama","error":{"code":1,"message":"No available fetch strategy for ollama.","kind":"provider"},"source":"api"}]
+
+STDERR:

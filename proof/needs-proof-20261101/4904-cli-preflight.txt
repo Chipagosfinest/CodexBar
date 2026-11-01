@@ -1,0 +1,10 @@
+PR #4904
+Source HEAD: a18f3fcd2788afc832ad64f2d9458cf6774f6ed9
+Executable SHA256: 3763526bb599cab87136613c5f13e0e0fa96dada7079474dfb88327ad9a6f2e8
+Command: CodexBarCLI usage --provider aiand --source api --json --no-color
+Config: isolated synthetic enabled provider without credentials. No browser import.
+Exit: 1
+STDOUT:
+[{"provider":"aiand","source":"api","error":{"code":1,"message":"No available fetch strategy for aiand.","kind":"provider"}}]
+
+STDERR:
