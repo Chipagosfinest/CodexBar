@@ -1,0 +1,24 @@
+overview-3-dark: content 399pt, 3 rows
+overview-3-dark: rows ["claude", "codex", "cursor"]
+overview-3-dark: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewLinesHeader", "overviewRow-claude", "overviewRow-codex", "overviewRow-cursor", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-3-dark: 310x417
+overview-8-dark: content 559pt, 8 rows
+overview-8-dark: rows ["claude", "gemini", "copilot", "codex", "cursor", "factory", "kimi", "windsurf"]
+overview-8-dark: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewLinesHeader", "overviewRow-claude", "overviewRow-gemini", "overviewRow-copilot", "overviewRow-codex", "overviewRow-cursor", "overviewRow-factory", "overviewRow-kimi", "overviewRow-windsurf", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-8-dark: 310x577
+overview-8-urgent-dark: content 559pt, 7 rows
+overview-8-urgent-dark: rows ["codex", "gemini", "claude", "copilot", "cursor", "factory", "windsurf"]
+overview-8-urgent-dark: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewLinesHeader", "overviewRow-codex", "overviewRow-gemini", "overviewAttention", "overviewRow-claude", "overviewRow-copilot", "overviewRow-cursor", "overviewRow-factory", "overviewRow-windsurf", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-8-urgent-dark: 310x577
+overview-3-light: content 399pt, 3 rows
+overview-3-light: rows ["claude", "codex", "cursor"]
+overview-3-light: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewLinesHeader", "overviewRow-claude", "overviewRow-codex", "overviewRow-cursor", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-3-light: 310x417
+overview-8-light: content 559pt, 8 rows
+overview-8-light: rows ["claude", "gemini", "copilot", "codex", "cursor", "factory", "kimi", "windsurf"]
+overview-8-light: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewLinesHeader", "overviewRow-claude", "overviewRow-gemini", "overviewRow-copilot", "overviewRow-codex", "overviewRow-cursor", "overviewRow-factory", "overviewRow-kimi", "overviewRow-windsurf", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-8-light: 310x577
+overview-8-urgent-light: content 559pt, 7 rows
+overview-8-urgent-light: rows ["codex", "gemini", "claude", "copilot", "cursor", "factory", "windsurf"]
+overview-8-urgent-light: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewLinesHeader", "overviewRow-codex", "overviewRow-gemini", "overviewAttention", "overviewRow-claude", "overviewRow-copilot", "overviewRow-cursor", "overviewRow-factory", "overviewRow-windsurf", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-8-urgent-light: 310x577

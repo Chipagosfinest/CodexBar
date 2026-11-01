@@ -1,0 +1,16 @@
+overview-3-dark: content 782pt, 3 rows
+overview-3-dark: rows ["codex", "claude", "cursor"]
+overview-3-dark: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewRow-codex", "---", "overviewRow-claude", "---", "overviewRow-cursor", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-3-dark: 310x800 | after hover: 310x402, 310x800
+overview-8-dark: content 1223pt, 6 rows
+overview-8-dark: rows ["codex", "claude", "cursor", "factory", "gemini", "copilot"]
+overview-8-dark: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewRow-codex", "---", "overviewRow-claude", "---", "overviewRow-cursor", "---", "overviewRow-factory", "---", "overviewRow-gemini", "---", "overviewRow-copilot", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-8-dark: 310x975 | after hover: 310x402, 310x975
+overview-3-light: content 782pt, 3 rows
+overview-3-light: rows ["codex", "claude", "cursor"]
+overview-3-light: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewRow-codex", "---", "overviewRow-claude", "---", "overviewRow-cursor", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-3-light: 310x800 | after hover: 310x402, 310x800
+overview-8-light: content 1223pt, 6 rows
+overview-8-light: rows ["codex", "claude", "cursor", "factory", "gemini", "copilot"]
+overview-8-light: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewRow-codex", "---", "overviewRow-claude", "---", "overviewRow-cursor", "---", "overviewRow-factory", "---", "overviewRow-gemini", "---", "overviewRow-copilot", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-8-light: 310x975 | after hover: 310x402, 310x975

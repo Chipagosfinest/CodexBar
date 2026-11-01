@@ -1,0 +1,8 @@
+overview-3-dark: content 782pt, 3 rows
+overview-3-dark: rows ["codex", "claude", "cursor"]
+overview-3-dark: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewRow-codex", "---", "overviewRow-claude", "---", "overviewRow-cursor", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-3-dark: 310x800 | after hover: 310x946, 310x800
+overview-3-light: content 782pt, 3 rows
+overview-3-light: rows ["codex", "claude", "cursor"]
+overview-3-light: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewRow-codex", "---", "overviewRow-claude", "---", "overviewRow-cursor", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
+overview-3-light: 310x800 | after hover: 310x946, 310x800

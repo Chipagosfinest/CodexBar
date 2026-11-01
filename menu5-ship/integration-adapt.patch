@@ -1,0 +1,133 @@
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+OverviewLines.swift b/Sources/CodexBar/StatusItem/StatusItemController+OverviewLines.swift
+index b84b5505e..25cd7b34c 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+OverviewLines.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+OverviewLines.swift
+@@ -28,8 +28,9 @@ extension StatusItemController {
+                 account: row.accountID == nil ? nil : model.email))
+         }
+         let sorted = OverviewProviderLine.sortedByUrgency(lines)
++        let visibleLines = sorted.prefix(Self.overviewInlineRowLimit)
+         // The heads describe bars and percentages, so they need at least one row that has them.
+-        if sorted.contains(where: { $0.percent != nil }),
++        if visibleLines.contains(where: { $0.percent != nil }),
+            let style = rows.lazy.compactMap({ $0.model?.metrics.first?.percentStyle }).first
+         {
+             menu.addItem(self.makeMenuCardItem(
+@@ -42,7 +43,7 @@ extension StatusItemController {
+             menuWidth: menuWidth,
+             interactionMenu: interactionMenu)
+         var attentionAdded = attention == nil
+-        for line in sorted {
++        for line in visibleLines {
+             guard let row = entries[line.id] else { continue }
+             // A signed-out provider is stopped now, so it follows only the limits about to stop.
+             if !attentionAdded, line.status != .critical, let attention {
+@@ -73,6 +74,7 @@ extension StatusItemController {
+             }
+             menu.addItem(item)
+         }
++        self.addOverviewOverflowItemIfNeeded(sorted.compactMap { entries[$0.id] }, to: menu)
+         return true
+     }
+ 
+@@ -84,7 +86,7 @@ extension StatusItemController {
+     {
+         let instanceID = row.provider
+         let submenu = row.accountID == nil
+-            ? row.model.flatMap { self.makeOverviewRowSubmenu(provider: line.provider, model: $0, width: menuWidth) }
++            ? self.makeOverviewLineSubmenu(provider: line.provider, width: menuWidth)
+             : nil
+         let item = self.makeMenuCardItem(
+             OverviewProviderLineView(line: line, width: menuWidth),
+diff --git a/Tests/CodexBarTests/StatusMenuOverviewSubmenuTests.swift b/Tests/CodexBarTests/StatusMenuOverviewSubmenuTests.swift
+index d354dd76a..b49213630 100644
+--- a/Tests/CodexBarTests/StatusMenuOverviewSubmenuTests.swift
++++ b/Tests/CodexBarTests/StatusMenuOverviewSubmenuTests.swift
+@@ -4,6 +4,23 @@ import Testing
+ @testable import CodexBar
+ 
+ extension StatusMenuTests {
++    /// Rows open a flyout whose nested row holds the chart, so the first level stays one card.
++    private func flyoutChartID(of row: NSMenuItem, controller: StatusItemController) throws -> String? {
++        let flyout = try #require(row.submenu)
++        _ = controller.hydrateHostedSubviewMenuIfNeeded(flyout, width: 310)
++        return flyout.items.lazy
++            .compactMap { $0.submenu?.items.first?.representedObject as? String }
++            .first
++    }
++
++    private func flyoutShowDetailsItem(of row: NSMenuItem, controller: StatusItemController) throws -> NSMenuItem {
++        let flyout = try #require(row.submenu)
++        _ = controller.hydrateHostedSubviewMenuIfNeeded(flyout, width: 310)
++        return try #require(flyout.items.first {
++            $0.action == #selector(StatusItemController.selectOverviewProvider(_:))
++        })
++    }
++
+     @Test
+     func `overview rows expose provider detail submenus`() throws {
+         self.disableMenuCardsForTesting()
+@@ -54,9 +71,8 @@ extension StatusMenuTests {
+         let openAIRow = try #require(menu.items.first {
+             ($0.representedObject as? String) == "overviewRow-openai"
+         })
+-        #expect(openAIRow.submenu?.items.contains {
+-            ($0.representedObject as? String) == StatusItemController.costHistoryChartID
+-        } == true)
++        #expect(
++            try self.flyoutChartID(of: openAIRow, controller: controller) == StatusItemController.costHistoryChartID)
+     }
+ 
+     @Test
+@@ -115,12 +131,8 @@ extension StatusMenuTests {
+         let opencodegoRow = try #require(menu.items.first {
+             ($0.representedObject as? String) == "overviewRow-opencodego"
+         })
+-        #expect(opencodegoRow.submenu?.items.contains {
+-            ($0.representedObject as? String) == StatusItemController.usageHistoryChartID
+-        } == true)
+-        #expect(opencodegoRow.submenu?.items.contains {
+-            ($0.representedObject as? String) == StatusItemController.costHistoryChartID
+-        } == false)
++        #expect(try self.flyoutChartID(of: opencodegoRow, controller: controller)
++            == StatusItemController.usageHistoryChartID)
+     }
+ 
+     @Test
+@@ -173,7 +185,7 @@ extension StatusMenuTests {
+         let zaiRow = try #require(menu.items.first {
+             ($0.representedObject as? String) == "overviewRow-zai"
+         })
+-        #expect(zaiRow.submenu == nil)
++        #expect(try self.flyoutChartID(of: zaiRow, controller: controller) == nil)
+         let details = try #require(store.snapshot(for: .zai)?.details.first)
+         #expect(details.title == "Quota details")
+         #expect(details.rows.contains { $0.label == "MCP quota" && $0.value == "50% used" })
+@@ -230,9 +242,10 @@ extension StatusMenuTests {
+         }
+         defer { controller._test_openMenuRebuildObserver = nil }
+ 
+-        let action = try #require(cursorRow.action)
+-        let target = try #require(cursorRow.target as? StatusItemController)
+-        _ = target.perform(action, with: cursorRow)
++        let showDetails = try self.flyoutShowDetailsItem(of: cursorRow, controller: controller)
++        let action = try #require(showDetails.action)
++        let target = try #require(showDetails.target as? StatusItemController)
++        _ = target.perform(action, with: showDetails)
+ 
+         #expect(settings.mergedMenuLastSelectedWasOverview == false)
+         #expect(settings.selectedMenuProvider == .cursor)
+@@ -298,9 +311,10 @@ extension StatusMenuTests {
+         }
+         defer { controller._test_openMenuRebuildObserver = nil }
+ 
+-        let action = try #require(cursorRow.action)
+-        let target = try #require(cursorRow.target as? StatusItemController)
+-        _ = target.perform(action, with: cursorRow)
++        let showDetails = try self.flyoutShowDetailsItem(of: cursorRow, controller: controller)
++        let action = try #require(showDetails.action)
++        let target = try #require(showDetails.target as? StatusItemController)
++        _ = target.perform(action, with: showDetails)
+         controller.menuDidClose(menu)
+ 
+         await Task.yield()
