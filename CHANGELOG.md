@@ -2,6 +2,12 @@
 
 ## 0.83.1 — Unreleased
 
+### Changed
+
+- Menu bar: stale titles and their leading logo dim inside the template image, so they stay legible on tinted and translucent menu bars instead of rendering as dark secondary text.
+- Menu bar: pace shows a small red dot only when usage runs ahead of pace; reserve and even pace stay plain text, and stale data never raises it.
+- Menu bar: Color by provider tints only the provider logo; figures keep the neutral menu bar text color. Layout figures use tabular digits by default so live values do not shift neighboring items.
+
 ## 0.83.0 — 2026-10-31
 
 ### Highlights

@@ -150,7 +150,7 @@ struct MenuBarProviderColorTests {
         settings.selectedMenuProvider = .claude
         settings.menuBarIconStyle = style
         settings.menuBarColorByProvider = true
-        settings.menuBarLayout = MenuBarLayout(lines: [[.percent(window: .session)]])
+        settings.menuBarLayout = MenuBarLayout(lines: [[.icon, .percent(window: .session)]])
         for provider in UsageProvider.allCases {
             if let metadata = ProviderRegistry.shared.metadata[provider] {
                 settings.setProviderEnabled(
@@ -180,10 +180,11 @@ struct MenuBarProviderColorTests {
         }
         func isColored() -> Bool {
             if style == .iconAndPercent {
+                // Provider color reaches only the brand mark attachment; the title text stays neutral.
                 guard button.attributedTitle.length > 0 else { return false }
-                let color = button.attributedTitle.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor
-                let accent = ProviderAccentPalette.color(for: .claude)
-                return color == NSColor(srgbRed: accent.red, green: accent.green, blue: accent.blue, alpha: 1)
+                let attachment = button.attributedTitle.attribute(
+                    .attachment, at: 0, effectiveRange: nil) as? NSTextAttachment
+                return attachment?.image?.isTemplate == false
             }
             return button.image?.isTemplate == false
         }
@@ -215,7 +216,7 @@ struct MenuBarProviderColorTests {
     // MARK: - Layout Rendering & Attributed Output
 
     @Test(arguments: ["aqua", "darkAqua"])
-    func `color by provider tints brand icon and percent tokens`(appearance: String) throws {
+    func `color by provider tints only the brand icon and keeps text neutral`(appearance: String) throws {
         let renderer = MenuBarLayoutRenderer()
         let icon = NSImage(size: NSSize(width: 16, height: 16))
         icon.isTemplate = true
@@ -229,15 +230,17 @@ struct MenuBarProviderColorTests {
         #expect(plain.leadingIcon != nil)
         #expect(plain.leadingIcon?.isTemplate == true)
 
-        // Opt-in (colorByProvider: true) -> tinted attributed title with attachment icon
+        // Opt-in (colorByProvider: true) -> tinted icon attachment, neutral text
         let coloredOptions = self.options(appearanceName: appearance, colorByProvider: true)
         let colored = renderer.render(layout: layout, data: data, icon: icon, options: coloredOptions)
         #expect(colored.leadingIcon == nil)
         #expect(colored.statusImage == nil)
 
-        let expectedAccent = ProviderAccentPalette.color(for: .claude)
+        let iconAttachment = colored.attributedTitle.attribute(
+            .attachment, at: 0, effectiveRange: nil) as? NSTextAttachment
+        #expect(iconAttachment?.image?.isTemplate == false)
 
-        // Verify percent tokens have the accent color applied
+        // Figures keep the neutral control text color
         let title = colored.attributedTitle
         let string = title.string
         let sessionRange = (string as NSString).range(of: "25%")
@@ -247,13 +250,8 @@ struct MenuBarProviderColorTests {
 
         let sessionColor = title.attribute(.foregroundColor, at: sessionRange.location, effectiveRange: nil) as? NSColor
         let weeklyColor = title.attribute(.foregroundColor, at: weeklyRange.location, effectiveRange: nil) as? NSColor
-        let expectedColor = NSColor(
-            srgbRed: expectedAccent.red,
-            green: expectedAccent.green,
-            blue: expectedAccent.blue,
-            alpha: 1.0)
-        #expect(sessionColor == expectedColor)
-        #expect(weeklyColor == expectedColor)
+        #expect(sessionColor == .controlTextColor)
+        #expect(weeklyColor == .controlTextColor)
 
         // Button application applies attributed title directly without button image
         let button = NSButton()
@@ -263,7 +261,7 @@ struct MenuBarProviderColorTests {
     }
 
     @Test
-    func `color by provider preserves pace colors when both are enabled`() throws {
+    func `color by provider keeps text neutral and preserves pace warnings`() throws {
         let renderer = MenuBarLayoutRenderer()
         let layout = MenuBarLayout(lines: [[.percent(window: .session), .pace(window: .weekly)]])
         let data = self.data(provider: .codex)
@@ -281,14 +279,9 @@ struct MenuBarProviderColorTests {
         let percentColor = title.attribute(.foregroundColor, at: percentRange.location, effectiveRange: nil) as? NSColor
         let paceColor = title.attribute(.foregroundColor, at: paceRange.location, effectiveRange: nil) as? NSColor
 
-        let codexAccent = ProviderAccentPalette.color(for: .codex)
-        let expectedCodexColor = NSColor(
-            srgbRed: codexAccent.red,
-            green: codexAccent.green,
-            blue: codexAccent.blue,
-            alpha: 1.0)
-        #expect(percentColor == expectedCodexColor)
+        #expect(percentColor == .controlTextColor)
         #expect(paceColor == .systemRed)
+        #expect(output.statusImage == nil)
     }
 
     @Test(arguments: [false, true])
@@ -308,18 +301,20 @@ struct MenuBarProviderColorTests {
         defer { ProviderAccentPalette._test_reset() }
         let renderer = MenuBarLayoutRenderer()
         let options = self.options(appearanceName: appearance, colorByProvider: true)
-        let layout = MenuBarLayout(lines: [[.percent(window: .session)]])
+        let layout = MenuBarLayout(lines: [[.icon, .percent(window: .session)]])
+        let icon = NSImage(size: NSSize(width: 16, height: 16))
+        icon.isTemplate = true
         func render(accent: String) -> MenuBarLayoutRenderedTitle {
             ProviderAccentPalette.apply(config: CodexBarConfig(providers: [
                 ProviderConfig(id: .claude, accentColor: accent),
             ]))
-            return renderer.render(layout: layout, data: self.data(provider: .claude), icon: nil, options: options)
+            return renderer.render(layout: layout, data: self.data(provider: .claude), icon: icon, options: options)
         }
         let before = render(accent: "#CC7C5E")
         let after = render(accent: "#49A3B0")
         #expect(!before.attributedTitle.isEqual(to: after.attributedTitle))
         let fallback = render(accent: appearance == "darkAqua" ? "#444444" : "#AAAAAA")
-        #expect(fallback.statusImage?.isTemplate == true)
+        #expect(fallback.leadingIcon?.isTemplate == true)
         #expect(fallback.attributedTitle.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor
             == .controlTextColor)
     }
@@ -342,7 +337,8 @@ struct MenuBarProviderColorTests {
         let stale = renderer.render(layout: layout, data: data, icon: nil, options: staleOptions)
         let staleColor = stale.attributedTitle.attribute(
             .foregroundColor, at: 0, effectiveRange: nil) as? NSColor
-        #expect(staleColor == .secondaryLabelColor)
+        #expect(staleColor == .controlTextColor)
+        #expect(stale.statusImage?.isTemplate == true)
     }
 
     // MARK: - Offscreen Proof PNG Generation
@@ -482,7 +478,7 @@ struct MenuBarProviderColorTests {
             }
             if c.colorByProvider, !c.isHighlighted, !c.isStale, !c.highContrast {
                 #expect(warmIconPixels > 10, "\(c.name): icon must retain rendered provider color")
-                #expect(warmTextPixels > 20, "\(c.name): text must retain rendered provider color")
+                #expect(warmTextPixels == 0, "\(c.name): figures stay neutral; only the mark carries provider color")
             } else {
                 #expect(warmIconPixels + warmTextPixels == 0, "\(c.name): fallback must render monochrome")
             }

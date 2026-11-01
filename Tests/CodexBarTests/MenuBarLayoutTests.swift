@@ -1178,8 +1178,8 @@ struct MenuBarLayoutTests {
 
         settings.setMenuBarLayout(global, for: nil)
         settings.setMenuBarLayout(provider, for: .claude)
-        #expect(!settings.menuBarLayoutMonospacedDigits)
-        settings.menuBarLayoutMonospacedDigits = true
+        #expect(settings.menuBarLayoutMonospacedDigits)
+        settings.menuBarLayoutMonospacedDigits = false
         settings.menuBarLayoutSize = size
         settings.menuBarLayoutGap = .tight
 
@@ -1191,7 +1191,7 @@ struct MenuBarLayoutTests {
         #expect(reloaded.menuBarLayout(for: .codex) == global)
         #expect(reloaded.menuBarLayout(for: .claude) == provider)
         #expect(reloaded.menuBarLayoutSize == size)
-        #expect(reloaded.menuBarLayoutMonospacedDigits)
+        #expect(!reloaded.menuBarLayoutMonospacedDigits)
         #expect(reloaded.menuBarLayoutGap == .tight)
 
         reloaded.removeMenuBarLayoutOverride(for: .claude)

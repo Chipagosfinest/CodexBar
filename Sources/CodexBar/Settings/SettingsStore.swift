@@ -635,7 +635,8 @@ extension SettingsStore {
             storedMenuBarLayout: storedMenuBarLayout,
             menuBarLayoutConditionals: menuBarLayoutConditionals,
             menuBarLayoutOverridesRaw: menuBarLayoutOverridesRaw,
-            menuBarLayoutMonospacedDigits: userDefaults.bool(forKey: "menuBarLayoutMonospacedDigits"),
+            menuBarLayoutMonospacedDigits: userDefaults
+                .object(forKey: "menuBarLayoutMonospacedDigits") as? Bool ?? true,
             menuBarLayoutShowWindowLabels: userDefaults
                 .object(forKey: "menuBarLayoutShowWindowLabels") as? Bool ?? true,
             menuBarLayoutSizeRaw: userDefaults.string(forKey: "menuBarLayoutSize")

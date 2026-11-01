@@ -1468,7 +1468,7 @@ struct MenuBarLayoutRendererTests {
     }
 
     @Test
-    func `stale title dims foreground while keeping the snapshot visible`() {
+    func `stale title dims inside the template status image while keeping the snapshot visible`() throws {
         let renderer = MenuBarLayoutRenderer()
         let fresh = renderer.render(
             layout: MenuBarLayout(lines: [[.percent(window: .automatic)]]),
@@ -1482,10 +1482,60 @@ struct MenuBarLayoutRendererTests {
             options: self.options(isStale: true))
 
         #expect(stale.attributedTitle.string == fresh.attributedTitle.string)
+        // Secondary or translucent title colors resolve dark on tinted menu bars; the dim lives in the template.
         #expect(stale.attributedTitle
-            .attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor == .secondaryLabelColor)
-        #expect(fresh.attributedTitle
             .attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor == .controlTextColor)
+        let staleImage = try #require(stale.statusImage)
+        let freshImage = try #require(fresh.statusImage)
+        #expect(staleImage.isTemplate)
+        let staleAlpha = Self.maximumAlpha(of: staleImage)
+        let freshAlpha = Self.maximumAlpha(of: freshImage)
+        #expect(freshAlpha > 0.5)
+        #expect(abs(staleAlpha / freshAlpha - 0.5) < 0.1)
+    }
+
+    @Test
+    func `stale leading icon joins the dimmed template`() throws {
+        let icon = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { rect in
+            NSColor.black.setFill()
+            rect.fill()
+            return true
+        }
+        icon.isTemplate = true
+        let stale = MenuBarLayoutRenderer().render(
+            layout: MenuBarLayout(lines: [[.icon, .percent(window: .automatic)]]),
+            data: self.data(),
+            icon: icon,
+            options: self.options(isStale: true))
+        #expect(stale.leadingIcon == nil)
+        let image = try #require(stale.statusImage)
+        #expect(image.isTemplate)
+        #expect(Self.maximumAlpha(of: image) < 0.6)
+    }
+
+    static func maximumAlpha(of image: NSImage) -> CGFloat {
+        guard let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(image.size.width * 2),
+            pixelsHigh: Int(image.size.height * 2),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0) else { return 0 }
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
+        image.draw(in: NSRect(x: 0, y: 0, width: rep.pixelsWide, height: rep.pixelsHigh))
+        NSGraphicsContext.restoreGraphicsState()
+        var maximum: CGFloat = 0
+        for x in 0..<rep.pixelsWide {
+            for y in 0..<rep.pixelsHigh {
+                maximum = max(maximum, rep.colorAt(x: x, y: y)?.alphaComponent ?? 0)
+            }
+        }
+        return maximum
     }
 
     @Test(arguments: [
@@ -2134,7 +2184,7 @@ struct MenuBarLayoutRendererTests {
     }
 
     @Test
-    func `pace state bars keep signed text neutral and scale with the font`() throws {
+    func `pace warning dot keeps signed text neutral and scales with the font`() throws {
         for size in MenuBarLayoutSize.allCases {
             let rendered = MenuBarLayoutRenderer().render(
                 layout: MenuBarLayout(lines: [[.pace(window: .weekly)]]),
@@ -2145,8 +2195,8 @@ struct MenuBarLayoutRendererTests {
             let attachment = try #require(title.attribute(.attachment, at: 0, effectiveRange: nil)
                 as? NSTextAttachment)
             let font = try #require(title.attribute(.font, at: 0, effectiveRange: nil) as? NSFont)
-            #expect(attachment.bounds.height == font.capHeight)
-            #expect(attachment.bounds.width == font.capHeight / 2)
+            #expect(attachment.bounds.height == max(4, (font.capHeight * 0.62).rounded()))
+            #expect(attachment.bounds.width == attachment.bounds.height)
             #expect(title.attribute(.foregroundColor, at: title.length - 1, effectiveRange: nil) as? NSColor
                 == .controlTextColor)
             #expect(rendered.accessibilityLabel.contains("+11%"))
@@ -2154,10 +2204,11 @@ struct MenuBarLayoutRendererTests {
     }
 
     @Test
-    func `pace colors follow reserve and ahead values and toggle invalidates cache`() {
+    func `pace color warns only when ahead and toggle invalidates cache`() {
         let renderer = MenuBarLayoutRenderer()
+        // A reserve (session) stays plain text: color is reserved for running ahead of pace.
         let cases: [(PercentWindow, NSColor)] = [
-            (.session, .systemGreen), (.weekly, .systemRed), (.automatic, .controlTextColor),
+            (.session, .controlTextColor), (.weekly, .systemRed), (.automatic, .controlTextColor),
             (.spend, .systemRed),
         ]
         for (window, expectedColor) in cases {
@@ -2171,12 +2222,12 @@ struct MenuBarLayoutRendererTests {
                 == expectedColor)
             #expect(colored.accessibilityLabel == plain.accessibilityLabel)
             #expect(plain.statusImage?.isTemplate == true)
-            #expect((colored.statusImage == nil) == (window != .automatic))
+            #expect((colored.statusImage == nil) == (expectedColor == .systemRed))
             let button = NSButton()
             for output in [plain, colored] {
                 _ = StatusItemController.applyMenuBarLayoutContent(output, for: button, gap: .regular)
             }
-            if window != .automatic {
+            if expectedColor == .systemRed {
                 #expect(button.image == nil)
                 #expect(button.attributedTitle.isEqual(to: colored.attributedTitle))
             }
@@ -2230,7 +2281,7 @@ struct MenuBarLayoutRendererTests {
         #expect(!neutral.accessibilityLabel.contains("+11%"))
     }
 
-    @Test(arguments: ["aqua", "darkAqua"], ["regular", "stale", "highContrast", "staleHighContrast"])
+    @Test(arguments: ["aqua", "darkAqua"], ["regular", "highContrast", "staleHighContrast"])
     func `colored pace reaches native button across supported layouts`(appearance: String, mode: String) throws {
         let renderer = MenuBarLayoutRenderer()
         let icon = NSImage(size: NSSize(width: 16, height: 16))
@@ -2255,25 +2306,38 @@ struct MenuBarLayoutRendererTests {
             _ = StatusItemController.applyMenuBarLayoutContent(output, for: button, gap: .regular)
             let range = (button.attributedTitle.string as NSString).range(of: "\u{FFFC}", options: .backwards)
             try #require(range.location != NSNotFound)
-            let expected = mode == "stale" ? NSColor.systemRed.withAlphaComponent(0.5) : .systemRed
             #expect(button.attributedTitle.attribute(
                 .foregroundColor,
                 at: range.location,
                 effectiveRange: nil) as? NSColor
-                == expected)
+                == .systemRed)
             #expect(button.accessibilityTitle() == output.accessibilityLabel)
         }
     }
 
     @Test
-    func `stale pace colors remain dimmed`() {
-        let rendered = MenuBarLayoutRenderer().render(
-            layout: MenuBarLayout(lines: [[.pace(window: .weekly)]]),
-            data: self.data(),
-            icon: nil,
-            options: self.options(isStale: true, colorPace: true))
-        #expect(rendered.attributedTitle.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor
-            == NSColor.systemRed.withAlphaComponent(0.5))
+    func `stale pace never raises the warning color`() {
+        let icon = NSImage(size: NSSize(width: 16, height: 16))
+        icon.isTemplate = true
+        for lines: [[MenuBarLayoutToken]] in [
+            [[.pace(window: .weekly)]],
+            [[.icon, .pace(window: .weekly)]],
+            [[.providerName], [.pace(window: .weekly)]],
+        ] {
+            let rendered = MenuBarLayoutRenderer().render(
+                layout: MenuBarLayout(lines: lines),
+                data: self.data(),
+                icon: icon,
+                options: self.options(isStale: true, colorPace: true))
+            rendered.attributedTitle.enumerateAttribute(
+                .foregroundColor,
+                in: NSRange(location: 0, length: rendered.attributedTitle.length))
+            { color, _, _ in
+                #expect(color as? NSColor == .controlTextColor)
+            }
+            #expect(rendered.statusImage?.isTemplate == true)
+            #expect(rendered.attributedTitle.string.hasSuffix("+11%"))
+        }
     }
 
     @Test(arguments: [false, true])
@@ -2354,7 +2418,7 @@ struct MenuBarLayoutRendererTests {
         #expect(data.weeklyPace == "+11%")
         #expect(self.renderToken(.pace(window: .spend), data: data).attributedTitle.string == "–")
 
-        // The pace color reads the Spend delta as well: a reserve is green while weekly pace is a deficit.
+        // The pace color reads the Spend delta as well: a Spend reserve stays neutral while weekly pace is a deficit.
         var reserve = MenuBarLayoutRenderMetrics.unavailable
         reserve.spendPaceDelta = -6
         let colored = MenuBarLayoutRenderer().render(
@@ -2363,7 +2427,8 @@ struct MenuBarLayoutRendererTests {
             icon: nil,
             options: self.options(colorPace: true))
         #expect(colored.attributedTitle.attribute(.foregroundColor, at: 0, effectiveRange: nil) as? NSColor
-            == .systemGreen)
+            == .controlTextColor)
+        #expect(!colored.attributedTitle.string.contains("\u{FFFC}"))
     }
 
     @Test
@@ -2727,7 +2792,6 @@ extension MenuBarLayoutRendererTests {
         let plain = MenuBarLayout(lines: [[.percent(window: .automatic)]])
         let highContrast = self.options(highContrast: true)
         let cases: [(MenuBarLayout, MenuBarLayoutRenderOptions)] = [
-            (plain, self.options(isStale: true)),
             (plain, highContrast),
             (MenuBarLayout(lines: [[.icon, .percent(window: .automatic)]]), self.options()),
             (MenuBarLayout(lines: [[.icon]]), self.options()),

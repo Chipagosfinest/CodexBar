@@ -313,6 +313,7 @@ final class MenuBarLayoutRenderer {
     private static let stackedBaselineOffset: CGFloat = -3 // Center multi-line NSStatusBarButton titles.
     private static let windowPrefixKey = NSAttributedString.Key("CodexBarWindowPrefix")
     private static let singleLineBaselineOffset: CGFloat = -1 // Drop single-line titles slightly for optical centering.
+    private static let staleTemplateAlpha: CGFloat = 0.5
 
     private struct TokenStyle {
         let font: NSFont
@@ -463,9 +464,15 @@ final class MenuBarLayoutRenderer {
         let font = options.monospacedDigits
             ? NSFont.monospacedDigitSystemFont(ofSize: fontSize, weight: isStacked ? .medium : .regular)
             : NSFont.systemFont(ofSize: fontSize, weight: isStacked ? .medium : .regular)
-        let providerTintColor = Self.effectiveProviderTintColor(for: data.provider.firstPartyProvider, options: options)
-        let foregroundColor = providerTintColor ?? Self.neutralForegroundColor(options)
+        // Provider color only ever reaches the brand mark; text stays neutral so figures read at menu bar size.
+        let rendersIcon = icon != nil && renderedLines.joined().contains(.icon)
+        let providerTintColor = rendersIcon
+            ? Self.effectiveProviderTintColor(for: data.provider.firstPartyProvider, options: options) : nil
+        let foregroundColor = Self.neutralForegroundColor(options)
         let isTintActive = providerTintColor != nil
+        // Stale content is dimmed inside the template status image: AppKit resolves secondary or translucent
+        // title colors outside the menu bar's vibrant appearance, which renders them dark on tinted menu bars.
+        let dimsStaleTemplate = options.isStale && !options.highContrast && !isTintActive
         let paragraphStyle = NSMutableParagraphStyle()
         if isStacked {
             let lineHeight: CGFloat = options.size == .large ? 11 : 9.5
@@ -493,7 +500,9 @@ final class MenuBarLayoutRenderer {
         // High-contrast layouts keep icon + text together for consistent rendering.
         // Provider-colored layouts keep the icon in attributed title to preserve the custom tint.
         // With a missing icon the token still renders its placeholder inside the title.
-        let leadingIcon: NSImage? = if options.highContrast || (isStacked && !canSurfaceStackedIcon) || isTintActive {
+        let leadingIcon: NSImage? = if options.highContrast || (isStacked && !canSurfaceStackedIcon) || isTintActive
+            || dimsStaleTemplate
+        {
             nil
         } else if renderedLines.first?.first == .icon, icon != nil {
             icon.map { Self.offsetLeadingIcon($0, adjustment: options.verticalAdjustment) }
@@ -579,14 +588,34 @@ final class MenuBarLayoutRenderer {
         let accessibilityLabel = accessibilityLines.enumerated().map { index, line in
             index == 0 ? line : "\(L("menu_bar_layout_line", index + 1)), \(line)"
         }.joined(separator: ", ")
+        let statusImage = !options.highContrast && !isTintActive && leadingIcon == nil
+            && result.string.filter(\.isNewline).count == max(0, renderedLines.count - 1)
+            ? Self.statusImage(
+                title: result,
+                foregroundColor: foregroundColor,
+                alpha: dimsStaleTemplate ? Self.staleTemplateAlpha : 1)
+            : nil
+        if dimsStaleTemplate, statusImage == nil {
+            // Rich titles (color glyphs, multiline labels) keep native rendering with the secondary label color.
+            Self.replaceForegroundColor(foregroundColor, with: .secondaryLabelColor, in: result)
+        }
         return MenuBarLayoutRenderedTitle(
             attributedTitle: result,
             accessibilityLabel: accessibilityLabel,
             leadingIcon: leadingIcon,
-            statusImage: !options.highContrast && !options.isStale && !isTintActive && leadingIcon == nil
-                && result.string.filter(\.isNewline).count == max(0, renderedLines.count - 1)
-                ? Self.statusImage(title: result, foregroundColor: foregroundColor)
-                : nil)
+            statusImage: statusImage)
+    }
+
+    private static func replaceForegroundColor(
+        _ color: NSColor,
+        with replacement: NSColor,
+        in title: NSMutableAttributedString)
+    {
+        let range = NSRange(location: 0, length: title.length)
+        title.enumerateAttribute(.foregroundColor, in: range) { value, subrange, _ in
+            guard value as? NSColor == color else { return }
+            title.addAttribute(.foregroundColor, value: replacement, range: subrange)
+        }
     }
 
     private static func removeDuplicateBalanceResets(
@@ -645,7 +674,11 @@ final class MenuBarLayoutRenderer {
             statusImage: highContrast ? nil : self.statusImage(title: title, foregroundColor: .labelColor))
     }
 
-    private static func statusImage(title: NSAttributedString, foregroundColor: NSColor) -> NSImage? {
+    private static func statusImage(
+        title: NSAttributedString,
+        foregroundColor: NSColor,
+        alpha: CGFloat = 1) -> NSImage?
+    {
         guard title.length > 0 else { return nil }
         // Preserve colored glyphs and attachments; monochrome attachment masks may join the template.
         let line = CTLineCreateWithAttributedString(title)
@@ -676,7 +709,12 @@ final class MenuBarLayoutRenderer {
         // Drawing handlers preserve the destination scale; the template lets AppKit own highlight and inactive tinting.
         // Capture immutable content only: AppKit can call the handler away from the main thread.
         let image = NSImage(size: size, flipped: false) { _ in
+            // A transparency layer dims glyphs and attachment images together; attachments ignore the context alpha.
+            let context = NSGraphicsContext.current?.cgContext
+            context?.setAlpha(alpha)
+            context?.beginTransparencyLayer(auxiliaryInfo: nil)
             immutableTitle.draw(with: titleRect, options: [.usesLineFragmentOrigin, .usesFontLeading])
+            context?.endTransparencyLayer()
             return true
         }
         image.isTemplate = true
@@ -806,27 +844,22 @@ final class MenuBarLayoutRenderer {
         case let .pace(window):
             let accessibilityPrefix = item.editorLabel(provider: data.provider.firstPartyProvider)
             let pace = Self.pace(window, data: data)
-            let neutralColor = Self.neutralForegroundColor(options)
             var attributes = style.attributes
-            attributes[.foregroundColor] = neutralColor
+            attributes[.foregroundColor] = Self.neutralForegroundColor(options)
             let rendered = self.optionalTextToken(
                 pace,
                 unavailableLabel: L("%@ unavailable", accessibilityPrefix),
                 accessibilityPrefix: accessibilityPrefix,
                 attributes: attributes)
-            guard options.colorPace, let pace, !pace.isEmpty else { return rendered }
-
-            var indicatorColor = neutralColor
-            var isMonochrome = true
-            if let delta = Self.paceDelta(window, data: data), delta.isFinite, delta != 0 {
-                // Use the same rounded numeric delta as the displayed text, never its localized sign.
-                let color: NSColor = delta < 0 ? .systemGreen : .systemRed
-                indicatorColor = options.isStale && !options.highContrast ? color
-                    .withAlphaComponent(0.5) : color
-                isMonochrome = false
-            }
+            // The indicator only appears as a warning: running ahead of pace. A reserve or even pace stays plain
+            // text, and stale data never raises it (high contrast keeps native colored titles).
+            // Use the same rounded numeric delta as the displayed text, never its localized sign.
+            guard options.colorPace, let pace, !pace.isEmpty,
+                  let delta = Self.paceDelta(window, data: data), delta.isFinite, delta > 0,
+                  !options.isStale || options.highContrast
+            else { return rendered }
             let result = NSMutableAttributedString(attributedString: Self.paceIndicator(
-                color: indicatorColor, style: style, isMonochrome: isMonochrome))
+                color: .systemRed, style: style))
             result.append(NSAttributedString(string: "\u{2009}", attributes: attributes))
             result.append(rendered.value)
             return (result, rendered.accessibilityText)
@@ -1210,7 +1243,8 @@ final class MenuBarLayoutRenderer {
     }
 
     private static func neutralForegroundColor(_ options: MenuBarLayoutRenderOptions) -> NSColor {
-        options.highContrast ? .labelColor : options.isStale ? .secondaryLabelColor : .controlTextColor
+        // Stale titles dim through the template status image (or `.secondaryLabelColor` as a rich-title fallback).
+        options.highContrast ? .labelColor : .controlTextColor
     }
 
     /// Provider color is decoration; native monochrome owns stale, selected and accessible states.
@@ -1480,15 +1514,15 @@ extension MenuBarLayoutRenderer {
         return (result, accessibility)
     }
 
-    private static func paceIndicator(color: NSColor, style: TokenStyle, isMonochrome: Bool) -> NSAttributedString {
-        let height = style.font.capHeight
-        let size = NSSize(width: height / 2, height: height)
+    private static func paceIndicator(color: NSColor, style: TokenStyle) -> NSAttributedString {
+        let diameter = max(4, (style.font.capHeight * 0.62).rounded())
+        let size = NSSize(width: diameter, height: diameter)
         let image = NSImage(size: size, flipped: false) { rect in
             color.setFill()
-            NSBezierPath(rect: rect).fill()
+            NSBezierPath(ovalIn: rect).fill()
             return true
         }
-        image.isTemplate = isMonochrome
+        image.isTemplate = false
         let attachment = NSTextAttachment()
         attachment.image = image
         attachment.bounds = NSRect(

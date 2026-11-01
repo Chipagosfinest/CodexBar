@@ -14,7 +14,7 @@ struct MenuBarLayoutV5PersistenceTests {
             } onChange: {
                 changed()
             }
-            settings.menuBarLayoutMonospacedDigits = true
+            settings.menuBarLayoutMonospacedDigits = false
         }
     }
 
@@ -23,7 +23,8 @@ struct MenuBarLayoutV5PersistenceTests {
         let defaults = InMemoryUserDefaults()
         let settings = testSettingsStore(suiteName: "typography-generation", userDefaults: defaults)
         #expect(settings.menuBarLayoutSize == .regular)
-        #expect(!settings.menuBarLayoutMonospacedDigits)
+        // Tabular figures are the default so live values do not shift neighboring menu bar items.
+        #expect(settings.menuBarLayoutMonospacedDigits)
         #expect(defaults.object(forKey: "menuBarLayoutMonospacedDigits") == nil)
 
         let layout = MenuBarLayout(lines: [[.icon, .progressBar(window: .session)]])
@@ -32,7 +33,7 @@ struct MenuBarLayoutV5PersistenceTests {
         let keys = ["menuBarLayoutV5", "menuBarLayoutV4", "menuBarLayoutOverridesV5", "menuBarLayoutOverridesV4"]
         let before = keys.map { defaults.data(forKey: $0) }
         settings.menuBarLayoutSize = .large
-        settings.menuBarLayoutMonospacedDigits = true
+        settings.menuBarLayoutMonospacedDigits = false
         #expect(keys.map { defaults.data(forKey: $0) } == before)
 
         let projected = try JSONDecoder().decode(
@@ -42,7 +43,7 @@ struct MenuBarLayoutV5PersistenceTests {
         #expect(returned.menuBarLayout == layout)
         #expect(returned.menuBarLayoutOverrides[.codex] == layout)
         #expect(returned.menuBarLayoutSize == .large)
-        #expect(returned.menuBarLayoutMonospacedDigits)
+        #expect(!returned.menuBarLayoutMonospacedDigits)
     }
 
     @Test
