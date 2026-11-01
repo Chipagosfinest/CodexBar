@@ -21,7 +21,6 @@ jobs:
     env:
       PROOF_PR: ${{ matrix.pr }}
       PROOF_SHA: ${{ matrix.sha }}
-      PROOF_OUTPUT: ${{ runner.temp }}/proof-${{ matrix.pr }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -32,6 +31,8 @@ jobs:
       - name: Select installed Xcode and record environment
         shell: bash
         run: |
+          export PROOF_OUTPUT="$RUNNER_TEMP/proof-$PROOF_PR"
+          echo "PROOF_OUTPUT=$PROOF_OUTPUT" >> "$GITHUB_ENV"
           mkdir -p "$PROOF_OUTPUT"
           python3 - <<'PY'
           import os, pathlib, re, subprocess
