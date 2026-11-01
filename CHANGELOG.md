@@ -2,6 +2,10 @@
 
 ## 0.83.1 — Unreleased
 
+### Changed
+
+- Dropdown: Overview's compact layout is now the default: one line per provider (logo, tightest limit, bar, percent, reset), most urgent first, and a click opens its tab. Row height no longer depends on quota windows or errors, a signed-out provider gets one red row instead of disappearing, and up to 12 providers appear. Detailed stays in Settings.
+
 ## 0.83.0 — 2026-10-31
 
 ### Highlights

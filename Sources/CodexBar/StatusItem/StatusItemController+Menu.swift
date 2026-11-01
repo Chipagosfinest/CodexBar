@@ -595,6 +595,8 @@ extension StatusItemController {
             menu.addItem(.separator())
         }
 
+        if self.addOverviewLinesIfCompact(rows, menu, providerScopes, menuWidth, interactionMenu) { return true }
+
         for (index, row) in rows.enumerated() {
             let instanceID = row.provider
             if index > 0 { menu.addItem(.separator()) }
