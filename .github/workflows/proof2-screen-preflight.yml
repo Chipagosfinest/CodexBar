@@ -1,0 +1,40 @@
+name: Proof2 actual-screen preflight
+on:
+  push:
+    branches: [proof2-screen-preflight]
+permissions:
+  contents: read
+jobs:
+  capture:
+    runs-on: macos-15
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Compile and capture actual onscreen menu
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/screen-proof"
+          sw_vers > "$RUNNER_TEMP/screen-proof/receipt.txt"
+          launchctl managername >> "$RUNNER_TEMP/screen-proof/receipt.txt"
+          swiftc proof2-preflight/Screen.swift -o "$RUNNER_TEMP/screen-preflight"
+          "$RUNNER_TEMP/screen-preflight" > "$RUNNER_TEMP/screen-proof/app.log" 2>&1 &
+          fixture_pid=$!
+          sleep 3
+          set +e
+          screencapture -x "$RUNNER_TEMP/screen-proof/screen.png" >> "$RUNNER_TEMP/screen-proof/receipt.txt" 2>&1
+          echo "screenshot_exit=$?" >> "$RUNNER_TEMP/screen-proof/receipt.txt"
+          screencapture -v -V 2 "$RUNNER_TEMP/screen-proof/screen.mov" >> "$RUNNER_TEMP/screen-proof/receipt.txt" 2>&1 &
+          capture_pid=$!
+          (sleep 10; kill "$capture_pid" 2>/dev/null) &
+          watchdog_pid=$!
+          wait "$capture_pid"
+          echo "video_exit=$?" >> "$RUNNER_TEMP/screen-proof/receipt.txt"
+          kill "$watchdog_pid" "$fixture_pid" 2>/dev/null
+          ls -l "$RUNNER_TEMP/screen-proof" >> "$RUNNER_TEMP/screen-proof/receipt.txt"
+          exit 0
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: actual-screen-preflight
+          path: ${{ runner.temp }}/screen-proof
+          retention-days: 3
