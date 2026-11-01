@@ -701,7 +701,7 @@ extension SettingsStore {
             jetbrainsIDEBasePath: userDefaults.string(forKey: "jetbrainsIDEBasePath") ?? "",
             mergeIcons: userDefaults.object(forKey: "mergeIcons") as? Bool ?? true,
             mergedOverviewLayoutRaw: userDefaults.string(forKey: "mergedOverviewLayout")
-                ?? MergedOverviewLayout.detailed.rawValue,
+                ?? MergedOverviewLayout.compact.rawValue,
             mergedOverviewAllAccounts: userDefaults.bool(forKey: "mergedOverviewAllAccounts"),
             switcherShowsIcons: userDefaults.object(forKey: "switcherShowsIcons") as? Bool ?? true,
             mergeIconsStacked: userDefaults.object(forKey: "mergeIconsStacked") as? Bool ?? false,

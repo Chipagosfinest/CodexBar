@@ -10,7 +10,7 @@ struct UsageMenuCardHeaderAndUsageSectionView: View {
         VStack(alignment: .leading, spacing: 0) {
             UsageMenuCardHeaderSectionView(
                 model: self.layoutModel,
-                showDivider: true,
+                showDivider: false,
                 width: self.width)
             UsageMenuCardUsageSectionView(
                 model: self.model,

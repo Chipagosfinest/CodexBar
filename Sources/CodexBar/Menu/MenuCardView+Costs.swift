@@ -19,6 +19,15 @@ struct ProviderCostContent: View {
                     .monospacedDigit()
                     .lineLimit(1)
             }
+        } else if self.section.balanceLine == nil, self.section.personalSpendLine == nil {
+            DenseMeterRow(
+                title: self.section.title,
+                percent: self.section.displayPercent,
+                isCritical: (self.section.percentUsed ?? 0) >= 90,
+                accessibilityLabel: self.section.progressAccessibilityLabel,
+                value: self.section.spendLine)
+                .help([self.section.percentLine, self.section.dailyTargetText]
+                    .compactMap(\.self).joined(separator: "\n"))
         } else {
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .firstTextBaseline) {

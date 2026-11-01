@@ -10,6 +10,40 @@ struct MetricRow: View {
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
     var body: some View {
+        if self.compact, self.metric.statusText == nil {
+            self.denseBody
+        } else {
+            self.fullBody
+        }
+    }
+
+    /// One line per limit. Pace, targets and notes stay in the tooltip unless they change what to do next.
+    private var denseBody: some View {
+        let presentation = self.metric.linePresentation(title: self.title)
+        return VStack(alignment: .leading, spacing: 1) {
+            DenseMeterRow(
+                title: self.title,
+                percent: self.metric.percent,
+                isCritical: self.metric.isNearLimit,
+                accessibilityLabel: self.metric.percentStyle.accessibilityLabel,
+                value: self.metric.percentLabel,
+                trailing: self.metric.resetText.map(DenseMeterRow.shortReset))
+            if let warning = self.metric.denseWarningText {
+                Text(warning)
+                    .font(.caption2)
+                    .foregroundStyle(self.metric.detailIsPaceDerived
+                        ? MenuHighlightStyle.error(self.isHighlighted)
+                        : MenuHighlightStyle.secondary(self.isHighlighted))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+        }
+        .help(self.metric.denseHelpText(presentation: presentation))
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private var fullBody: some View {
         let presentation = self.metric.linePresentation(title: self.title)
         let layoutPresentation = self.layoutMetric.linePresentation(title: self.title)
         VStack(alignment: .leading, spacing: 6) {

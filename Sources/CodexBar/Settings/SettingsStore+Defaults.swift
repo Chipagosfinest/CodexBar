@@ -916,7 +916,7 @@ extension SettingsStore {
     }
 
     var mergedOverviewLayout: MergedOverviewLayout {
-        get { MergedOverviewLayout(rawValue: self.defaultsState.mergedOverviewLayoutRaw) ?? .detailed }
+        get { MergedOverviewLayout(rawValue: self.defaultsState.mergedOverviewLayoutRaw) ?? .compact }
         set { self.setDefault(\.mergedOverviewLayoutRaw, newValue.rawValue, key: "mergedOverviewLayout") }
     }
 

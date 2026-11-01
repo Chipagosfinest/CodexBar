@@ -1153,13 +1153,15 @@ extension ProviderSwitcherView {
 
     fileprivate static func quotaIndicatorColor(
         for selection: ProviderSwitcherSelection,
-        remainingPercent _: Double) -> NSColor
+        remainingPercent: Double) -> NSColor
     {
+        // Logos carry provider identity; the bar's only colour signal is a limit that is close.
         switch selection {
-        case let .provider(instanceID):
-            guard let provider = instanceID.firstPartyProvider else { return NSColor.secondaryLabelColor }
-            let color = ProviderAccentPalette.color(for: provider)
-            return NSColor(deviceRed: color.red, green: color.green, blue: color.blue, alpha: 1)
+        case .provider:
+            return remainingPercent <= UsageMenuCardView.Model.Metric.nearLimitRemainingPercent
+                ? NSColor.systemRed
+                // Resolved once into a layer color, so it must read on both appearances.
+                : NSColor.systemGray
         case .overview:
             return NSColor.secondaryLabelColor
         }

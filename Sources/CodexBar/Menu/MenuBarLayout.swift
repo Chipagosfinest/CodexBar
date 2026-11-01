@@ -572,6 +572,8 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     case usageBar
     /// Graphical progress bar for a semantic window, drawn as an `NSTextAttachment` mini-bar.
     case progressBar(window: PercentWindow)
+    /// One thin bar per quota window, drawn as a single mask so AppKit tints it for any menu bar.
+    case usageMeters
     case resetCountdown
     case resetAbsolute
     /// Explicit reset windows keep separate discriminators so persisted automatic tokens stay unchanged.
@@ -599,7 +601,8 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     /// Synthesized `Codable` keys each case by name; `costWindow` pins the discriminator written before the
     /// case was renamed, because 0.73.0 discards a persisted layout containing an unknown token.
     private enum CodingKeys: String, CodingKey {
-        case icon, providerName, accountLabel, percent, lanePercent, extraPercent, pace, usageBar, progressBar
+        case icon, providerName, accountLabel, percent, lanePercent, extraPercent, pace
+        case usageBar, progressBar, usageMeters
         case resetCountdown, resetAbsolute, windowResetCountdown, windowResetAbsolute
         case runsOut, runsOutCompact, balance, costToday, tokensPerMinute, tokensSparkline
         case costWindow = "cost30d"
@@ -638,6 +641,7 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     /// V6 builds discard a layout holding an unknown token, so every new glyph reads as the original dot there.
     var v6Compatible: MenuBarLayoutToken {
         if case .separator = self { return .separatorDot }
+        if case .usageMeters = self { return .progressBar(window: .automatic) }
         return self
     }
 
@@ -646,6 +650,7 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     var v4Compatible: MenuBarLayoutToken {
         switch self {
         case let .progressBar(window): .percent(window: window)
+        case .usageMeters: .percent(window: .automatic)
         case .tokensPerMinute, .tokensSparkline: .hidden
         default: self
         }
@@ -672,7 +677,7 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     /// Tokens without an older representation are dropped after mapping graphical bars to percentages.
     var hasReleasedRepresentation: Bool {
         switch self {
-        case .extraPercent, .windowResetCountdown, .windowResetAbsolute, .progressBar, .tokensPerMinute,
+        case .extraPercent, .windowResetCountdown, .windowResetAbsolute, .progressBar, .usageMeters, .tokensPerMinute,
              .tokensSparkline: false
         default: true
         }
@@ -680,7 +685,7 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
 
     var hasV3Representation: Bool {
         switch self {
-        case .extraPercent, .progressBar, .tokensPerMinute, .tokensSparkline: false
+        case .extraPercent, .progressBar, .usageMeters, .tokensPerMinute, .tokensSparkline: false
         default: true
         }
     }
@@ -688,7 +693,7 @@ enum MenuBarLayoutToken: Codable, Hashable, Sendable {
     var hasLegacyRepresentation: Bool {
         switch self {
         case .conditional, .extraPercent, .hidden, .windowResetCountdown, .windowResetAbsolute,
-             .progressBar, .tokensPerMinute, .tokensSparkline: false
+             .progressBar, .usageMeters, .tokensPerMinute, .tokensSparkline: false
         default: true
         }
     }
@@ -970,6 +975,7 @@ enum MenuBarLayoutPreset: String, CaseIterable, Identifiable, Sendable {
     case percentAndReset
     case compactStacked
     case barsStacked
+    case iconAndMeters
     case custom
 
     var id: String {
@@ -999,6 +1005,8 @@ enum MenuBarLayoutPreset: String, CaseIterable, Identifiable, Sendable {
                 [.progressBar(window: .session), .windowResetCountdown(window: .session)],
                 [.progressBar(window: .weekly), .windowResetCountdown(window: .weekly)],
             ])
+        case .iconAndMeters:
+            MenuBarLayout(lines: [[.icon, .usageMeters]])
         case .custom:
             nil
         }

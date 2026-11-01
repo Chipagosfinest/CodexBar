@@ -26,6 +26,20 @@ struct InlineUsageDashboardModel: Equatable {
         let title: String
         let value: String
         let emphasis: Bool
+        /// Muted second figure under the value, such as the same period's tokens.
+        var detail: String?
+    }
+
+    struct TopModel: Equatable, Identifiable {
+        let id: String
+        let name: String
+        let shareFraction: Double
+        let value: String
+        let tier: ModelEffortTier
+
+        var shareText: String {
+            self.shareFraction < 0.01 ? "<1%" : "\(Int((self.shareFraction * 100).rounded()))%"
+        }
     }
 
     struct Point: Equatable, Identifiable {
@@ -65,6 +79,14 @@ struct InlineUsageDashboardModel: Equatable {
     /// Nil for token/points dashboards.
     var currencyCode: String?
     var chartTitle: String?
+    /// Up to three figures on one line, with depth in the Cost submenu. Dashboards without that submenu leave this
+    /// empty and keep every figure and detail line inline.
+    var summaryKPIs: [KPI] = []
+    var topModels: [TopModel] = []
+
+    var displayedSummaryKPIs: [KPI] {
+        self.summaryKPIs.isEmpty ? self.kpis : self.summaryKPIs
+    }
 }
 
 extension UsageMenuCardView.Model {
@@ -401,6 +423,23 @@ extension UsageMenuCardView.Model {
         model.quotaWindows = quota.rows
         model.currencyCode = displayCurrencyCode
         model.chartTitle = L("Daily spend · %@", period)
+        model.summaryKPIs = Self.summaryKPIs(
+            input: input,
+            today: .init(
+                title: todayKPI.title,
+                value: todayKPI.value,
+                emphasis: true,
+                detail: latest?.totalTokens.map(UsageFormatter.tokenCountString)),
+            leading: kpis.first,
+            quota: quota,
+            history: .init(
+                title: legacyMonth ? L("30d") : period,
+                value: historyCostKPI.value,
+                emphasis: true,
+                detail: tokenHistoryKPI.value))
+        model.topModels = Self.topModels(
+            from: snapshot.daily,
+            format: convertedString)
         return model
     }
 
@@ -659,6 +698,65 @@ extension UsageMenuCardView.Model {
         return String(trimmed.prefix(25)) + "…"
     }
 
+    /// At most three figures: today, the current quota window when known, and the history period.
+    private static func summaryKPIs(
+        input: Input,
+        today: InlineUsageDashboardModel.KPI,
+        leading: InlineUsageDashboardModel.KPI?,
+        quota: CostHistoryQuotaPresentation,
+        history: InlineUsageDashboardModel.KPI) -> [InlineUsageDashboardModel.KPI]
+    {
+        var summary = [today]
+        if input.provider == .cursor, let leading, leading.title != today.title {
+            summary.insert(leading, at: 0)
+        }
+        if quota.insertsKPIs || quota.relabelsHistory {
+            summary.append(.init(title: L("Window"), value: quota.costValue, emphasis: true, detail: quota.tokenValue))
+        }
+        if !quota.relabelsHistory {
+            summary.append(history)
+        }
+        return Array(summary.prefix(3))
+    }
+
+    /// Ranked by cost, then tokens. Shares are of every model's total, so three rows may sum below 100%.
+    static func topModels(
+        from entries: [CostUsageDailyReport.Entry],
+        limit: Int = 3,
+        format: (Double) -> String) -> [InlineUsageDashboardModel.TopModel]
+    {
+        guard self.topCostModel(from: entries) != nil else { return [] }
+        var scores: [String: (cost: Double, tokens: Int)] = [:]
+        for entry in entries {
+            for model in entry.modelBreakdowns ?? [] {
+                var score = scores[model.modelName] ?? (0, 0)
+                score.cost += model.costUSD ?? 0
+                score.tokens &+= model.totalTokens ?? 0
+                scores[model.modelName] = score
+            }
+        }
+        let totalCost = scores.values.reduce(0) { $0 + $1.cost }
+        let totalTokens = scores.values.reduce(0) { $0 + Double($1.tokens) }
+        let usesCost = totalCost > 0
+        let total = usesCost ? totalCost : totalTokens
+        guard total > 0 else { return [] }
+        return scores
+            .sorted { lhs, rhs in
+                if lhs.value.cost != rhs.value.cost { return lhs.value.cost > rhs.value.cost }
+                if lhs.value.tokens != rhs.value.tokens { return lhs.value.tokens > rhs.value.tokens }
+                return lhs.key < rhs.key
+            }
+            .prefix(limit)
+            .map { name, score in
+                InlineUsageDashboardModel.TopModel(
+                    id: name,
+                    name: self.shortModelName(name),
+                    shareFraction: (usesCost ? score.cost : Double(score.tokens)) / total,
+                    value: usesCost ? format(score.cost) : UsageFormatter.tokenCountString(score.tokens),
+                    tier: .classify(name))
+            }
+    }
+
     private static func topCostModel(from entries: [CostUsageDailyReport.Entry]) -> String? {
         guard entries.allSatisfy({
             $0.incompleteRequestCount == 0
@@ -696,35 +794,123 @@ struct InlineUsageDashboardContent: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
             self.kpis
+            if !self.model.topModels.isEmpty {
+                TopModelsContent(models: self.model.topModels, title: L("TOP MODELS"))
+            }
             if self.showsChart, !self.model.points.isEmpty {
                 MiniUsageBars(model: self.model)
-                    .frame(height: 58)
+                    .frame(height: 38)
                     .accessibilityElement(children: .contain)
                     .accessibilityLabel(self.model.accessibilityLabel)
             }
-            if !self.model.quotaWindows.isEmpty {
-                self.quotaWindows
+            if self.model.summaryKPIs.isEmpty {
+                ForEach(Array(self.model.detailLines.enumerated()), id: \.offset) { _, line in
+                    Text(line)
+                        .font(.caption)
+                        .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                        .lineLimit(1)
+                }
             }
-            self.detailLines
         }
+        .help(self.model.detailLines.joined(separator: "\n"))
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var kpis: some View {
         LazyVGrid(
-            columns: [
-                GridItem(.flexible(minimum: 118), alignment: .leading),
-                GridItem(.flexible(minimum: 100), alignment: .leading),
-            ],
+            columns: Array(repeating: GridItem(.flexible(), alignment: .topLeading), count: 3),
             alignment: .leading,
             spacing: 6)
         {
-            ForEach(Array(self.model.kpis.enumerated()), id: \.offset) { _, kpi in
-                KPIBlock(title: kpi.title, value: kpi.value, emphasis: kpi.emphasis)
+            ForEach(Array(self.model.displayedSummaryKPIs.enumerated()), id: \.offset) { _, kpi in
+                KPIBlock(title: kpi.title, value: kpi.value, detail: kpi.detail, emphasis: kpi.emphasis)
             }
         }
+    }
+
+    private struct KPIBlock: View {
+        let title: String
+        let value: String
+        let detail: String?
+        let emphasis: Bool
+        @Environment(\.menuItemHighlighted) private var isHighlighted
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(self.title)
+                    .font(.caption2)
+                    .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                    .lineLimit(1)
+                Text(self.value)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .monospacedDigit()
+                    .foregroundStyle(MenuHighlightStyle.primary(self.isHighlighted))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.72)
+                if let detail = self.detail {
+                    Text(detail)
+                        .font(.caption2)
+                        .monospacedDigit()
+                        .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                        .lineLimit(1)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private struct MiniUsageBars: View {
+        let model: InlineUsageDashboardModel
+        @Environment(\.menuItemHighlighted) private var isHighlighted
+        @Environment(\.menuUsageBarSelection) private var injectedSelection
+        @State private var selectedPointID: String?
+
+        var body: some View {
+            let hoverSummary = self.model.points
+                .first(where: { $0.id == (self.injectedSelection ?? self.$selectedPointID).wrappedValue })?
+                .hoverDetail?.summary
+            let scale = UsageChartScale(values: self.model.points.compactMap(\.value))
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 6) {
+                    Text(hoverSummary ?? self.model.chartTitle ?? "")
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.72)
+                    Spacer(minLength: 4)
+                    if hoverSummary == nil, let currencyCode = self.model.currencyCode, scale.maximum > 0 {
+                        Text(UsageFormatter.compactCurrencyString(scale.maximum, currencyCode: currencyCode))
+                            .monospacedDigit()
+                    }
+                }
+                .font(.caption2)
+                .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                MenuUsageBarStrip(
+                    points: self.model.points.map(\.menuUsageBarPoint),
+                    baseColor: Color.primary.opacity(0.5),
+                    selection: self.injectedSelection ?? self.$selectedPointID)
+            }
+        }
+    }
+}
+
+/// The depth cut from the dropdown: recent quota windows and provenance, shown under the Cost submenu's chart.
+struct UsageWindowsDetailContent: View {
+    let model: InlineUsageDashboardModel
+    let width: CGFloat
+    @Environment(\.menuItemHighlighted) private var isHighlighted
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if !self.model.quotaWindows.isEmpty {
+                self.quotaWindows
+            }
+            self.detailLines
+        }
+        .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
+        .padding(.vertical, 8)
+        .frame(width: self.width, alignment: .leading)
     }
 
     private var quotaWindows: some View {
@@ -773,68 +959,6 @@ struct InlineUsageDashboardContent: View {
                     .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                     .lineLimit(1)
             }
-        }
-    }
-
-    private struct KPIBlock: View {
-        let title: String
-        let value: String
-        let emphasis: Bool
-        @Environment(\.menuItemHighlighted) private var isHighlighted
-
-        var body: some View {
-            VStack(alignment: .leading, spacing: 1) {
-                Text(self.title)
-                    .font(.caption2)
-                    .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(self.value)
-                    .font(self.emphasis ? .headline : .subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(MenuHighlightStyle.primary(self.isHighlighted))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.72)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-
-    private struct MiniUsageBars: View {
-        let model: InlineUsageDashboardModel
-        @Environment(\.menuItemHighlighted) private var isHighlighted
-        @Environment(\.menuUsageBarSelection) private var injectedSelection
-        @State private var selectedPointID: String?
-
-        var body: some View {
-            let scale = UsageChartScale(values: self.model.points.compactMap(\.value))
-            let hoverDetail = self.model.points
-                .first(where: { $0.id == (self.injectedSelection ?? self.$selectedPointID).wrappedValue })?
-                .hoverDetail
-            VStack(alignment: .trailing, spacing: 2) {
-                if let currencyCode = self.model.currencyCode {
-                    let scaleLabel = scale.maximum > 0
-                        ? UsageFormatter.compactCurrencyString(scale.maximum, currencyCode: currencyCode)
-                        : " "
-                    Text(hoverDetail?.summary ?? scaleLabel)
-                        .font(.caption2)
-                        .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
-                        .monospacedDigit()
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.72)
-                        .allowsTightening(true)
-                        .frame(maxWidth: .infinity, alignment: hoverDetail == nil ? .trailing : .leading)
-                        .opacity(hoverDetail != nil || scale.maximum > 0 ? 1 : 0)
-                        .accessibilityHidden(hoverDetail != nil)
-                }
-                MenuUsageBarStrip(
-                    points: self.model.points.map(\.menuUsageBarPoint),
-                    baseColor: self.baseColor,
-                    selection: self.injectedSelection ?? self.$selectedPointID)
-            }
-        }
-
-        private var baseColor: Color {
-            self.model.chartColor
         }
     }
 }

@@ -6,27 +6,15 @@ import Testing
 @MainActor
 struct InlineUsageDashboardLayoutTests {
     @Test(arguments: AppLanguage.allCases.filter { $0 != .system })
-    func `localized statistic headings reserve their full wrapped height`(language: AppLanguage) {
+    func `localized statistic headings stay on one line`(language: AppLanguage) {
         CodexBarLocalizationOverride.$appLanguage.withValue(language.rawValue) {
             let title = L("Estimated: %@", L("%@ tokens", L("Current window")))
-            let columnWidth: CGFloat = 130
-            let proposal = CGSize(width: columnWidth, height: .greatestFiniteMagnitude)
-            let fullTitleHeight = NSHostingController(rootView: Text(title).font(.caption2)
-                .fixedSize(horizontal: false, vertical: true)).sizeThatFits(in: proposal).height
-            let shortTitleHeight = NSHostingController(rootView: Text("X").font(.caption2))
-                .sizeThatFits(in: proposal).height
-            let dashboardProposal = CGSize(width: columnWidth * 2 + 8, height: .greatestFiniteMagnitude)
+            let proposal = CGSize(width: 278, height: CGFloat.greatestFiniteMagnitude)
             let shortHeight = NSHostingController(rootView: InlineUsageDashboardContent(model: Self.model(title: "X")))
-                .sizeThatFits(in: dashboardProposal).height
+                .sizeThatFits(in: proposal).height
             let fullHeight = NSHostingController(rootView: InlineUsageDashboardContent(model: Self.model(title: title)))
-                .sizeThatFits(in: dashboardProposal).height
-
-            #expect(
-                fullHeight - shortHeight >= fullTitleHeight - shortTitleHeight - 1,
-                "\(language.rawValue): the heading must fit without truncation")
-            if language == .english {
-                #expect(fullTitleHeight > shortTitleHeight)
-            }
+                .sizeThatFits(in: proposal).height
+            #expect(abs(fullHeight - shortHeight) <= 1, "\(language.rawValue): the summary keeps one measured height")
         }
     }
 

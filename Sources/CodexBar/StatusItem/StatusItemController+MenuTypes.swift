@@ -38,7 +38,9 @@ struct OverviewMenuCardRowView: View {
     let model: UsageMenuCardView.Model
     let storageText: String?
     let width: CGFloat
-    var layout: MergedOverviewLayout = .detailed
+    var layout: MergedOverviewLayout = .compact
+    /// Per-account overview rows need the identity; a provider row repeats what its tab already shows.
+    var showsAccount = false
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
     var body: some View {
@@ -49,7 +51,8 @@ struct OverviewMenuCardRowView: View {
                 UsageMenuCardHeaderSectionView(
                     model: self.model,
                     showDivider: Self.showsSectionDividers && self.model.hasUsageContent,
-                    width: self.width)
+                    width: self.width,
+                    showsAccount: self.layout == .detailed || self.showsAccount)
                 if self.model.hasUsageContent {
                     UsageMenuCardUsageSectionView(
                         model: self.model,
@@ -58,7 +61,8 @@ struct OverviewMenuCardRowView: View {
                         bottomPadding: 6,
                         width: self.width,
                         showsSectionDividers: Self.showsSectionDividers,
-                        compactMetrics: self.layout == .compact)
+                        compactMetrics: self.layout == .compact,
+                        denseMetrics: self.layout == .compact)
                 }
             }
             if let storageText {

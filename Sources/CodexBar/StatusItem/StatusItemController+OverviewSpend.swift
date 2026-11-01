@@ -94,45 +94,47 @@ struct OverviewSpendSummary: Equatable {
 struct OverviewSpendSummaryCardView: View {
     let summary: OverviewSpendSummary
     let days: Int
+    var topModels: [InlineUsageDashboardModel.TopModel] = []
     let width: CGFloat
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 7) {
-            HStack(spacing: 6) {
-                Text(L("Usage & Spend"))
-                    .font(.headline.weight(.semibold))
-                Text("·")
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(self.summary.primarySpendText)
+                    .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .layoutPriority(1)
                 Text(spendDashboardDayRangeText(self.days))
-            }
-            .foregroundStyle(.secondary)
-
-            Text(self.summary.primarySpendText)
-                .font(.system(.title2, design: .rounded, weight: .bold))
-                .monospacedDigit()
-                .lineLimit(2)
-
-            HStack(spacing: 8) {
-                Text(self.summary.providerCoverageText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer(minLength: 4)
                 if let tokenText = self.summary.tokenText {
-                    Text("·")
                     Text(tokenText)
+                        .font(.caption)
+                        .monospacedDigit()
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
                 }
             }
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .lineLimit(1)
-
-            Text("\(self.summary.historyCoverageText) · \(self.summary.provenanceText)")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-            Text(self.summary.pricingCoverageText)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
+            if self.summary.isPartial {
+                Text(self.summary.providerCoverageText)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            if !self.topModels.isEmpty {
+                TopModelsContent(models: self.topModels, title: L("TOP MODELS"))
+            }
         }
+        .help([
+            self.summary.providerCoverageText,
+            "\(self.summary.historyCoverageText) · \(self.summary.provenanceText)",
+            self.summary.pricingCoverageText,
+        ].joined(separator: "\n"))
         .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
-        .padding(.vertical, 10)
+        .padding(.vertical, 6)
         .frame(width: self.width, alignment: .leading)
     }
 }
@@ -160,6 +162,32 @@ extension StatusItemController {
             item.image = image
         }
         return item
+    }
+
+    /// Top models across every provider, in the dashboard's own ranking. Empty when its history is incomplete.
+    func overviewTopModels(model: SpendDashboardModel) -> [InlineUsageDashboardModel.TopModel] {
+        guard model.groups.count == 1, let group = model.groups.first,
+              group.modelHistoryCompleteness == .complete
+        else { return [] }
+        let rows = group.models
+        let totalCost = rows.compactMap(\.totalCost).reduce(0, +)
+        let totalTokens = rows.compactMap(\.totalTokens).reduce(0) { $0 + Double($1) }
+        let usesCost = totalCost > 0
+        let total = usesCost ? totalCost : totalTokens
+        guard total > 0 else { return [] }
+        return rows
+            .sorted { ($0.totalCost ?? 0, $0.totalTokens ?? 0) > ($1.totalCost ?? 0, $1.totalTokens ?? 0) }
+            .prefix(3)
+            .map { row in
+                InlineUsageDashboardModel.TopModel(
+                    id: row.id,
+                    name: row.modelName,
+                    shareFraction: (usesCost ? row.totalCost ?? 0 : Double(row.totalTokens ?? 0)) / total,
+                    value: usesCost
+                        ? UsageFormatter.currencyString(row.totalCost ?? 0, currencyCode: group.currencyCode)
+                        : UsageFormatter.tokenCountString(row.totalTokens ?? 0),
+                    tier: .classify(row.modelName))
+            }
     }
 
     @objc func presentOverviewShareStats() {

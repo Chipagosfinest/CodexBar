@@ -309,13 +309,13 @@ final class MenuBarLayoutTitleCache {
 @MainActor
 // swiftlint:disable:next type_body_length
 final class MenuBarLayoutRenderer {
-    private static let missingValue = "–"
+    static let missingValue = "–"
     private static let stackedBaselineOffset: CGFloat = -3 // Center multi-line NSStatusBarButton titles.
     private static let windowPrefixKey = NSAttributedString.Key("CodexBarWindowPrefix")
     private static let singleLineBaselineOffset: CGFloat = -1 // Drop single-line titles slightly for optical centering.
     private static let staleTemplateAlpha: CGFloat = 0.5
 
-    private struct TokenStyle {
+    struct TokenStyle {
         let font: NSFont
         let foregroundColor: NSColor
         let iconHeight: CGFloat
@@ -919,7 +919,7 @@ final class MenuBarLayoutRenderer {
         case .providerName, .accountLabel, .lanePercent, .extraPercent, .tokensPerMinute, .tokensSparkline,
              .spendAmount, .spendBudget:
             preconditionFailure("Provider text, throughput, and spend tokens should render before the main switch")
-        case .usageBar, .progressBar:
+        case .usageBar, .progressBar, .usageMeters:
             preconditionFailure("Usage meter tokens should render before the main switch")
         }
     }
@@ -954,6 +954,8 @@ final class MenuBarLayoutRenderer {
                 data: data,
                 style: style,
                 options: options)
+        case .usageMeters:
+            return self.usageMetersToken(data: data, style: style, options: options)
         default:
             return nil
         }
@@ -1052,7 +1054,7 @@ final class MenuBarLayoutRenderer {
     }
 
     /// A tagged lane announces its own title, so a monthly lane is never read out as "Weekly".
-    private static func windowAccessibilityLabel(_ window: PercentWindow, data: MenuBarLayoutRenderData) -> String {
+    static func windowAccessibilityLabel(_ window: PercentWindow, data: MenuBarLayoutRenderData) -> String {
         if let lane = self.taggedSemanticLane(window, data: data) {
             return data.laneLabels.label(for: lane)
         }
@@ -1162,7 +1164,7 @@ final class MenuBarLayoutRenderer {
             attributes: attributes)
     }
 
-    private static func percentValue(
+    static func percentValue(
         window: PercentWindow,
         rateWindow: MenuBarLayoutRenderWindow?,
         automaticText: String?,
@@ -1296,7 +1298,7 @@ final class MenuBarLayoutRenderer {
         return self.textToken(value, accessibilityText: resolvedAccessibilityText, attributes: attributes)
     }
 
-    private static func textToken(
+    static func textToken(
         _ value: String,
         accessibilityText: String?,
         attributes: [NSAttributedString.Key: Any])
@@ -1583,7 +1585,7 @@ extension MenuBarLayoutRenderer {
     /// shift is re-applied through `bounds.origin.y`, which is what AppKit actually uses to place
     /// `NSTextAttachment` images — without it the meter sits on the unshifted baseline and looks
     /// vertically off-center from the surrounding text (especially stacked rows at -3pt).
-    private static func attachmentText(_ attachment: NSTextAttachment, style: TokenStyle) -> NSAttributedString {
+    static func attachmentText(_ attachment: NSTextAttachment, style: TokenStyle) -> NSAttributedString {
         let value = NSMutableAttributedString(attachment: attachment)
         value.addAttributes(style.attributes, range: NSRange(location: 0, length: value.length))
         value.removeAttribute(.baselineOffset, range: NSRange(location: 0, length: value.length))
@@ -1592,7 +1594,7 @@ extension MenuBarLayoutRenderer {
 
     /// Centers a meter of `height` on the text cap band, then follows the run's `baselineOffset`
     /// (stacked/single-line base plus the user's vertical adjustment).
-    private static func attachmentYOrigin(height: CGFloat, style: TokenStyle) -> CGFloat {
+    static func attachmentYOrigin(height: CGFloat, style: TokenStyle) -> CGFloat {
         let shift = (style.attributes[.baselineOffset] as? NSNumber)?.doubleValue ?? 0
         return ((style.font.capHeight - height) / 2).rounded() + CGFloat(shift)
     }

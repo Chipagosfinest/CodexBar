@@ -7,6 +7,9 @@
 - Menu bar: stale titles and their leading logo dim inside the template image, so they stay legible on tinted and translucent menu bars instead of rendering as dark secondary text.
 - Menu bar: pace shows a small red dot only when usage runs ahead of pace; reserve and even pace stay plain text, and stale data never raises it.
 - Menu bar: Color by provider tints only the provider logo; figures keep the neutral menu bar text color. Layout figures use tabular digits by default so live values do not shift neighboring items.
+- Menu bar: new Icon + Progress bars layout draws one thin bar per quota window at a fixed width, with red only for a window near its limit.
+- Dropdown: much denser menu. Limits are single lines with neutral bars and red only near a limit; a favorable pace forecast moves to the tooltip while an unfavorable one stays visible. Today, window and 30-day figures share one row, top models with share and spend sit above a smaller daily chart, and recent windows move into the Cost submenu.
+- Dropdown: Overview defaults to the compact layout with a one-line spend total and top models across providers (Detailed stays in Settings). Status Page, Changelog, About and Check for Updates move under More.
 
 ## 0.83.0 — 2026-10-31
 

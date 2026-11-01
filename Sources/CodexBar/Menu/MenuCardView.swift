@@ -225,9 +225,8 @@ struct UsageMenuCardView: View {
                 planAction: self.planAction)
 
             if Self.hasDetails(for: liveModel) {
-                Divider()
-                    .padding(.top, UsageMenuCardLayout.headerContentSpacing)
-                    .padding(.bottom, Self.dividerBottomPadding(for: liveModel))
+                Spacer(minLength: 0)
+                    .frame(height: UsageMenuCardLayout.headerContentSpacing)
             }
 
             if !liveModel.usesStackedDetailLayout {
@@ -332,22 +331,66 @@ struct UsageMenuCardView: View {
     private static func hasDetails(for model: Model) -> Bool {
         model.hasUsageContent || model.usesStackedDetailLayout
     }
-
-    static func dividerBottomPadding(for model: Model) -> CGFloat {
-        if model.usesStackedDetailLayout, model.hasUsageContent {
-            return UsageMenuCardLayout.postHeaderDividerContentSpacing
-        }
-        return UsageMenuCardLayout.sectionBottomPadding
-    }
 }
 
 private struct UsageMenuCardHeaderView: View {
     let model: UsageMenuCardView.Model
     var planAction: (() -> Void)?
+    var showsAccount = true
     @Environment(\.menuItemHighlighted) private var isHighlighted
     @Environment(\.menuCardRefreshMonitor) private var refreshMonitor
 
     var body: some View {
+        if self.model.subtitleStyle != .error, self.model.lastKnownUsageText == nil {
+            self.singleLine
+        } else {
+            self.fullHeader
+        }
+    }
+
+    /// Name and plan lead, account and freshness trail. A long account shortens first; freshness stays whole.
+    private var singleLine: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text(self.model.providerName)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .lineLimit(1)
+                .layoutPriority(3)
+            if let plan = self.model.planText {
+                Group {
+                    if let planAction {
+                        Button(action: planAction) { Text(plan) }
+                            .buttonStyle(.plain)
+                            .menuCardInteractiveControl()
+                            .accessibilityLabel(plan)
+                    } else {
+                        Text(plan)
+                    }
+                }
+                .font(.caption)
+                .fontWeight(self.model.planEmphasis.isEmphasized ? .semibold : nil)
+                .foregroundStyle(self.model.planEmphasis.color(highlighted: self.isHighlighted))
+                .lineLimit(1)
+                .layoutPriority(2)
+            }
+            Spacer(minLength: 4)
+            if self.showsAccount {
+                Text(self.model.email)
+                    .font(.caption)
+                    .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+            }
+            let liveSubtitle = self.liveSubtitle
+            Text(MenuInlineCodeText.attributed(DenseMeterRow.shortFreshness(liveSubtitle.text)))
+                .font(.caption)
+                .foregroundStyle(self.subtitleColor(for: liveSubtitle.style))
+                .lineLimit(1)
+                .layoutPriority(2)
+        }
+    }
+
+    private var fullHeader: some View {
         VStack(alignment: .leading, spacing: UsageMenuCardLayout.headerLineSpacing) {
             HStack(alignment: .firstTextBaseline, spacing: UsageMenuCardLayout.headerColumnSpacing) {
                 Text(self.model.providerName).font(.headline)
@@ -589,10 +632,11 @@ struct UsageMenuCardHeaderSectionView: View {
     let model: UsageMenuCardView.Model
     let showDivider: Bool
     let width: CGFloat
+    var showsAccount = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: UsageMenuCardLayout.headerContentSpacing) {
-            UsageMenuCardHeaderView(model: self.model, planAction: nil)
+            UsageMenuCardHeaderView(model: self.model, planAction: nil, showsAccount: self.showsAccount)
 
             if self.showDivider {
                 Divider()
@@ -620,6 +664,8 @@ private struct UsageMenuCardUsageContentView: View {
     let showBottomDivider: Bool
     var showsSectionDividers = true
     var compactMetrics = false
+    /// One-line limits everywhere except the opt-in detailed overview.
+    var denseMetrics = true
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
     /// Doubao ships Coding Plan and Agent Plan subscriptions, each with personal
@@ -650,12 +696,12 @@ private struct UsageMenuCardUsageContentView: View {
                 layoutMetric: self.layoutModel.metrics.first { $0.id == metric.id } ?? metric,
                 title: UsageMenuCardView.popupMetricTitle(provider: self.model.provider, metric: metric),
                 progressColor: self.model.progressColor,
-                compact: self.compactMetrics)
+                compact: self.compactMetrics || self.denseMetrics)
         }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: self.denseMetrics ? 3 : 12) {
             if let split = self.doubaoSplitMetrics {
                 if !split.coding.isEmpty {
                     self.groupHeader("Coding Plan")
@@ -742,6 +788,7 @@ struct UsageMenuCardUsageSectionView: View {
     let width: CGFloat
     var showsSectionDividers = true
     var compactMetrics = false
+    var denseMetrics = true
     @Environment(\.menuCardRefreshMonitor) private var refreshMonitor
 
     var body: some View {
@@ -751,9 +798,10 @@ struct UsageMenuCardUsageSectionView: View {
             layoutModel: self.layoutModel,
             showBottomDivider: self.showBottomDivider,
             showsSectionDividers: self.showsSectionDividers,
-            compactMetrics: self.compactMetrics)
+            compactMetrics: self.compactMetrics,
+            denseMetrics: self.denseMetrics)
             .padding(.horizontal, UsageMenuCardLayout.horizontalPadding)
-            .padding(.top, UsageMenuCardLayout.usageSectionTopPadding)
+            .padding(.top, self.denseMetrics ? 0 : UsageMenuCardLayout.usageSectionTopPadding)
             .padding(.bottom, self.bottomPadding)
             .frame(width: self.width, alignment: .leading)
     }
@@ -811,30 +859,13 @@ private struct CreditsBarContent: View {
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(L("Credits"))
-                .font(.body)
-                .fontWeight(.medium)
-            if self.showsProgress, let progressPercent {
-                UsageProgressBar(
-                    percent: min(100, max(0, progressPercent)),
-                    tint: self.progressColor,
-                    accessibilityLabel: L("Credits remaining"))
-                HStack(alignment: .firstTextBaseline) {
-                    Text(self.creditsText)
-                        .font(.caption)
-                        .lineLimit(1)
-                    Spacer()
-                    if let scaleText {
-                        Text(scaleText)
-                            .font(.caption)
-                            .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
-                    }
-                }
-            } else {
-                Text(self.creditsText)
-                    .font(.caption)
-            }
+        VStack(alignment: .leading, spacing: 3) {
+            DenseMeterRow(
+                title: L("Credits"),
+                percent: self.showsProgress ? self.progressPercent.map { min(100, max(0, $0)) } : nil,
+                accessibilityLabel: L("Credits remaining"),
+                value: self.creditsText,
+                trailing: self.scaleText)
             if let hintText, !hintText.isEmpty {
                 Text(hintText)
                     .font(.footnote)

@@ -576,6 +576,7 @@ extension StatusItemController {
                 OverviewSpendSummaryCardView(
                     summary: spendSummary,
                     days: spendModel.requestedDays,
+                    topModels: self.overviewTopModels(model: spendModel),
                     width: menuWidth),
                 id: "overviewSpendSummary",
                 width: menuWidth,
@@ -597,7 +598,7 @@ extension StatusItemController {
 
         for (index, row) in rows.enumerated() {
             let instanceID = row.provider
-            if index > 0 { menu.addItem(.separator()) }
+            if index > 0, self.settings.mergedOverviewLayout == .detailed { menu.addItem(.separator()) }
             let identifier = "\(Self.overviewRowIdentifierPrefix)\(row.id)"
             guard let provider = instanceID.firstPartyProvider,
                   let model = row.model
@@ -629,7 +630,8 @@ extension StatusItemController {
                     model: model,
                     storageText: storageText,
                     width: menuWidth,
-                    layout: self.settings.mergedOverviewLayout),
+                    layout: self.settings.mergedOverviewLayout,
+                    showsAccount: row.accountID != nil),
                 id: identifier,
                 width: menuWidth,
                 heightCacheScope: provider.rawValue,
@@ -952,6 +954,8 @@ extension StatusItemController {
                             child.action = selector
                             child.target = self
                             child.representedObject = represented
+                            self.attachStatusComponentsSubmenuIfNeeded(
+                                to: child, action: action, provider: provider, width: width)
                         }
                         submenu.addItem(child)
                     }
@@ -1367,12 +1371,12 @@ extension StatusItemController {
             }
         }
         if hasExtraUsage {
-            addSectionSeparator()
+            if hasCredits { addSectionSeparator() }
             let extraUsageSubmenu = self.makeOpenAIAPIUsageSubmenu(provider: provider, width: width)
             let extraUsageView = UsageMenuCardExtraUsageSectionView(
                 model: model,
-                topPadding: sectionSpacing,
-                bottomPadding: bottomPadding,
+                topPadding: 0,
+                bottomPadding: 0,
                 width: width)
             menu.addItem(self.makeMenuCardItem(
                 extraUsageView,

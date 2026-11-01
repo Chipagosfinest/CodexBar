@@ -480,6 +480,19 @@ extension StatusItemController {
         chartItem.representedObject = Self.costHistoryChartID
         chartItem.toolTip = provider.rawValue
         submenu.addItem(chartItem)
+        if let dashboard = self.menuCardModel(for: provider)?.inlineUsageDashboard,
+           !dashboard.quotaWindows.isEmpty || !dashboard.detailLines.isEmpty
+        {
+            let detailView = MenuHostingView(rootView: UsageWindowsDetailContent(model: dashboard, width: width)
+                .codexBarLocalized())
+            detailView.frame = NSRect(origin: .zero, size: NSSize(width: width, height: 1))
+            detailView.layoutSubtreeIfNeeded()
+            detailView.frame.size.height = detailView.fittingSize.height
+            let detailItem = NSMenuItem()
+            detailItem.view = detailView
+            detailItem.isEnabled = false
+            submenu.addItem(detailItem)
+        }
         return true
     }
 
