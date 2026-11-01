@@ -1,6 +1,11 @@
 name: Widget desktop UI smoke
 on:
   workflow_dispatch:
+    inputs:
+      package_run:
+        description: Reuse package artifact from a previous proof run
+        type: string
+        default: ""
   push:
     branches: [proof/pr4890-installed]
 permissions:
@@ -25,7 +30,16 @@ jobs:
           git rev-parse HEAD > "$RUNNER_TEMP/proof/fixture-sha.txt"
           git show --format=fuller HEAD > "$RUNNER_TEMP/proof/fixture-and-product.patch"
           shasum -a 256 Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift Sources/CodexBarWidget/*.swift > "$RUNNER_TEMP/proof/source-hashes.txt"
+      - name: Download previously built proof package
+        if: inputs.package_run != '' && inputs.package_run != null
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: pr4890-package
+          run-id: ${{ inputs.package_run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/package
       - name: Package real app and WidgetKit extension
+        if: inputs.package_run == '' || inputs.package_run == null
         run: |
           set -euo pipefail
           command -v xcodegen || brew install xcodegen
@@ -34,6 +48,22 @@ jobs:
           codesign -d --entitlements :- CodexBar.app > "$RUNNER_TEMP/proof/app-entitlements.plist"
           codesign -d --entitlements :- CodexBar.app/Contents/PlugIns/CodexBarWidget.appex > "$RUNNER_TEMP/proof/widget-entitlements.plist"
           shasum -a 256 CodexBar.app/Contents/MacOS/CodexBar CodexBar.app/Contents/PlugIns/CodexBarWidget.appex/Contents/MacOS/CodexBarWidget > "$RUNNER_TEMP/proof/binary-hashes.txt"
+      - name: Preserve built package for UI-only retries
+        if: inputs.package_run == '' || inputs.package_run == null
+        run: |
+          mkdir -p "$RUNNER_TEMP/package"
+          ditto -c -k --sequesterRsrc --keepParent CodexBar.app "$RUNNER_TEMP/package/CodexBar.zip"
+          git rev-parse HEAD > "$RUNNER_TEMP/package/built-sha.txt"
+      - name: Upload reusable package
+        if: inputs.package_run == '' || inputs.package_run == null
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: pr4890-package
+          path: ${{ runner.temp }}/package
+          retention-days: 7
+      - name: Unpack reused package
+        if: inputs.package_run != '' && inputs.package_run != null
+        run: ditto -x -k "$RUNNER_TEMP/package/CodexBar.zip" .
       - name: Install and launch isolated synthetic app
         run: |
           set -euo pipefail

@@ -35,12 +35,21 @@ enum WidgetHostProof {
             self.label = NSTextField(labelWithString: "")
             self.label.frame = NSRect(x: 10, y: 5, width: 880, height: 55)
             self.label.maximumNumberOfLines = 3
+            self.label.frame.size.width = 650
             self.window.contentView?.addSubview(self.label)
+            let button = NSButton(title: "Use incomplete history", target: self, action: #selector(self.incomplete))
+            button.frame = NSRect(x: 670, y: 15, width: 210, height: 32)
+            self.window.contentView?.addSubview(button)
             self.window.orderFrontRegardless()
             self.tick()
             self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
                 MainActor.assumeIsolated { self?.tick() }
             }
+        }
+
+        @objc func incomplete() {
+            try! "incomplete".write(to: self.root.appendingPathComponent("phase"), atomically: true, encoding: .utf8)
+            self.tick()
         }
 
         func tick() {
