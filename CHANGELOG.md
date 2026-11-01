@@ -2,6 +2,10 @@
 
 ## 0.83.1 — Unreleased
 
+### Added
+
+- Widgets: large usage tiles list the provider's top three models with their share of its local history when that history has a complete model split.
+
 ## 0.83.0 — 2026-10-31
 
 ### Highlights
