@@ -226,6 +226,17 @@ final class WidgetHostProofTests: XCTestCase {
                 "Medium action did not resize Switcher")
         }
 
+        // The gallery leaves Notification Center's notifications panel open. Close that
+        // observed panel before interacting with the fixture app, so XCTest does not
+        // mistake the desktop widget for a notification interruption.
+        let clearNotifications = notificationCenter.menuButtons.matching(identifier: "xmark").firstMatch
+        if clearNotifications.exists {
+            clock.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
+            let closed = XCTNSPredicateExpectation(
+                predicate: NSPredicate(format: "exists == false"),
+                object: clearNotifications)
+            XCTAssertEqual(XCTWaiter.wait(for: [closed], timeout: 5), .completed)
+        }
         XCTAssertTrue(installed.frame.height > 300, "Must exercise a large installed widget")
         func waitForText(_ text: String, present: Bool) {
             let changed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
@@ -243,7 +254,8 @@ final class WidgetHostProofTests: XCTestCase {
         app.activate()
         let incomplete = app.buttons["Use incomplete history"]
         XCTAssertTrue(incomplete.waitForExistence(timeout: 5))
-        incomplete.click()
+        XCTAssertTrue(NSScreen.screens.contains(where: { $0.frame.contains(incomplete.frame) }))
+        incomplete.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
         finder.activate()
         waitForText("fixture-alpha", present: false)
         waitForText("Last 14 days", present: true)

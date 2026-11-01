@@ -6,8 +6,6 @@ on:
         description: Reuse package artifact from a previous proof run
         type: string
         default: ""
-  push:
-    branches: [proof/pr4890-installed]
 permissions:
   contents: read
   actions: read
@@ -72,6 +70,9 @@ jobs:
         run: |
           set -euo pipefail
           cp -R CodexBar.app /Applications/CodexBar.app
+          cp "$RUNNER_TEMP/package/built-sha.txt" "$RUNNER_TEMP/proof/package-built-sha.txt"
+          codesign --verify --deep --strict /Applications/CodexBar.app
+          shasum -a 256 /Applications/CodexBar.app/Contents/MacOS/CodexBar /Applications/CodexBar.app/Contents/PlugIns/CodexBarWidget.appex/Contents/MacOS/CodexBarWidget > "$RUNNER_TEMP/proof/installed-binary-hashes.txt"
           /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f /Applications/CodexBar.app
           pluginkit -a /Applications/CodexBar.app/Contents/PlugIns/CodexBarWidget.appex
           pluginkit -m -A -D -i com.steipete.codexbar.debug.widget > "$RUNNER_TEMP/proof/registration.txt"
