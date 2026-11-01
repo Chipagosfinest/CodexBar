@@ -1,3 +1,4 @@
+import AppKit
 import CodexBarCore
 import Foundation
 import SwiftUI
@@ -82,8 +83,8 @@ enum WidgetLayout {
     static let laneSpacing: CGFloat = 7
     static let barHeight: CGFloat = 7
     static let heroBarHeight: CGFloat = 9
-    static let markSizeSmall: CGFloat = 20
-    static let markSizeRegular: CGFloat = 23
+    static let markSizeSmall: CGFloat = 22
+    static let markSizeRegular: CGFloat = 26
     static let separatorOpacity: Double = 0.12
 
     /// The single-metric tile has no lanes to fit around, so its figure runs larger.
@@ -143,26 +144,6 @@ enum ProviderMonogram {
 
 // MARK: - Contrast
 
-enum WidgetContrast {
-    /// Black-vs-white crossover for WCAG relative luminance: below this a white label wins, above
-    /// it a black label wins. Solving 1.05/(L+0.05) = (L+0.05)/0.05 gives L ≈ 0.1791.
-    private static let crossoverLuminance: Double = 0.1791
-
-    /// Highest-contrast label colour for text drawn on `color`. Brand palettes span very light
-    /// (Gemini lilac) to mid (Claude terracotta); picking per colour keeps every mark legible.
-    static func label(on color: ProviderColor) -> Color {
-        self.relativeLuminance(of: color) > self.crossoverLuminance ? .black : .white
-    }
-
-    static func relativeLuminance(of color: ProviderColor) -> Double {
-        func linear(_ value: Double) -> Double {
-            let clamped = min(1, max(0, value))
-            return clamped <= 0.03928 ? clamped / 12.92 : pow((clamped + 0.055) / 1.055, 2.4)
-        }
-        return 0.2126 * linear(color.red) + 0.7152 * linear(color.green) + 0.0722 * linear(color.blue)
-    }
-}
-
 // MARK: - Provider mark
 
 struct ProviderMark: View {
@@ -174,21 +155,74 @@ struct ProviderMark: View {
     @Environment(\.widgetRenderingModeOverride) private var renderingModeOverride
 
     var body: some View {
+        let mode = self.renderingModeOverride ?? self.renderingMode
         let style = ProviderMarkStyle.resolve(
-            renderingMode: self.renderingModeOverride ?? self.renderingMode,
+            renderingMode: mode,
             provider: self.provider,
             isSelected: self.isSelected)
-        Text(ProviderMonogram.text(for: self.provider))
-            .font(.system(size: self.size * 0.44, weight: .bold, design: .rounded))
-            .kerning(-0.3)
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-            .foregroundStyle(style.foreground)
-            .frame(width: self.size, height: self.size)
-            .background(
-                RoundedRectangle(cornerRadius: self.size * 0.3, style: .continuous)
-                    .fill(style.background))
-            .accessibilityLabel(Text(ProviderMarkLabel.text(for: self.provider, isSelected: self.isSelected)))
+        let image = WidgetProviderMarkAsset.image(for: self.provider, fullColor: mode == .fullColor && self.isSelected)
+        ZStack {
+            RoundedRectangle(cornerRadius: self.size * 0.28, style: .continuous)
+                .fill(style.background)
+            RoundedRectangle(cornerRadius: self.size * 0.28, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.08), lineWidth: 0.5)
+            if let image {
+                Image(nsImage: image)
+                    .resizable()
+                    .renderingMode(image.isTemplate ? .template : .original)
+                    .scaledToFit()
+                    .foregroundStyle(style.foreground)
+                    .padding(self.size * 0.2)
+                    .widgetAccentable()
+            } else {
+                Text(ProviderMonogram.text(for: self.provider))
+                    .font(.system(size: self.size * 0.44, weight: .bold, design: .rounded))
+                    .kerning(-0.3)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .foregroundStyle(style.foreground)
+            }
+        }
+        .frame(width: self.size, height: self.size)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(ProviderMarkLabel.text(for: self.provider, isSelected: self.isSelected)))
+    }
+}
+
+/// The provider's real mark, bundled for the curated widget providers.
+///
+/// The files are copies of the app's own `ProviderIcon-*` and `Brand-ProviderIcon-*` resources (a test keeps
+/// them byte-identical); providers without a bundled mark keep their monogram.
+@MainActor
+enum WidgetProviderMarkAsset {
+    private static var cache: [String: NSImage] = [:]
+
+    static func image(for provider: UsageProvider, fullColor: Bool) -> NSImage? {
+        let template = ProviderDescriptorRegistry.descriptor(for: provider).branding.iconResourceName
+        let names = fullColor
+            ? ["Brand-ProviderIcon-" + provider.rawValue, template]
+            : [template]
+        for name in names {
+            if let image = self.load(name, isTemplate: name == template) {
+                return image
+            }
+        }
+        return nil
+    }
+
+    private static func load(_ name: String, isTemplate: Bool) -> NSImage? {
+        if let cached = self.cache[name] {
+            return cached
+        }
+        let bundle = WidgetLocalization.resourceBundle
+        let url = ["svg", "png"].lazy.compactMap { fileExtension in
+            bundle.url(forResource: name, withExtension: fileExtension)
+                ?? bundle.url(forResource: name, withExtension: fileExtension, subdirectory: "ProviderMarks")
+        }.first
+        guard let url, let image = NSImage(contentsOf: url) else { return nil }
+        image.isTemplate = isTemplate
+        self.cache[name] = image
+        return image
     }
 }
 
@@ -197,9 +231,12 @@ struct ProviderMarkStyle {
     let background: Color
 
     /// Desktop widgets in tinted and clear appearances render through a luminance mask, so a brand
-    /// fill carrying a dark label collapses to an empty white square — the monogram disappears
-    /// entirely. Outside full colour the mark inverts: a faint plate with a bright label, which
-    /// survives the mask.
+    /// fill would collapse into a solid square. Outside full colour the mark is a bright template glyph
+    /// on a faint plate, which survives the mask.
+    ///
+    /// In full colour the brand tint only washes the plate; it never carries the glyph's contrast. The
+    /// glyph is the curated full-colour mark or the template mark in ink, so a pale tint (Gemini) or a
+    /// mid tone (Codex) cannot leave a low-contrast logo.
     static func resolve(
         renderingMode: WidgetRenderingMode,
         provider: UsageProvider,
@@ -215,10 +252,9 @@ struct ProviderMarkStyle {
                 foreground: .primary.opacity(0.62),
                 background: .primary.opacity(0.08))
         }
-        let brand = ProviderBrandColor.resolve(for: provider.instanceID)
         return ProviderMarkStyle(
-            foreground: brand.map(WidgetContrast.label(on:)) ?? .white,
-            background: WidgetColors.color(for: provider.instanceID))
+            foreground: .primary,
+            background: WidgetColors.color(for: provider.instanceID).opacity(0.16))
     }
 }
 
@@ -232,15 +268,6 @@ enum ProviderMarkLabel {
     static func text(for provider: UsageProvider, isSelected: Bool) -> String {
         let name = ProviderDefaults.metadata[provider]?.displayName ?? provider.rawValue.capitalized
         return isSelected ? W("%@, selected", name) : name
-    }
-}
-
-enum ProviderBrandColor {
-    /// The raw brand colour behind `WidgetColors.color(for:)`, needed for contrast maths.
-    static func resolve(for instanceID: ProviderInstanceID) -> ProviderColor? {
-        guard let provider = instanceID.firstPartyProvider else { return nil }
-        return ProviderAccentColors.sharedOverride(for: instanceID)
-            ?? ProviderDescriptorRegistry.descriptor(for: provider).branding.widgetColor
     }
 }
 
