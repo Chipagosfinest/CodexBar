@@ -1,0 +1,2 @@
+Files Sources/CodexBar/CodexbarApp.swift and Sources/CodexBar/CodexbarApp.swift differ
+Only in Sources/CodexBar: RealBehaviorProof.swift

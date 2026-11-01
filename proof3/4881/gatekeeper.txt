@@ -1,0 +1,3 @@
+◇ Test run started.
+✔ Test run with 48 tests in 1 suite passed after 3.857 seconds.
+exit=0

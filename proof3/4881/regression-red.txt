@@ -1,0 +1,17 @@
+◇ Test run started.
+✘ Test "live title crossing the horizontal fit boundary stays inside the frozen height" recorded an issue at MenuCardCriticalHeadroomTests.swift:128:13: Expectation failed: visible.height <= envelope
+↳ Live header outgrew the frozen height at width 235.0
+✘ Test "live title crossing the horizontal fit boundary stays inside the frozen height" recorded an issue at MenuCardCriticalHeadroomTests.swift:128:13: Expectation failed: visible.height <= envelope
+↳ Live header outgrew the frozen height at width 236.0
+✘ Test "live title crossing the horizontal fit boundary stays inside the frozen height" recorded an issue at MenuCardCriticalHeadroomTests.swift:128:13: Expectation failed: visible.height <= envelope
+↳ Live header outgrew the frozen height at width 237.0
+✘ Test "live title crossing the horizontal fit boundary stays inside the frozen height" recorded an issue at MenuCardCriticalHeadroomTests.swift:128:13: Expectation failed: visible.height <= envelope
+↳ Live header outgrew the frozen height at width 238.0
+✘ Test "live title crossing the horizontal fit boundary stays inside the frozen height" recorded an issue at MenuCardCriticalHeadroomTests.swift:128:13: Expectation failed: visible.height <= envelope
+↳ Live header outgrew the frozen height at width 239.0
+✘ Test "live title crossing the horizontal fit boundary stays inside the frozen height" recorded an issue at MenuCardCriticalHeadroomTests.swift:128:13: Expectation failed: visible.height <= envelope
+↳ Live header outgrew the frozen height at width 240.0
+✘ Test "live title crossing the horizontal fit boundary stays inside the frozen height" failed after 0.568 seconds with 6 issues.
+✘ Suite MenuCardCriticalHeadroomTests failed after 0.568 seconds with 6 issues.
+✘ Test run with 7 tests in 1 suite failed after 0.568 seconds with 6 issues.
+exit=1

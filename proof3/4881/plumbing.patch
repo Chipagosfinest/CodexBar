@@ -1,0 +1,6 @@
+--- a/Sources/CodexBar/CodexbarApp.swift
++++ b/Sources/CodexBar/CodexbarApp.swift
+@@ DEBUG entry point (proof build only, never in the PR)
+         #if DEBUG
++        if RealBehaviorProof.runIfRequested() { return }
+         if MenuBarLayoutNativeProof.runIfRequested() {
