@@ -2,7 +2,7 @@ import AppKit
 import XCTest
 
 final class WidgetHostProofTests: XCTestCase {
-    func testInstalledLargeWidgetCompleteAndIncompleteHistory() throws {
+    func testInstallAndVerifyCompleteHistory() {
         let galleryFamily = "small"
         let widgetFamily = "large"
         let finder = XCUIApplication(bundleIdentifier: "com.apple.finder")
@@ -250,26 +250,22 @@ final class WidgetHostProofTests: XCTestCase {
         waitForText("fixture-alpha", present: true)
         waitForText("80%", present: true)
         self.attach("complete-installed-large", app: notificationCenter)
-        let app = XCUIApplication(bundleIdentifier: "com.steipete.codexbar.debug")
-        app.terminate()
-        XCTAssertTrue(app.wait(for: .notRunning, timeout: 10))
-        let root = try XCTUnwrap(ProcessInfo.processInfo.environment["CODEXBAR_CI_SEED_ROOT"])
-        let launch = Process()
-        launch.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        launch.arguments = [
-            "-n",
-            "-a",
-            "/Applications/CodexBar.app",
-            "--args",
-            "--widget-host-proof",
-            root + "/incomplete-fixture",
-        ]
-        launch.environment = ["PATH": "/usr/bin:/bin:/usr/sbin:/sbin"]
-        try launch.run()
-        launch.waitUntilExit()
-        XCTAssertEqual(launch.terminationStatus, 0)
-        waitForText("fixture-alpha", present: false)
-        waitForText("Last 14 days", present: true)
+    }
+
+    func testRetainedWidgetShowsIncompleteHistoryChart() {
+        let finder = XCUIApplication(bundleIdentifier: "com.apple.finder")
+        finder.activate()
+        let notificationCenter = XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui")
+        let installed = notificationCenter.descendants(matching: .any).matching(NSPredicate(
+            format: "identifier BEGINSWITH %@ AND identifier CONTAINS %@ AND identifier CONTAINS %@",
+            "widget-local:", "com.steipete.codexbar.debug", "CodexBarSwitcherWidget")).firstMatch
+        XCTAssertTrue(installed.waitForExistence(timeout: 15))
+        XCTAssertTrue(installed.frame.height > 300)
+        let changed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            let text = installed.debugDescription
+            return !text.contains("fixture-alpha") && text.contains("Last 14 days")
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [changed], timeout: 90), .completed)
         self.attach("incomplete-installed-large", app: notificationCenter)
     }
 

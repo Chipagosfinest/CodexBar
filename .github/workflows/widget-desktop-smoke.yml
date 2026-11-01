@@ -82,21 +82,51 @@ jobs:
           test -f "$RUNNER_TEMP/proof/complete-transport.json"
       - name: Enable disposable runner Notification Center
         run: launchctl load -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
-      - name: Exercise real desktop host
+      - name: Install real large desktop widget and verify complete history
         run: |
           set -euo pipefail
           xcodebuild test -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
             -scheme WidgetDesktopSmoke -configuration Debug -destination 'platform=macOS' \
-            -derivedDataPath "$RUNNER_TEMP/ui-build" -resultBundlePath "$RUNNER_TEMP/proof/WidgetHost.xcresult" \
-            -only-testing:WidgetDesktopSmokeUITests/WidgetHostProofTests \
-            CODEXBAR_CI_SEED_ROOT="$RUNNER_TEMP/proof" CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual \
-            > "$RUNNER_TEMP/proof/ui-test.log" 2>&1
+            -derivedDataPath "$RUNNER_TEMP/ui-build" -resultBundlePath "$RUNNER_TEMP/proof/Complete.xcresult" \
+            -only-testing:WidgetDesktopSmokeUITests/WidgetHostProofTests/testInstallAndVerifyCompleteHistory \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual \
+            > "$RUNNER_TEMP/proof/complete-ui-test.log" 2>&1
+      - name: Publish incomplete history through same running fixture app
+        run: |
+          set -euo pipefail
+          echo incomplete > "$RUNNER_TEMP/proof/phase"
+          for attempt in $(seq 1 20); do
+            test -f "$RUNNER_TEMP/proof/incomplete-transport.json" && break
+            sleep 1
+          done
+          python3 - <<'PYPROOF'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'proof'
+          before = json.loads((root / 'complete-transport.json').read_text())
+          after = json.loads((root / 'incomplete-transport.json').read_text())
+          assert before['decodedModelCount'] == 2 and before['incompleteRequestCount'] == 0
+          assert after['decodedModelCount'] == 0 and after['incompleteRequestCount'] == 1
+          assert after['dailyPointCount'] == 14 and after['containerIsGroupContainer']
+          assert before['matchingDayCost'] == after['matchingDayCost'] == 10
+          assert before['matchingDayTokens'] == after['matchingDayTokens'] == 100
+          PYPROOF
+      - name: Verify retained installed widget renders chart fallback
+        run: |
+          set -euo pipefail
+          xcodebuild test -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
+            -scheme WidgetDesktopSmoke -configuration Debug -destination 'platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/ui-build" -resultBundlePath "$RUNNER_TEMP/proof/Incomplete.xcresult" \
+            -only-testing:WidgetDesktopSmokeUITests/WidgetHostProofTests/testRetainedWidgetShowsIncompleteHistoryChart \
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual \
+            > "$RUNNER_TEMP/proof/incomplete-ui-test.log" 2>&1
       - name: Export screenshot and hierarchy attachments
         if: always()
         run: |
-          if test -d "$RUNNER_TEMP/proof/WidgetHost.xcresult"; then
-            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/proof/WidgetHost.xcresult" --output-path "$RUNNER_TEMP/proof/attachments"
-          fi
+          for phase in Complete Incomplete; do
+            if test -d "$RUNNER_TEMP/proof/$phase.xcresult"; then
+              xcrun xcresulttool export attachments --path "$RUNNER_TEMP/proof/$phase.xcresult" --output-path "$RUNNER_TEMP/proof/attachments-$phase"
+            fi
+          done
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
