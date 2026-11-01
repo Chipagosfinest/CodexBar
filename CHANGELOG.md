@@ -2,6 +2,10 @@
 
 ## 0.83.1 — Unreleased
 
+### Changed
+
+- Dropdown: a shorter, reachable footer. More than 5 tabs become a single row of logos, Share Usage Snapshot moves to the compact Overview's footer, Status Page, Changelog, About and Check for Updates move under More, and Overview rows past 12 go into a More submenu.
+
 ## 0.83.0 — 2026-10-31
 
 ### Highlights
