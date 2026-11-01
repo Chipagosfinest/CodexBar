@@ -1,0 +1,80 @@
+{
+  "main": {
+    "sourceSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "testExit": 0,
+    "tests": 135,
+    "suiteSources": [
+      "MenuCardModelTests.swift",
+      "MenuCardProviderRegressionTests.swift",
+      "MenuCardHeightFingerprintTests.swift",
+      "CompactOverviewTests.swift",
+      "MenuCardModelCodexDegradedQuotaTests.swift",
+      "ProviderArchitectureGatekeeperTests.swift",
+      "TestStores.swift",
+      "ProviderUsageItemVisibilityTests.swift",
+      "LockIsolated.swift",
+      "OpenRouterTestSnapshots.swift",
+      "ZaiTokenStoreTestSupport.swift",
+      "MenuCardTestDateFormatting.swift"
+    ]
+  },
+  "quota-critical-cue": {
+    "sourceSHA": "54e543b2c2f3cc970b8afe0ced35818c60c0ee4f",
+    "testExit": 0,
+    "tests": 138,
+    "suiteSources": [
+      "MenuCardModelTests.swift",
+      "MenuCardProviderRegressionTests.swift",
+      "MenuCardHeightFingerprintTests.swift",
+      "CompactOverviewTests.swift",
+      "MenuCardModelCodexDegradedQuotaTests.swift",
+      "ProviderArchitectureGatekeeperTests.swift",
+      "TestStores.swift",
+      "ProviderUsageItemVisibilityTests.swift",
+      "LockIsolated.swift",
+      "OpenRouterTestSnapshots.swift",
+      "MenuCardCriticalHeadroomTests.swift",
+      "ZaiTokenStoreTestSupport.swift",
+      "MenuCardTestDateFormatting.swift"
+    ]
+  },
+  "stale-error-tint": {
+    "sourceSHA": "778e2f739640e3f04607d94b200b8c91118f7d4d",
+    "testExit": 0,
+    "tests": 137,
+    "suiteSources": [
+      "MenuCardModelTests.swift",
+      "MenuCardProviderRegressionTests.swift",
+      "MenuCardHeightFingerprintTests.swift",
+      "CompactOverviewTests.swift",
+      "MenuCardModelCodexDegradedQuotaTests.swift",
+      "ProviderArchitectureGatekeeperTests.swift",
+      "TestStores.swift",
+      "ProviderUsageItemVisibilityTests.swift",
+      "LockIsolated.swift",
+      "OpenRouterTestSnapshots.swift",
+      "MenuCardStaleTintTests.swift",
+      "ZaiTokenStoreTestSupport.swift",
+      "MenuCardTestDateFormatting.swift"
+    ]
+  },
+  "tabular-numerals": {
+    "sourceSHA": "863bfefef2d4708bcf0586d9f12a7948f07b1063",
+    "testExit": 0,
+    "tests": 135,
+    "suiteSources": [
+      "MenuCardModelTests.swift",
+      "MenuCardProviderRegressionTests.swift",
+      "MenuCardHeightFingerprintTests.swift",
+      "CompactOverviewTests.swift",
+      "MenuCardModelCodexDegradedQuotaTests.swift",
+      "ProviderArchitectureGatekeeperTests.swift",
+      "TestStores.swift",
+      "ProviderUsageItemVisibilityTests.swift",
+      "LockIsolated.swift",
+      "OpenRouterTestSnapshots.swift",
+      "ZaiTokenStoreTestSupport.swift",
+      "MenuCardTestDateFormatting.swift"
+    ]
+  }
+}

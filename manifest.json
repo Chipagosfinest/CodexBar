@@ -102,5 +102,57 @@
     "observed": "Production Claude menu card in dark appearance; fixture values and example.com identity.",
     "proves": "Static production-view appearance and numeric labels.",
     "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/stale-error-tint/menu-card-claude-error-light.png",
+    "sha256": "78852b8a376f700f14502ad10cb13bb516801d27671dfe84567a453d88342e64",
+    "dimensions": [
+      310,
+      408
+    ],
+    "sourceSHA": "778e2f739640e3f04607d94b200b8c91118f7d4d",
+    "synthetic": true,
+    "observed": "Retained usage bars are neutral beside the failed-refresh subtitle. light appearance.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, live update timing, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/stale-error-tint/menu-card-claude-error-dark.png",
+    "sha256": "5fa2c12abd80a68a0ff15cdcc4599214ca92522e6e16f2f7ca1efe9fea208dfe",
+    "dimensions": [
+      310,
+      408
+    ],
+    "sourceSHA": "778e2f739640e3f04607d94b200b8c91118f7d4d",
+    "synthetic": true,
+    "observed": "Retained usage bars are neutral beside the failed-refresh subtitle. dark appearance.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, live update timing, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/tabular-numerals/menu-card-ticking-values-light.png",
+    "sha256": "494b0e7be8cd8711369ea94d5a6c4f6c8609494f109a426bb14ffa6aed82b165",
+    "dimensions": [
+      930,
+      391
+    ],
+    "sourceSHA": "863bfefef2d4708bcf0586d9f12a7948f07b1063",
+    "synthetic": true,
+    "observed": "Three production cards show different numeric values with tabular digit spacing. light appearance.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, live update timing, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/tabular-numerals/menu-card-ticking-values-dark.png",
+    "sha256": "9a135ec0db907180493afcfa2aa88e455c0f53d2f6c52dff29ec62d6e9271ded",
+    "dimensions": [
+      930,
+      391
+    ],
+    "sourceSHA": "863bfefef2d4708bcf0586d9f12a7948f07b1063",
+    "synthetic": true,
+    "observed": "Three production cards show different numeric values with tabular digit spacing. dark appearance.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, live update timing, or NSMenu interaction."
   }
 ]
