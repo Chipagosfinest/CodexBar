@@ -13,4 +13,4 @@ overview-3-light: 310x786
 overview-8-light: content 1238pt, 6 rows
 overview-8-light: rows ["codex", "claude", "cursor", "factory", "gemini", "copilot"]
 overview-8-light: items ["view", "---", "overviewSpendSummary", "Share Usage Snapshot…", "---", "overviewRow-codex", "---", "overviewRow-claude", "---", "overviewRow-cursor", "---", "overviewRow-factory", "---", "overviewRow-gemini", "---", "overviewRow-copilot", "---", "persistentRefreshAction", "Settings...", "About CodexBar", "Quit"]
-overview-8-light: 310x975
+overview-8-light: 310x976

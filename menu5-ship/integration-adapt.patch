@@ -1,3 +1,16 @@
+diff --git a/Sources/CodexBar/Menu/OverviewSpendChart.swift b/Sources/CodexBar/Menu/OverviewSpendChart.swift
+index 53213bcae..e3ff61e64 100644
+--- a/Sources/CodexBar/Menu/OverviewSpendChart.swift
++++ b/Sources/CodexBar/Menu/OverviewSpendChart.swift
+@@ -34,7 +34,7 @@ enum OverviewSpendPalette {
+ 
+     /// Coral glows on the dark menu. The same hue with less chroma and no lightness lift still reads as Claude.
+     private static let darkAnchors: [UsageProvider: Anchor] = [
+-        .claude: Anchor(hue: 33, chroma: 0.075, lightnessOffset: 0),
++        .claude: Anchor(hue: 33, chroma: 0.09, lightnessOffset: 0),
+     ]
+ 
+     static var anchoredProviders: [UsageProvider] {
 diff --git a/Sources/CodexBar/StatusItem/StatusItemController+OverviewLines.swift b/Sources/CodexBar/StatusItem/StatusItemController+OverviewLines.swift
 index b84b5505e..25cd7b34c 100644
 --- a/Sources/CodexBar/StatusItem/StatusItemController+OverviewLines.swift
@@ -39,6 +52,19 @@ index b84b5505e..25cd7b34c 100644
              : nil
          let item = self.makeMenuCardItem(
              OverviewProviderLineView(line: line, width: menuWidth),
+diff --git a/Tests/CodexBarTests/OverviewSpendChartTests.swift b/Tests/CodexBarTests/OverviewSpendChartTests.swift
+index 0c8e8de18..29e05d50f 100644
+--- a/Tests/CodexBarTests/OverviewSpendChartTests.swift
++++ b/Tests/CodexBarTests/OverviewSpendChartTests.swift
+@@ -35,7 +35,7 @@ struct OverviewSpendChartTests {
+         let brand = OverviewSpendPalette.oklch(ProviderDescriptorRegistry.descriptor(for: .claude).branding.color)
+         let dark = OverviewSpendPalette.oklch(OverviewSpendPalette.color(provider: .claude, tier: tier, dark: true))
+         let light = OverviewSpendPalette.oklch(OverviewSpendPalette.color(provider: .claude, tier: tier, dark: false))
+-        #expect(dark.chroma <= 0.08)
++        #expect(dark.chroma <= 0.095)
+         #expect(dark.chroma > 0.05)
+         #expect(abs(dark.hue - brand.hue) <= 10)
+         #expect(light.chroma > dark.chroma)
 diff --git a/Tests/CodexBarTests/StatusMenuOverviewSubmenuTests.swift b/Tests/CodexBarTests/StatusMenuOverviewSubmenuTests.swift
 index d354dd76a..b49213630 100644
 --- a/Tests/CodexBarTests/StatusMenuOverviewSubmenuTests.swift
