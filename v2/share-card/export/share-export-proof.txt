@@ -1,0 +1,2 @@
+light: app=NSAppearanceNameAqua copied=1200x630 corner=(1.000, 1.000, 1.000)
+dark: app=NSAppearanceNameDarkAqua copied=1200x630 corner=(0.119, 0.119, 0.119)

@@ -2,7 +2,7 @@
   "base": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
   "heads": {
     "widgets": "7cfe4c032763dd6b04f1b61368865bfcbab61187",
-    "share-card": "2eedbbc5f6bbb455e81213f15887558ef9f8cbfb",
+    "share-card": "03f2146a365c74a7586dfa8541adc898644af4d8",
     "models": "61cbf2bd8c25d6d4b1144dbbf3fc3586f98fff7d"
   },
   "method": "Offscreen NSHostingView renders of production SwiftUI views with fixed synthetic data, 2x, light and dark. Not captured from a running app or WidgetKit host.",
@@ -28,6 +28,10 @@
     "v2/models/usage-spend-models-partial-light.png": "57b1bd3ef1aec982ce62177d15470098afbd7bb45cceadf454ec75001d55b1d0",
     "v2/models/usage-spend-models-unpriced-dark.png": "a8361f4ce28cd11e3718e99a158c5238a1f050a2b8ab8c1d2c251ef9a39332f1",
     "v2/models/usage-spend-models-unpriced-light.png": "022f2cfacaaa46cfc83d8444454be3594c6b6fd4c7cf16d219a0b304f8dfb19f",
+    "v2/share-card/export/share-copied-image-dark.png": "6119883ceeb3c5d30f830edbbe34e8fa8a133e93c75c003ec03d4638dbe8bbc3",
+    "v2/share-card/export/share-copied-image-light.png": "62baa86fc614f474218df1d0d2cbba8b2c8de57b09f4385f5aea7485604a7316",
+    "v2/share-card/export/share-window-preview-dark.png": "c1e9b41485b5e3a3a70237d25370be3e5382a2293ddbdbca6fa42312aec15f0b",
+    "v2/share-card/export/share-window-preview-light.png": "68622617a8e08f81e5b432c4a1d4725c09a0db98a8af2e0d1ee20cbb25e48d94",
     "v2/share-card/share-card-dark.png": "6119883ceeb3c5d30f830edbbe34e8fa8a133e93c75c003ec03d4638dbe8bbc3",
     "v2/share-card/share-card-light.png": "62baa86fc614f474218df1d0d2cbba8b2c8de57b09f4385f5aea7485604a7316",
     "v2/share-card/share-card-multicurrency-dark.png": "f77a6d46f554ea66781c7925bd6cc3fc37e1e441c881b2127ba968e0389026e3",
@@ -46,5 +50,6 @@
     "v2/widgets/widget-usage-medium-light.png": "f0daf1f2954139c1c44d3ee07ce4fe2937745bfa2d793375b045227e3c7e48e6",
     "v2/widgets/widget-usage-small-dark.png": "427d5f6d9ce83e656a7dc981f9a0d3f2957e3c7df3e65df0c63fef13ecaf5ba1",
     "v2/widgets/widget-usage-small-light.png": "aa1768a7e9ffd1deeea100f0f11cfb6f5a01ed821678b67a7c202b1b466f8bc3"
-  }
+  },
+  "exportProof": "V2ShareExportProofTests: sets NSApplication.shared.appearance, opens the shipped ShareStatsWindowController (ordered front, captured from its window frame view) and calls ShareStatsExporter.copyImage into a private NSPasteboard with no explicit appearance; the PNG is read back from the pasteboard. In-process test host, synthetic payload, no real accounts."
 }
