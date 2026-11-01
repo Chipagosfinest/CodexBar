@@ -1,0 +1,1 @@
+Renders: #4887 head 23bf4c17e, top-models head 02546a5e0. Offscreen NSHostingView renders of production UsageTile with synthetic data via a temporary local test target; tinted modes via widgetRenderingModeOverride.
