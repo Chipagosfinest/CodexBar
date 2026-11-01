@@ -1,0 +1,106 @@
+[
+  {
+    "path": "redesign/main/menu-card-claude-light.png",
+    "sha256": "a96784351261e8fe6b7745fc04be0b792c3236cda9259548a1f2f714dbb86d3c",
+    "dimensions": [
+      310,
+      391
+    ],
+    "sourceSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "synthetic": true,
+    "observed": "Production Claude menu card in light appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/main/menu-card-claude-dark.png",
+    "sha256": "7e8d7c745eac5e1876cff584ee2069e6e5ee2444a0e32951e0e670f687438079",
+    "dimensions": [
+      310,
+      391
+    ],
+    "sourceSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "synthetic": true,
+    "observed": "Production Claude menu card in dark appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/main/menu-card-claude-error-light.png",
+    "sha256": "99df8c2ea32a67bc41064b86d60d1669eedfc32e6d4324056a8701787aaf4c18",
+    "dimensions": [
+      310,
+      408
+    ],
+    "sourceSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "synthetic": true,
+    "observed": "Production Claude menu card in light appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/main/menu-card-claude-error-dark.png",
+    "sha256": "33ed1321d5e6cd4f8ae6ac8d525f5d68dc81fb12c9b978e47db18c89f60fd7c0",
+    "dimensions": [
+      310,
+      408
+    ],
+    "sourceSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "synthetic": true,
+    "observed": "Production Claude menu card in dark appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/main/menu-card-ticking-values-light.png",
+    "sha256": "21efa3d5be760eab9b15384160d54cbc2b5e9eec6136ffdc52feb2b25b853453",
+    "dimensions": [
+      930,
+      391
+    ],
+    "sourceSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "synthetic": true,
+    "observed": "Production Claude menu card in light appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/main/menu-card-ticking-values-dark.png",
+    "sha256": "6d2878cbbc00d59d5469f861f8bca65a73d1dd1c2f5973ae93461a7d7223cd1b",
+    "dimensions": [
+      930,
+      391
+    ],
+    "sourceSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "synthetic": true,
+    "observed": "Production Claude menu card in dark appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/quota-critical-cue/menu-card-claude-light.png",
+    "sha256": "05e809583f7441669ff071e698cbda984e1ef66c2c442682faa647ff6fb5fa98",
+    "dimensions": [
+      310,
+      391
+    ],
+    "sourceSHA": "54e543b2c2f3cc970b8afe0ced35818c60c0ee4f",
+    "synthetic": true,
+    "observed": "Production Claude menu card in light appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  },
+  {
+    "path": "redesign/quota-critical-cue/menu-card-claude-dark.png",
+    "sha256": "51142f43ae2f43f04a9d262e642a79d49620bc6314d3951d7ef97f8a9e5b1101",
+    "dimensions": [
+      310,
+      391
+    ],
+    "sourceSHA": "54e543b2c2f3cc970b8afe0ced35818c60c0ee4f",
+    "synthetic": true,
+    "observed": "Production Claude menu card in dark appearance; fixture values and example.com identity.",
+    "proves": "Static production-view appearance and numeric labels.",
+    "does_not_prove": "Live provider state, real-account behavior, or NSMenu interaction."
+  }
+]
