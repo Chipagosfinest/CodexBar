@@ -4,7 +4,7 @@
 
 ### Added
 
-- Widgets: large usage tiles list the provider's top three models with their share of its local history when that history has a complete model split.
+- Widgets: large usage tiles list the provider's top three models with their share of its local history when that history has a complete model split (#4890).
 
 ## 0.83.0 — 2026-10-31
 
