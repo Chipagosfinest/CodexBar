@@ -278,8 +278,11 @@ enum ProviderMarkLabel {
 enum WidgetInk {
     static let data = Color.primary.opacity(0.82)
 
-    static func bar(isLow: Bool) -> Color {
-        isLow ? .red : self.data
+    /// Fill for a bar whose limit is running low. Full colour shows red. Tinted and clear widgets
+    /// render through a luminance mask where red reads dimmer than ink, which would invert the
+    /// warning, so there the low fill keeps full ink strength and joins the accent group instead.
+    static func lowBar(renderingMode: WidgetRenderingMode) -> Color {
+        renderingMode == .fullColor ? .red : .primary
     }
 }
 
@@ -288,7 +291,12 @@ enum WidgetInk {
 struct QuotaBar: View {
     let percent: Double?
     let color: Color
+    /// A low limit replaces `color` with the rendering-mode-aware warning fill.
+    var isLow: Bool = false
     var height: CGFloat = WidgetLayout.barHeight
+
+    @Environment(\.widgetRenderingMode) private var renderingMode
+    @Environment(\.widgetRenderingModeOverride) private var renderingModeOverride
 
     var body: some View {
         GeometryReader { proxy in
@@ -299,7 +307,10 @@ struct QuotaBar: View {
                     // Floor the fill at the bar's own height so a nearly-exhausted lane reads as a
                     // visible nub instead of a sliver indistinguishable from an empty track.
                     Capsule()
-                        .fill(self.color)
+                        .fill(self.isLow
+                            ? WidgetInk.lowBar(renderingMode: self.renderingModeOverride ?? self.renderingMode)
+                            : self.color)
+                        .widgetAccentable(self.isLow)
                         .frame(width: max(self.height, fraction * proxy.size.width))
                 }
             }
@@ -307,7 +318,7 @@ struct QuotaBar: View {
         .frame(height: self.height)
     }
 
-    static func fillFraction(_ percent: Double?) -> Double {
+    nonisolated static func fillFraction(_ percent: Double?) -> Double {
         guard let percent else { return 0 }
         return min(1, max(0, percent / 100))
     }
@@ -342,7 +353,8 @@ struct QuotaLaneView: View {
             if self.showsBar {
                 QuotaBar(
                     percent: self.percent,
-                    color: QuotaSeverity.isLow(remaining: self.remainingPercent) ? .red : self.color)
+                    color: self.color,
+                    isLow: QuotaSeverity.isLow(remaining: self.remainingPercent))
             }
         }
     }
@@ -439,7 +451,8 @@ struct HeroBlock: View {
             if let barPercent = self.barPercent {
                 QuotaBar(
                     percent: barPercent,
-                    color: self.isLow ? .red : self.color,
+                    color: self.color,
+                    isLow: self.isLow,
                     height: self.compact ? 6 : WidgetLayout.heroBarHeight)
                     .padding(.top, self.compact ? 2 : 5)
             }
@@ -456,41 +469,6 @@ struct HeroBlock: View {
             .foregroundStyle(self.unavailableAwareColor)
             .lineLimit(1)
             .minimumScaleFactor(0.5)
-    }
-}
-
-// MARK: - Top models
-
-/// A provider's leading models: name, share of the provider's usage, and an ink bar for that share.
-struct WidgetTopModels: View {
-    let models: [WidgetSnapshot.ModelShare]
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            WidgetSeparator()
-            Text(W("Models"))
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            ForEach(Array(self.models.enumerated()), id: \.offset) { _, model in
-                VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 6) {
-                        Text(model.modelName)
-                            .font(.caption)
-                            .lineLimit(1)
-                            .truncationMode(.middle)
-                        Spacer(minLength: 4)
-                        Text(WidgetTopModels.shareText(model.share))
-                            .font(.caption.weight(.semibold))
-                            .monospacedDigit()
-                    }
-                    QuotaBar(percent: model.share * 100, color: WidgetInk.data, height: 4)
-                }
-            }
-        }
-    }
-
-    static func shareText(_ share: Double) -> String {
-        share.formatted(.percent.precision(.fractionLength(share > 0 && share < 0.01 ? 1 : 0)))
     }
 }
 

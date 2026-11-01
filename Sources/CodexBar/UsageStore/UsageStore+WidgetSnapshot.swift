@@ -337,50 +337,7 @@ extension UsageStore {
             providerCost: providerCost,
             quotaOwnerKey: snapshot != nil ? claudeQuotaOwnerKey : preservedClaudeUsage?.quotaOwnerKey,
             balanceText: balanceText,
-            details: snapshot.flatMap { $0.details.isEmpty ? nil : $0.details },
-            topModels: Self.widgetTopModels(from: tokenSnapshot))
-    }
-
-    /// The provider's own leading models over its local cost history, so the widget can name them
-    /// without reading another provider's data.
-    nonisolated static func widgetTopModels(from snapshot: CostUsageTokenSnapshot?) -> [WidgetSnapshot.ModelShare]? {
-        guard let snapshot else { return nil }
-        var order: [String] = []
-        var tokens: [String: [Int?]] = [:]
-        var costs: [String: [Double?]] = [:]
-        for entry in snapshot.daily {
-            // A day with usage but no model split would make every share overstate its model. Unmetered
-            // requests (e.g. unresolved forks) carry neither tokens nor cost, so no basis can cover them.
-            let hasUsage = (entry.totalTokens ?? 0) > 0 || (entry.costUSD ?? 0) > 0 ||
-                (entry.requestCount ?? 0) > 0 || (entry.unpricedRequestCount ?? 0) > 0
-            if (entry.unmeteredRequestCount ?? 0) > 0 || (hasUsage && entry.modelBreakdowns?.isEmpty ?? true) {
-                return nil
-            }
-            // Unpriced requests leave each model's dollars a partial subtotal; withhold them so the
-            // shares fall back to complete token counts instead of comparing incomplete spend.
-            let spendIsComplete = (entry.unpricedRequestCount ?? 0) == 0
-            for breakdown in entry.modelBreakdowns ?? [] {
-                let name = breakdown.modelName.trimmingCharacters(in: .whitespacesAndNewlines)
-                guard !name.isEmpty else { continue }
-                if tokens[name] == nil, costs[name] == nil {
-                    order.append(name)
-                }
-                tokens[name, default: []].append(breakdown.totalTokens)
-                costs[name, default: []].append(spendIsComplete ? breakdown.costUSD : nil)
-            }
-        }
-        let inputs = order.map { name in
-            let modelCosts = costs[name] ?? []
-            // A day without a count makes the total unknown rather than a silent partial sum.
-            let modelTokens = tokens[name] ?? []
-            let summedTokens = modelTokens.contains(where: { $0 == nil })
-                ? nil : CheckedSum.integers(modelTokens.compactMap(\.self))
-            return WidgetSnapshot.ModelShareInput(
-                modelName: name,
-                totalTokens: summedTokens,
-                costUSD: modelCosts.contains(where: { $0 == nil }) ? nil : modelCosts.compactMap(\.self).reduce(0, +))
-        }
-        return WidgetSnapshot.ModelShare.leading(inputs)
+            details: snapshot.flatMap { $0.details.isEmpty ? nil : $0.details })
     }
 
     private func claudeWidgetQuotaOwnerKey() -> String {

@@ -2,6 +2,10 @@
 
 ## 0.83.1 — Unreleased
 
+### Changed
+
+- Widgets: lead every usage tile with one headline figure, show the provider's real logo, draw bars in neutral ink with red reserved for a low window (kept visible in tinted and clear widgets), and keep medium cost lines whenever they fit (#4887).
+
 ## 0.83.0 — 2026-10-31
 
 ### Highlights
