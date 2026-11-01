@@ -349,6 +349,11 @@ extension UsageStore {
         var tokens: [String: [Int?]] = [:]
         var costs: [String: [Double?]] = [:]
         for entry in snapshot.daily {
+            // A day with usage but no model split would make every share overstate its model.
+            let hasUsage = (entry.totalTokens ?? 0) > 0 || (entry.costUSD ?? 0) > 0
+            if hasUsage, entry.modelBreakdowns?.isEmpty ?? true {
+                return nil
+            }
             for breakdown in entry.modelBreakdowns ?? [] {
                 let name = breakdown.modelName.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !name.isEmpty else { continue }

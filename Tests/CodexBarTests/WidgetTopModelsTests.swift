@@ -95,6 +95,27 @@ struct WidgetTopModelsTests {
     }
 
     @Test
+    func `a usage day without a model split withholds top models`() {
+        let unsplit = CostUsageDailyReport.Entry(
+            date: "2026-10-02",
+            inputTokens: nil,
+            outputTokens: nil,
+            totalTokens: 5000,
+            costUSD: 4,
+            modelsUsed: nil,
+            modelBreakdowns: nil)
+        let snapshot = CostUsageTokenSnapshot(
+            sessionTokens: nil,
+            sessionCostUSD: nil,
+            last30DaysTokens: nil,
+            last30DaysCostUSD: nil,
+            daily: [Self.day("2026-10-01", [("opus", 100, 6)]), unsplit],
+            updatedAt: Date(timeIntervalSince1970: 1_793_000_000))
+
+        #expect(UsageStore.widgetTopModels(from: snapshot) == nil)
+    }
+
+    @Test
     func `snapshots written before top models still decode`() throws {
         let entry = WidgetSnapshot.ProviderEntry(
             provider: .claude,

@@ -214,7 +214,10 @@ struct UsageTile<Header: View>: View {
                 barPercent: displayed ?? 0,
                 isLow: QuotaSeverity.isLow(remaining: lane.remainingPercent),
                 color: color,
-                numberSize: self.size.heroNumberSize)
+                numberSize: self.size.heroNumberSize,
+                // Small tiles keep the figure large but put its caption beside it, leaving room for
+                // the other windows so a low one is never folded into "+N more".
+                compact: self.size == .small)
         } else if let fallback {
             HeroBlock(
                 value: fallback.value,
