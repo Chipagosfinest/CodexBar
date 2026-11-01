@@ -10,10 +10,26 @@ source = source.replace('NSRect(x: 280, y: 380, width: 440, height: 160)', 'NSRe
 source = source.replace('NSPoint(x: 20, y: 100)', 'NSPoint(x: 20, y: 520)')
 source = source.replace('NSRect(x: 20, y: 110, width: 400, height: 22)', 'NSRect(x: 20, y: 520, width: 780, height: 22)')
 (product/'Sources/CodexBar/RealBehaviorProof.swift').write_text(source)
-entry = product/'Sources/CodexBar/CodexBarApp.swift'
+entry = product/'Sources/CodexBar/CodexbarApp.swift'
 entry.write_text(entry.read_text().replace('if MenuBarLayoutNativeProof.runIfRequested() {', 'if RealBehaviorProof.runIfRequested() { return }\n        if MenuBarLayoutNativeProof.runIfRequested() {'))
+# Swift 6.2.4 on the hosted image times out inferring this pre-existing array
+# concatenation. Only type decomposition changes; this function is outside the
+# early fixture entry path and product PR source is never changed.
+plugins = product/'Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift'
+plugin_source = plugins.read_text()
+plugin_source = plugin_source.replace('        return ([\n            codexBarLocalizationSignature(),', '        let fields: [String] = [\n            codexBarLocalizationSignature(),').replace('        ] + resets).joined(separator: "|")', '        ]\n        return (fields + resets).joined(separator: "|")')
+assert plugin_source != plugins.read_text(), 'Fingerprint decomposition target did not match'
+plugins.write_text(plugin_source)
+integrity = []
+paths = subprocess.check_output(['git','ls-files','Sources/CodexBar/Menu','Sources/CodexBarCore'],cwd=product,text=True).splitlines()
+for relative in paths:
+    current = (product/relative).read_bytes()
+    baseline = subprocess.check_output(['git','show','HEAD:'+relative],cwd=product)
+    assert current == baseline, 'Exercised production source changed: '+relative
+    integrity.append({'path':relative,'sha256':hashlib.sha256(current).hexdigest(),'matches_product_head':True})
+(output/'production-integrity.json').write_text(json.dumps(integrity,indent=2)+'\n')
 (output/'fixture.swift').write_text(source)
-(output/'plumbing.patch').write_text(subprocess.check_output(['git', 'diff', '--', 'Sources/CodexBar/CodexBarApp.swift'], cwd=product, text=True))
+(output/'plumbing.patch').write_text(subprocess.check_output(['git', 'diff', '--', 'Sources/CodexBar/CodexbarApp.swift', 'Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift'], cwd=product, text=True))
 (output/'source-provenance.json').write_text(json.dumps({
     'pr': os.environ['PROOF_PR'],
     'head_sha': subprocess.check_output(['git','rev-parse','HEAD'],cwd=product,text=True).strip(),
