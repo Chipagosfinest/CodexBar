@@ -126,22 +126,21 @@ struct UsageTile<Header: View>: View {
                 // Medium splits into columns only when there are lanes to fill the right one. A
                 // single-lane provider in two columns leaves a void beside the headline; down one
                 // column it gets the full width for its bar instead.
+                // The hero's bar stays under its own number; cost lines span both columns below, so
+                // neither column is stretched to meet the other's baseline.
                 if self.size == .medium, !plan.lanes.isEmpty {
                     HStack(alignment: .top, spacing: 14) {
-                        self.hero(plan: plan, fallback: fallback, color: color, spreads: !metrics.isEmpty)
+                        self.hero(plan: plan, fallback: fallback, color: color)
                             .frame(width: 104, alignment: .leading)
                         VStack(alignment: .leading, spacing: WidgetLayout.laneSpacing) {
                             self.lanes(plan: plan, color: color)
-                            if !metrics.isEmpty {
-                                Spacer(minLength: 2)
-                                self.metrics(metrics)
-                            }
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
                     }
-                    .frame(maxHeight: .infinity)
+                    Spacer(minLength: 0)
+                    self.metrics(metrics)
                 } else {
-                    self.hero(plan: plan, fallback: fallback, color: color, spreads: false)
+                    self.hero(plan: plan, fallback: fallback, color: color)
                     VStack(alignment: .leading, spacing: self.size.laneSpacing) {
                         self.lanes(plan: plan, color: color)
                     }
@@ -179,7 +178,7 @@ struct UsageTile<Header: View>: View {
     {
         VStack(alignment: .leading, spacing: 4) {
             self.header()
-            self.hero(plan: plan, fallback: fallback, color: color, spreads: false)
+            self.hero(plan: plan, fallback: fallback, color: color)
             VStack(alignment: .leading, spacing: 3) {
                 self.lanes(plan: plan, color: color)
             }
@@ -193,8 +192,7 @@ struct UsageTile<Header: View>: View {
     private func hero(
         plan: WidgetTilePlan,
         fallback: WidgetFallbackHeroContent?,
-        color: Color,
-        spreads: Bool) -> some View
+        color: Color) -> some View
     {
         if let lane = plan.hero {
             let displayed = WidgetUsageDisplay.percent(
@@ -211,7 +209,6 @@ struct UsageTile<Header: View>: View {
                 isLow: QuotaSeverity.isLow(remaining: lane.remainingPercent),
                 color: color,
                 numberSize: self.size.heroNumberSize,
-                spreads: spreads,
                 compact: self.size == .small,
                 inlineQuotaTitle: title)
         } else if let fallback {

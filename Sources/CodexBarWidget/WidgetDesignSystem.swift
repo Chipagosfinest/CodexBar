@@ -328,9 +328,6 @@ struct HeroBlock: View {
     var isLow: Bool = false
     var color: Color = .secondary
     var numberSize: CGFloat = 34
-    /// Pushes the bar to the bottom of the available height so a column tile has no dead space
-    /// under the headline.
-    var spreads: Bool = false
     var compact: Bool = false
     var inlineQuotaTitle: String?
 
@@ -399,14 +396,11 @@ struct HeroBlock: View {
                     .minimumScaleFactor(0.75)
             }
             if let barPercent = self.barPercent {
-                if self.spreads {
-                    Spacer(minLength: 5)
-                }
                 QuotaBar(
                     percent: barPercent,
                     color: self.color,
                     height: self.compact ? 6 : WidgetLayout.heroBarHeight)
-                    .padding(.top, self.spreads ? 0 : self.compact ? 2 : 5)
+                    .padding(.top, self.compact ? 2 : 5)
             }
         }
     }
