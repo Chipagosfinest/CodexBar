@@ -168,6 +168,116 @@ struct WidgetTopModelsTests {
         #expect(UsageStore.widgetTopModels(from: snapshot) == nil)
     }
 
+    @Test(arguments: [(false, false), (true, true), (false, true)])
+    func `incomplete history withholds model shares`(coverage: Bool, partial: Bool) {
+        let snapshot = CostUsageTokenSnapshot(
+            sessionTokens: nil,
+            sessionCostUSD: nil,
+            last30DaysTokens: nil,
+            last30DaysCostUSD: nil,
+            historyCoverageIsEstablished: coverage,
+            historyScanIsPartial: partial,
+            daily: [Self.day("2026-10-01", [("opus", 100, 6)])],
+            updatedAt: Date(timeIntervalSince1970: 1_793_000_000))
+
+        #expect(UsageStore.widgetTopModels(from: snapshot) == nil)
+    }
+
+    @Test(arguments: [
+        (40, 4.0), (40, 10.0), (100, 4.0), (100, 10.0), (140, 14.0),
+    ])
+    func `daily coverage selects only a complete basis`(modelTokens: Int, modelCost: Double) throws {
+        let entry = CostUsageDailyReport.Entry(
+            date: "2026-10-01",
+            inputTokens: nil,
+            outputTokens: nil,
+            totalTokens: 100,
+            costUSD: 10,
+            modelsUsed: ["opus", "sonnet"],
+            modelBreakdowns: [
+                .init(modelName: "opus", costUSD: modelCost * 0.8, totalTokens: modelTokens / 2),
+                .init(modelName: "sonnet", costUSD: modelCost * 0.2, totalTokens: modelTokens / 2),
+            ])
+        let shares = UsageStore.widgetTopModels(from: Self.snapshot([entry]))
+        if modelCost == 10 {
+            #expect(try abs(#require(shares?.first?.share) - 0.8) < 1e-9)
+        } else if modelTokens == 100 {
+            #expect(shares?.first?.share == 0.5)
+            #expect(shares?.first?.costUSD == nil)
+        } else {
+            #expect(shares == nil)
+        }
+    }
+
+    @Test
+    func `partial sole model and unnamed usage do not become one hundred percent`() {
+        for models in [[("opus", 40, 4.0)], [("opus", 40, 4.0), ("  ", 60, 6.0)]] {
+            let entry = Self.coverageDay("2026-10-01", models)
+            #expect(UsageStore.widgetTopModels(from: Self.snapshot([entry])) == nil)
+        }
+    }
+
+    @Test
+    func `coverage must hold each day rather than cancelling across days`() {
+        let days = [
+            Self.coverageDay("2026-10-01", [("opus", 40, 4)]),
+            Self.coverageDay("2026-10-02", [("opus", 160, 16)]),
+        ]
+        #expect(UsageStore.widgetTopModels(from: Self.snapshot(days)) == nil)
+    }
+
+    @Test
+    func `one basis must cover the entire history`() {
+        let days = [
+            Self.coverageDay("2026-10-01", [("opus", 40, 10)]),
+            Self.coverageDay("2026-10-02", [("sonnet", 100, 4)]),
+        ]
+        #expect(UsageStore.widgetTopModels(from: Self.snapshot(days)) == nil)
+    }
+
+    @Test
+    func `floating point spend summation preserves complete coverage`() throws {
+        let entry = CostUsageDailyReport.Entry(
+            date: "2026-10-01",
+            inputTokens: nil,
+            outputTokens: nil,
+            totalTokens: nil,
+            costUSD: 0.3,
+            modelsUsed: ["opus", "sonnet"],
+            modelBreakdowns: [
+                .init(modelName: "opus", costUSD: 0.1),
+                .init(modelName: "sonnet", costUSD: 0.2),
+            ])
+        let shares = try #require(UsageStore.widgetTopModels(from: Self.snapshot([entry])))
+        #expect(abs((shares.first?.share ?? 0) - 2.0 / 3.0) < 1e-9)
+    }
+
+    private static func coverageDay(
+        _ date: String,
+        _ models: [(String, Int, Double)]) -> CostUsageDailyReport.Entry
+    {
+        CostUsageDailyReport.Entry(
+            date: date,
+            inputTokens: nil,
+            outputTokens: nil,
+            totalTokens: 100,
+            costUSD: 10,
+            modelsUsed: models.map(\.0),
+            modelBreakdowns: models.map {
+                .init(modelName: $0.0, costUSD: $0.2, totalTokens: $0.1)
+            })
+    }
+
+    private static func snapshot(_ days: [CostUsageDailyReport.Entry]) -> CostUsageTokenSnapshot {
+        CostUsageTokenSnapshot(
+            sessionTokens: nil,
+            sessionCostUSD: nil,
+            last30DaysTokens: nil,
+            last30DaysCostUSD: nil,
+            daily: days,
+            updatedAt: Date(timeIntervalSince1970: 1_793_000_000))
+    }
+
     @Test
     func `snapshots written before top models still decode`() throws {
         let entry = WidgetSnapshot.ProviderEntry(
