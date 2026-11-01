@@ -1,0 +1,102 @@
+PR #4890 real-behavior proof log
+Head: c68604b327fb176150519f7ae07c3cd4155bf276 (detached worktree, PR code unchanged)
+Machine: macOS 27, Command Line Tools only (no Xcode). Date: 2026-11-01.
+
+Harness: Package.swift locally patched (not committed) to replace the XCTest-based CodexBarTests target with a
+local-only Swift Testing target "RedesignProofTests" (deps: CodexBar, CodexBarCore, CodexBarWidget) containing
+TopModelsPipelineProofTests.swift (copy: TopModelsPipelineProofTests.swift.txt) plus the repo's TestStores.swift and
+ZaiTokenStoreTestSupport.swift helpers. Built with --build-system native, MacOSX26.5 SDK, local SwiftUI macro shim.
+
+Commands:
+  git -C <repo> worktree add --detach /tmp/cb-4890-proof c68604b327fb176150519f7ae07c3cd4155bf276
+  python3 patch_package.py /tmp/cb-4890-proof          # swap test target as above
+  CB_CMD=build cb-build.sh --target RedesignProofTests  # exit 0
+  CB_CMD=test CODEXBAR_REDESIGN_PROOF_DIR=/tmp/cb-4890-proof-out cb-build.sh --filter TopModelsPipelineProofTests
+
+Test output:
+◇ Test run started.
+✔ Test "withheld and partial-breakdown histories through the same publication path" passed after 1.042 seconds.
+✔ Test "real Claude history flows through UsageStore to the persisted snapshot and large tile" passed after 7.226 seconds.
+✔ Suite TopModelsPipelineProofTests passed after 7.226 seconds.
+✔ Test run with 2 tests in 1 suite passed after 7.226 seconds.
+
+Pipeline exercised in Case 1 (all production code, nothing injected):
+  ~/.claude/projects JSONL -> CostUsageFetcher(cacheRoot: temp dir) -> UsageStore.refreshTokenUsage(.claude, force: true)
+  -> loadTokenUsageSnapshot -> commitTokenUsageResult -> publishTokenSnapshot -> persistWidgetSnapshot
+  -> makeWidgetSnapshot/makeWidgetEntry -> UsageStore.widgetTopModels(from:) -> saveWidgetSnapshot (JSON on disk)
+  -> WidgetSnapshotStore.load(from:) (same decoder as the extension) -> UsageTile(size: .large) + TileHeader.
+  No quota/OAuth fetch, no cookies, KeychainAccessGate disabled for the run, widget timeline reload stubbed.
+
+== Case 1: REAL local Claude Code history (this Mac), production refresh path ==
+head=c68604b327fb176150519f7ae07c3cd4155bf276; Keychain gate disabled for the run; cost cache isolated to a temp dir
+UsageStore.refreshTokenUsage(.claude, force: true) took 6.7s; tokenError=nil
+snapshot flags: historyScanIsPartial=false historyCoverageIsEstablished=true historyIsFullyScanned=true historyDays=30 days=8
+per-day completeness (gate = the PR's predicate in widgetTopModels; coverage = breakdown sums vs day totals, NOT checked by the PR):
+  2026-10-08 dayTokens=7122636 dayCost=$6.48 models=1 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-18 dayTokens=55418609 dayCost=$7.53 models=3 unpriced=258 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-19 dayTokens=811620 dayCost=$0.11 models=2 unpriced=8 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-21 dayTokens=10142774 dayCost=$0.37 models=2 unpriced=62 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-24 dayTokens=6101822 dayCost=$0.18 models=2 unpriced=50 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-25 dayTokens=8409945 dayCost=$0.24 models=2 unpriced=67 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-31 dayTokens=101370564 dayCost=$2.95 models=3 unpriced=435 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-11-01 dayTokens=104383143 dayCost=$1.43 models=2 unpriced=537 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+UsageStore.widgetTopModels(from: published snapshot): basis=tokens
+  claude-opus-5-5 share=0.9378 (94%) tokens=275499239 cost=nil
+  claude-opus-4-6 share=0.0480 (5%) tokens=14091733 cost=nil
+  claude-sonnet-5-5 share=0.0117 (1%) tokens=3433218 cost=nil
+persisted widget.json bytes=1269 (written by persistWidgetSnapshot -> saveWidgetSnapshot)
+decoded entry.topModels (WidgetSnapshotStore.load): basis=tokens
+  claude-opus-5-5 share=0.9378 (94%) tokens=275499239 cost=nil
+  claude-opus-4-6 share=0.0480 (5%) tokens=14091733 cost=nil
+  claude-sonnet-5-5 share=0.0117 (1%) tokens=3433218 cost=nil
+decoded dailyUsage points=8; tile shows models instead of chart: true
+
+== Case 2: SYNTHETIC history, one day has usage but no model split ==
+snapshot flags: historyScanIsPartial=false historyCoverageIsEstablished=true historyIsFullyScanned=true historyDays=30 days=14
+per-day completeness (gate = the PR's predicate in widgetTopModels; coverage = breakdown sums vs day totals, NOT checked by the PR):
+  2026-10-19 dayTokens=1000000 dayCost=$20.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-20 dayTokens=1090000 dayCost=$21.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-21 dayTokens=1180000 dayCost=$22.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-22 dayTokens=1270000 dayCost=$23.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-23 dayTokens=1360000 dayCost=$24.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-24 dayTokens=1450000 dayCost=$25.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-25 dayTokens=1540000 dayCost=$26.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-26 dayTokens=1630000 dayCost=$27.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-27 dayTokens=1720000 dayCost=$28.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-28 dayTokens=1500000 dayCost=$31.00 models=0 unpriced=nil unmetered=nil gate=WITHHOLD tokenCoverage=0.0000 costCoverage=0.0000
+  2026-10-29 dayTokens=1900000 dayCost=$30.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-30 dayTokens=1990000 dayCost=$31.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-31 dayTokens=2080000 dayCost=$32.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-11-01 dayTokens=2170000 dayCost=$33.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+persisted widget.json bytes=1233
+decoded entry.topModels: topModels=nil (shares withheld -> chart)
+decoded dailyUsage points=14 -> 14-day chart rendered: true
+
+== Case 3: SYNTHETIC ClawSweeper P2 shape: day total $10 / 100 tokens, sole breakdown $4 / 40 tokens ==
+snapshot flags: historyScanIsPartial=false historyCoverageIsEstablished=true historyIsFullyScanned=true historyDays=30 days=1
+per-day completeness (gate = the PR's predicate in widgetTopModels; coverage = breakdown sums vs day totals, NOT checked by the PR):
+  2026-11-01 dayTokens=100 dayCost=$10.00 models=1 unpriced=nil unmetered=nil gate=accept tokenCoverage=0.4000 costCoverage=0.4000
+persisted widget.json bytes=539
+decoded entry.topModels: basis=cost (all models priced)
+  claude-sonnet-4-5 share=1.0000 (100%) tokens=40 cost=$4.00
+RESULT at this head: shares PUBLISHED although breakdowns cover only 40% of the day -> ClawSweeper P2 #2 reproduced
+
+Notes on real data (Case 1):
+- 7 of 8 days have unpriced requests (unpriced=8..537), so the PR's gate withholds cost and shares use the token
+  basis; the tile's 94% / 5% / 1% are token shares. Top-3 tokens sum 293,024,190 of 293,761,113 total (a 4th model
+  holds the remaining ~0.25%); shares divide by all models.
+- Real history was fully scanned (historyScanIsPartial=false, historyIsFullyScanned=true), so ClawSweeper P2 #1
+  (partial scan not withheld) was NOT exercised by this data. Breakdown sums matched every day's totals exactly
+  (coverage 1.0000), so P2 #2 did not show on real data either.
+- Case 3 (synthetic) reproduces P2 #2 through the full store -> JSON -> tile path: a day whose sole breakdown covers
+  40% of its tokens and cost is published as 100% for that model.
+- The provider mark renders as the "CL" initials fallback: the harness does not compile the asset catalog (no actool).
+
+Installed WidgetKit extension: NOT exercised.
+- Scripts/package_app.sh builds CodexBarWidget.appex only via xcodegen + `xcodebuild -scheme CodexBarWidgetExtension`
+  (lines ~471-548); this Mac has no Xcode (`xcrun --find actool` fails; xcodebuild unavailable). SwiftPM's
+  `CodexBarWidget` executable product is not a WidgetKit .appex bundle.
+- The registered widget on this Mac (pluginkit: com.steipete.codexbar.widget 0.83.0) is the released app, which
+  predates the topModels field, so it cannot show PR behavior.
+- Hence: in-process rendering of the production SwiftUI tile from the persisted/decoded snapshot, not a WidgetKit
+  host. Timeline provider, app-group container I/O and reloadAllTimelines were not exercised.

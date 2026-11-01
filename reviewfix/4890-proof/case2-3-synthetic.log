@@ -1,0 +1,29 @@
+== Case 2: SYNTHETIC history, one day has usage but no model split ==
+snapshot flags: historyScanIsPartial=false historyCoverageIsEstablished=true historyIsFullyScanned=true historyDays=30 days=14
+per-day completeness (gate = the PR's predicate in widgetTopModels; coverage = breakdown sums vs day totals, NOT checked by the PR):
+  2026-10-19 dayTokens=1000000 dayCost=$20.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-20 dayTokens=1090000 dayCost=$21.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-21 dayTokens=1180000 dayCost=$22.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-22 dayTokens=1270000 dayCost=$23.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-23 dayTokens=1360000 dayCost=$24.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-24 dayTokens=1450000 dayCost=$25.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-25 dayTokens=1540000 dayCost=$26.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-26 dayTokens=1630000 dayCost=$27.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-27 dayTokens=1720000 dayCost=$28.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-28 dayTokens=1500000 dayCost=$31.00 models=0 unpriced=nil unmetered=nil gate=WITHHOLD tokenCoverage=0.0000 costCoverage=0.0000
+  2026-10-29 dayTokens=1900000 dayCost=$30.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-30 dayTokens=1990000 dayCost=$31.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-31 dayTokens=2080000 dayCost=$32.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-11-01 dayTokens=2170000 dayCost=$33.00 models=2 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+persisted widget.json bytes=1233
+decoded entry.topModels: topModels=nil (shares withheld -> chart)
+decoded dailyUsage points=14 -> 14-day chart rendered: true
+
+== Case 3: SYNTHETIC ClawSweeper P2 shape: day total $10 / 100 tokens, sole breakdown $4 / 40 tokens ==
+snapshot flags: historyScanIsPartial=false historyCoverageIsEstablished=true historyIsFullyScanned=true historyDays=30 days=1
+per-day completeness (gate = the PR's predicate in widgetTopModels; coverage = breakdown sums vs day totals, NOT checked by the PR):
+  2026-11-01 dayTokens=100 dayCost=$10.00 models=1 unpriced=nil unmetered=nil gate=accept tokenCoverage=0.4000 costCoverage=0.4000
+persisted widget.json bytes=539
+decoded entry.topModels: basis=cost (all models priced)
+  claude-sonnet-4-5 share=1.0000 (100%) tokens=40 cost=$4.00
+RESULT at this head: shares PUBLISHED although breakdowns cover only 40% of the day -> ClawSweeper P2 #2 reproduced

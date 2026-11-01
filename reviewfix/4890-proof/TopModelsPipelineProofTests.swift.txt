@@ -1,0 +1,261 @@
+import AppKit
+@testable import CodexBarCore
+import Foundation
+import SwiftUI
+import Testing
+import WidgetKit
+@testable import CodexBar
+@testable import CodexBarWidget
+
+/// Local-only proof for PR #4890. Not part of the PR.
+/// Real path: this Mac's Claude Code JSONL -> CostUsageFetcher (isolated cache) -> UsageStore.refreshTokenUsage
+/// -> publishTokenSnapshot -> persistWidgetSnapshot -> widget.json on disk -> WidgetSnapshotStore.load(from:)
+/// -> production large UsageTile + TileHeader (as CodexBarUsageWidgetView builds it).
+@MainActor
+struct TopModelsPipelineProofTests {
+    static var outputDirectory: URL? {
+        ProcessInfo.processInfo.environment["CODEXBAR_REDESIGN_PROOF_DIR"].map {
+            URL(fileURLWithPath: $0, isDirectory: true)
+        }
+    }
+
+    final class Log {
+        var lines: [String] = []
+        func callAsFunction(_ s: String) { self.lines.append(s); print("[proof] \(s)") }
+    }
+
+    // MARK: Store
+
+    static func makeStore(root: URL, environment: [String: String]) -> UsageStore {
+        let settings = testSettingsStore(
+            suiteName: "TopModelsPipelineProof",
+            userDefaults: InMemoryUserDefaults(),
+            config: testConfigWithAllProvidersDisabled())
+        settings.statusChecksEnabled = false
+        settings.refreshFrequency = .manual
+        settings.costUsageEnabled = true
+        enableTestProviders([.claude], settings: settings)
+        return UsageStore(
+            fetcher: UsageFetcher(environment: [:]),
+            browserDetection: BrowserDetection(homeDirectory: root.path, fileExists: { _ in false }),
+            costUsageFetcher: CostUsageFetcher(cacheRoot: root.appendingPathComponent("cost-cache", isDirectory: true)),
+            settings: settings,
+            historicalUsageHistoryStore: HistoricalUsageHistoryStore(fileURL: root.appendingPathComponent("history.json")),
+            planUtilizationHistoryStore: PlanUtilizationHistoryStore(directoryURL: nil),
+            startupBehavior: .testing,
+            environmentBase: environment,
+            widgetSnapshotURL: root.appendingPathComponent("widget.json"),
+            widgetTimelineReloader: {})
+    }
+
+    // MARK: Render
+
+    static func png(_ view: some View, appearance: NSAppearance.Name, scale: CGFloat = 2) -> Data? {
+        let hosting = NSHostingView(rootView: AnyView(view))
+        hosting.appearance = NSAppearance(named: appearance)
+        let size = hosting.fittingSize
+        hosting.frame = CGRect(origin: .zero, size: size)
+        let window = NSWindow(contentRect: hosting.frame, styleMask: [.borderless], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        window.appearance = hosting.appearance
+        window.contentView = hosting
+        defer {
+            window.contentView = nil
+            window.close()
+        }
+        window.layoutIfNeeded()
+        hosting.layoutSubtreeIfNeeded()
+        RunLoop.current.run(until: Date().addingTimeInterval(0.2))
+        let pixels = NSSize(width: size.width * scale, height: size.height * scale)
+        guard let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil, pixelsWide: Int(pixels.width), pixelsHigh: Int(pixels.height),
+            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+            colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)
+        else { return nil }
+        rep.size = size
+        hosting.cacheDisplay(in: hosting.bounds, to: rep)
+        return rep.representation(using: .png, properties: [:])
+    }
+
+    /// Mirrors CodexBarUsageWidgetView's body for the systemLarge family (the view reads the get-only
+    /// `\.widgetFamily`, so the tile it builds is constructed directly here). 364x382 is the large widget size.
+    static func largeTile(_ snapshot: WidgetSnapshot, provider: UsageProvider) throws -> some View {
+        let entry = try #require(snapshot.entries.first { $0.provider == provider.instanceID })
+        return UsageTile(entry: entry, size: .large) {
+            TileHeader(provider: entry.provider, updatedAt: entry.updatedAt, size: .large)
+        }
+        .environment(\.widgetUsageShowsUsed, snapshot.usageBarsShowUsed)
+        .padding(14)
+        .frame(width: 364, height: 382)
+        .background(.fill.tertiary, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .padding(12)
+    }
+
+    static func write(_ name: String, _ view: some View, to dir: URL) throws {
+        for (scheme, appearance) in [(ColorScheme.light, NSAppearance.Name.aqua), (.dark, .darkAqua)] {
+            let framed = view
+                .environment(\.locale, Locale(identifier: "en_US_POSIX"))
+                .environment(\.colorScheme, scheme)
+                .background(Color(nsColor: .windowBackgroundColor))
+            let data = try #require(Self.png(framed, appearance: appearance))
+            try data.write(to: dir.appendingPathComponent("\(name)-\(scheme == .light ? "light" : "dark").png"))
+        }
+    }
+
+    // MARK: Logging helpers
+
+    static func usd(_ v: Double?) -> String { v.map { String(format: "$%.2f", $0) } ?? "nil" }
+    static func tok(_ v: Int?) -> String { v.map { String($0) } ?? "nil" }
+
+    static func logDays(_ snapshot: CostUsageTokenSnapshot, _ log: Log) {
+        log("snapshot flags: historyScanIsPartial=\(snapshot.historyScanIsPartial) " +
+            "historyCoverageIsEstablished=\(snapshot.historyCoverageIsEstablished) " +
+            "historyIsFullyScanned=\(snapshot.historyIsFullyScanned) historyDays=\(snapshot.historyDays) days=\(snapshot.daily.count)")
+        log("per-day completeness (gate = the PR's predicate in widgetTopModels; coverage = breakdown sums vs day totals, NOT checked by the PR):")
+        for e in snapshot.daily {
+            let b = e.modelBreakdowns ?? []
+            let hasUsage = (e.totalTokens ?? 0) > 0 || (e.costUSD ?? 0) > 0 ||
+                (e.requestCount ?? 0) > 0 || (e.unpricedRequestCount ?? 0) > 0
+            let withheld = (e.unmeteredRequestCount ?? 0) > 0 || (hasUsage && b.isEmpty)
+            let bTok = b.compactMap(\.totalTokens).reduce(0, +)
+            let bCost = b.compactMap(\.costUSD).reduce(0, +)
+            let tokCov = e.totalTokens.map { $0 > 0 ? String(format: "%.4f", Double(bTok) / Double($0)) : "-" } ?? "n/a"
+            let costCov = e.costUSD.map { $0 > 0 ? String(format: "%.4f", bCost / $0) : "-" } ?? "n/a"
+            log("  \(e.date) dayTokens=\(Self.tok(e.totalTokens)) dayCost=\(Self.usd(e.costUSD)) " +
+                "models=\(b.count) unpriced=\(Self.tok(e.unpricedRequestCount)) unmetered=\(Self.tok(e.unmeteredRequestCount)) " +
+                "gate=\(withheld ? "WITHHOLD" : "accept") tokenCoverage=\(tokCov) costCoverage=\(costCov)")
+        }
+    }
+
+    static func logShares(_ models: [WidgetSnapshot.ModelShare]?, _ log: Log, label: String) {
+        guard let models else { log("\(label): topModels=nil (shares withheld -> chart)"); return }
+        let basis = models.allSatisfy { $0.costUSD != nil } ? "cost (all models priced)" : "tokens"
+        log("\(label): basis=\(basis)")
+        for m in models {
+            log(String(format: "  %@ share=%.4f (%@) tokens=%@ cost=%@",
+                       m.modelName, m.share, WidgetTopModels.shareText(m.share), Self.tok(m.totalTokens), Self.usd(m.costUSD)))
+        }
+    }
+
+    /// Publishes a snapshot through the store's real publication path, persists, and decodes from disk.
+    static func publishAndDecode(
+        _ token: CostUsageTokenSnapshot, root: URL, log: Log) async throws -> WidgetSnapshot
+    {
+        let store = Self.makeStore(root: root, environment: [:])
+        store.publishTokenSnapshot(token, for: .claude)
+        store.persistWidgetSnapshot(reason: "proof")
+        await store.widgetSnapshotPersistTask?.value
+        let url = root.appendingPathComponent("widget.json")
+        log("persisted widget.json bytes=\(try Data(contentsOf: url).count)")
+        return try #require(WidgetSnapshotStore.load(from: url))
+    }
+
+    static func day(_ date: String, tokens: Int?, cost: Double?, _ models: [(String, Int?, Double?)]?) -> CostUsageDailyReport.Entry {
+        CostUsageDailyReport.Entry(
+            date: date, inputTokens: nil, outputTokens: nil, totalTokens: tokens, costUSD: cost,
+            modelsUsed: models?.map(\.0),
+            modelBreakdowns: models?.map { CostUsageDailyReport.ModelBreakdown(modelName: $0.0, costUSD: $0.2, totalTokens: $0.1) })
+    }
+
+    static func recentDayKeys(_ n: Int) -> [String] {
+        let f = DateFormatter()
+        f.calendar = Calendar(identifier: .gregorian)
+        f.dateFormat = "yyyy-MM-dd"
+        return (0..<n).map { f.string(from: Date().addingTimeInterval(Double($0 - n + 1) * 86400)) }
+    }
+
+    // MARK: Tests
+
+    @Test
+    func `real Claude history flows through UsageStore to the persisted snapshot and large tile`() async throws {
+        guard let out = Self.outputDirectory else { return }
+        try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
+        let log = Log()
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("cb4890-real-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        log("== Case 1: REAL local Claude Code history (this Mac), production refresh path ==")
+        log("head=c68604b327fb176150519f7ae07c3cd4155bf276; Keychain gate disabled for the run; cost cache isolated to a temp dir")
+        let store = Self.makeStore(root: root, environment: ProcessInfo.processInfo.environment)
+        let started = Date()
+        await KeychainAccessGate.withTaskOverrideForTesting(true) {
+            await store.refreshTokenUsage(.claude, force: true)
+        }
+        await store.widgetSnapshotPersistTask?.value
+        log(String(format: "UsageStore.refreshTokenUsage(.claude, force: true) took %.1fs; tokenError=%@",
+                   Date().timeIntervalSince(started), store.tokenError(for: .claude) ?? "nil"))
+        let published = try #require(store.tokenSnapshotForCurrentProviderConfig(for: .claude)?.snapshot)
+        Self.logDays(published, log)
+        Self.logShares(UsageStore.widgetTopModels(from: published), log, label: "UsageStore.widgetTopModels(from: published snapshot)")
+
+        let url = root.appendingPathComponent("widget.json")
+        let raw = try Data(contentsOf: url)
+        log("persisted widget.json bytes=\(raw.count) (written by persistWidgetSnapshot -> saveWidgetSnapshot)")
+        let decoded = try #require(WidgetSnapshotStore.load(from: url))
+        let entry = try #require(decoded.entries.first { $0.provider == .claude })
+        Self.logShares(entry.topModels, log, label: "decoded entry.topModels (WidgetSnapshotStore.load)")
+        #expect(entry.topModels == UsageStore.widgetTopModels(from: published))
+        log("decoded dailyUsage points=\(entry.dailyUsage.count); tile shows models instead of chart: \(!(entry.topModels ?? []).isEmpty)")
+        // Persist the claude entry's topModels block from disk verbatim as JSON evidence.
+        if let obj = try JSONSerialization.jsonObject(with: raw) as? [String: Any],
+           let entries = obj["entries"] as? [[String: Any]],
+           let claude = entries.first(where: { ($0["provider"] as? String) == "claude" }),
+           let top = claude["topModels"]
+        {
+            let d = try JSONSerialization.data(withJSONObject: ["provider": "claude", "topModels": top], options: [.prettyPrinted, .sortedKeys])
+            try d.write(to: out.appendingPathComponent("case1-real-widget-json-topModels.json"))
+        }
+        try CodexBarLocalizationOverride.$appLanguage.withValue("en") {
+            try Self.write("case1-real-claude-large", Self.largeTile(decoded, provider: .claude), to: out)
+        }
+        try (log.lines.joined(separator: "\n") + "\n").write(to: out.appendingPathComponent("case1-real.log"), atomically: true, encoding: .utf8)
+    }
+
+    @Test
+    func `withheld and partial-breakdown histories through the same publication path`() async throws {
+        guard let out = Self.outputDirectory else { return }
+        try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
+        let log = Log()
+        let keys = Self.recentDayKeys(14)
+        // Case 2 (SYNTHETIC): every day split by model except one day with usage but no model breakdown.
+        log("== Case 2: SYNTHETIC history, one day has usage but no model split ==")
+        var days = keys.enumerated().map { i, k in
+            Self.day(k, tokens: 1_000_000 + i * 90_000, cost: 20 + Double(i), [
+                ("claude-opus-4-1", 600_000 + i * 50_000, 14 + Double(i) * 0.7),
+                ("claude-sonnet-4-5", 400_000 + i * 40_000, 6 + Double(i) * 0.3),
+            ])
+        }
+        days[9] = Self.day(keys[9], tokens: 1_500_000, cost: 31, nil)
+        let withheld = CostUsageTokenSnapshot(
+            sessionTokens: 1_000_000, sessionCostUSD: 20, last30DaysTokens: 20_000_000, last30DaysCostUSD: 400,
+            daily: days, updatedAt: Date())
+        Self.logDays(withheld, log)
+        let root2 = FileManager.default.temporaryDirectory.appendingPathComponent("cb4890-withheld-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: root2, withIntermediateDirectories: true)
+        let decoded2 = try await Self.publishAndDecode(withheld, root: root2, log: log)
+        let e2 = try #require(decoded2.entries.first { $0.provider == .claude })
+        Self.logShares(e2.topModels, log, label: "decoded entry.topModels")
+        log("decoded dailyUsage points=\(e2.dailyUsage.count) -> 14-day chart rendered: \(e2.topModels == nil && !e2.dailyUsage.isEmpty)")
+        #expect(e2.topModels == nil)
+
+        // Case 3 (SYNTHETIC): ClawSweeper's partial-breakdown shape ($10 / 100 tokens day, one named $4 / 40 row).
+        log("")
+        log("== Case 3: SYNTHETIC ClawSweeper P2 shape: day total $10 / 100 tokens, sole breakdown $4 / 40 tokens ==")
+        let partial = CostUsageTokenSnapshot(
+            sessionTokens: 100, sessionCostUSD: 10, last30DaysTokens: 100, last30DaysCostUSD: 10,
+            daily: [Self.day(keys[13], tokens: 100, cost: 10, [("claude-sonnet-4-5", 40, 4)])],
+            updatedAt: Date())
+        Self.logDays(partial, log)
+        let root3 = FileManager.default.temporaryDirectory.appendingPathComponent("cb4890-partial-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: root3, withIntermediateDirectories: true)
+        let decoded3 = try await Self.publishAndDecode(partial, root: root3, log: log)
+        let e3 = try #require(decoded3.entries.first { $0.provider == .claude })
+        Self.logShares(e3.topModels, log, label: "decoded entry.topModels")
+        log("RESULT at this head: \(e3.topModels == nil ? "withheld (chart kept)" : "shares PUBLISHED although breakdowns cover only 40% of the day -> ClawSweeper P2 #2 reproduced")")
+
+        try CodexBarLocalizationOverride.$appLanguage.withValue("en") {
+            try Self.write("case2-synthetic-withheld-large", Self.largeTile(decoded2, provider: .claude), to: out)
+            try Self.write("case3-synthetic-partial-large", Self.largeTile(decoded3, provider: .claude), to: out)
+        }
+        try (log.lines.joined(separator: "\n") + "\n").write(to: out.appendingPathComponent("case2-3-synthetic.log"), atomically: true, encoding: .utf8)
+    }
+}

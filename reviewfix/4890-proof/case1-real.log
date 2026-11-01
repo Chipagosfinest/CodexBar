@@ -1,0 +1,23 @@
+== Case 1: REAL local Claude Code history (this Mac), production refresh path ==
+head=c68604b327fb176150519f7ae07c3cd4155bf276; Keychain gate disabled for the run; cost cache isolated to a temp dir
+UsageStore.refreshTokenUsage(.claude, force: true) took 6.7s; tokenError=nil
+snapshot flags: historyScanIsPartial=false historyCoverageIsEstablished=true historyIsFullyScanned=true historyDays=30 days=8
+per-day completeness (gate = the PR's predicate in widgetTopModels; coverage = breakdown sums vs day totals, NOT checked by the PR):
+  2026-10-08 dayTokens=7122636 dayCost=$6.48 models=1 unpriced=nil unmetered=nil gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-18 dayTokens=55418609 dayCost=$7.53 models=3 unpriced=258 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-19 dayTokens=811620 dayCost=$0.11 models=2 unpriced=8 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-21 dayTokens=10142774 dayCost=$0.37 models=2 unpriced=62 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-24 dayTokens=6101822 dayCost=$0.18 models=2 unpriced=50 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-25 dayTokens=8409945 dayCost=$0.24 models=2 unpriced=67 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-10-31 dayTokens=101370564 dayCost=$2.95 models=3 unpriced=435 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+  2026-11-01 dayTokens=104383143 dayCost=$1.43 models=2 unpriced=537 unmetered=0 gate=accept tokenCoverage=1.0000 costCoverage=1.0000
+UsageStore.widgetTopModels(from: published snapshot): basis=tokens
+  claude-opus-5-5 share=0.9378 (94%) tokens=275499239 cost=nil
+  claude-opus-4-6 share=0.0480 (5%) tokens=14091733 cost=nil
+  claude-sonnet-5-5 share=0.0117 (1%) tokens=3433218 cost=nil
+persisted widget.json bytes=1269 (written by persistWidgetSnapshot -> saveWidgetSnapshot)
+decoded entry.topModels (WidgetSnapshotStore.load): basis=tokens
+  claude-opus-5-5 share=0.9378 (94%) tokens=275499239 cost=nil
+  claude-opus-4-6 share=0.0480 (5%) tokens=14091733 cost=nil
+  claude-sonnet-5-5 share=0.0117 (1%) tokens=3433218 cost=nil
+decoded dailyUsage points=8; tile shows models instead of chart: true
