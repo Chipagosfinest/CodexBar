@@ -1,0 +1,35 @@
+[0/1] Planning build
+Building for debugging...
+[0/18] Write sources
+[1/18] Write swift-version--1AB21518FC5DEDBE.txt
+[3/9] Emitting module CodexBarWidget
+macro expansion @Entry:2:5: warning: 'nonisolated(unsafe)' is unnecessary for a constant with 'Sendable' type 'Bool', consider removing it
+`- /private/tmp/cb-reviewfix/4887/Sources/CodexBarWidget/WidgetDesignSystem.swift:65:50: note: expanded code originates here
+ 63 | extension EnvironmentValues {
+ 64 |     /// Mirrors the app's "show used instead of remaining" preference into the tiles.
+ 65 |     @Entry var widgetUsageShowsUsed: Bool = false
+    |     `- note: in expansion of macro 'Entry' on property 'widgetUsageShowsUsed' here
+    +--- macro expansion @Entry ----------------------------------------
+    |1 | private struct __Key_widgetUsageShowsUsed: SwiftUI.EnvironmentKey {
+    |2 |     nonisolated(unsafe) static let defaultValue: Bool = unsafeBitCast(
+    |  |     `- warning: 'nonisolated(unsafe)' is unnecessary for a constant with 'Sendable' type 'Bool', consider removing it
+    |3 |         make as @MainActor () -> Bool, to: (() -> Bool).self)()
+    |4 |     @MainActor private static func make() -> Bool {
+    +-------------------------------------------------------------------
+ 66 | 
+ 67 |     /// Snapshot-rendering seam. WidgetKit owns `widgetRenderingMode` and nothing outside a widget
+[4/8] Compiling LocalProofTests V2ProofTests.swift
+[5/8] Compiling LocalProofTests V2WidgetProofTests.swift
+[6/8] Emitting module LocalProofTests
+[6/8] Write Objects.LinkFileList
+[7/8] Linking CodexBarPackageTests
+Build complete! (9.06s)
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite V2WidgetProofTests started.
+◇ Test "render usage widgets" started.
+✔ Test "render usage widgets" passed after 2.088 seconds.
+✔ Suite V2WidgetProofTests passed after 2.088 seconds.
+✔ Test run with 1 test in 1 suite passed after 2.088 seconds.

@@ -1,0 +1,20 @@
+[0/1] Planning build
+Building for debugging...
+[0/17] Write sources
+[1/17] Write swift-version--1AB21518FC5DEDBE.txt
+[3/6] Emitting module LocalProofTests
+[4/6] Compiling LocalProofTests V2ProofTests.swift
+[5/6] Compiling LocalProofTests V2ModelsProofTests.swift
+[5/7] Write Objects.LinkFileList
+[6/7] Linking CodexBarPackageTests
+Build complete! (6.37s)
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite V2ModelsProofTests started.
+◇ Test "render usage and spend models lens" started.
+Charts: Custom UnitPoint values are not supported in AxisValueLabel's anchor property. Please use leading, topLeading, center, etc.
+✔ Test "render usage and spend models lens" passed after 1.656 seconds.
+✔ Suite V2ModelsProofTests passed after 1.657 seconds.
+✔ Test run with 1 test in 1 suite passed after 1.657 seconds.

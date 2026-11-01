@@ -1,0 +1,35 @@
+diff --git a/Sources/CodexBar/CodexbarApp.swift b/Sources/CodexBar/CodexbarApp.swift
+index 8f29a42..fdd46a5 100644
+--- a/Sources/CodexBar/CodexbarApp.swift
++++ b/Sources/CodexBar/CodexbarApp.swift
+@@ -27,6 +27,7 @@ enum CodexBarEntryPoint {
+             exit(CodexBarCoreResourceSmoke.run())
+         }
+         #if DEBUG
++        if RealBehaviorProof.runIfRequested() { return }
+         if MenuBarLayoutNativeProof.runIfRequested() {
+             return
+         }
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift b/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
+index 08bcceb..5b411db 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
+@@ -426,7 +426,7 @@ struct UserPluginMenuCardView: View {
+         let resets = [snapshot?.primary, snapshot?.secondary, snapshot?.tertiary].map { window in
+             window.flatMap { UsageFormatter.resetLine(for: $0, style: resetStyle, now: now) } ?? ""
+         }
+-        return ([
++        let fields: [String] = [
+             codexBarLocalizationSignature(),
+             snapshot?.updatedAt.timeIntervalSinceReferenceDate.description ?? "none",
+             String(snapshot?.details.count ?? 0),
+@@ -437,7 +437,8 @@ struct UserPluginMenuCardView: View {
+             error == nil ? "" : snapshot.map {
+                 LastKnownUsagePresentation.message(capturedAt: $0.updatedAt, now: now)
+             } ?? "",
+-        ] + resets).joined(separator: "|")
++        ]
++        return (fields + resets).joined(separator: "|")
+     }
+ }
+ #endif

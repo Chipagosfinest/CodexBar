@@ -1,0 +1,614 @@
+{
+  "heads": {
+    "4897": "3927a4e72577da2bdb4c5c0fee0077e007d2efc0",
+    "4896": "38e10c239bec53eaf706afea99b81400df49083b",
+    "4893": "a14a006c7c19eba24b2ae0348efe4cadae62d593",
+    "4890": "6f97fb9d7e2ebe9855bbd344b8092395c351d43b",
+    "4889": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+    "4888": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+    "4887": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+    "4884": "8c311de2545db92f4914629d3f0692a5dbf18acf",
+    "4883": "d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0",
+    "4882": "b14654258b056401b590cc65c880eb6245610fb8",
+    "4881": "7dc9174267b5809433dbb326a233f30d3f5cf01d",
+    "4877": "a299386b88311cff6051d7d8dcd678a5ca310aab"
+  },
+  "images": [
+    {
+      "path": "4881/03-critical.png",
+      "sourceSHA": "7dc9174267b5809433dbb326a233f30d3f5cf01d",
+      "sha256": "b32cde4557bd9286e67617ec1187810613e0bd37e97276f9bed7c6f8a82b842b",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "nonblankStddev": [
+        108.98613998053622,
+        108.60430027346023,
+        108.87292612153927
+      ],
+      "observed": "Real native NSMenu with current PR production card and synthetic state: 03-critical",
+      "proves": "Actual hosted menu state from current product head; related recording preserves transitions",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4881/09-healthy.png",
+      "sourceSHA": "7dc9174267b5809433dbb326a233f30d3f5cf01d",
+      "sha256": "2b4d89e858dc89e25c0e2a390448a80223e2abc3581d5f3a23ba845345da8888",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "nonblankStddev": [
+        108.93010738927882,
+        108.52539102076022,
+        108.80036105925127
+      ],
+      "observed": "Real native NSMenu with current PR production card and synthetic state: 09-healthy",
+      "proves": "Actual hosted menu state from current product head; related recording preserves transitions",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4883/06-failed.png",
+      "sourceSHA": "d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0",
+      "sha256": "88a72d5a135053d530ee9d076f4de7432399ae7a0ebb89398c4d29b8f8ef9ee2",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "nonblankStddev": [
+        109.0013600027604,
+        108.57762566419188,
+        108.81119415679157
+      ],
+      "observed": "Real native NSMenu with current PR production card and synthetic state: 06-failed",
+      "proves": "Actual hosted menu state from current product head; related recording preserves transitions",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4883/11-recovered.png",
+      "sourceSHA": "d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0",
+      "sha256": "e944493025d7aa7a41c4da6fd6dd0d5dc88e37cccb8cd42ff41ff516ffbc8f8e",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "nonblankStddev": [
+        108.96928960362176,
+        108.56455739594502,
+        108.83950580517943
+      ],
+      "observed": "Real native NSMenu with current PR production card and synthetic state: 11-recovered",
+      "proves": "Actual hosted menu state from current product head; related recording preserves transitions",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4883/healthy.png",
+      "sourceSHA": "d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0",
+      "sha256": "1b14af83bbef9be7e3c4f86b6932f0c4418a11322d536afd2d6e27d11a90ea55",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "nonblankStddev": [
+        108.96922638653423,
+        108.56477421348588,
+        108.84001258707737
+      ],
+      "observed": "Real native NSMenu with current PR production card and synthetic state: healthy",
+      "proves": "Actual hosted menu state from current product head; related recording preserves transitions",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4884/02-tick11.png",
+      "sourceSHA": "8c311de2545db92f4914629d3f0692a5dbf18acf",
+      "sha256": "063c91f386346e11dc2438a6cf704c0fbcc6ffc6d97412a5e7dc90f1d6e96fe8",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "nonblankStddev": [
+        108.97320914868502,
+        108.5670051802602,
+        108.806770027324
+      ],
+      "observed": "Real native NSMenu with current PR production card and synthetic state: 02-tick11",
+      "proves": "Actual hosted menu state from current product head; related recording preserves transitions",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4884/07-tick88.png",
+      "sourceSHA": "8c311de2545db92f4914629d3f0692a5dbf18acf",
+      "sha256": "df27ad8e33c5644d90a76bf2b58e1292dcf79522601a049f4005a2e04dd75742",
+      "dimensions": [
+        1024,
+        768
+      ],
+      "nonblankStddev": [
+        108.92989702284922,
+        108.52538309025604,
+        108.84906866085655
+      ],
+      "observed": "Real native NSMenu with current PR production card and synthetic state: 07-tick88",
+      "proves": "Actual hosted menu state from current product head; related recording preserves transitions",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-sheet-dark.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "63e42dcda66880edda733a6d3a382a30cc150bb73aa009987337707a555d97ec",
+      "dimensions": [
+        1916,
+        3280
+      ],
+      "nonblankStddev": [
+        31.39891560931489,
+        31.150739002788868,
+        31.30882072485258
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-sheet-light.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "1d1f076e781195a216e141dafd1b4dd86a0470a693b412fcae9bef976a0bad05",
+      "dimensions": [
+        1916,
+        3280
+      ],
+      "nonblankStddev": [
+        34.27719816194933,
+        34.43021290122174,
+        34.384096562318355
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-usage-large-dark.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "11b283c90f1712b3f67ad5eddb4db6668d749abb119db6b393ef2e9ef1f19c68",
+      "dimensions": [
+        776,
+        888
+      ],
+      "nonblankStddev": [
+        35.869344233462265,
+        35.034644602120046,
+        35.01896569687565
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-usage-large-light.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "251b2db136a1980cb6d6c110f0698f9151625193101ebf2afa29d4afaa98f41c",
+      "dimensions": [
+        776,
+        888
+      ],
+      "nonblankStddev": [
+        38.604571499751145,
+        39.13843903886072,
+        39.160804749639524
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-usage-medium-dark.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "ab2812f7bb8f560a323cf413f70d17aca6fe5e3523867fcfdf5e0be503ad48f4",
+      "dimensions": [
+        776,
+        464
+      ],
+      "nonblankStddev": [
+        33.82282932348214,
+        32.576229787654164,
+        32.532977082402894
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-usage-medium-light.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "6ff7117cf31379e0ca7cf9db1ad12e3bb81cf85fb53381679883980eb67ec2db",
+      "dimensions": [
+        776,
+        464
+      ],
+      "nonblankStddev": [
+        35.115354404158786,
+        35.94926104708901,
+        36.02206270176381
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-usage-small-dark.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "5ff7f5a2c78500b53069e68c018859dd0434c89100d9d248785bda3a6acee821",
+      "dimensions": [
+        590,
+        464
+      ],
+      "nonblankStddev": [
+        30.82690722079868,
+        30.20118891792087,
+        30.15595137911562
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4887/widget-usage-small-light.png",
+      "sourceSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "sha256": "475eda0cede3c26db04cbacdea5a8e9300c57b5d9ba9fbb7e80844604fcde6a9",
+      "dimensions": [
+        590,
+        464
+      ],
+      "nonblankStddev": [
+        31.274302595375303,
+        31.707845580666824,
+        31.79553800695345
+      ],
+      "observed": "Current production widget; chart retained on large family; neutral quota bars and low-quota red secondary values",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-dark.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "48c87ff6d48861fbedc8a2fc0293fed5aaf3860e9ddf159e802adef685ab7df5",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        34.52390033261078,
+        34.42736456773908,
+        34.94141269518948
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-dark",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-light.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "be697d816a789e505b4eb2d67eda1eb95f4117118dd75a5cc000106978a00ff0",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        37.313187788382756,
+        37.346581016380135,
+        37.35590649943192
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-light",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-multicurrency-dark.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "c24e02f51a9f9982053def71d5bab1efab814fed695a2bda67270393421fc80a",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        34.5930753177863,
+        34.494835716315976,
+        35.014306831269295
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-multicurrency-dark",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-multicurrency-light.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "682f08535bb002a4e8df9bdb31391e53bff457d7d5d1d5ab8c2487b1a117d7c3",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        37.34444876198693,
+        37.38109276245053,
+        37.37691731940797
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-multicurrency-light",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-no-models-dark.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "06dee9546aa694952ac9631673bce0016a81e816aba506bb8673e0e489e806e5",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        31.137820614551877,
+        31.07971509924035,
+        31.24458870569318
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-no-models-dark",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-no-models-light.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "c1fb157be9e0d5cc98dd6ec329fb1fb435593a39fdda8156e178fa4cab1cfe2d",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        33.70353388612589,
+        33.736396514954826,
+        33.82107176145732
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-no-models-light",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-partial-dark.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "3c8f7be1e23700491d674891f5d0bf0c858b68fb8096db899a896cc9152c767b",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        33.71862566707608,
+        33.618922441555,
+        34.14659423507034
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-partial-dark",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-partial-light.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "d3f9666615b97ba464235b919b4ffdf5e61c510ce3e567553faec9c25c403ed0",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        36.31692203458374,
+        36.352440804961475,
+        36.33024639087483
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-partial-light",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-sparse-dark.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "761a571724125e5ba36fd52c44999f203980b0c00baeced81ec793bff0afd0e6",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        32.6170453436602,
+        32.4910257626497,
+        32.63580725772359
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-sparse-dark",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-card-sparse-light.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "26acc62c5c696b96ecc75aae84f881b3699bd9ea9ce1aad0043ecca73b8ef68e",
+      "dimensions": [
+        1200,
+        668
+      ],
+      "nonblankStddev": [
+        35.34219394554289,
+        35.41804057804938,
+        35.51603673655083
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-card-sparse-light",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-copied-image-dark.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "6119883ceeb3c5d30f830edbbe34e8fa8a133e93c75c003ec03d4638dbe8bbc3",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "nonblankStddev": [
+        35.15305050993477,
+        35.052274268490855,
+        35.58793641731255
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-copied-image-dark",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-copied-image-light.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "62baa86fc614f474218df1d0d2cbba8b2c8de57b09f4385f5aea7485604a7316",
+      "dimensions": [
+        1200,
+        630
+      ],
+      "nonblankStddev": [
+        38.043820852533,
+        38.07797684525767,
+        38.0876451008716
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-copied-image-light",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-window-preview-dark.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "c1e9b41485b5e3a3a70237d25370be3e5382a2293ddbdbca6fa42312aec15f0b",
+      "dimensions": [
+        780,
+        557
+      ],
+      "nonblankStddev": [
+        27.819876634948606,
+        27.768231168142705,
+        28.16649061998194
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-window-preview-dark",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4888/share-window-preview-light.png",
+      "sourceSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "sha256": "68622617a8e08f81e5b432c4a1d4725c09a0db98a8af2e0d1ee20cbb25e48d94",
+      "dimensions": [
+        780,
+        557
+      ],
+      "nonblankStddev": [
+        30.802932995665454,
+        30.724241123456743,
+        30.700933551625635
+      ],
+      "observed": "Production share card or actual window/private-pasteboard export; share-window-preview-light",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4889/usage-spend-models-dark.png",
+      "sourceSHA": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+      "sha256": "7b265fc1c8611e76e292ca56b7aa2b956aad5e82b746159daed7b7981f9d9879",
+      "dimensions": [
+        640,
+        1205
+      ],
+      "nonblankStddev": [
+        39.47311950966685,
+        31.267870023109573,
+        29.996846751937003
+      ],
+      "observed": "Models lens; priced ranked models with spend shares",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4889/usage-spend-models-light.png",
+      "sourceSHA": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+      "sha256": "ae6c6f608c1038e18b5289f900cee40afe7a2e7f08c3b9235ee6d311ca1f83fb",
+      "dimensions": [
+        640,
+        1205
+      ],
+      "nonblankStddev": [
+        36.414459353488596,
+        39.13076002292609,
+        42.61272468361806
+      ],
+      "observed": "Models lens; priced ranked models with spend shares",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4889/usage-spend-models-partial-dark.png",
+      "sourceSHA": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+      "sha256": "006dcb805fe313a6a0d40ab141790d79fbe7c9dad5b70a02e8094f8b96c50e2b",
+      "dimensions": [
+        640,
+        1201
+      ],
+      "nonblankStddev": [
+        38.83174721912809,
+        30.38065139905683,
+        29.064940913075965
+      ],
+      "observed": "Models lens; partial breakdown warning with no shares or bars",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4889/usage-spend-models-partial-light.png",
+      "sourceSHA": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+      "sha256": "98823ace05a6c8bf0bf241ab523c78cf2a837da2e3420b71ab9f7d3e6addf28d",
+      "dimensions": [
+        640,
+        1201
+      ],
+      "nonblankStddev": [
+        36.10512944107006,
+        38.87613731219801,
+        42.39610269511649
+      ],
+      "observed": "Models lens; partial breakdown warning with no shares or bars",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4889/usage-spend-models-unpriced-dark.png",
+      "sourceSHA": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+      "sha256": "e93f0230b3abf519d258b85650abcba8e5e965dcf06c68f70b5176dbb8f33392",
+      "dimensions": [
+        640,
+        1185
+      ],
+      "nonblankStddev": [
+        39.56429584446886,
+        31.206409623819393,
+        29.91300049674312
+      ],
+      "observed": "Models lens; mixed-provider unpriced rows with no shares or bars",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    },
+    {
+      "path": "4889/usage-spend-models-unpriced-light.png",
+      "sourceSHA": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+      "sha256": "b3e9fda8cba61f1756940ed453dc3d2d9ea90426e85eae07e7289aca33dbf255",
+      "dimensions": [
+        640,
+        1185
+      ],
+      "nonblankStddev": [
+        36.19324702330535,
+        38.988433476199326,
+        42.544033751031556
+      ],
+      "observed": "Models lens; mixed-provider unpriced rows with no shares or bars",
+      "proves": "Fixture-driven production presentation at the stated PR head; export images exercise the real exporter",
+      "does_not_prove": "Live provider fetching, personal-account behavior, or product approval; offscreen widget renders do not prove WidgetKit installation"
+    }
+  ],
+  "method": "PR-specific unchanged production sources; synthetic data; temporary opt-in renderer; local CLT SDK 26.5 and macro shims. Hosted NSMenu stills reuse exact-head captures already attached as video proof."
+}

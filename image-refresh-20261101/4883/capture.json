@@ -1,0 +1,20 @@
+{
+  "screencapture_exit": 0,
+  "stderr": "IOServiceMatchingfailed for: AppleM2ScalerParavirtDriver\n",
+  "events": [
+    {
+      "offset_s": 3.1,
+      "phase": "refreshing"
+    },
+    {
+      "offset_s": 6.092,
+      "phase": "failed"
+    },
+    {
+      "offset_s": 11.122,
+      "phase": "recovered"
+    }
+  ],
+  "app_pid": 5439,
+  "app_running_after_capture": true
+}

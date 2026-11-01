@@ -1,0 +1,26 @@
+[0/1] Planning build
+Building for debugging...
+[0/19] Write sources
+[1/18] Write swift-version--1AB21518FC5DEDBE.txt
+[3/7] Compiling LocalProofTests V2ShareExportProofTests.swift
+[4/7] Compiling LocalProofTests V2ProofTests.swift
+[5/7] Emitting module LocalProofTests
+[5/7] Write Objects.LinkFileList
+[6/7] Linking CodexBarPackageTests
+Build complete! (9.49s)
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite V2ProofTests started.
+◇ Suite V2ShareExportProofTests started.
+◇ Test "share window preview and copied image follow the app appearance" started.
+◇ Test "render share card" started.
+◇ Test "render usage and spend section" started.
+Charts: Custom UnitPoint values are not supported in AxisValueLabel's anchor property. Please use leading, topLeading, center, etc.
+✔ Test "render share card" passed after 4.202 seconds.
+✔ Test "share window preview and copied image follow the app appearance" passed after 4.203 seconds.
+✔ Suite V2ShareExportProofTests passed after 4.203 seconds.
+✔ Test "render usage and spend section" passed after 4.203 seconds.
+✔ Suite V2ProofTests passed after 4.203 seconds.
+✔ Test run with 3 tests in 2 suites passed after 4.203 seconds.
