@@ -1,0 +1,18 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuCardCriticalHeadroomTests started.
+◇ Test "remaining percentages use the same shared threshold" started.
+◇ Test "healthy compact headers reserve no warning glyph space" started.
+◇ Test "critical warning preserves the frozen reset header height" started.
+◇ Test "healthy reset content uses full width inside the safe height" started.
+◇ Test "unavailable windows and credit lanes never read as critical" started.
+◇ Test "used percentages flag only the critical headroom tier" started.
+✔ Test "unavailable windows and credit lanes never read as critical" passed after 0.001 seconds.
+✔ Test "remaining percentages use the same shared threshold" passed after 0.001 seconds.
+✔ Test "used percentages flag only the critical headroom tier" passed after 0.001 seconds.
+✔ Test "healthy compact headers reserve no warning glyph space" passed after 0.041 seconds.
+✔ Test "critical warning preserves the frozen reset header height" passed after 0.130 seconds.
+✔ Test "healthy reset content uses full width inside the safe height" passed after 0.182 seconds.
+✔ Suite MenuCardCriticalHeadroomTests passed after 0.182 seconds.
+✔ Test run with 6 tests in 1 suite passed after 0.182 seconds.

@@ -1,0 +1,50 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuCardStaleTintTests started.
+◇ Test "failed refresh tints retained bars neutral" started.
+◇ Test "account subtitle override does not hide a failed refresh" started.
+◇ Test "successful refresh keeps the provider tint" started.
+◇ Test "failed quota refresh preserves fresh supplemental cost tint" started.
+◇ Test "failed first fetch has no retained measurement to tint" started.
+✔ Test "account subtitle override does not hide a failed refresh" passed after 0.038 seconds.
+✔ Test "failed refresh tints retained bars neutral" passed after 0.038 seconds.
+✘ Test "failed quota refresh preserves fresh supplemental cost tint" recorded an issue at MenuCardStaleTintTests.swift:71:9: Expectation failed: failed.progressColor == UsageMenuCardView.Model.progressColor(for: .claude)
+↳ failed.progressColor == UsageMenuCardView.Model.progressColor(for: .claude) → false
+↳   failed.progressColor → AppKitPlatformColorProvider(platformColor: Catalog color: System secondaryLabelColor)
+↳     provider → SwiftUI.ColorBox<SwiftUI.AppKitPlatformColorProvider>
+↳       base → AppKitPlatformColorProvider(platformColor: Catalog color: System secondaryLabelColor)
+↳         platformColor → Catalog color: System secondaryLabelColor
+↳   UsageMenuCardView.Model.progressColor(for: .claude) → #CC7C5EFF
+↳     provider → SwiftUI.ColorBox<SwiftUI.ResolvedColorProvider>
+↳       base → ResolvedColorProvider(color: #CC7C5EFF)
+↳         color → #CC7C5EFF
+↳           base → #CC7C5EFF
+↳             linearRed → 0.6038274
+↳             linearGreen → 0.2015563
+↳             linearBlue → 0.111932434
+↳             opacity → 1.0
+↳           _headroom → nan
+✘ Test "failed quota refresh preserves fresh supplemental cost tint" recorded an issue at MenuCardStaleTintTests.swift:72:9: Expectation failed: failed.progressColor == recovered.progressColor
+↳ failed.progressColor == recovered.progressColor → false
+↳   failed.progressColor → AppKitPlatformColorProvider(platformColor: Catalog color: System secondaryLabelColor)
+↳     provider → SwiftUI.ColorBox<SwiftUI.AppKitPlatformColorProvider>
+↳       base → AppKitPlatformColorProvider(platformColor: Catalog color: System secondaryLabelColor)
+↳         platformColor → Catalog color: System secondaryLabelColor
+↳   recovered.progressColor → #CC7C5EFF
+↳     provider → SwiftUI.ColorBox<SwiftUI.ResolvedColorProvider>
+↳       base → ResolvedColorProvider(color: #CC7C5EFF)
+↳         color → #CC7C5EFF
+↳           base → #CC7C5EFF
+↳             linearRed → 0.6038274
+↳             linearGreen → 0.2015563
+↳             linearBlue → 0.111932434
+↳             opacity → 1.0
+↳           _headroom → nan
+✔ Test "successful refresh keeps the provider tint" passed after 0.043 seconds.
+✔ Test "failed first fetch has no retained measurement to tint" passed after 0.043 seconds.
+✘ Test "failed quota refresh preserves fresh supplemental cost tint" failed after 0.043 seconds with 2 issues.
+✘ Suite MenuCardStaleTintTests failed after 0.043 seconds with 2 issues.
+✘ Test run with 5 tests in 1 suite failed after 0.043 seconds with 2 issues.
+Note: Some test targets reported failures:
+  - CodexBarPackageTests (Swift Testing)

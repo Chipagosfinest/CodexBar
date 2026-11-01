@@ -1,0 +1,26 @@
+{
+  "pr": "4881",
+  "gitSHA": "7dc9174267b5809433dbb326a233f30d3f5cf01d",
+  "rawMOV": "pr4881-7dc917426.mov",
+  "rawSHA256": "5f5b9c0160008d17fa414bc4527d3f079c7dddf1139195c432c7fe17a016c018",
+  "mp4SHA256": "7624f4940caf9aa6fe7c7e0c3f8f58bce7805e4344c897c34a7fec2b0dc06afc",
+  "transformation": "H264 MP4 container transcode only, same dimensions and playback speed, no overlays or cuts",
+  "ffprobe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1024,
+        "height": 768
+      }
+    ],
+    "format": {
+      "duration": "15.533333",
+      "size": "2095821"
+    }
+  },
+  "verifiedProductionFiles": 1025,
+  "publishedRawFile": "screen.mov",
+  "publishedMP4File": "screen.mp4"
+}

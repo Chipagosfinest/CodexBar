@@ -1,0 +1,13 @@
+F
+======================================================================
+FAIL: test_all_launches_isolate_ambient_accounts_and_normal_launch_mode (__main__.PackagedAppLaunchTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/user/projects/CodexBar-oss/Scripts/test_packaged_app_launch.py", line 116, in test_all_launches_isolate_ambient_accounts_and_normal_launch_mode
+    self.assertFalse(list(ambient.iterdir()))
+AssertionError: [PosixPath('/var/folders/s9/ny7pjsq92350z1q09bmntxyr0000gn/T/codexbar-launch-fixture-bmv7e1um/ambient-home/Library')] is not false
+
+----------------------------------------------------------------------
+Ran 1 test in 8.034s
+
+FAILED (failures=1)

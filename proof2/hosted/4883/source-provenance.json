@@ -1,0 +1,7 @@
+{
+  "pr": "4883",
+  "head_sha": "d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0",
+  "fixture_sha256": "bd6369d3fe06f15e6472dbe9af2f39f9f339abdc5163c552180730ca0cfcc718",
+  "original_fixture_sha256": "af2b9320babfd6bc39ecd6af6905ce404d35d3550b16a6f7c3d8d1d426682a77",
+  "boundary": "Full CodexBar target at PR head plus early opt-in fixture entry. Real production view and refresh monitor hosted in native NSMenu. Synthetic data, no real transports or StatusItemController routing."
+}

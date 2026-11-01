@@ -1,0 +1,28 @@
+ProductName:		macOS
+ProductVersion:		15.8.2
+BuildVersion:		24H232
+Aqua
+Xcode 26.3
+Build version 17C529
+Apple Swift version 6.2.4 (swiftlang-6.2.4.1.4 clang-1700.6.4.2)
+Target: arm64-apple-macosx15.0
+/Applications/Xcode_16.0.0.app
+/Applications/Xcode_16.0.app
+/Applications/Xcode_16.1.0.app
+/Applications/Xcode_16.1.app
+/Applications/Xcode_16.2.0.app
+/Applications/Xcode_16.2.app
+/Applications/Xcode_16.3.0.app
+/Applications/Xcode_16.3.app
+/Applications/Xcode_16.4.0.app
+/Applications/Xcode_16.4.app
+/Applications/Xcode_16.app
+/Applications/Xcode_26.0.1.app
+/Applications/Xcode_26.0.app
+/Applications/Xcode_26.1.1.app
+/Applications/Xcode_26.1.app
+/Applications/Xcode_26.2.0.app
+/Applications/Xcode_26.2.app
+/Applications/Xcode_26.3.0.app
+/Applications/Xcode_26.3.app
+/Applications/Xcode.app

@@ -1,3 +1,5 @@
+Current three app-PR recordings and review fixes: [proof2](proof2/README.md). The original notes below are historical.
+
 # Native Mac proof, 2026-11-01
 
 Each PR was fetched into its own detached worktree; main was freshly fetched at 897bff317. Native builds ran on Apple Silicon with CLT Swift 6.4. Product source changes were not pushed.

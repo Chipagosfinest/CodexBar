@@ -1,0 +1,43 @@
+diff --git a/Package.swift b/Package.swift
+index 7fe7c2ebb..709f96bb5 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -82,7 +82,7 @@ let package = Package(
+                     .product(name: "SweetCookieKit", package: "SweetCookieKit"),
+                 ],
+                 resources: [
+-                    .process("Resources"),
++                    .copy("Resources"),
+                 ],
+                 swiftSettings: [
+                     .enableUpcomingFeature("StrictConcurrency"),
+@@ -199,7 +199,7 @@ let package = Package(
+                 ],
+                 path: "Sources/CodexBar",
+                 resources: [
+-                    .process("Resources"),
++                    .copy("Resources"),
+                 ],
+                 swiftSettings: [
+                     // Opt into Swift 6 strict concurrency (approachable migration path).
+@@ -211,7 +211,7 @@ let package = Package(
+                 dependencies: ["CodexBarCore"],
+                 path: "Sources/CodexBarWidget",
+                 resources: [
+-                    .process("Resources"),
++                    .copy("Resources"),
+                 ],
+                 swiftSettings: [
+                     .enableUpcomingFeature("StrictConcurrency"),
+diff --git a/Sources/CodexBar/CodexbarApp.swift b/Sources/CodexBar/CodexbarApp.swift
+index 8f29a4227..fdd46a568 100644
+--- a/Sources/CodexBar/CodexbarApp.swift
++++ b/Sources/CodexBar/CodexbarApp.swift
+@@ -27,6 +27,7 @@ enum CodexBarEntryPoint {
+             exit(CodexBarCoreResourceSmoke.run())
+         }
+         #if DEBUG
++        if RealBehaviorProof.runIfRequested() { return }
+         if MenuBarLayoutNativeProof.runIfRequested() {
+             return
+         }

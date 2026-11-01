@@ -1,0 +1,104 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuCardCriticalHeadroomTests started.
+◇ Test "remaining percentages use the same shared threshold" started.
+◇ Test "healthy compact headers reserve no warning glyph space" started.
+◇ Test "used percentages flag only the critical headroom tier" started.
+◇ Test "critical warning preserves the frozen reset header height" started.
+◇ Test "unavailable windows and credit lanes never read as critical" started.
+✔ Test "unavailable windows and credit lanes never read as critical" passed after 0.001 seconds.
+✔ Test "remaining percentages use the same shared threshold" passed after 0.001 seconds.
+✔ Test "used percentages flag only the critical headroom tier" passed after 0.001 seconds.
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 218.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 219.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 220.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 221.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 222.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 223.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 224.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 225.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 226.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 227.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 228.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 229.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 230.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 231.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 232.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 233.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" recorded an issue at MenuCardCriticalHeadroomTests.swift:62:13: Expectation failed: height(critical: false) == height(critical: true)
+↳ Critical warning changed frozen header height at width 234.0
+↳ height(critical: false) == height(critical: true) → false
+↳   height(critical: false) → 16.0
+↳   height(critical: true) → 31.0
+✘ Test "critical warning preserves the frozen reset header height" failed after 0.129 seconds with 17 issues.
+✔ Test "healthy compact headers reserve no warning glyph space" passed after 0.141 seconds.
+✘ Suite MenuCardCriticalHeadroomTests failed after 0.141 seconds with 17 issues.
+✘ Test run with 5 tests in 1 suite failed after 0.141 seconds with 17 issues.
+Note: Some test targets reported failures:
+  - CodexBarPackwarning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+ageTests (Swift Testing)

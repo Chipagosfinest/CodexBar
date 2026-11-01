@@ -1,0 +1,16 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuCardStaleTintTests started.
+◇ Test "account subtitle override does not hide a failed refresh" started.
+◇ Test "failed first fetch has no retained measurement to tint" started.
+◇ Test "failed quota refresh preserves fresh supplemental cost tint" started.
+◇ Test "successful refresh keeps the provider tint" started.
+◇ Test "failed refresh tints retained bars neutral" started.
+✔ Test "failed quota refresh preserves fresh supplemental cost tint" passed after 0.036 seconds.
+✔ Test "failed first fetch has no retained measurement to tint" passed after 0.036 seconds.
+✔ Test "account subtitle override does not hide a failed refresh" passed after 0.036 seconds.
+✔ Test "successful refresh keeps the provider tint" passed after 0.036 seconds.
+✔ Test "failed refresh tints retained bars neutral" passed after 0.037 seconds.
+✔ Suite MenuCardStaleTintTests passed after 0.037 seconds.
+✔ Test run with 5 tests in 1 suite passed after 0.037 seconds.

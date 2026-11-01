@@ -1,0 +1,17 @@
+[
+  {
+    "phase": "healthy",
+    "receipt": "manual=false resolved=89.0 reset=Resets in 3h 11m phase=healthy primary=89.0 subtitle=Updated just now",
+    "time": 1793547814.6544662
+  },
+  {
+    "phase": "critical",
+    "receipt": "manual=false resolved=90.0 reset=Resets in 3h 11m phase=critical primary=90.0 subtitle=Updated just now",
+    "time": 1793547815.665612
+  },
+  {
+    "phase": "healthy",
+    "receipt": "manual=false resolved=89.0 reset=Resets in 3h 11m phase=healthy primary=89.0 subtitle=Updated just now",
+    "time": 1793547816.675841
+  }
+]

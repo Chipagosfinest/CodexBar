@@ -1,0 +1,27 @@
+[
+  {
+    "phase": "healthy",
+    "receipt": "manual=false resolved=89.0 reset=Resets in 3h 11m phase=healthy primary=89.0 subtitle=Updated just now",
+    "time": 1793547701.253089
+  },
+  {
+    "phase": "tick11",
+    "receipt": "manual=false resolved=11.0 reset=Resets in 2m phase=tick11 primary=11.0 subtitle=Updated just now",
+    "time": 1793547702.258036
+  },
+  {
+    "phase": "tick88",
+    "receipt": "manual=false resolved=88.0 reset=Resets in 2m phase=tick88 primary=88.0 subtitle=Updated just now",
+    "time": 1793547703.263354
+  },
+  {
+    "phase": "tick11",
+    "receipt": "manual=false resolved=11.0 reset=Resets in 2m phase=tick11 primary=11.0 subtitle=Updated just now",
+    "time": 1793547704.274459
+  },
+  {
+    "phase": "tick11-after-wall-clock-boundary",
+    "receipt": "manual=false resolved=11.0 reset=Resets in 1m phase=tick11 primary=11.0 subtitle=Updated just now",
+    "time": 1793547710.278189
+  }
+]

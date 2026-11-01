@@ -1,0 +1,22 @@
+[
+  {
+    "phase": "healthy",
+    "receipt": "manual=false resolved=89.0 reset=Resets in 3h 11m phase=healthy primary=89.0 subtitle=Updated just now",
+    "time": 1793547697.066122
+  },
+  {
+    "phase": "refreshing",
+    "receipt": "manual=true resolved=89.0 reset=Resets in 3h 11m phase=refreshing primary=89.0 subtitle=Refreshing\u2026",
+    "time": 1793547698.076991
+  },
+  {
+    "phase": "failed",
+    "receipt": "manual=false resolved=89.0 reset=Resets in 3h 11m phase=failed primary=89.0 subtitle=Synthetic refresh failed. Retaining last usage.",
+    "time": 1793547699.0879822
+  },
+  {
+    "phase": "recovered",
+    "receipt": "manual=false resolved=89.0 reset=Resets in 3h 11m phase=recovered primary=89.0 subtitle=Updated just now",
+    "time": 1793547700.098999
+  }
+]
