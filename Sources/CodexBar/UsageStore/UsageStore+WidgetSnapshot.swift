@@ -349,11 +349,16 @@ extension UsageStore {
         var tokens: [String: [Int?]] = [:]
         var costs: [String: [Double?]] = [:]
         for entry in snapshot.daily {
-            // A day with usage but no model split would make every share overstate its model.
-            let hasUsage = (entry.totalTokens ?? 0) > 0 || (entry.costUSD ?? 0) > 0
-            if hasUsage, entry.modelBreakdowns?.isEmpty ?? true {
+            // A day with usage but no model split would make every share overstate its model. Unmetered
+            // requests (e.g. unresolved forks) carry neither tokens nor cost, so no basis can cover them.
+            let hasUsage = (entry.totalTokens ?? 0) > 0 || (entry.costUSD ?? 0) > 0 ||
+                (entry.requestCount ?? 0) > 0 || (entry.unpricedRequestCount ?? 0) > 0
+            if (entry.unmeteredRequestCount ?? 0) > 0 || (hasUsage && entry.modelBreakdowns?.isEmpty ?? true) {
                 return nil
             }
+            // Unpriced requests leave each model's dollars a partial subtotal; withhold them so the
+            // shares fall back to complete token counts instead of comparing incomplete spend.
+            let spendIsComplete = (entry.unpricedRequestCount ?? 0) == 0
             for breakdown in entry.modelBreakdowns ?? [] {
                 let name = breakdown.modelName.trimmingCharacters(in: .whitespacesAndNewlines)
                 guard !name.isEmpty else { continue }
@@ -361,7 +366,7 @@ extension UsageStore {
                     order.append(name)
                 }
                 tokens[name, default: []].append(breakdown.totalTokens)
-                costs[name, default: []].append(breakdown.costUSD)
+                costs[name, default: []].append(spendIsComplete ? breakdown.costUSD : nil)
             }
         }
         let inputs = order.map { name in

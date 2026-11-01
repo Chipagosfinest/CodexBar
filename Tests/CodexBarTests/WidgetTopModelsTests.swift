@@ -116,6 +116,59 @@ struct WidgetTopModelsTests {
     }
 
     @Test
+    func `a day with unpriced requests ranks by complete tokens instead of partial spend`() throws {
+        // Both models carry a $1 known subtotal, but the day reports an unpriced request, so spend is
+        // incomplete and the shares must come from the complete token counts.
+        let partial = CostUsageDailyReport.Entry(
+            date: "2026-10-01",
+            inputTokens: nil,
+            outputTokens: nil,
+            totalTokens: 1100,
+            costUSD: 2,
+            modelsUsed: ["big", "small"],
+            modelBreakdowns: [
+                .init(modelName: "big", costUSD: 1, totalTokens: 1000),
+                .init(modelName: "small", costUSD: 1, totalTokens: 100),
+            ],
+            unpricedRequestCount: 1)
+        let snapshot = CostUsageTokenSnapshot(
+            sessionTokens: nil,
+            sessionCostUSD: nil,
+            last30DaysTokens: nil,
+            last30DaysCostUSD: nil,
+            daily: [partial],
+            updatedAt: Date(timeIntervalSince1970: 1_793_000_000))
+
+        let leading = try #require(UsageStore.widgetTopModels(from: snapshot))
+
+        #expect(leading.map(\.modelName) == ["big", "small"])
+        #expect(abs((leading.first?.share ?? 0) - 1000.0 / 1100.0) < 1e-9)
+    }
+
+    @Test
+    func `an unmetered day without a model split withholds top models`() {
+        // Unresolved fork activity: requests happened, but no tokens, cost, or model split exist.
+        let unmetered = CostUsageDailyReport.Entry(
+            date: "2026-10-02",
+            inputTokens: nil,
+            outputTokens: nil,
+            totalTokens: nil,
+            costUSD: nil,
+            modelsUsed: nil,
+            modelBreakdowns: nil,
+            unmeteredRequestCount: 3)
+        let snapshot = CostUsageTokenSnapshot(
+            sessionTokens: nil,
+            sessionCostUSD: nil,
+            last30DaysTokens: nil,
+            last30DaysCostUSD: nil,
+            daily: [Self.day("2026-10-01", [("opus", 100, 6)]), unmetered],
+            updatedAt: Date(timeIntervalSince1970: 1_793_000_000))
+
+        #expect(UsageStore.widgetTopModels(from: snapshot) == nil)
+    }
+
+    @Test
     func `snapshots written before top models still decode`() throws {
         let entry = WidgetSnapshot.ProviderEntry(
             provider: .claude,

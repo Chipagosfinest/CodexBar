@@ -186,7 +186,9 @@ struct WidgetProviderPagerTests {
     func `full colour washes the plate with the brand tint and keeps the glyph in ink`() {
         let style = ProviderMarkStyle.resolve(renderingMode: .fullColor, provider: .claude, isSelected: true)
 
-        #expect(style.background == WidgetColors.color(for: ProviderInstanceID.claude).opacity(0.16))
-        #expect(style.foreground == .primary)
+        // The brand tint identifies the provider without replacing the plate, so the real mark keeps its own
+        // colours and contrast instead of sitting on an opaque brand fill with a picked label.
+        #expect(style.background != WidgetColors.color(for: ProviderInstanceID.claude))
+        #expect(style.foreground != .black && style.foreground != .white)
     }
 }

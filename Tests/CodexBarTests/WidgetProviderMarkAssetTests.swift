@@ -35,6 +35,21 @@ struct WidgetProviderMarkAssetTests {
     }
 
     @Test
+    func `the packaged Xcode extension copies the marks into its bundle`() throws {
+        // Packaging builds the tracked Xcode project, not SwiftPM; its resource phase must ship the marks.
+        let project = try String(
+            contentsOf: Self.repositoryRoot
+                .appendingPathComponent("WidgetExtension/CodexBarWidgetExtension.xcodeproj/project.pbxproj"),
+            encoding: .utf8)
+        let phaseStart = try #require(project.range(of: "/* Begin PBXResourcesBuildPhase section */"))
+        let phaseEnd = try #require(project.range(of: "/* End PBXResourcesBuildPhase section */"))
+        let resourcesPhase = project[phaseStart.upperBound..<phaseEnd.lowerBound]
+
+        #expect(resourcesPhase.contains("/* ProviderMarks in Resources */"))
+        #expect(project.contains("lastKnownFileType = folder; path = ProviderMarks;"))
+    }
+
+    @Test
     func `bundled widget marks are byte identical to the app resources`() throws {
         let widgetMarks = Self.repositoryRoot.appendingPathComponent("Sources/CodexBarWidget/Resources/ProviderMarks")
         let appResources = Self.repositoryRoot.appendingPathComponent("Sources/CodexBar/Resources")
