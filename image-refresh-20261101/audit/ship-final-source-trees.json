@@ -1,0 +1,26 @@
+[
+  {
+    "pr": 4902,
+    "head": "c254d8b459b2654be70fbf016c55bf86db2a7815",
+    "sourcesTree": "a622564f0430b129a5e6af2cb9fb727aff90be47",
+    "method": "Final branch-specific native-menu capture; selected-day chart uses injected selection, as labelled"
+  },
+  {
+    "pr": 4901,
+    "head": "6283c26c7ca8fefc0a4cba3477ac45ecf3564a45",
+    "sourcesTree": "5488fdc67257c8277f423c03d25a0484804e716a",
+    "method": "Final branch-specific native-menu capture; selected-day chart uses injected selection, as labelled"
+  },
+  {
+    "pr": 4900,
+    "head": "c64d91d2fe09168a68048d43d9228b9d154c6e3a",
+    "sourcesTree": "cf03531c923148cc8d7b1bb23dd62e0b59bcc398",
+    "method": "Final branch-specific native-menu capture; selected-day chart uses injected selection, as labelled"
+  },
+  {
+    "pr": 4899,
+    "head": "61b1a59de3bb6b239901229a17471cee4394fd56",
+    "sourcesTree": "7a4122a3605cc20d8c9623fc3e4162ed6090b1a0",
+    "method": "Final branch-specific native-menu capture; selected-day chart uses injected selection, as labelled"
+  }
+]

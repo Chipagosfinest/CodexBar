@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-long-3-long99.png",
+    "sha256": "e61435c7302c06cc34aa61872a48c9a969adbd9ae290f02c2121d224f09338ed",
+    "dimensions": [
+      932,
+      704
+    ],
+    "stddev": [
+      111.2846202006741,
+      111.45804956389208,
+      111.44942978841621
+    ],
+    "head": "44e51249b2afcd7120213a17b61e37b749a3f6a8",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-normal-2-critical.png",
+    "sha256": "adb952709419ef9831d0c2b2eee147c2cc5dd633b1daa04a91d222420a3c63ec",
+    "dimensions": [
+      932,
+      704
+    ],
+    "stddev": [
+      111.2721277379967,
+      111.43245162375442,
+      111.42672789570197
+    ],
+    "head": "44e51249b2afcd7120213a17b61e37b749a3f6a8",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-normal-1-healthy.png",
+    "sha256": "85d892a504f41941c0cca24b04177fd6b2145009d73af2d804f4c241de191af9",
+    "dimensions": [
+      932,
+      704
+    ],
+    "stddev": [
+      111.22970416869167,
+      111.3012083920225,
+      111.36425046013244
+    ],
+    "head": "44e51249b2afcd7120213a17b61e37b749a3f6a8",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-long-2-long100.png",
+    "sha256": "5ca5b49045eedf9b900ef2080cbab5f7e036f7726180fac19cafa5e3e0ff702c",
+    "dimensions": [
+      932,
+      704
+    ],
+    "stddev": [
+      111.29946828481486,
+      111.478410111735,
+      111.46892504929092
+    ],
+    "head": "44e51249b2afcd7120213a17b61e37b749a3f6a8",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/before-long-title-100.png",
+    "sha256": "5b90507a698152c670eaf41555b53fdcf206d08123bad34e810327f9c91befb1",
+    "dimensions": [
+      932,
+      704
+    ],
+    "stddev": [
+      111.29040554693957,
+      111.46838098603928,
+      111.45765938578525
+    ],
+    "head": "44e51249b2afcd7120213a17b61e37b749a3f6a8",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-normal-3-healthy.png",
+    "sha256": "52440686dffc649194f678c99efec371be4340e526d6fa72545a3aa35b5ee55b",
+    "dimensions": [
+      932,
+      704
+    ],
+    "stddev": [
+      111.22971307501642,
+      111.3008943323413,
+      111.36391811126154
+    ],
+    "head": "44e51249b2afcd7120213a17b61e37b749a3f6a8",
+    "ok": true
+  }
+]

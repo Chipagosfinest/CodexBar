@@ -1,0 +1,866 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-sheet-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1916,
+      3204
+    ],
+    "stddev": [
+      29.827998976261195,
+      25.128435706629062,
+      29.402661350171115
+    ],
+    "sha256": "5cceebd51740f2320ff23b12b39d7a28d00c22bcbccc8fbe8854f764c46326cf",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-sheet-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1916,
+      3204
+    ],
+    "stddev": [
+      25.70110687634166,
+      26.730543133744607,
+      26.736171981612273
+    ],
+    "sha256": "528659cfb384628afa6088220ff6528c72f93ff7328466e81176ba7b870c18a2",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-large-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      812
+    ],
+    "stddev": [
+      41.36281699680292,
+      25.109930261350698,
+      20.400180845495033
+    ],
+    "sha256": "e707600b6e6597abcd4a85e2c57c53a6a6a7d17006488f4442f3adc9e5b0335c",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-large-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      812
+    ],
+    "stddev": [
+      18.762141132035012,
+      32.28711272901131,
+      38.427414888601206
+    ],
+    "sha256": "46a809319d44e2c1a036ff9e65a676418bf3eb62137e9c14a5b4882f32288dcc",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-medium-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      388
+    ],
+    "stddev": [
+      32.81612228569303,
+      24.83946871082443,
+      22.96200907718752
+    ],
+    "sha256": "fbaf18e227c01df3312a23283095b803aab0c38c0103f2cc746d293347fd3605",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-medium-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      388
+    ],
+    "stddev": [
+      22.759368495699974,
+      28.620583122546975,
+      31.65277732343378
+    ],
+    "sha256": "676ec3424d1270bd8d0f6926be983366fac16452af0eaa0e3bea93cae6bb0419",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-small-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      388,
+      388
+    ],
+    "stddev": [
+      34.015828527447134,
+      28.31846378119009,
+      27.16427114964192
+    ],
+    "sha256": "127e566a57f002fbc65c20503056938f0d3248f4789cdb909d88ac7d71e4379d",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-small-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      388,
+      388
+    ],
+    "stddev": [
+      27.361281900665478,
+      31.477057934798236,
+      33.54327335380893
+    ],
+    "sha256": "3ac9e9aed5283ae2e04cbabcbec3008c3bb99cf2a8762bff8a5324ba105a7d17",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/440be5716439cc4221863866cc92d87ad6bae9e5/redesign/main/menu-card-claude-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      310,
+      391
+    ],
+    "stddev": [
+      42.50538686558283,
+      34.36065558962986,
+      33.21365356206653
+    ],
+    "sha256": "7e8d7c745eac5e1876cff584ee2069e6e5ee2444a0e32951e0e670f687438079",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/440be5716439cc4221863866cc92d87ad6bae9e5/redesign/main/menu-card-claude-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      310,
+      391
+    ],
+    "stddev": [
+      31.72267502171859,
+      38.11795311330205,
+      40.483052631095994
+    ],
+    "sha256": "a96784351261e8fe6b7745fc04be0b792c3236cda9259548a1f2f714dbb86d3c",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/45b5a3d24180ffaf94d2174d559617c5eebc60f5/reviewfix/4890-installed-proof/complete-installed-large.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      91.25731524795447,
+      91.35368322613608,
+      91.61819058583085
+    ],
+    "sha256": "65b1106808a6bcc0b1339f3cdcb662acee07942bd6c9bc310804e6e51519054a",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/45b5a3d24180ffaf94d2174d559617c5eebc60f5/reviewfix/4890-installed-proof/incomplete-installed-large.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      92.80265852413707,
+      92.87927937776668,
+      93.13761803596347
+    ],
+    "sha256": "8655a0876e8eb7791d33f18fb46f57af5e542ebba39507157311f5ff64827ca7",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/9501427e7b63eb64b7f1cb670c33e61c40390b36/reviewfix/widget-reviewfix-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      2064,
+      1140
+    ],
+    "stddev": [
+      34.21947474307971,
+      33.798322163695346,
+      33.782903040606556
+    ],
+    "sha256": "fa5183c0c3f31b3ac360a0c388210c9dfe51d86afd2f587155ccdf68859a519d",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/9501427e7b63eb64b7f1cb670c33e61c40390b36/reviewfix/widget-reviewfix-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      2064,
+      1140
+    ],
+    "stddev": [
+      36.60244211538575,
+      36.87466383395403,
+      36.90320386178212
+    ],
+    "sha256": "c9780ff2dc16433cbe4eb8b1f38f545f514259e64c92c85fa857a8ca115bf953",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      630
+    ],
+    "stddev": [
+      34.995210533698234,
+      33.99139216876712,
+      32.5785698076454
+    ],
+    "sha256": "b462a2627c473f1dfc3d674ecac0df55182195317f6b000361c12c5a19571a37",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-multicurrency-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      630
+    ],
+    "stddev": [
+      36.040822869603836,
+      34.98825279133013,
+      33.4691498124487
+    ],
+    "sha256": "d03f0457e55acd7d92b719c0bb866a9c023339c2745c70f6c0df29826ffbac9d",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-no-models-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      630
+    ],
+    "stddev": [
+      33.60560819133405,
+      32.58615628857936,
+      31.169391814359077
+    ],
+    "sha256": "aa4520fe57865e28864e0c99b69e28ce910ac4cfb6f9facea4d8c1fd821c6c13",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-partial-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      630
+    ],
+    "stddev": [
+      35.359974570240745,
+      34.37582448120926,
+      32.964299598037975
+    ],
+    "sha256": "aa95df8e9a6226623da0fc2ee4c2d76b699a5f605da3cfe63a4bfc96b35624de",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-sparse-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      630
+    ],
+    "stddev": [
+      33.82276156125886,
+      32.72705104995499,
+      31.287384054439748
+    ],
+    "sha256": "55d5f44d94b4f6e585d39c3b36615c7a24eb78d74111e85a444721a8d1c00713",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/usage-spend-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      640,
+      1309
+    ],
+    "stddev": [
+      37.82347919563102,
+      29.831070553568214,
+      28.63683930434086
+    ],
+    "sha256": "4a7a234c87211e3c29e63c39bc46bd1ee32c3098fd0503d3ff2265bed970631a",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/usage-spend-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      640,
+      1309
+    ],
+    "stddev": [
+      34.614531494407416,
+      37.34084565231202,
+      40.721535760828935
+    ],
+    "sha256": "f76991a3e3fa9dfff3e7d40309064774ec5534d94366b7f5dafa863f4dbb8927",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4881/03-critical.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      108.98613998053622,
+      108.60430027346023,
+      108.87292612153927
+    ],
+    "sha256": "b32cde4557bd9286e67617ec1187810613e0bd37e97276f9bed7c6f8a82b842b",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4881/09-healthy.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      108.93010738927882,
+      108.52539102076022,
+      108.80036105925127
+    ],
+    "sha256": "2b4d89e858dc89e25c0e2a390448a80223e2abc3581d5f3a23ba845345da8888",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4883/06-failed.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      109.0013600027604,
+      108.57762566419188,
+      108.81119415679157
+    ],
+    "sha256": "88a72d5a135053d530ee9d076f4de7432399ae7a0ebb89398c4d29b8f8ef9ee2",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4883/11-recovered.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      108.96928960362176,
+      108.56455739594502,
+      108.83950580517943
+    ],
+    "sha256": "e944493025d7aa7a41c4da6fd6dd0d5dc88e37cccb8cd42ff41ff516ffbc8f8e",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4883/healthy.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      108.96922638653423,
+      108.56477421348588,
+      108.84001258707737
+    ],
+    "sha256": "1b14af83bbef9be7e3c4f86b6932f0c4418a11322d536afd2d6e27d11a90ea55",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4884/02-tick11.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      108.97320914868502,
+      108.5670051802602,
+      108.806770027324
+    ],
+    "sha256": "063c91f386346e11dc2438a6cf704c0fbcc6ffc6d97412a5e7dc90f1d6e96fe8",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4884/07-tick88.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1024,
+      768
+    ],
+    "stddev": [
+      108.92989702284922,
+      108.52538309025604,
+      108.84906866085655
+    ],
+    "sha256": "df27ad8e33c5644d90a76bf2b58e1292dcf79522601a049f4005a2e04dd75742",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-sheet-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1916,
+      3280
+    ],
+    "stddev": [
+      31.39891560931489,
+      31.150739002788868,
+      31.30882072485258
+    ],
+    "sha256": "63e42dcda66880edda733a6d3a382a30cc150bb73aa009987337707a555d97ec",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-sheet-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1916,
+      3280
+    ],
+    "stddev": [
+      34.27719816194933,
+      34.43021290122174,
+      34.384096562318355
+    ],
+    "sha256": "1d1f076e781195a216e141dafd1b4dd86a0470a693b412fcae9bef976a0bad05",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-large-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      888
+    ],
+    "stddev": [
+      35.869344233462265,
+      35.034644602120046,
+      35.01896569687565
+    ],
+    "sha256": "11b283c90f1712b3f67ad5eddb4db6668d749abb119db6b393ef2e9ef1f19c68",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-large-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      888
+    ],
+    "stddev": [
+      38.604571499751145,
+      39.13843903886072,
+      39.160804749639524
+    ],
+    "sha256": "251b2db136a1980cb6d6c110f0698f9151625193101ebf2afa29d4afaa98f41c",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-medium-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      464
+    ],
+    "stddev": [
+      33.82282932348214,
+      32.576229787654164,
+      32.532977082402894
+    ],
+    "sha256": "ab2812f7bb8f560a323cf413f70d17aca6fe5e3523867fcfdf5e0be503ad48f4",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-medium-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      776,
+      464
+    ],
+    "stddev": [
+      35.115354404158786,
+      35.94926104708901,
+      36.02206270176381
+    ],
+    "sha256": "6ff7117cf31379e0ca7cf9db1ad12e3bb81cf85fb53381679883980eb67ec2db",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-small-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      590,
+      464
+    ],
+    "stddev": [
+      30.82690722079868,
+      30.20118891792087,
+      30.15595137911562
+    ],
+    "sha256": "5ff7f5a2c78500b53069e68c018859dd0434c89100d9d248785bda3a6acee821",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-small-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      590,
+      464
+    ],
+    "stddev": [
+      31.274302595375303,
+      31.707845580666824,
+      31.79553800695345
+    ],
+    "sha256": "475eda0cede3c26db04cbacdea5a8e9300c57b5d9ba9fbb7e80844604fcde6a9",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      668
+    ],
+    "stddev": [
+      34.52390033261078,
+      34.42736456773908,
+      34.94141269518948
+    ],
+    "sha256": "48c87ff6d48861fbedc8a2fc0293fed5aaf3860e9ddf159e802adef685ab7df5",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      668
+    ],
+    "stddev": [
+      37.313187788382756,
+      37.346581016380135,
+      37.35590649943192
+    ],
+    "sha256": "be697d816a789e505b4eb2d67eda1eb95f4117118dd75a5cc000106978a00ff0",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-multicurrency-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      668
+    ],
+    "stddev": [
+      34.5930753177863,
+      34.494835716315976,
+      35.014306831269295
+    ],
+    "sha256": "c24e02f51a9f9982053def71d5bab1efab814fed695a2bda67270393421fc80a",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-no-models-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      668
+    ],
+    "stddev": [
+      31.137820614551877,
+      31.07971509924035,
+      31.24458870569318
+    ],
+    "sha256": "06dee9546aa694952ac9631673bce0016a81e816aba506bb8673e0e489e806e5",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-partial-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      668
+    ],
+    "stddev": [
+      33.71862566707608,
+      33.618922441555,
+      34.14659423507034
+    ],
+    "sha256": "3c8f7be1e23700491d674891f5d0bf0c858b68fb8096db899a896cc9152c767b",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-sparse-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      668
+    ],
+    "stddev": [
+      32.6170453436602,
+      32.4910257626497,
+      32.63580725772359
+    ],
+    "sha256": "761a571724125e5ba36fd52c44999f203980b0c00baeced81ec793bff0afd0e6",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-copied-image-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      630
+    ],
+    "stddev": [
+      35.15305050993477,
+      35.052274268490855,
+      35.58793641731255
+    ],
+    "sha256": "6119883ceeb3c5d30f830edbbe34e8fa8a133e93c75c003ec03d4638dbe8bbc3",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-copied-image-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      1200,
+      630
+    ],
+    "stddev": [
+      38.043820852533,
+      38.07797684525767,
+      38.0876451008716
+    ],
+    "sha256": "62baa86fc614f474218df1d0d2cbba8b2c8de57b09f4385f5aea7485604a7316",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-window-preview-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      780,
+      557
+    ],
+    "stddev": [
+      27.819876634948606,
+      27.768231168142705,
+      28.16649061998194
+    ],
+    "sha256": "c1e9b41485b5e3a3a70237d25370be3e5382a2293ddbdbca6fa42312aec15f0b",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-window-preview-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      780,
+      557
+    ],
+    "stddev": [
+      30.802932995665454,
+      30.724241123456743,
+      30.700933551625635
+    ],
+    "sha256": "68622617a8e08f81e5b432c4a1d4725c09a0db98a8af2e0d1ee20cbb25e48d94",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      640,
+      1205
+    ],
+    "stddev": [
+      39.47311950966685,
+      31.267870023109573,
+      29.996846751937003
+    ],
+    "sha256": "7b265fc1c8611e76e292ca56b7aa2b956aad5e82b746159daed7b7981f9d9879",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      640,
+      1205
+    ],
+    "stddev": [
+      36.414459353488596,
+      39.13076002292609,
+      42.61272468361806
+    ],
+    "sha256": "ae6c6f608c1038e18b5289f900cee40afe7a2e7f08c3b9235ee6d311ca1f83fb",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-partial-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      640,
+      1201
+    ],
+    "stddev": [
+      36.10512944107006,
+      38.87613731219801,
+      42.39610269511649
+    ],
+    "sha256": "98823ace05a6c8bf0bf241ab523c78cf2a837da2e3420b71ab9f7d3e6addf28d",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-unpriced-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      640,
+      1185
+    ],
+    "stddev": [
+      36.19324702330535,
+      38.988433476199326,
+      42.544033751031556
+    ],
+    "sha256": "b3e9fda8cba61f1756940ed453dc3d2d9ea90426e85eae07e7289aca33dbf255",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-claude-error-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      310,
+      408
+    ],
+    "stddev": [
+      43.35948372816497,
+      33.51840627215743,
+      32.39933149994065
+    ],
+    "sha256": "33ed1321d5e6cd4f8ae6ac8d525f5d68dc81fb12c9b978e47db18c89f60fd7c0",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-claude-error-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      310,
+      408
+    ],
+    "stddev": [
+      30.958259075598942,
+      38.96905604109966,
+      41.008101499293794
+    ],
+    "sha256": "99df8c2ea32a67bc41064b86d60d1669eedfc32e6d4324056a8701787aaf4c18",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-ticking-values-dark.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      930,
+      391
+    ],
+    "stddev": [
+      41.100701703927434,
+      33.84362918064919,
+      32.817981548825465
+    ],
+    "sha256": "6d2878cbbc00d59d5469f861f8bca65a73d1dd1c2f5973ae93461a7d7223cd1b",
+    "ok": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-ticking-values-light.png",
+    "status": 200,
+    "contentType": "image/png",
+    "dimensions": [
+      930,
+      391
+    ],
+    "stddev": [
+      31.45829837058204,
+      37.099974343772075,
+      39.23351437290097
+    ],
+    "sha256": "21efa3d5be760eab9b15384160d54cbc2b5e9eec6136ffdc52feb2b25b853453",
+    "ok": true
+  }
+]

@@ -1,0 +1,196 @@
+{
+  "inventory": [
+    {
+      "pr": 4902,
+      "url": "https://github.com/steipete/CodexBar/pull/4902",
+      "head": "c254d8b459b2654be70fbf016c55bf86db2a7815",
+      "bodySHA256": "f4ec22b34a2eb586cf9fb5088eac08f9f8cf81d50a80a4583e4c9c263a712d4a"
+    },
+    {
+      "pr": 4901,
+      "url": "https://github.com/steipete/CodexBar/pull/4901",
+      "head": "6283c26c7ca8fefc0a4cba3477ac45ecf3564a45",
+      "bodySHA256": "b3380f09a9b51e20b7e4a54851648150fb7226c26fbb031c3e11002818cc7458"
+    },
+    {
+      "pr": 4900,
+      "url": "https://github.com/steipete/CodexBar/pull/4900",
+      "head": "c64d91d2fe09168a68048d43d9228b9d154c6e3a",
+      "bodySHA256": "fbcc42fed97730b77357d9961d057ea2265790a7310db3188bf5a853f11b3dfb"
+    },
+    {
+      "pr": 4899,
+      "url": "https://github.com/steipete/CodexBar/pull/4899",
+      "head": "61b1a59de3bb6b239901229a17471cee4394fd56",
+      "bodySHA256": "10e26731962ef7c581d85aed4f2519053662b08d6349bb8f19b9163367521826"
+    },
+    {
+      "pr": 4897,
+      "url": "https://github.com/steipete/CodexBar/pull/4897",
+      "head": "3927a4e72577da2bdb4c5c0fee0077e007d2efc0",
+      "bodySHA256": "9001c31ba7dc704fcd850a52c46bfc083f3318d40a2813b188e6f8a8c3c33381"
+    },
+    {
+      "pr": 4896,
+      "url": "https://github.com/steipete/CodexBar/pull/4896",
+      "head": "38e10c239bec53eaf706afea99b81400df49083b",
+      "bodySHA256": "b777ba81921e0e5c69bead98c75d339cd831ad0d8cbd15cce47a572189c6e4b8"
+    },
+    {
+      "pr": 4893,
+      "url": "https://github.com/steipete/CodexBar/pull/4893",
+      "head": "a14a006c7c19eba24b2ae0348efe4cadae62d593",
+      "bodySHA256": "c3aa9ba2b31bb2965a6225fc4805173a28aa7d9328fd23f8569c64ff9203a3ab"
+    },
+    {
+      "pr": 4890,
+      "url": "https://github.com/steipete/CodexBar/pull/4890",
+      "head": "6f97fb9d7e2ebe9855bbd344b8092395c351d43b",
+      "bodySHA256": "7c4dcc62551936bd70ed776076fc86888a622129f24b2b367795266b90875293"
+    },
+    {
+      "pr": 4889,
+      "url": "https://github.com/steipete/CodexBar/pull/4889",
+      "head": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+      "bodySHA256": "d2f03a0ad6477caed9abb058db6a2634b54924c5cfd3d9baeb366d611e6ece5d"
+    },
+    {
+      "pr": 4888,
+      "url": "https://github.com/steipete/CodexBar/pull/4888",
+      "head": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+      "bodySHA256": "9739aeda91c86a3c4ac5a489a43e29bd123d252fa924a34bef87f4015d6cb679"
+    },
+    {
+      "pr": 4887,
+      "url": "https://github.com/steipete/CodexBar/pull/4887",
+      "head": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+      "bodySHA256": "6f7b9e5f6f5fe8a33c4164d1781bdb2d2f6d9a089e7881c44eefa2eb105fff11"
+    },
+    {
+      "pr": 4884,
+      "url": "https://github.com/steipete/CodexBar/pull/4884",
+      "head": "8c311de2545db92f4914629d3f0692a5dbf18acf",
+      "bodySHA256": "7b1df4865d458d088de7dd57bab2ab83818ba1262e2beb3f9268f9d907404f9e"
+    },
+    {
+      "pr": 4883,
+      "url": "https://github.com/steipete/CodexBar/pull/4883",
+      "head": "d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0",
+      "bodySHA256": "3e27393c59eab33f60115794747ee4045b5a3c47f9809116ff982f19e782e2d6"
+    },
+    {
+      "pr": 4882,
+      "url": "https://github.com/steipete/CodexBar/pull/4882",
+      "head": "eeb0e1d65941346a132b69b6a726c11f4541cde7",
+      "bodySHA256": "1a4ffa05956a681d7f8499862029bfddc9dbf52a6731c07ca664c31d16c3eea3"
+    },
+    {
+      "pr": 4881,
+      "url": "https://github.com/steipete/CodexBar/pull/4881",
+      "head": "44e51249b2afcd7120213a17b61e37b749a3f6a8",
+      "bodySHA256": "746ac6eade217511d1612611616e568e4c5776724520861289e1cea10365c3d8"
+    },
+    {
+      "pr": 4877,
+      "url": "https://github.com/steipete/CodexBar/pull/4877",
+      "head": "a299386b88311cff6051d7d8dcd678a5ca310aab",
+      "bodySHA256": "44277687870d33fa3f3d136a44584bc57cabda17f22c12fc37ceb67a92f49e08"
+    }
+  ],
+  "allPNGURLs": [
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-long-2-long100.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-long-3-long99.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-normal-1-healthy.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-normal-2-critical.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/after-normal-3-healthy.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/238c1ca91e3ed55be849810a79978239428113ec/proof3/4881/before-long-title-100.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-sheet-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-sheet-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-large-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-large-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-medium-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-medium-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-small-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/330416a69fe032b137178569334e6b2805bbe81d/v2/main/widget-usage-small-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/440be5716439cc4221863866cc92d87ad6bae9e5/redesign/main/menu-card-claude-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/440be5716439cc4221863866cc92d87ad6bae9e5/redesign/main/menu-card-claude-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/45b5a3d24180ffaf94d2174d559617c5eebc60f5/reviewfix/4890-installed-proof/complete-installed-large.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/45b5a3d24180ffaf94d2174d559617c5eebc60f5/reviewfix/4890-installed-proof/incomplete-installed-large.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/bounded/after-3-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/bounded/after-8-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/bounded/before-main-compact-3-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/bounded/before-main-compact-8-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/chart/after-3-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/chart/after-3-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/chart/after-8-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/chart/before-main-3-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/chart/chart-selected-day-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/chart/chart-selected-day-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/flyout/after-hover-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/flyout/after-hover-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/flyout/before-main-hover-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/integration/live-hover-overview-8-urgent-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/integration/live-overflow-accounts-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/rows/after-8-urgent-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/rows/after-8-urgent-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/rows/before-main-8-urgent-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/484f7b918452288222bac236281dae8ef94f864d/menu5-ship/rows/before-main-8-urgent-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/9501427e7b63eb64b7f1cb670c33e61c40390b36/reviewfix/widget-reviewfix-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/9501427e7b63eb64b7f1cb670c33e61c40390b36/reviewfix/widget-reviewfix-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-multicurrency-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-no-models-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-partial-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/share-card-sparse-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/usage-spend-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/a3956af430aea30f8750af02b8c35d16b315cd33/v2/main/usage-spend-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4883/06-failed.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4883/11-recovered.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4883/healthy.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4884/02-tick11.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4884/07-tick88.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-sheet-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-sheet-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-large-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-large-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-medium-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-medium-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-small-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4887/widget-usage-small-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-multicurrency-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-no-models-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-partial-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-card-sparse-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-copied-image-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-copied-image-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-window-preview-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4888/share-window-preview-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-partial-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/af7405115e7b7ec614557c8e86d83ce857d4cbf5/image-refresh-20261101/4889/usage-spend-models-unpriced-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-claude-error-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-claude-error-light.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-ticking-values-dark.png",
+    "https://raw.githubusercontent.com/Chipagosfinest/CodexBar/cc88ee4955d6ca91522ae263b427d0270223628c/redesign/main/menu-card-ticking-values-light.png"
+  ],
+  "verifiedPNGCount": 77,
+  "productCodeChangedByAudit": false,
+  "existingEditedPRs": [
+    4881,
+    4883,
+    4884,
+    4887,
+    4888,
+    4889,
+    4890
+  ],
+  "newCaptionOnlyEditedPRs": [
+    4900,
+    4901,
+    4902
+  ],
+  "lateConcurrentReviewProof": 4881
+}
