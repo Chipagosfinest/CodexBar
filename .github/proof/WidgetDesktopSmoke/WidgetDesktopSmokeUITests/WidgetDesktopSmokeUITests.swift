@@ -251,12 +251,23 @@ final class WidgetHostProofTests: XCTestCase {
         waitForText("80%", present: true)
         self.attach("complete-installed-large", app: notificationCenter)
         let app = XCUIApplication(bundleIdentifier: "com.steipete.codexbar.debug")
-        app.activate()
-        let incomplete = app.buttons["Use incomplete history"]
-        XCTAssertTrue(incomplete.waitForExistence(timeout: 5))
-        XCTAssertTrue(NSScreen.screens.contains(where: { $0.frame.contains(incomplete.frame) }))
-        incomplete.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
-        finder.activate()
+        app.terminate()
+        XCTAssertTrue(app.wait(for: .notRunning, timeout: 10))
+        let root = try XCTUnwrap(ProcessInfo.processInfo.environment["CODEXBAR_CI_SEED_ROOT"])
+        let launch = Process()
+        launch.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+        launch.arguments = [
+            "-n",
+            "-a",
+            "/Applications/CodexBar.app",
+            "--args",
+            "--widget-host-proof",
+            root + "/incomplete-fixture",
+        ]
+        launch.environment = ["PATH": "/usr/bin:/bin:/usr/sbin:/sbin"]
+        try launch.run()
+        launch.waitUntilExit()
+        XCTAssertEqual(launch.terminationStatus, 0)
         waitForText("fixture-alpha", present: false)
         waitForText("Last 14 days", present: true)
         self.attach("incomplete-installed-large", app: notificationCenter)

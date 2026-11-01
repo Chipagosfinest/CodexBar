@@ -28,7 +28,8 @@ jobs:
             sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
           fi
           xcodebuild -version
-          mkdir -p "$RUNNER_TEMP/proof"
+          mkdir -p "$RUNNER_TEMP/proof/incomplete-fixture"
+          echo incomplete > "$RUNNER_TEMP/proof/incomplete-fixture/phase"
           git rev-parse HEAD > "$RUNNER_TEMP/proof/fixture-sha.txt"
           git show --format=fuller HEAD > "$RUNNER_TEMP/proof/fixture-and-product.patch"
           shasum -a 256 Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift Sources/CodexBarWidget/*.swift > "$RUNNER_TEMP/proof/source-hashes.txt"
