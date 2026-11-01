@@ -10,6 +10,10 @@ on:
     branches: [proof/pr4890-installed]
 permissions:
   contents: read
+  actions: read
+concurrency:
+  group: pr4890-widget-proof
+  cancel-in-progress: true
 jobs:
   installed-widget:
     runs-on: macos-26
@@ -85,6 +89,12 @@ jobs:
             -only-testing:WidgetDesktopSmokeUITests/WidgetHostProofTests \
             CODEXBAR_CI_SEED_ROOT="$RUNNER_TEMP/proof" CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual \
             > "$RUNNER_TEMP/proof/ui-test.log" 2>&1
+      - name: Export screenshot and hierarchy attachments
+        if: always()
+        run: |
+          if test -d "$RUNNER_TEMP/proof/WidgetHost.xcresult"; then
+            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/proof/WidgetHost.xcresult" --output-path "$RUNNER_TEMP/proof/attachments"
+          fi
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a

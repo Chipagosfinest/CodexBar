@@ -2,8 +2,7 @@ import AppKit
 import XCTest
 
 final class WidgetHostProofTests: XCTestCase {
-    func testInstalledLargeWidgetCompleteAndIncompleteHistory() throws {
-        let root = try URL(fileURLWithPath: XCTUnwrap(ProcessInfo.processInfo.environment["CODEXBAR_CI_SEED_ROOT"]))
+    func testInstalledLargeWidgetCompleteAndIncompleteHistory() {
         let galleryFamily = "small"
         let widgetFamily = "large"
         let finder = XCUIApplication(bundleIdentifier: "com.apple.finder")
@@ -240,22 +239,15 @@ final class WidgetHostProofTests: XCTestCase {
         waitForText("fixture-alpha", present: true)
         waitForText("80%", present: true)
         self.attach("complete-installed-large", app: notificationCenter)
-        try XCUIScreen.main.screenshot().pngRepresentation
-            .write(to: root.appendingPathComponent("complete-installed-large.png"))
-        try installed.debugDescription.write(
-            to: root.appendingPathComponent("complete-host.txt"),
-            atomically: true,
-            encoding: .utf8)
-        try "incomplete".write(to: root.appendingPathComponent("phase"), atomically: true, encoding: .utf8)
+        let app = XCUIApplication(bundleIdentifier: "com.steipete.codexbar.debug")
+        app.activate()
+        let incomplete = app.buttons["Use incomplete history"]
+        XCTAssertTrue(incomplete.waitForExistence(timeout: 5))
+        incomplete.click()
+        finder.activate()
         waitForText("fixture-alpha", present: false)
         waitForText("Last 14 days", present: true)
         self.attach("incomplete-installed-large", app: notificationCenter)
-        try XCUIScreen.main.screenshot().pngRepresentation
-            .write(to: root.appendingPathComponent("incomplete-installed-large.png"))
-        try installed.debugDescription.write(
-            to: root.appendingPathComponent("incomplete-host.txt"),
-            atomically: true,
-            encoding: .utf8)
     }
 
     private func waitForNotificationCenterIdentifier() -> String? {
