@@ -1,0 +1,41 @@
+diff --git a/Package.swift b/Package.swift
+index 7fe7c2ebb..261f3b89b 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -226,33 +226,9 @@ let package = Package(
+         ])
+ 
+         targets.append(.testTarget(
+-            name: "CodexBarTests",
+-            dependencies: [
+-                "CodexBar", "CodexBarCore", "CodexBarCLI", "CodexBarCostStoreCrashProbe", "CodexBarWidget",
+-                .product(name: "Sparkle", package: "Sparkle"),
+-            ],
+-            path: "Tests",
+-            exclude: [
+-                "AdaptiveReplayCLITests",
+-                "AdaptiveReplayKitTests",
+-                "CodexBarTests/ProviderPluginDetailsParityTests.swift",
+-                "CodexBarTests/ProviderPluginExtensionParityTests.swift",
+-                "CodexBarTests/ProviderPluginParityTests.swift",
+-                "CodexBarTests/ProviderPluginRuntimeTests.swift",
+-                "CodexBarTests/Sub2APIPluginGoldenTests.swift",
+-            ],
+-            resources: [
+-                .copy("CodexBarTests/Fixtures"),
+-            ],
+-            swiftSettings: [
+-                .enableUpcomingFeature("StrictConcurrency"),
+-                .enableExperimentalFeature("SwiftTesting"),
+-            ],
+-            linkerSettings: [
+-                // XCTest's executable is three directories below its sibling framework products.
+-                .unsafeFlags(["-Xlinker", "-rpath", "-Xlinker", "@loader_path/../../.."]),
+-            ]))
++            name: "LocalProofTests", dependencies: ["CodexBar", "CodexBarCore"], path: "LocalProofTests",
++            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]))
+         #endif
+ 
+-        return targets
++        return targets.filter { $0.type != .test || $0.name == "LocalProofTests" }
+     }())

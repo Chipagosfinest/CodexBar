@@ -1,0 +1,72 @@
+[
+  {
+    "pr": "4881",
+    "phase": "healthy",
+    "receipt": "phase=healthy primary=89.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4881",
+    "phase": "critical",
+    "receipt": "phase=critical primary=90.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4881",
+    "phase": "healthy",
+    "receipt": "phase=healthy primary=89.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4883",
+    "phase": "healthy",
+    "receipt": "phase=healthy primary=89.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4883",
+    "phase": "refreshing",
+    "receipt": "phase=refreshing primary=89.0 subtitle=Refreshing\u2026",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4883",
+    "phase": "failed",
+    "receipt": "phase=failed primary=89.0 subtitle=Synthetic refresh failed. Retaining last usage.",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4883",
+    "phase": "recovered",
+    "receipt": "phase=recovered primary=89.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4884",
+    "phase": "tick11",
+    "receipt": "phase=tick11 primary=11.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4884",
+    "phase": "tick88",
+    "receipt": "phase=tick88 primary=88.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  },
+  {
+    "pr": "4884",
+    "phase": "tick11",
+    "receipt": "phase=tick11 primary=11.0 subtitle=Updated just now",
+    "processRunning": true,
+    "screenCapture": "blocked: macOS locked"
+  }
+]

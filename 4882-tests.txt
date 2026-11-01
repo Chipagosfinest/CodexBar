@@ -1,0 +1,36 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite CLIOpenAIDashboardCacheTests started.
+◇ Test "dashboard cache requires a fixture URL in tests" started.
+✔ Test "dashboard cache requires a fixture URL in tests" passed after 0.003 seconds.
+◇ Test "cached dashboard restores when authority allows cached reuse" started.
+✔ Test "cached dashboard restores when authority allows cached reuse" passed after 0.013 seconds.
+◇ Test "cached dashboard returns nil on display only and clears cache" started.
+✔ Test "cached dashboard returns nil on display only and clears cache" passed after 0.002 seconds.
+◇ Test "cached dashboard returns nil on fail closed and clears cache" started.
+✔ Test "cached dashboard returns nil on fail closed and clears cache" passed after 0.002 seconds.
+◇ Test "cached dashboard wrong email returns nil and clears cache" started.
+✔ Test "cached dashboard wrong email returns nil and clears cache" passed after 0.002 seconds.
+◇ Test "cached dashboard provider account without scoped auth email fails closed" started.
+✔ Test "cached dashboard provider account without scoped auth email fails closed" passed after 0.002 seconds.
+◇ Test "cached dashboard unresolved trusted continuity with competing owner returns nil" started.
+✔ Test "cached dashboard unresolved trusted continuity with competing owner returns nil" passed after 0.003 seconds.
+◇ Test "cached dashboard trusts codex cli usage continuity" started.
+✔ Test "cached dashboard trusts codex cli usage continuity" passed after 0.003 seconds.
+◇ Test "cached dashboard trusts oauth usage continuity" started.
+✔ Test "cached dashboard trusts oauth usage continuity" passed after 0.002 seconds.
+◇ Test "cached dashboard does not trust open A I web usage continuity" started.
+✔ Test "cached dashboard does not trust open A I web usage continuity" passed after 0.001 seconds.
+◇ Test "cached dashboard ignores cached account email equality when authority rejects" started.
+✔ Test "cached dashboard ignores cached account email equality when authority rejects" passed after 0.002 seconds.
+◇ Test "oauth dashboard attachment is bounded by cache age" started.
+◇ Test case passing 1 argument age → 0.0 to "oauth dashboard attachment is bounded by cache age" started.
+◇ Test case passing 1 argument age → 60.0 to "oauth dashboard attachment is bounded by cache age" started.
+◇ Test case passing 1 argument age → 900.0 to "oauth dashboard attachment is bounded by cache age" started.
+◇ Test case passing 1 argument age → 901.0 to "oauth dashboard attachment is bounded by cache age" started.
+◇ Test case passing 1 argument age → 5616000.0 to "oauth dashboard attachment is bounded by cache age" started.
+◇ Test case passing 1 argument age → -60.0 to "oauth dashboard attachment is bounded by cache age" started.
+✔ Test "oauth dashboard attachment is bounded by cache age" with 6 test cases passed after 0.031 seconds.
+✔ Suite CLIOpenAIDashboardCacheTests passed after 0.073 seconds.
+✔ Test run with 12 tests in 1 suite passed after 0.073 seconds.

@@ -1,0 +1,7 @@
+{"binary": "main-897bff317", "cache": "recent", "exit": 0, "source": "oauth", "usageUpdatedAt": "2026-11-01T07:43:27Z", "dashboardAttached": true, "cacheUnchanged": true, "settingsUnchanged": true, "dashboardUpdatedAt": "2026-11-01T07:42:24Z"}
+{"binary": "pr4882-c706263", "cache": "recent", "exit": 0, "source": "oauth", "usageUpdatedAt": "2026-11-01T07:43:28Z", "dashboardAttached": true, "cacheUnchanged": true, "settingsUnchanged": true, "dashboardUpdatedAt": "2026-11-01T07:42:24Z"}
+{"binary": "main-897bff317", "cache": "expired-65-days", "exit": 0, "source": "oauth", "usageUpdatedAt": "2026-11-01T07:43:30Z", "dashboardAttached": true, "cacheUnchanged": true, "settingsUnchanged": true, "dashboardUpdatedAt": "2026-08-28T07:43:24Z"}
+{"binary": "pr4882-c706263", "cache": "expired-65-days", "exit": 0, "source": "oauth", "usageUpdatedAt": "2026-11-01T07:43:31Z", "dashboardAttached": false, "cacheUnchanged": true, "settingsUnchanged": true}
+{"binary": "main-897bff317", "cache": "future", "exit": 0, "source": "oauth", "usageUpdatedAt": "2026-11-01T07:43:32Z", "dashboardAttached": true, "cacheUnchanged": true, "settingsUnchanged": true, "dashboardUpdatedAt": "2026-11-01T08:43:24Z"}
+{"binary": "pr4882-c706263", "cache": "future", "exit": 0, "source": "oauth", "usageUpdatedAt": "2026-11-01T07:43:38Z", "dashboardAttached": false, "cacheUnchanged": true, "settingsUnchanged": true}
+PASS: main cache reused byte-for-byte; fresh OAuth usage retained; cache/settings/auth unchanged in all six runs.

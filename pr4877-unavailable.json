@@ -1,0 +1,57 @@
+{
+  "generatedAt" : "2026-11-01T07:44:11Z",
+  "host" : {
+    "codexBarVersion" : null,
+    "refreshIntervalSeconds" : 0,
+    "usageBarsShowUsed" : false
+  },
+  "providers" : [
+    {
+      "cost" : {
+        "last30DaysUSD" : 0,
+        "todayUSD" : null
+      },
+      "credits" : null,
+      "display" : {
+        "accentColor" : "#CC7C5E",
+        "priority" : "normal",
+        "sortKey" : 0
+      },
+      "enabled" : true,
+      "error" : null,
+      "id" : "claude",
+      "identity" : {
+        "accountEmail" : null,
+        "plan" : "Max"
+      },
+      "name" : "Claude",
+      "source" : "claude",
+      "status" : null,
+      "updatedAt" : "2026-11-01T07:44:11Z",
+      "warnings" : [
+        {
+          "code" : "model-breakdown-unavailable",
+          "message" : "Per-model breakdown unavailable (rate limited until 2:32pm)"
+        }
+      ],
+      "windows" : [
+        {
+          "kind" : "session",
+          "label" : "Session",
+          "remainingPercent" : 75,
+          "resetAt" : "2026-11-01T18:00:00Z",
+          "usedPercent" : 25
+        },
+        {
+          "kind" : "weekly",
+          "label" : "Weekly",
+          "remainingPercent" : 60,
+          "resetAt" : "2026-11-02T18:00:00Z",
+          "usedPercent" : 40
+        }
+      ]
+    }
+  ],
+  "schemaVersion" : 1,
+  "staleAfterSeconds" : 180
+}

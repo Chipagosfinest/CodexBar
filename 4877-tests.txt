@@ -1,0 +1,14 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite DashboardProviderWarningsTests started.
+◇ Test "claude breakdown notice becomes a dashboard warning while quotas stay intact" started.
+◇ Test "rows without a partial-data notice keep their existing shape" started.
+◇ Test "shell detail omits warnings" started.
+◇ Test "same detail row id from another provider is not treated as a claude warning" started.
+✔ Test "shell detail omits warnings" passed after 0.001 seconds.
+✔ Test "same detail row id from another provider is not treated as a claude warning" passed after 0.009 seconds.
+✔ Test "rows without a partial-data notice keep their existing shape" passed after 0.009 seconds.
+✔ Test "claude breakdown notice becomes a dashboard warning while quotas stay intact" passed after 0.010 seconds.
+✔ Suite DashboardProviderWarningsTests passed after 0.010 seconds.
+✔ Test run with 4 tests in 1 suite passed after 0.010 seconds.

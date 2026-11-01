@@ -1,0 +1,113 @@
+[
+  {
+    "binary": "main",
+    "state": "unavailable",
+    "exit": 0,
+    "warnings": null,
+    "error": null,
+    "windows": [
+      {
+        "kind": "session",
+        "label": "Session",
+        "remainingPercent": 75,
+        "resetAt": "2026-11-01T18:00:00Z",
+        "usedPercent": 25
+      },
+      {
+        "kind": "weekly",
+        "label": "Weekly",
+        "remainingPercent": 60,
+        "resetAt": "2026-11-02T18:00:00Z",
+        "usedPercent": 40
+      }
+    ]
+  },
+  {
+    "binary": "main",
+    "state": "recovered",
+    "exit": 0,
+    "warnings": null,
+    "error": null,
+    "windows": [
+      {
+        "kind": "session",
+        "label": "Session",
+        "remainingPercent": 75,
+        "resetAt": "2026-11-01T18:00:00Z",
+        "usedPercent": 25
+      },
+      {
+        "kind": "weekly",
+        "label": "Weekly",
+        "remainingPercent": 60,
+        "resetAt": "2026-11-02T18:00:00Z",
+        "usedPercent": 40
+      },
+      {
+        "kind": "tertiary",
+        "label": "Sonnet",
+        "remainingPercent": 90,
+        "resetAt": "2026-11-02T18:00:00Z",
+        "usedPercent": 10
+      }
+    ]
+  },
+  {
+    "binary": "pr4877",
+    "state": "unavailable",
+    "exit": 0,
+    "warnings": [
+      {
+        "code": "model-breakdown-unavailable",
+        "message": "Per-model breakdown unavailable (rate limited until 2:32pm)"
+      }
+    ],
+    "error": null,
+    "windows": [
+      {
+        "kind": "session",
+        "label": "Session",
+        "remainingPercent": 75,
+        "resetAt": "2026-11-01T18:00:00Z",
+        "usedPercent": 25
+      },
+      {
+        "kind": "weekly",
+        "label": "Weekly",
+        "remainingPercent": 60,
+        "resetAt": "2026-11-02T18:00:00Z",
+        "usedPercent": 40
+      }
+    ]
+  },
+  {
+    "binary": "pr4877",
+    "state": "recovered",
+    "exit": 0,
+    "warnings": null,
+    "error": null,
+    "windows": [
+      {
+        "kind": "session",
+        "label": "Session",
+        "remainingPercent": 75,
+        "resetAt": "2026-11-01T18:00:00Z",
+        "usedPercent": 25
+      },
+      {
+        "kind": "weekly",
+        "label": "Weekly",
+        "remainingPercent": 60,
+        "resetAt": "2026-11-02T18:00:00Z",
+        "usedPercent": 40
+      },
+      {
+        "kind": "tertiary",
+        "label": "Sonnet",
+        "remainingPercent": 90,
+        "resetAt": "2026-11-02T18:00:00Z",
+        "usedPercent": 10
+      }
+    ]
+  }
+]

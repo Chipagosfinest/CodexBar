@@ -1,0 +1,44 @@
+[
+  {
+    "ref": "main",
+    "gitSHA": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+    "binarySHA256": "907c715b6c3edf3621280269e9f1231876c0a7fc35f74f10d462c74252b258c1",
+    "product": "CLI",
+    "worktree": "/proof/worktrees/main"
+  },
+  {
+    "ref": "4877",
+    "gitSHA": "44178085d15cff160d0898104f5641212190387b",
+    "binarySHA256": "7114cc2f37f381eab2c8b3c5fa14eb2cd15c9cc24715200081210930cc907e59",
+    "product": "CLI",
+    "worktree": "/proof/worktrees/4877"
+  },
+  {
+    "ref": "4881",
+    "gitSHA": "2c84493b67dd736df387635fedd790fc940f90ab",
+    "binarySHA256": "24eb91794a0b73217c1634ce7d7235ae61bc9aa55284a467439082eda7682f38",
+    "product": "app+local-synthetic-entry",
+    "worktree": "/proof/worktrees/4881"
+  },
+  {
+    "ref": "4882",
+    "gitSHA": "c7062634745db4be16f82e33baff5821361b144b",
+    "binarySHA256": "c3019e1115717175633dfea294cb2a83f9e73221eab59afc4d23ad17dcbb2bf1",
+    "product": "CLI",
+    "worktree": "/proof/worktrees/4882"
+  },
+  {
+    "ref": "4883",
+    "gitSHA": "778e2f739640e3f04607d94b200b8c91118f7d4d",
+    "binarySHA256": "7a6df3d9953649f2b7d9a06ce6a752fb6ef0e640e24b6929b47e134447eecedb",
+    "product": "app+local-synthetic-entry",
+    "worktree": "/proof/worktrees/4883"
+  },
+  {
+    "ref": "4884",
+    "gitSHA": "863bfefef2d4708bcf0586d9f12a7948f07b1063",
+    "binarySHA256": "3a52c5d0376784838fe01adc231237f0c156fe9ded4d95317879fbc63af5986f",
+    "product": "app+local-synthetic-entry",
+    "worktree": "/proof/worktrees/4884"
+  }
+]

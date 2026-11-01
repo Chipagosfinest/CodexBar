@@ -1,0 +1,127 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuCardModelTests started.
+◇ Suite OverviewMenuCardVisibilityTests started.
+◇ Suite MenuCardHeightFingerprintTests started.
+◇ Suite MenuCardModelCodexDegradedQuotaTests started.
+◇ Suite FactoryMenuCardModelTests started.
+◇ Test "kilo model treats auto top up only login as activity" started.
+◇ Test "builds metrics using remaining percent" started.
+◇ Test "claude model hides weekly when unavailable" started.
+◇ Suite MenuCardProviderRegressionTests started.
+◇ Test "shows error subtitle when present" started.
+◇ Suite MiniMaxMenuCardModelTests started.
+◇ Test "open router model when key fetch unavailable shows unavailable note" started.
+◇ Test "hides email when personal info hidden" started.
+◇ Test "hides claude extra usage when disabled" started.
+◇ Test "kilo model keeps zero total edge state visible" started.
+◇ Test "warp model shows primary detail when reset date missing" started.
+◇ Test "open router model uses API key quota bar and quota detail" started.
+◇ Test "height fingerprint invalidates when wrapping text grows from short to long" started.
+◇ Suite ProviderInlineDashboardModelTests started.
+◇ Test "kilo model does not show fallback note when not auto to CLI" started.
+◇ Test "kilo model splits pass and activity and shows fallback note" started.
+◇ Test "overview keeps cards with graceful unavailable placeholders" started.
+◇ Test "height fingerprint ignores content changes inside fixed metric lines" started.
+◇ Test "claude model does not leak codex plan" started.
+◇ Test "overview keeps Grok cards with reset credits and an error subtitle" started.
+◇ Test "height fingerprint does not retain raw text fields" started.
+◇ Test "codex local token usage preserves limits unavailable placeholder" started.
+◇ Test "factory legacy billing keeps pool labels" started.
+◇ Test "codex local token usage hides remote quota unavailable error" started.
+◇ Test "open router model without key limit shows text only summary" started.
+◇ Test "factory token rate billing uses time window labels" started.
+◇ Test "factory extra usage balance renders as optional balance" started.
+◇ Test "factory time window labels localize in simplified chinese" started.
+◇ Test "codex managed token usage keeps remote quota unavailable error visible" started.
+◇ Test "codex remote quota unavailable error stays visible when token usage is hidden" started.
+◇ Test "height fingerprint field distinguishes nil from empty string" started.
+◇ Test "kilo model shows primary detail when reset date missing" started.
+◇ Test "claude subscription-only quota keeps local cost content" started.
+◇ Test "height fingerprint tracks wrapping metric text content" started.
+◇ Test "codex local token usage preserves sign-in guidance" started.
+◇ Test "credits select stacked detail layout without quota metrics" started.
+◇ Test "height fingerprint tracks reset-credit inventory shape" started.
+◇ Test "codex local token usage hides mapped remote transport error" started.
+◇ Test "cost section includes last30 days tokens" started.
+◇ Test "overview hides cards that only contain an error" started.
+◇ Test "elevenlabs progress color stays visible in light menus" started.
+◇ Test "menu card keeps positive sub percent usage visible" started.
+◇ Test "command code progress color uses its contrasting brand accent" started.
+◇ Test "open router model shows daily and weekly key spend" started.
+◇ Test "ollama API balance card shares monthly and credit presentation" started.
+◇ Test "copilot over quota usage keeps used percentage detail" started.
+◇ Test "wayfinder model shows gateway routing savings and latency" started.
+◇ Test "minimax service metrics use codex aligned quota copy" started.
+◇ Test "minimax token plan model shows weekly quota and points balance" started.
+◇ Test "text generation badge uses real window type when multiple windows exist" started.
+◇ Test "kimi model orders rate limit before weekly quota and shows pace" started.
+◇ Test "openrouter period usage gets inline dashboard" started.
+◇ Test "local cost history gets inline dashboard" started.
+◇ Test "mistral billing usage can show cost card summary" started.
+◇ Test "mistral daily buckets get inline dashboard" started.
+◇ Test "zai hourly usage gets inline dashboard" started.
+✔ Test "claude model does not leak codex plan" passed after 0.015 seconds.
+✔ Test "shows error subtitle when present" passed after 0.015 seconds.
+✔ Test "height fingerprint ignores content changes inside fixed metric lines" passed after 0.015 seconds.
+✔ Test "warp model shows primary detail when reset date missing" passed after 0.015 seconds.
+✔ Test "overview keeps cards with graceful unavailable placeholders" passed after 0.015 seconds.
+✔ Test "height fingerprint invalidates when wrapping text grows from short to long" passed after 0.015 seconds.
+✔ Test "factory legacy billing keeps pool labels" passed after 0.015 seconds.
+✔ Test "height fingerprint does not retain raw text fields" passed after 0.015 seconds.
+✔ Test "overview keeps Grok cards with reset credits and an error subtitle" passed after 0.015 seconds.
+✔ Test "codex remote quota unavailable error stays visible when token usage is hidden" passed after 0.014 seconds.
+✔ Test "hides claude extra usage when disabled" passed after 0.015 seconds.
+✔ Test "height fingerprint field distinguishes nil from empty string" passed after 0.015 seconds.
+✔ Test "kilo model treats auto top up only login as activity" passed after 0.015 seconds.
+✔ Test "open router model when key fetch unavailable shows unavailable note" passed after 0.015 seconds.
+✔ Test "codex local token usage preserves limits unavailable placeholder" passed after 0.015 seconds.
+✔ Test "claude subscription-only quota keeps local cost content" passed after 0.016 seconds.
+✔ Test "credits select stacked detail layout without quota metrics" passed after 0.016 seconds.
+✔ Test "factory token rate billing uses time window labels" passed after 0.017 seconds.
+✔ Test "height fingerprint tracks wrapping metric text content" passed after 0.017 seconds.
+✔ Test "height fingerprint tracks reset-credit inventory shape" passed after 0.017 seconds.
+✔ Test "codex managed token usage keeps remote quota unavailable error visible" passed after 0.017 seconds.
+✔ Test "codex local token usage preserves sign-in guidance" passed after 0.017 seconds.
+✔ Test "open router model without key limit shows text only summary" passed after 0.017 seconds.
+✔ Test "menu card keeps positive sub percent usage visible" passed after 0.003 seconds.
+✔ Test "command code progress color uses its contrasting brand accent" passed after 0.003 seconds.
+✔ Test "claude model hides weekly when unavailable" passed after 0.018 seconds.
+✔ Test "hides email when personal info hidden" passed after 0.018 seconds.
+✔ Test "kilo model shows primary detail when reset date missing" passed after 0.018 seconds.
+✔ Test "kilo model keeps zero total edge state visible" passed after 0.018 seconds.
+✔ Test "wayfinder model shows gateway routing savings and latency" passed after 0.003 seconds.
+✔ Test "overview hides cards that only contain an error" passed after 0.017 seconds.
+✔ Test "text generation badge uses real window type when multiple windows exist" passed after 0.003 seconds.
+✔ Test "kilo model splits pass and activity and shows fallback note" passed after 0.018 seconds.
+✔ Test "kilo model does not show fallback note when not auto to CLI" passed after 0.018 seconds.
+✔ Test "factory extra usage balance renders as optional balance" passed after 0.017 seconds.
+✔ Test "minimax service metrics use codex aligned quota copy" passed after 0.003 seconds.
+✔ Test "builds metrics using remaining percent" passed after 0.018 seconds.
+✔ Test "open router model uses API key quota bar and quota detail" passed after 0.018 seconds.
+✔ Test "ollama API balance card shares monthly and credit presentation" passed after 0.003 seconds.
+✔ Suite MenuCardHeightFingerprintTests pawarning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+ssed after 0.018 seconds.
+✔ Suite OverviewMenuCardVisibilityTests passed after 0.018 seconds.
+✔ Test "codex local token usage hides mapped remote transport error" passed after 0.018 seconds.
+✔ Test "open router model shows daily and weekly key spend" passed after 0.004 seconds.
+✔ Test "kimi model orders rate limit before weekly quota and shows pace" passed after 0.004 seconds.
+✔ Test "openrouter period usage gets inline dashboard" passed after 0.004 seconds.
+✔ Test "cost section includes last30 days tokens" passed after 0.019 seconds.
+✔ Suite MenuCardModelTests passed after 0.019 seconds.
+✔ Test "copilot over quota usage keeps used percentage detail" passed after 0.005 seconds.
+✔ Test "zai hourly usage gets inline dashboard" passed after 0.004 seconds.
+✔ Test "factory time window labels localize in simplified chinese" passed after 0.020 seconds.
+✔ Suite FactoryMenuCardModelTests passed after 0.020 seconds.
+✔ Test "minimax token plan model shows weekly quota and points balance" passed after 0.009 seconds.
+✔ Suite MiniMaxMenuCardModelTests passed after 0.024 seconds.
+✔ Test "mistral daily buckets get inline dashboard" passed after 0.009 seconds.
+✔ Test "mistral billing usage can show cost card summary" passed after 0.015 seconds.
+✔ Test "codex local token usage hides remote quota unavailable error" passed after 0.030 seconds.
+✔ Suite MenuCardModelCodexDegradedQuotaTests passed after 0.030 seconds.
+✔ Test "local cost history gets inline dashboard" passed after 0.016 seconds.
+✔ Suite ProviderInlineDashboardModelTests passed after 0.030 seconds.
+✔ Test "elevenlabs progress color stays visible in light menus" passed after 0.033 seconds.
+✔ Suite MenuCardProviderRegressionTests passed after 0.047 seconds.
+✔ Test run with 53 tests in 8 suites passed after 0.048 seconds.
