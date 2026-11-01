@@ -10,9 +10,9 @@ enum WidgetTileSize {
 
     var heroNumberSize: CGFloat {
         switch self {
-        case .small: 24
-        case .medium: 34
-        case .large: 42
+        case .small: 34
+        case .medium: 40
+        case .large: 46
         }
     }
 
@@ -70,18 +70,24 @@ struct UsageTile<Header: View>: View {
     @ViewBuilder let header: () -> Header
 
     var body: some View {
-        let color = WidgetColors.color(for: self.entry.provider)
+        let color = WidgetInk.data
         // The provider's compact row cap curates what a tile may LIST; it must not decide which
         // lane is binding. Headline and overflow are computed against the full set.
         let allLanes = WidgetTileLane.lanes(for: self.entry)
         let displayLanes = self.laneLimit == nil
             ? allLanes
             : WidgetTileLane.lanes(for: self.entry, limit: self.laneLimit)
-        let hasChart = self.size.showsChart(
+        // Large tiles name the provider's leading models when the history has them; the History widget
+        // keeps the daily chart.
+        let topModels = self.size == .large ? Array((self.entry.topModels ?? []).prefix(3)) : []
+        let hasChart = topModels.isEmpty && self.size.showsChart(
             laneCount: allLanes.count,
             hasHistory: !self.entry.dailyUsage.isEmpty)
         let fallback = allLanes.contains(where: \.isHeadlineCandidate) ? nil : WidgetFallbackHero.make(for: self.entry)
-        let metrics = WidgetMetricRows.rows(
+        // A two-column medium tile subtracts its cost line before it shrinks the headline figure;
+        // the large tile and the single-column medium tile keep it.
+        let isTwoColumnMedium = self.size == .medium && allLanes.count > 1
+        let metrics = isTwoColumnMedium ? [] : WidgetMetricRows.rows(
             for: self.entry,
             size: self.size,
             secondaryLaneCount: max(0, allLanes.count - 1),
@@ -91,7 +97,7 @@ struct UsageTile<Header: View>: View {
             displayCandidates: displayLanes,
             maxSecondaryLanes: self.size.secondaryLaneCapacity(
                 hasMetrics: !metrics.isEmpty,
-                hasChart: hasChart),
+                hasChart: hasChart || !topModels.isEmpty),
             reservesOverflowRow: self.size != .large)
 
         if self.size == .small {
@@ -131,7 +137,7 @@ struct UsageTile<Header: View>: View {
                 if self.size == .medium, !plan.lanes.isEmpty {
                     HStack(alignment: .top, spacing: 14) {
                         self.hero(plan: plan, fallback: fallback, color: color)
-                            .frame(width: 104, alignment: .leading)
+                            .frame(width: 120, alignment: .leading)
                         VStack(alignment: .leading, spacing: WidgetLayout.laneSpacing) {
                             self.lanes(plan: plan, color: color)
                         }
@@ -145,7 +151,10 @@ struct UsageTile<Header: View>: View {
                         self.lanes(plan: plan, color: color)
                     }
                     self.metrics(metrics)
-                    if hasChart {
+                    if !topModels.isEmpty {
+                        WidgetTopModels(models: topModels)
+                        Spacer(minLength: 0)
+                    } else if hasChart {
                         UsageHistoryChart(
                             points: self.entry.dailyUsage,
                             color: color,
@@ -198,9 +207,6 @@ struct UsageTile<Header: View>: View {
             let displayed = WidgetUsageDisplay.percent(
                 fromRemaining: lane.remainingPercent,
                 showUsed: self.showsUsed)
-            let title = WidgetLaneCopy.caption(
-                title: W("%@ %@", W(lane.title), WidgetFormat.percent(displayed)),
-                showUsed: self.showsUsed)
             HeroBlock(
                 value: WidgetFormat.percent(displayed),
                 caption: Text(WidgetLaneCopy.caption(title: lane.title, showUsed: self.showsUsed)),
@@ -208,9 +214,7 @@ struct UsageTile<Header: View>: View {
                 barPercent: displayed ?? 0,
                 isLow: QuotaSeverity.isLow(remaining: lane.remainingPercent),
                 color: color,
-                numberSize: self.size.heroNumberSize,
-                compact: self.size == .small,
-                inlineQuotaTitle: title)
+                numberSize: self.size.heroNumberSize)
         } else if let fallback {
             HeroBlock(
                 value: fallback.value,

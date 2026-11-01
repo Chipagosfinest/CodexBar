@@ -83,8 +83,8 @@ enum WidgetLayout {
     static let laneSpacing: CGFloat = 7
     static let barHeight: CGFloat = 7
     static let heroBarHeight: CGFloat = 9
-    static let markSizeSmall: CGFloat = 22
-    static let markSizeRegular: CGFloat = 26
+    static let markSizeSmall: CGFloat = 24
+    static let markSizeRegular: CGFloat = 30
     static let separatorOpacity: Double = 0.12
 
     /// The single-metric tile has no lanes to fit around, so its figure runs larger.
@@ -271,6 +271,18 @@ enum ProviderMarkLabel {
     }
 }
 
+// MARK: - Ink
+
+/// Data marks (bars, history) are drawn in ink. Colour is reserved for one meaning: a limit that is
+/// running low. Provider identity lives in the mark, not in the bars.
+enum WidgetInk {
+    static let data = Color.primary.opacity(0.82)
+
+    static func bar(isLow: Bool) -> Color {
+        isLow ? .red : self.data
+    }
+}
+
 // MARK: - Quota bar
 
 struct QuotaBar: View {
@@ -328,7 +340,9 @@ struct QuotaLaneView: View {
                     .lineLimit(1)
             }
             if self.showsBar {
-                QuotaBar(percent: self.percent, color: self.color)
+                QuotaBar(
+                    percent: self.percent,
+                    color: QuotaSeverity.isLow(remaining: self.remainingPercent) ? .red : self.color)
             }
         }
     }
@@ -425,7 +439,7 @@ struct HeroBlock: View {
             if let barPercent = self.barPercent {
                 QuotaBar(
                     percent: barPercent,
-                    color: self.color,
+                    color: self.isLow ? .red : self.color,
                     height: self.compact ? 6 : WidgetLayout.heroBarHeight)
                     .padding(.top, self.compact ? 2 : 5)
             }
@@ -442,6 +456,41 @@ struct HeroBlock: View {
             .foregroundStyle(self.unavailableAwareColor)
             .lineLimit(1)
             .minimumScaleFactor(0.5)
+    }
+}
+
+// MARK: - Top models
+
+/// A provider's leading models: name, share of the provider's usage, and an ink bar for that share.
+struct WidgetTopModels: View {
+    let models: [WidgetSnapshot.ModelShare]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            WidgetSeparator()
+            Text(W("Models"))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            ForEach(Array(self.models.enumerated()), id: \.offset) { _, model in
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 6) {
+                        Text(model.modelName)
+                            .font(.caption)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        Spacer(minLength: 4)
+                        Text(WidgetTopModels.shareText(model.share))
+                            .font(.caption.weight(.semibold))
+                            .monospacedDigit()
+                    }
+                    QuotaBar(percent: model.share * 100, color: WidgetInk.data, height: 4)
+                }
+            }
+        }
+    }
+
+    static func shareText(_ share: Double) -> String {
+        share.formatted(.percent.precision(.fractionLength(share > 0 && share < 0.01 ? 1 : 0)))
     }
 }
 
@@ -494,7 +543,10 @@ struct TileHeader: View {
         VStack(alignment: .leading, spacing: 3) {
             HStack(spacing: 7) {
                 if let provider = self.provider.firstPartyProvider {
-                    ProviderMark(provider: provider, isSelected: true, size: WidgetLayout.markSizeSmall)
+                    ProviderMark(
+                        provider: provider,
+                        isSelected: true,
+                        size: self.size == .small ? WidgetLayout.markSizeSmall : WidgetLayout.markSizeRegular)
                 }
                 Text(self.displayName)
                     .font(.subheadline.weight(.semibold))

@@ -305,7 +305,10 @@ struct AccountsOverviewTile: View {
                 }
             }
             if self.family == .systemLarge, remaining != nil {
-                QuotaBar(percent: displayed, color: WidgetColors.color(for: self.entry.provider.instanceID), height: 3)
+                QuotaBar(
+                    percent: displayed,
+                    color: WidgetInk.bar(isLow: QuotaSeverity.isLow(remaining: remaining)),
+                    height: 3)
             }
         }
     }

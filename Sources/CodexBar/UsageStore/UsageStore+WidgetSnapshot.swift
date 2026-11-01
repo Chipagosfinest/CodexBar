@@ -337,7 +337,40 @@ extension UsageStore {
             providerCost: providerCost,
             quotaOwnerKey: snapshot != nil ? claudeQuotaOwnerKey : preservedClaudeUsage?.quotaOwnerKey,
             balanceText: balanceText,
-            details: snapshot.flatMap { $0.details.isEmpty ? nil : $0.details })
+            details: snapshot.flatMap { $0.details.isEmpty ? nil : $0.details },
+            topModels: Self.widgetTopModels(from: tokenSnapshot))
+    }
+
+    /// The provider's own leading models over its local cost history, so the widget can name them
+    /// without reading another provider's data.
+    nonisolated static func widgetTopModels(from snapshot: CostUsageTokenSnapshot?) -> [WidgetSnapshot.ModelShare]? {
+        guard let snapshot else { return nil }
+        var order: [String] = []
+        var tokens: [String: [Int?]] = [:]
+        var costs: [String: [Double?]] = [:]
+        for entry in snapshot.daily {
+            for breakdown in entry.modelBreakdowns ?? [] {
+                let name = breakdown.modelName.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !name.isEmpty else { continue }
+                if tokens[name] == nil, costs[name] == nil {
+                    order.append(name)
+                }
+                tokens[name, default: []].append(breakdown.totalTokens)
+                costs[name, default: []].append(breakdown.costUSD)
+            }
+        }
+        let inputs = order.map { name in
+            let modelCosts = costs[name] ?? []
+            // A day without a count makes the total unknown rather than a silent partial sum.
+            let modelTokens = tokens[name] ?? []
+            let summedTokens = modelTokens.contains(where: { $0 == nil })
+                ? nil : CheckedSum.integers(modelTokens.compactMap(\.self))
+            return WidgetSnapshot.ModelShareInput(
+                modelName: name,
+                totalTokens: summedTokens,
+                costUSD: modelCosts.contains(where: { $0 == nil }) ? nil : modelCosts.compactMap(\.self).reduce(0, +))
+        }
+        return WidgetSnapshot.ModelShare.leading(inputs)
     }
 
     private func claudeWidgetQuotaOwnerKey() -> String {

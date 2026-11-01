@@ -562,7 +562,7 @@ private struct HistoryView: View {
                 size: self.isLarge ? .large : .medium)
             UsageHistoryChart(
                 points: self.entry.dailyUsage,
-                color: WidgetColors.color(for: self.entry.provider),
+                color: WidgetInk.data,
                 currencyCode: self.entry.tokenUsage?.currencyCode)
                 .frame(minHeight: self.isLarge ? 110 : 58, maxHeight: .infinity)
             if let token = entry.tokenUsage {
