@@ -1,0 +1,64 @@
+name: Widget desktop UI smoke
+on:
+  workflow_dispatch:
+  push:
+    branches: [proof/pr4890-installed]
+permissions:
+  contents: read
+jobs:
+  installed-widget:
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Select Xcode and record provenance
+        run: |
+          set -euo pipefail
+          ls -d /Applications/Xcode*.app
+          if test -d /Applications/Xcode_27.0.app; then
+            sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
+          fi
+          xcodebuild -version
+          mkdir -p "$RUNNER_TEMP/proof"
+          git rev-parse HEAD > "$RUNNER_TEMP/proof/fixture-sha.txt"
+          git show --format=fuller HEAD > "$RUNNER_TEMP/proof/fixture-and-product.patch"
+          shasum -a 256 Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift Sources/CodexBarWidget/*.swift > "$RUNNER_TEMP/proof/source-hashes.txt"
+      - name: Package real app and WidgetKit extension
+        run: |
+          set -euo pipefail
+          command -v xcodegen || brew install xcodegen
+          ARCHES=arm64 CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh debug > "$RUNNER_TEMP/proof/package.log" 2>&1
+          codesign --verify --deep --strict CodexBar.app
+          codesign -d --entitlements :- CodexBar.app > "$RUNNER_TEMP/proof/app-entitlements.plist"
+          codesign -d --entitlements :- CodexBar.app/Contents/PlugIns/CodexBarWidget.appex > "$RUNNER_TEMP/proof/widget-entitlements.plist"
+          shasum -a 256 CodexBar.app/Contents/MacOS/CodexBar CodexBar.app/Contents/PlugIns/CodexBarWidget.appex/Contents/MacOS/CodexBarWidget > "$RUNNER_TEMP/proof/binary-hashes.txt"
+      - name: Install and launch isolated synthetic app
+        run: |
+          set -euo pipefail
+          cp -R CodexBar.app /Applications/CodexBar.app
+          /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f /Applications/CodexBar.app
+          pluginkit -a /Applications/CodexBar.app/Contents/PlugIns/CodexBarWidget.appex
+          pluginkit -m -A -D -i com.steipete.codexbar.debug.widget > "$RUNNER_TEMP/proof/registration.txt"
+          /Applications/CodexBar.app/Contents/MacOS/CodexBar --widget-host-proof "$RUNNER_TEMP/proof" > "$RUNNER_TEMP/proof/app.log" 2>&1 &
+          sleep 4
+          test -f "$RUNNER_TEMP/proof/complete-transport.json"
+      - name: Enable disposable runner Notification Center
+        run: launchctl load -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+      - name: Exercise real desktop host
+        run: |
+          set -euo pipefail
+          xcodebuild test -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
+            -scheme WidgetDesktopSmoke -configuration Debug -destination 'platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/ui-build" -resultBundlePath "$RUNNER_TEMP/proof/WidgetHost.xcresult" \
+            -only-testing:WidgetDesktopSmokeUITests/WidgetHostProofTests \
+            CODEXBAR_CI_SEED_ROOT="$RUNNER_TEMP/proof" CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual \
+            > "$RUNNER_TEMP/proof/ui-test.log" 2>&1
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: pr4890-installed-widget
+          path: ${{ runner.temp }}/proof
+          retention-days: 7

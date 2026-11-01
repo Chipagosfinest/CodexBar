@@ -1,0 +1,49 @@
+diff --git a/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift b/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift
+index ebc426160..fab3b7d89 100644
+--- a/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift
++++ b/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift
+@@ -350,10 +350,12 @@ extension UsageStore {
+         var costs: [String: [Double?]] = [:]
+         for entry in snapshot.daily {
+             // A day with usage but no model split would make every share overstate its model. Unmetered
+-            // requests (e.g. unresolved forks) carry neither tokens nor cost, so no basis can cover them.
++            // or incomplete requests are missing from the totals, so no basis can cover them.
+             let hasUsage = (entry.totalTokens ?? 0) > 0 || (entry.costUSD ?? 0) > 0 ||
+                 (entry.requestCount ?? 0) > 0 || (entry.unpricedRequestCount ?? 0) > 0
+-            if (entry.unmeteredRequestCount ?? 0) > 0 || (hasUsage && entry.modelBreakdowns?.isEmpty ?? true) {
++            if (entry.unmeteredRequestCount ?? 0) > 0 || entry.incompleteRequestCount > 0 ||
++                (hasUsage && entry.modelBreakdowns?.isEmpty ?? true)
++            {
+                 return nil
+             }
+             // Validate only named rows: unnamed usage is omitted from the widget's denominator.
+diff --git a/Tests/CodexBarTests/WidgetTopModelsTests.swift b/Tests/CodexBarTests/WidgetTopModelsTests.swift
+index 825ccf53b..c0698f507 100644
+--- a/Tests/CodexBarTests/WidgetTopModelsTests.swift
++++ b/Tests/CodexBarTests/WidgetTopModelsTests.swift
+@@ -168,6 +168,25 @@ struct WidgetTopModelsTests {
+         #expect(UsageStore.widgetTopModels(from: snapshot) == nil)
+     }
+ 
++    @Test(arguments: [nil, 0, 1, 3])
++    func `incomplete requests withhold shares even when model totals match`(incompleteRequests: Int?) {
++        let entry = CostUsageDailyReport.Entry(
++            date: "2026-10-01",
++            inputTokens: nil,
++            outputTokens: nil,
++            totalTokens: 100,
++            costUSD: 10,
++            modelsUsed: ["opus"],
++            modelBreakdowns: [
++                .init(modelName: "opus", costUSD: 10, totalTokens: 100, incompleteRequestCount: incompleteRequests),
++            ])
++
++        // Incomplete requests contribute to neither the model breakdown nor the daily totals.
++        // Matching sums therefore cannot establish coverage when any such request exists.
++        let shares = UsageStore.widgetTopModels(from: Self.snapshot([entry]))
++        #expect((shares == nil) == ((incompleteRequests ?? 0) > 0))
++    }
++
+     @Test(arguments: [(false, false), (true, true), (false, true)])
+     func `incomplete history withholds model shares`(coverage: Bool, partial: Bool) {
+         let snapshot = CostUsageTokenSnapshot(

@@ -27,6 +27,7 @@ enum CodexBarEntryPoint {
             exit(CodexBarCoreResourceSmoke.run())
         }
         #if DEBUG
+        if WidgetHostProof.runIfRequested() { return }
         if MenuBarLayoutNativeProof.runIfRequested() {
             return
         }

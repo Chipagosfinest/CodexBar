@@ -350,10 +350,12 @@ extension UsageStore {
         var costs: [String: [Double?]] = [:]
         for entry in snapshot.daily {
             // A day with usage but no model split would make every share overstate its model. Unmetered
-            // requests (e.g. unresolved forks) carry neither tokens nor cost, so no basis can cover them.
+            // or incomplete requests are missing from the totals, so no basis can cover them.
             let hasUsage = (entry.totalTokens ?? 0) > 0 || (entry.costUSD ?? 0) > 0 ||
                 (entry.requestCount ?? 0) > 0 || (entry.unpricedRequestCount ?? 0) > 0
-            if (entry.unmeteredRequestCount ?? 0) > 0 || (hasUsage && entry.modelBreakdowns?.isEmpty ?? true) {
+            if (entry.unmeteredRequestCount ?? 0) > 0 || entry.incompleteRequestCount > 0 ||
+                (hasUsage && entry.modelBreakdowns?.isEmpty ?? true)
+            {
                 return nil
             }
             // Validate only named rows: unnamed usage is omitted from the widget's denominator.

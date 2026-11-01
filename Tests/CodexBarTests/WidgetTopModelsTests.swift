@@ -168,6 +168,25 @@ struct WidgetTopModelsTests {
         #expect(UsageStore.widgetTopModels(from: snapshot) == nil)
     }
 
+    @Test(arguments: [nil, 0, 1, 3])
+    func `incomplete requests withhold shares even when model totals match`(incompleteRequests: Int?) {
+        let entry = CostUsageDailyReport.Entry(
+            date: "2026-10-01",
+            inputTokens: nil,
+            outputTokens: nil,
+            totalTokens: 100,
+            costUSD: 10,
+            modelsUsed: ["opus"],
+            modelBreakdowns: [
+                .init(modelName: "opus", costUSD: 10, totalTokens: 100, incompleteRequestCount: incompleteRequests),
+            ])
+
+        // Incomplete requests contribute to neither the model breakdown nor the daily totals.
+        // Matching sums therefore cannot establish coverage when any such request exists.
+        let shares = UsageStore.widgetTopModels(from: Self.snapshot([entry]))
+        #expect((shares == nil) == ((incompleteRequests ?? 0) > 0))
+    }
+
     @Test(arguments: [(false, false), (true, true), (false, true)])
     func `incomplete history withholds model shares`(coverage: Bool, partial: Bool) {
         let snapshot = CostUsageTokenSnapshot(
