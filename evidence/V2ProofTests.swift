@@ -137,7 +137,7 @@ struct V2ProofTests {
 
     // MARK: - Usage & Spend
 
-    static func dashboardGroup(unpricedModel: Bool = false) -> SpendDashboardModel.CurrencyGroup {
+    static func dashboardGroup(unpricedModel: Bool = false, partialModels: Bool = false) -> SpendDashboardModel.CurrencyGroup {
         let calendar = Calendar(identifier: .gregorian)
         let end = calendar.startOfDay(for: Self.now)
         let start = calendar.date(byAdding: .day, value: -29, to: end)!
@@ -193,7 +193,8 @@ struct V2ProofTests {
             totalCost: 1724.14,
             coveredDayCount: 30,
             chartDomain: start...calendar.date(byAdding: .day, value: 1, to: end)!,
-            modelHistoryCompleteness: .complete,
+            modelHistoryCompleteness: partialModels ? .incomplete : .complete,
+            incompleteModelProviders: partialModels ? [.cursor] : [],
             provenance: .listPriceEstimate,
             timeZone: TimeZone(identifier: "America/New_York")!)
     }

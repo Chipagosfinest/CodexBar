@@ -3,7 +3,7 @@
   "heads": {
     "widgets": "7cfe4c032763dd6b04f1b61368865bfcbab61187",
     "share-card": "2eedbbc5f6bbb455e81213f15887558ef9f8cbfb",
-    "models": "879a693377e57c91eac77e6eefc36243ef3a071f"
+    "models": "61cbf2bd8c25d6d4b1144dbbf3fc3586f98fff7d"
   },
   "method": "Offscreen NSHostingView renders of production SwiftUI views with fixed synthetic data, 2x, light and dark. Not captured from a running app or WidgetKit host.",
   "sha256": {
@@ -24,6 +24,8 @@
     "v2/main/widget-usage-small-light.png": "3ac9e9aed5283ae2e04cbabcbec3008c3bb99cf2a8762bff8a5324ba105a7d17",
     "v2/models/usage-spend-models-dark.png": "31fe648ab58a13a4337acdd2cfc67662fa7655c2c422afe987ff5ba27e176199",
     "v2/models/usage-spend-models-light.png": "f2a83fc9d2649a5ad1d54c4a608aff2c499a471ce892922a1c799cbd6f2d6d0d",
+    "v2/models/usage-spend-models-partial-dark.png": "c9b57a0654264ee000aad9894d7d5f7e72d17242b061928c48a99c2289545bd9",
+    "v2/models/usage-spend-models-partial-light.png": "57b1bd3ef1aec982ce62177d15470098afbd7bb45cceadf454ec75001d55b1d0",
     "v2/models/usage-spend-models-unpriced-dark.png": "a8361f4ce28cd11e3718e99a158c5238a1f050a2b8ab8c1d2c251ef9a39332f1",
     "v2/models/usage-spend-models-unpriced-light.png": "022f2cfacaaa46cfc83d8444454be3594c6b6fd4c7cf16d219a0b304f8dfb19f",
     "v2/share-card/share-card-dark.png": "6119883ceeb3c5d30f830edbbe34e8fa8a133e93c75c003ec03d4638dbe8bbc3",
