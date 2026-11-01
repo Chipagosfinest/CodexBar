@@ -2,7 +2,7 @@ import AppKit
 import XCTest
 
 final class WidgetHostProofTests: XCTestCase {
-    func testInstalledLargeWidgetCompleteAndIncompleteHistory() {
+    func testInstalledLargeWidgetCompleteAndIncompleteHistory() throws {
         let galleryFamily = "small"
         let widgetFamily = "large"
         let finder = XCUIApplication(bundleIdentifier: "com.apple.finder")
