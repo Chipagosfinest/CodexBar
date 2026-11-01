@@ -1,0 +1,822 @@
+diff --git a/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj/project.pbxproj b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj/project.pbxproj
+new file mode 100644
+index 000000000..a1d60abb7
+--- /dev/null
++++ b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj/project.pbxproj
+@@ -0,0 +1,72 @@
++// !$*UTF8*$!
++{
++	archiveVersion = 1;
++	classes = {};
++	objectVersion = 77;
++	objects = {
++
++/* Begin PBXBuildFile section */
++		000000000000000000000011 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000021 /* AppDelegate.swift */; };
++		000000000000000000000012 /* WidgetDesktopSmokeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000022 /* WidgetDesktopSmokeUITests.swift */; };
++/* End PBXBuildFile section */
++
++/* Begin PBXContainerItemProxy section */
++		000000000000000000000031 /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = 000000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 000000000000000000000101; remoteInfo = WidgetDesktopSmoke; };
++/* End PBXContainerItemProxy section */
++
++/* Begin PBXFileReference section */
++		000000000000000000000021 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
++		000000000000000000000022 /* WidgetDesktopSmokeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDesktopSmokeUITests.swift; sourceTree = "<group>"; };
++		000000000000000000000023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
++		000000000000000000000024 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
++		000000000000000000000025 /* WidgetDesktopSmoke.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WidgetDesktopSmoke.app; sourceTree = BUILT_PRODUCTS_DIR; };
++		000000000000000000000026 /* WidgetDesktopSmokeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WidgetDesktopSmokeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
++/* End PBXFileReference section */
++
++/* Begin PBXFrameworksBuildPhase section */
++		000000000000000000000131 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
++		000000000000000000000132 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
++/* End PBXFrameworksBuildPhase section */
++
++/* Begin PBXGroup section */
++		000000000000000000000002 = {isa = PBXGroup; children = (000000000000000000000041 /* WidgetDesktopSmoke */, 000000000000000000000042 /* WidgetDesktopSmokeUITests */, 000000000000000000000043 /* Products */); sourceTree = "<group>"; };
++		000000000000000000000041 /* WidgetDesktopSmoke */ = {isa = PBXGroup; children = (000000000000000000000021 /* AppDelegate.swift */, 000000000000000000000023 /* Info.plist */); path = WidgetDesktopSmoke; sourceTree = "<group>"; };
++		000000000000000000000042 /* WidgetDesktopSmokeUITests */ = {isa = PBXGroup; children = (000000000000000000000022 /* WidgetDesktopSmokeUITests.swift */, 000000000000000000000024 /* Info.plist */); path = WidgetDesktopSmokeUITests; sourceTree = "<group>"; };
++		000000000000000000000043 /* Products */ = {isa = PBXGroup; children = (000000000000000000000025 /* WidgetDesktopSmoke.app */, 000000000000000000000026 /* WidgetDesktopSmokeUITests.xctest */); name = Products; sourceTree = "<group>"; };
++/* End PBXGroup section */
++
++/* Begin PBXNativeTarget section */
++		000000000000000000000101 /* WidgetDesktopSmoke */ = {isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000201 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmoke" */; buildPhases = (000000000000000000000121 /* Sources */, 000000000000000000000131 /* Frameworks */); buildRules = (); dependencies = (); name = WidgetDesktopSmoke; productName = WidgetDesktopSmoke; productReference = 000000000000000000000025 /* WidgetDesktopSmoke.app */; productType = "com.apple.product-type.application"; };
++		000000000000000000000102 /* WidgetDesktopSmokeUITests */ = {isa = PBXNativeTarget; buildConfigurationList = 000000000000000000000202 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmokeUITests" */; buildPhases = (000000000000000000000122 /* Sources */, 000000000000000000000132 /* Frameworks */); buildRules = (); dependencies = (000000000000000000000141 /* PBXTargetDependency */); name = WidgetDesktopSmokeUITests; productName = WidgetDesktopSmokeUITests; productReference = 000000000000000000000026 /* WidgetDesktopSmokeUITests.xctest */; productType = "com.apple.product-type.bundle.ui-testing"; };
++/* End PBXNativeTarget section */
++
++/* Begin PBXProject section */
++		000000000000000000000001 /* Project object */ = {isa = PBXProject; attributes = { LastUpgradeCheck = 2600; TargetAttributes = { 000000000000000000000102 = { TestTargetID = 000000000000000000000101; }; }; }; buildConfigurationList = 000000000000000000000200 /* Build configuration list for PBXProject "WidgetDesktopSmoke" */; compatibilityVersion = "Xcode 16.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = 000000000000000000000002; productRefGroup = 000000000000000000000043 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (000000000000000000000101 /* WidgetDesktopSmoke */, 000000000000000000000102 /* WidgetDesktopSmokeUITests */); };
++/* End PBXProject section */
++
++/* Begin PBXSourcesBuildPhase section */
++		000000000000000000000121 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000011 /* AppDelegate.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
++		000000000000000000000122 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000012 /* WidgetDesktopSmokeUITests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
++/* End PBXSourcesBuildPhase section */
++
++/* Begin PBXTargetDependency section */
++		000000000000000000000141 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 000000000000000000000101 /* WidgetDesktopSmoke */; targetProxy = 000000000000000000000031 /* PBXContainerItemProxy */; };
++/* End PBXTargetDependency section */
++
++/* Begin XCBuildConfiguration section */
++		000000000000000000000301 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; MACOSX_DEPLOYMENT_TARGET = 14.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Debug; };
++		000000000000000000000302 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; MACOSX_DEPLOYMENT_TARGET = 14.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Release; };
++		000000000000000000000311 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmoke/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; }; name = Debug; };
++		000000000000000000000312 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmoke/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; }; name = Release; };
++		000000000000000000000321 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmokeUITests/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke.ui-tests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_TARGET_NAME = WidgetDesktopSmoke; }; name = Debug; };
++		000000000000000000000322 /* Release */ = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_IDENTITY = "-"; CODE_SIGN_STYLE = Manual; INFOPLIST_FILE = WidgetDesktopSmokeUITests/Info.plist; MACOSX_DEPLOYMENT_TARGET = 14.0; PRODUCT_BUNDLE_IDENTIFIER = com.steipete.codexbar.proof.widgetdesktopsmoke.ui-tests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_TARGET_NAME = WidgetDesktopSmoke; }; name = Release; };
++/* End XCBuildConfiguration section */
++
++/* Begin XCConfigurationList section */
++		000000000000000000000200 /* Build configuration list for PBXProject "WidgetDesktopSmoke" */ = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000301 /* Debug */, 000000000000000000000302 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
++		000000000000000000000201 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmoke" */ = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000311 /* Debug */, 000000000000000000000312 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
++		000000000000000000000202 /* Build configuration list for PBXNativeTarget "WidgetDesktopSmokeUITests" */ = {isa = XCConfigurationList; buildConfigurations = (000000000000000000000321 /* Debug */, 000000000000000000000322 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
++/* End XCConfigurationList section */
++	};
++	rootObject = 000000000000000000000001 /* Project object */;
++}
+diff --git a/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj/xcshareddata/xcschemes/WidgetDesktopSmoke.xcscheme b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj/xcshareddata/xcschemes/WidgetDesktopSmoke.xcscheme
+new file mode 100644
+index 000000000..90bca8864
+--- /dev/null
++++ b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj/xcshareddata/xcschemes/WidgetDesktopSmoke.xcscheme
+@@ -0,0 +1,31 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Scheme LastUpgradeVersion="2600" version="1.7">
++  <BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES">
++    <BuildActionEntries>
++      <BuildActionEntry buildForTesting="YES" buildForRunning="YES" buildForProfiling="YES" buildForArchiving="YES" buildForAnalyzing="YES">
++        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000101" BuildableName="WidgetDesktopSmoke.app" BlueprintName="WidgetDesktopSmoke" ReferencedContainer="container:WidgetDesktopSmoke.xcodeproj"/>
++      </BuildActionEntry>
++      <BuildActionEntry buildForTesting="YES" buildForRunning="NO" buildForProfiling="NO" buildForArchiving="NO" buildForAnalyzing="NO">
++        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000102" BuildableName="WidgetDesktopSmokeUITests.xctest" BlueprintName="WidgetDesktopSmokeUITests" ReferencedContainer="container:WidgetDesktopSmoke.xcodeproj"/>
++      </BuildActionEntry>
++    </BuildActionEntries>
++  </BuildAction>
++  <TestAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv="NO">
++    <MacroExpansion><BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000101" BuildableName="WidgetDesktopSmoke.app" BlueprintName="WidgetDesktopSmoke" ReferencedContainer="container:WidgetDesktopSmoke.xcodeproj"/></MacroExpansion>
++    <Testables><TestableReference skipped="NO"><BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000102" BuildableName="WidgetDesktopSmokeUITests.xctest" BlueprintName="WidgetDesktopSmokeUITests" ReferencedContainer="container:WidgetDesktopSmoke.xcodeproj"/></TestableReference></Testables>
++<EnvironmentVariables>
++  <EnvironmentVariable key="CODEXBAR_CI_PACKAGED_APP" value="$(CODEXBAR_CI_PACKAGED_APP)" isEnabled="YES"/>
++  <EnvironmentVariable key="CODEXBAR_CI_SEED_ROOT" value="$(CODEXBAR_CI_SEED_ROOT)" isEnabled="YES"/>
++  <EnvironmentVariable key="CODEXBAR_CI_PACKAGED_PROOF" value="$(CODEXBAR_CI_PACKAGED_PROOF)" isEnabled="YES"/>
++  <EnvironmentVariable key="CODEXBAR_CI_RUNNER_TEMP" value="$(CODEXBAR_CI_RUNNER_TEMP)" isEnabled="YES"/>
++  <EnvironmentVariable key="CODEXBAR_CI_WIDGET_FAMILY" value="$(CODEXBAR_CI_WIDGET_FAMILY)" isEnabled="YES"/>
++  <EnvironmentVariable key="CODEXBAR_CI_PROVIDER_SWITCH_PROOF" value="$(CODEXBAR_CI_PROVIDER_SWITCH_PROOF)" isEnabled="YES"/>
++  <EnvironmentVariable key="CODEXBAR_CI_UPGRADE_CANDIDATE_APP" value="$(CODEXBAR_CI_UPGRADE_CANDIDATE_APP)" isEnabled="YES"/>
++  <EnvironmentVariable key="CODEXBAR_CI_UPGRADE_PHASE" value="$(CODEXBAR_CI_UPGRADE_PHASE)" isEnabled="YES"/>
++</EnvironmentVariables>
++  </TestAction>
++  <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" allowLocationSimulation="YES"><BuildableProductRunnable runnableDebuggingMode="0"><BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000101" BuildableName="WidgetDesktopSmoke.app" BlueprintName="WidgetDesktopSmoke" ReferencedContainer="container:WidgetDesktopSmoke.xcodeproj"/></BuildableProductRunnable></LaunchAction>
++  <ProfileAction buildConfiguration="Release" shouldUseLaunchSchemeArgsEnv="YES" savedToolIdentifier="" useCustomWorkingDirectory="NO" debugDocumentVersioning="YES"><BuildableProductRunnable runnableDebuggingMode="0"><BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="000000000000000000000101" BuildableName="WidgetDesktopSmoke.app" BlueprintName="WidgetDesktopSmoke" ReferencedContainer="container:WidgetDesktopSmoke.xcodeproj"/></BuildableProductRunnable></ProfileAction>
++  <AnalyzeAction buildConfiguration="Debug"/>
++  <ArchiveAction buildConfiguration="Release" revealArchiveInOrganizer="YES"/>
++</Scheme>
+diff --git a/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke/AppDelegate.swift b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke/AppDelegate.swift
+new file mode 100644
+index 000000000..4030dca27
+--- /dev/null
++++ b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke/AppDelegate.swift
+@@ -0,0 +1,20 @@
++import AppKit
++
++@main
++final class AppDelegate: NSObject, NSApplicationDelegate {
++    func applicationDidFinishLaunching(_: Notification) {
++        let window = NSWindow(
++            contentRect: NSRect(x: 0, y: 0, width: 320, height: 180),
++            styleMask: [.titled, .closable],
++            backing: .buffered,
++            defer: false)
++        window.title = "Widget Desktop Smoke Host"
++        let label = NSTextField(labelWithString: "Widget Desktop Smoke Host")
++        label.identifier = NSUserInterfaceItemIdentifier("widget-desktop-smoke-host")
++        label.frame = NSRect(x: 24, y: 78, width: 272, height: 24)
++        window.contentView = NSView(frame: window.contentRect(forFrameRect: window.frame))
++        window.contentView?.addSubview(label)
++        window.makeKeyAndOrderFront(nil)
++        NSApp.activate(ignoringOtherApps: true)
++    }
++}
+diff --git a/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke/Info.plist b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke/Info.plist
+new file mode 100644
+index 000000000..5455df429
+--- /dev/null
++++ b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke/Info.plist
+@@ -0,0 +1,3 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0"><dict><key>CFBundleDevelopmentRegion</key><string>en</string><key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string><key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string><key>CFBundleInfoDictionaryVersion</key><string>6.0</string><key>CFBundleName</key><string>$(PRODUCT_NAME)</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>1.0</string><key>CFBundleVersion</key><string>1</string><key>LSMinimumSystemVersion</key><string>$(MACOSX_DEPLOYMENT_TARGET)</string><key>NSPrincipalClass</key><string>NSApplication</string></dict></plist>
+diff --git a/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmokeUITests/Info.plist b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmokeUITests/Info.plist
+new file mode 100644
+index 000000000..10b4810a8
+--- /dev/null
++++ b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmokeUITests/Info.plist
+@@ -0,0 +1,3 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0"><dict><key>CFBundleDevelopmentRegion</key><string>en</string><key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string><key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string><key>CFBundleInfoDictionaryVersion</key><string>6.0</string><key>CFBundleName</key><string>$(PRODUCT_NAME)</string><key>CFBundlePackageType</key><string>BNDL</string><key>CFBundleShortVersionString</key><string>1.0</string><key>CFBundleVersion</key><string>1</string></dict></plist>
+diff --git a/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmokeUITests/WidgetDesktopSmokeUITests.swift b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmokeUITests/WidgetDesktopSmokeUITests.swift
+new file mode 100644
+index 000000000..641b08126
+--- /dev/null
++++ b/.github/proof/WidgetDesktopSmoke/WidgetDesktopSmokeUITests/WidgetDesktopSmokeUITests.swift
+@@ -0,0 +1,338 @@
++import AppKit
++import XCTest
++
++final class WidgetHostProofTests: XCTestCase {
++    func testInstalledLargeWidgetCompleteAndIncompleteHistory() {
++        let galleryFamily = "small"
++        let widgetFamily = "large"
++        let finder = XCUIApplication(bundleIdentifier: "com.apple.finder")
++        finder.activate()
++        XCTAssertTrue(finder.wait(for: .runningForeground, timeout: 10), "Finder did not become foreground")
++        XCTAssertTrue(finder.menuBars.firstMatch.waitForExistence(timeout: 5), "Finder menu bar was not accessible")
++
++        self.attach("finder-before-widget-gallery", app: finder)
++        self.attachText(self.systemWidgetOwnerSummary(), named: "widget-system-owners")
++        self.attachSystemOwnerHierarchies()
++
++        let notificationCenter = XCUIApplication(bundleIdentifier: "com.apple.notificationcenterui")
++        let controlCenter = XCUIApplication(bundleIdentifier: "com.apple.controlcenter")
++        let clock = controlCenter.descendants(matching: .any)
++            .matching(identifier: "com.apple.menuextra.clock").firstMatch
++        XCTAssertTrue(clock.waitForExistence(timeout: 5), "Observed clock status item was not accessible")
++        XCTAssertTrue(clock.isHittable, "Observed clock status item was not hittable")
++        guard clock.exists, clock.isHittable else { return }
++        clock.click()
++
++        guard let notificationCenterID = self.waitForNotificationCenterIdentifier() else {
++            XCTFail("Clicking the observed clock did not reveal a public Notification Center owner")
++            return
++        }
++        XCTAssertEqual(notificationCenterID, "com.apple.notificationcenterui")
++        self.attach("notification-center-open", app: notificationCenter)
++        let editWidgets = notificationCenter.descendants(matching: .any).matching(NSPredicate(
++            format: "label CONTAINS[c] %@", "Edit Widgets")).firstMatch
++        XCTAssertTrue(
++            editWidgets.waitForExistence(timeout: 5),
++            "Notification Center lacked an accessible Edit Widgets control")
++        let editWidgetsFrame = editWidgets.frame
++        let observedLabel = editWidgets.label
++        let validEditWidgetsFrame = editWidgetsFrame.width > 0 && editWidgetsFrame.height > 0 &&
++            NSScreen.screens.contains(where: { $0.frame.contains(editWidgetsFrame) })
++        XCTAssertTrue(
++            observedLabel.localizedCaseInsensitiveContains("Edit Widgets") && validEditWidgetsFrame,
++            "Accessible Edit Widgets control must retain its label and an on-screen frame")
++        guard editWidgets.exists, observedLabel.localizedCaseInsensitiveContains("Edit Widgets"),
++              validEditWidgetsFrame else { return }
++        editWidgets.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
++        let editWidgetsClosed = XCTNSPredicateExpectation(
++            predicate: NSPredicate(format: "exists == false"),
++            object: editWidgets)
++        XCTAssertEqual(
++            XCTWaiter.wait(for: [editWidgetsClosed], timeout: 5),
++            .completed,
++            "Edit Widgets remained visible after its action; post-action UI is not a gallery transition")
++        let gallerySearch = notificationCenter.searchFields.firstMatch
++        let galleryDone = notificationCenter.buttons["Done"]
++        var galleryControl: String?
++        for attempt in 0..<10 {
++            if gallerySearch.exists {
++                galleryControl = "search field"
++                break
++            }
++            if galleryDone.exists {
++                galleryControl = "Done button"
++                break
++            }
++            if attempt < 9 {
++                RunLoop.current.run(until: Date().addingTimeInterval(0.25))
++            }
++        }
++        self.attach("after-edit-widgets", app: notificationCenter)
++        self.attachText(self.systemWidgetOwnerSummary(), named: "post-edit-widgets-system-owners")
++        self.attachSystemOwnerHierarchies()
++        self.attachText(
++            galleryControl ?? "No observed gallery search or Done control",
++            named: "post-edit-widgets-gallery-control")
++        self.attachText(
++            self.codexBarGalleryCandidates(in: notificationCenter),
++            named: "post-edit-widgets-codexbar-candidates")
++
++        let codexBarCategory = notificationCenter.buttons["CodexBar"]
++        XCTAssertTrue(
++            codexBarCategory.waitForExistence(timeout: 5),
++            "Widget gallery lacked the observed CodexBar category")
++        guard codexBarCategory.exists else { return }
++        codexBarCategory.click()
++        let switcherPreview = notificationCenter.descendants(matching: .any).matching(NSPredicate(
++            format: "identifier CONTAINS %@ AND identifier CONTAINS %@ AND identifier CONTAINS %@",
++            "com.steipete.codexbar.debug", "CodexBarSwitcherWidget", "system\(galleryFamily.capitalized)")).firstMatch
++        XCTAssertTrue(
++            switcherPreview.waitForExistence(timeout: 5),
++            "CodexBar \(galleryFamily) Switcher preview was not available")
++        XCTAssertTrue(
++            switcherPreview.frame.width > 0 && switcherPreview.frame.height > 0,
++            "Switcher preview had no visible frame")
++        self.attach("codexbar-switcher-selected-before-actions", app: notificationCenter)
++
++        // This fresh runner's captured desktop has existing widgets at x <= 368,
++        // the gallery below y=256, and Notification Center at x >= 664.
++        // Recheck the actual window frames before using that empty desktop region.
++        let desktop = finder.descendants(matching: .any).matching(NSPredicate(
++            format: "label ==[c] %@", "desktop")).firstMatch
++        XCTAssertTrue(desktop.exists, "Observed Finder desktop disappeared")
++        let desktopFrame = desktop.frame
++        let installedSize = galleryFamily == "small" ? CGSize(width: 180, height: 180) : CGSize(
++            width: 348,
++            height: 168)
++        // macOS 15's captured widgets occupy the right edge; keep a medium tile wholly left of them.
++        let drop = CGPoint(
++            x: galleryFamily == "medium" ? desktopFrame.minX + 400 : desktopFrame.midX,
++            y: desktopFrame.minY + 120)
++        let dropFrame = CGRect(
++            x: drop.x - installedSize.width / 2,
++            y: drop.y - installedSize.height / 2,
++            width: installedSize.width,
++            height: installedSize.height)
++        let occupied = notificationCenter.windows.allElementsBoundByIndex.contains {
++            $0.frame.intersects(dropFrame)
++        }
++        guard desktopFrame.width == 1024, desktopFrame.height == 768,
++              desktopFrame.contains(dropFrame), !occupied,
++              NSScreen.screens.contains(where: { $0.frame.contains(switcherPreview.frame) })
++        else {
++            XCTFail("Captured desktop geometry does not establish a safe empty drop target")
++            return
++        }
++        let target = desktop.coordinate(withNormalizedOffset: CGVector(
++            dx: (drop.x - desktopFrame.minX) / desktopFrame.width,
++            dy: (drop.y - desktopFrame.minY) / desktopFrame.height))
++        switcherPreview.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
++            .click(forDuration: 1, thenDragTo: target)
++        self.attach("after-switcher-desktop-drop", app: notificationCenter)
++        let modernDone = notificationCenter.buttons.matching(identifier: "widget-add-sheet-done").firstMatch
++        let legacyDone = notificationCenter.buttons.matching(NSPredicate(format: "label == %@", "Done"))
++        let done: XCUIElement
++        if modernDone.exists {
++            done = modernDone
++        } else if ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 15, legacyDone.count == 1 {
++            // macOS 15's captured gallery exposes the Done label without the newer identifier.
++            done = legacyDone.firstMatch
++        } else {
++            XCTFail("Widget gallery has no uniquely identified Done control")
++            return
++        }
++        guard done.waitForExistence(timeout: 5),
++              NSScreen.screens.contains(where: { $0.frame.contains(done.frame) })
++        else {
++            XCTFail("Observed widget gallery Done control was unavailable")
++            return
++        }
++        let doneReady = XCTNSPredicateExpectation(
++            predicate: NSPredicate(format: "hittable == true"), object: done)
++        guard XCTWaiter.wait(for: [doneReady], timeout: 5) == .completed else {
++            XCTFail("Observed gallery Done control never became hittable after placement")
++            return
++        }
++        done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
++        let galleryClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: done)
++        if XCTWaiter.wait(for: [galleryClosed], timeout: 5) != .completed {
++            self.attach("gallery-after-unacknowledged-done", app: notificationCenter)
++            // macOS 26 captures sometimes retain the gallery after the first Done click.
++            // Retry the same observed control once; disappearance remains mandatory.
++            guard done.exists, done.isHittable, done.frame.width > 0, done.frame.height > 0,
++                  NSScreen.screens.contains(where: { $0.frame.contains(done.frame) })
++            else {
++                XCTFail("Gallery did not close and its original Done control is no longer safely actionable")
++                return
++            }
++            done.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
++            let retryClosed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: done)
++            guard XCTWaiter.wait(for: [retryClosed], timeout: 5) == .completed else {
++                XCTFail("Gallery remained open after one bounded Done retry")
++                return
++            }
++        }
++        // The add sheet and desktop editor have separate Done controls.
++        let editorDone = notificationCenter.buttons.matching(identifier: "widget-editor-button").firstMatch
++        if editorDone.exists, editorDone.label == "Done" {
++            guard NSScreen.screens.contains(where: { $0.frame.contains(editorDone.frame) }) else {
++                XCTFail("Desktop editor Done control is outside the screen")
++                return
++            }
++            editorDone.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
++        }
++        let editingEnded = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
++            !editorDone.exists || editorDone.label != "Done"
++        }, object: nil)
++        XCTAssertEqual(
++            XCTWaiter.wait(for: [editingEnded], timeout: 5),
++            .completed,
++            "Desktop remained in widget editing mode")
++
++        let installed = notificationCenter.descendants(matching: .any).matching(NSPredicate(
++            format: "identifier BEGINSWITH %@ AND identifier CONTAINS %@ AND identifier CONTAINS %@",
++            "widget-local:", "com.steipete.codexbar.debug", "CodexBarSwitcherWidget")).firstMatch
++        guard installed.waitForExistence(timeout: 15) else {
++            self.attach("installed-switcher-missing", app: notificationCenter)
++            XCTFail("Dragging the gallery preview did not create an installed desktop Switcher")
++            return
++        }
++        XCTAssertTrue(
++            galleryFamily == "small"
++                ? (140...200).contains(installed.frame.width) && (140...200).contains(installed.frame.height)
++                : (320...380).contains(installed.frame.width) && (140...200).contains(installed.frame.height),
++            "Installed Switcher is not the expected \(galleryFamily) family")
++        XCTAssertFalse(installed.buttons["Remove"].exists, "Installed widget is still in edit mode")
++        if widgetFamily == "large" {
++            installed.rightClick()
++            self.attach("installed-switcher-context-menu-before-medium", app: notificationCenter)
++            // The observed menu belongs to Notification Center and exposes AppKit title text.
++            let mediumActions = notificationCenter.menuItems.matching(NSPredicate(
++                format: "title == %@", "Large")).allElementsBoundByIndex.filter { item in
++                item.exists && item.frame.width > 0 && item.frame.height > 0 &&
++                    NSScreen.screens.contains(where: { $0.frame.contains(item.frame) })
++            }
++            guard mediumActions.count == 1, let medium = mediumActions.first else {
++                XCTFail("Expected one observed on-screen Medium widget size action")
++                return
++            }
++            medium.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).click()
++            let resized = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
++                (320...380).contains(installed.frame.width) && (320...400).contains(installed.frame.height)
++            }, object: nil)
++            XCTAssertEqual(
++                XCTWaiter.wait(for: [resized], timeout: 10),
++                .completed,
++                "Medium action did not resize Switcher")
++        }
++
++        XCTAssertTrue(installed.frame.height > 300, "Must exercise a large installed widget")
++        func waitForText(_ text: String, present: Bool) {
++            let changed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
++                installed.debugDescription.contains(text) == present
++            }, object: nil)
++            XCTAssertEqual(
++                XCTWaiter.wait(for: [changed], timeout: 90),
++                .completed,
++                "Expected \(text) present=\(present)")
++        }
++        waitForText("fixture-alpha", present: true)
++        waitForText("80%", present: true)
++        self.attach("complete-installed-large", app: notificationCenter)
++        let app = XCUIApplication(bundleIdentifier: "com.steipete.codexbar.debug")
++        app.activate()
++        let incomplete = app.buttons["Use incomplete history"]
++        XCTAssertTrue(incomplete.waitForExistence(timeout: 5))
++        incomplete.click()
++        finder.activate()
++        waitForText("fixture-alpha", present: false)
++        waitForText("Last 14 days", present: true)
++        self.attach("incomplete-installed-large", app: notificationCenter)
++    }
++
++    private func waitForNotificationCenterIdentifier() -> String? {
++        for attempt in 0..<10 {
++            if let identifier = self.systemOwnerIdentifiers().first(where: {
++                $0 == "com.apple.notificationcenterui"
++            }) {
++                return identifier
++            }
++            if attempt < 9 {
++                RunLoop.current.run(until: Date().addingTimeInterval(0.25))
++            }
++        }
++        return nil
++    }
++
++    private func codexBarGalleryCandidates(in notificationCenter: XCUIApplication) -> String {
++        let candidates = notificationCenter.descendants(matching: .any).matching(NSPredicate(
++            format: "label CONTAINS[c] %@ OR identifier CONTAINS[c] %@", "CodexBar", "CodexBar"))
++        return (0..<candidates.count).compactMap { index in
++            let candidate = candidates.element(boundBy: index)
++            guard candidate.exists else { return nil }
++            return "\(candidate.elementType) | \(candidate.identifier) | \(candidate.label) | \(candidate.frame)"
++        }.joined(separator: "\n")
++    }
++
++    private func closeSharePreviewIfVisible(in app: XCUIApplication) {
++        let preview = app.windows["Share AI Usage"]
++        guard preview.exists else { return }
++        app.activate()
++        let close = preview.buttons.matching(identifier: "_XCUI:CloseWindow").firstMatch
++        XCTAssertTrue(close.waitForExistence(timeout: 5), "Visible share preview lacks its accessible close control")
++        guard close.exists else { return }
++        close.click()
++        let closed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: preview)
++        XCTAssertEqual(
++            XCTWaiter.wait(for: [closed], timeout: 5),
++            .completed,
++            "Share preview did not close before gallery discovery")
++    }
++
++    private func systemWidgetOwnerSummary() -> String {
++        self.systemOwnerIdentifiers().compactMap { identifier in
++            NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == identifier }).map {
++                "\(identifier) | \($0.localizedName ?? "") | running=\(!$0.isTerminated)"
++            }
++        }.joined(separator: "\n")
++    }
++
++    private func systemOwnerIdentifiers() -> [String] {
++        NSWorkspace.shared.runningApplications.compactMap(\.bundleIdentifier).filter {
++            $0 == "com.apple.finder" || $0.localizedCaseInsensitiveContains("controlcenter") ||
++                $0.localizedCaseInsensitiveContains("notificationcenter")
++        }.sorted()
++    }
++
++    private func attachSystemOwnerHierarchies() {
++        let identifiers = self.systemOwnerIdentifiers().filter {
++            $0.localizedCaseInsensitiveContains("controlcenter") || $0
++                .localizedCaseInsensitiveContains("notificationcenter")
++        }
++        for identifier in identifiers {
++            self.attach("system-owner-\(identifier)", app: XCUIApplication(bundleIdentifier: identifier))
++        }
++    }
++
++    private func attach(_ name: String, app: XCUIApplication) {
++        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
++        screenshot.name = "\(name)-screen"
++        screenshot.lifetime = .keepAlways
++        add(screenshot)
++        self.attachText(app.debugDescription, named: "\(name)-hierarchy")
++    }
++
++    private func attachText(_ text: String, named name: String) {
++        let attachment = XCTAttachment(string: text)
++        attachment.name = name
++        attachment.lifetime = .keepAlways
++        add(attachment)
++    }
++
++    private static func isStrictDescendant(_ child: String, of parent: String) -> Bool {
++        let childComponents = URL(fileURLWithPath: child).resolvingSymlinksInPath().pathComponents
++        let parentComponents = URL(fileURLWithPath: parent).resolvingSymlinksInPath().pathComponents
++        return childComponents.count > parentComponents.count
++            && childComponents.starts(with: parentComponents)
++    }
++}
+diff --git a/.github/proof/product.patch b/.github/proof/product.patch
+new file mode 100644
+index 000000000..08578fe2f
+--- /dev/null
++++ b/.github/proof/product.patch
+@@ -0,0 +1,49 @@
++diff --git a/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift b/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift
++index ebc426160..fab3b7d89 100644
++--- a/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift
+++++ b/Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift
++@@ -350,10 +350,12 @@ extension UsageStore {
++         var costs: [String: [Double?]] = [:]
++         for entry in snapshot.daily {
++             // A day with usage but no model split would make every share overstate its model. Unmetered
++-            // requests (e.g. unresolved forks) carry neither tokens nor cost, so no basis can cover them.
+++            // or incomplete requests are missing from the totals, so no basis can cover them.
++             let hasUsage = (entry.totalTokens ?? 0) > 0 || (entry.costUSD ?? 0) > 0 ||
++                 (entry.requestCount ?? 0) > 0 || (entry.unpricedRequestCount ?? 0) > 0
++-            if (entry.unmeteredRequestCount ?? 0) > 0 || (hasUsage && entry.modelBreakdowns?.isEmpty ?? true) {
+++            if (entry.unmeteredRequestCount ?? 0) > 0 || entry.incompleteRequestCount > 0 ||
+++                (hasUsage && entry.modelBreakdowns?.isEmpty ?? true)
+++            {
++                 return nil
++             }
++             // Validate only named rows: unnamed usage is omitted from the widget's denominator.
++diff --git a/Tests/CodexBarTests/WidgetTopModelsTests.swift b/Tests/CodexBarTests/WidgetTopModelsTests.swift
++index 825ccf53b..c0698f507 100644
++--- a/Tests/CodexBarTests/WidgetTopModelsTests.swift
+++++ b/Tests/CodexBarTests/WidgetTopModelsTests.swift
++@@ -168,6 +168,25 @@ struct WidgetTopModelsTests {
++         #expect(UsageStore.widgetTopModels(from: snapshot) == nil)
++     }
++ 
+++    @Test(arguments: [nil, 0, 1, 3])
+++    func `incomplete requests withhold shares even when model totals match`(incompleteRequests: Int?) {
+++        let entry = CostUsageDailyReport.Entry(
+++            date: "2026-10-01",
+++            inputTokens: nil,
+++            outputTokens: nil,
+++            totalTokens: 100,
+++            costUSD: 10,
+++            modelsUsed: ["opus"],
+++            modelBreakdowns: [
+++                .init(modelName: "opus", costUSD: 10, totalTokens: 100, incompleteRequestCount: incompleteRequests),
+++            ])
+++
+++        // Incomplete requests contribute to neither the model breakdown nor the daily totals.
+++        // Matching sums therefore cannot establish coverage when any such request exists.
+++        let shares = UsageStore.widgetTopModels(from: Self.snapshot([entry]))
+++        #expect((shares == nil) == ((incompleteRequests ?? 0) > 0))
+++    }
+++
++     @Test(arguments: [(false, false), (true, true), (false, true)])
++     func `incomplete history withholds model shares`(coverage: Bool, partial: Bool) {
++         let snapshot = CostUsageTokenSnapshot(
+diff --git a/.github/workflows/widget-desktop-smoke.yml b/.github/workflows/widget-desktop-smoke.yml
+new file mode 100644
+index 000000000..ca93bfe44
+--- /dev/null
++++ b/.github/workflows/widget-desktop-smoke.yml
+@@ -0,0 +1,104 @@
++name: Widget desktop UI smoke
++on:
++  workflow_dispatch:
++    inputs:
++      package_run:
++        description: Reuse package artifact from a previous proof run
++        type: string
++        default: ""
++  push:
++    branches: [proof/pr4890-installed]
++permissions:
++  contents: read
++  actions: read
++concurrency:
++  group: pr4890-widget-proof
++  cancel-in-progress: true
++jobs:
++  installed-widget:
++    runs-on: macos-26
++    timeout-minutes: 60
++    steps:
++      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
++        with:
++          persist-credentials: false
++      - name: Select Xcode and record provenance
++        run: |
++          set -euo pipefail
++          ls -d /Applications/Xcode*.app
++          if test -d /Applications/Xcode_27.0.app; then
++            sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
++          fi
++          xcodebuild -version
++          mkdir -p "$RUNNER_TEMP/proof"
++          git rev-parse HEAD > "$RUNNER_TEMP/proof/fixture-sha.txt"
++          git show --format=fuller HEAD > "$RUNNER_TEMP/proof/fixture-and-product.patch"
++          shasum -a 256 Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift Sources/CodexBarWidget/*.swift > "$RUNNER_TEMP/proof/source-hashes.txt"
++      - name: Download previously built proof package
++        if: inputs.package_run != '' && inputs.package_run != null
++        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
++        with:
++          name: pr4890-package
++          run-id: ${{ inputs.package_run }}
++          github-token: ${{ github.token }}
++          path: ${{ runner.temp }}/package
++      - name: Package real app and WidgetKit extension
++        if: inputs.package_run == '' || inputs.package_run == null
++        run: |
++          set -euo pipefail
++          command -v xcodegen || brew install xcodegen
++          ARCHES=arm64 CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh debug > "$RUNNER_TEMP/proof/package.log" 2>&1
++          codesign --verify --deep --strict CodexBar.app
++          codesign -d --entitlements :- CodexBar.app > "$RUNNER_TEMP/proof/app-entitlements.plist"
++          codesign -d --entitlements :- CodexBar.app/Contents/PlugIns/CodexBarWidget.appex > "$RUNNER_TEMP/proof/widget-entitlements.plist"
++          shasum -a 256 CodexBar.app/Contents/MacOS/CodexBar CodexBar.app/Contents/PlugIns/CodexBarWidget.appex/Contents/MacOS/CodexBarWidget > "$RUNNER_TEMP/proof/binary-hashes.txt"
++      - name: Preserve built package for UI-only retries
++        if: inputs.package_run == '' || inputs.package_run == null
++        run: |
++          mkdir -p "$RUNNER_TEMP/package"
++          ditto -c -k --sequesterRsrc --keepParent CodexBar.app "$RUNNER_TEMP/package/CodexBar.zip"
++          git rev-parse HEAD > "$RUNNER_TEMP/package/built-sha.txt"
++      - name: Upload reusable package
++        if: inputs.package_run == '' || inputs.package_run == null
++        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
++        with:
++          name: pr4890-package
++          path: ${{ runner.temp }}/package
++          retention-days: 7
++      - name: Unpack reused package
++        if: inputs.package_run != '' && inputs.package_run != null
++        run: ditto -x -k "$RUNNER_TEMP/package/CodexBar.zip" .
++      - name: Install and launch isolated synthetic app
++        run: |
++          set -euo pipefail
++          cp -R CodexBar.app /Applications/CodexBar.app
++          /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f /Applications/CodexBar.app
++          pluginkit -a /Applications/CodexBar.app/Contents/PlugIns/CodexBarWidget.appex
++          pluginkit -m -A -D -i com.steipete.codexbar.debug.widget > "$RUNNER_TEMP/proof/registration.txt"
++          /Applications/CodexBar.app/Contents/MacOS/CodexBar --widget-host-proof "$RUNNER_TEMP/proof" > "$RUNNER_TEMP/proof/app.log" 2>&1 &
++          sleep 4
++          test -f "$RUNNER_TEMP/proof/complete-transport.json"
++      - name: Enable disposable runner Notification Center
++        run: launchctl load -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
++      - name: Exercise real desktop host
++        run: |
++          set -euo pipefail
++          xcodebuild test -project .github/proof/WidgetDesktopSmoke/WidgetDesktopSmoke.xcodeproj \
++            -scheme WidgetDesktopSmoke -configuration Debug -destination 'platform=macOS' \
++            -derivedDataPath "$RUNNER_TEMP/ui-build" -resultBundlePath "$RUNNER_TEMP/proof/WidgetHost.xcresult" \
++            -only-testing:WidgetDesktopSmokeUITests/WidgetHostProofTests \
++            CODEXBAR_CI_SEED_ROOT="$RUNNER_TEMP/proof" CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual \
++            > "$RUNNER_TEMP/proof/ui-test.log" 2>&1
++      - name: Export screenshot and hierarchy attachments
++        if: always()
++        run: |
++          if test -d "$RUNNER_TEMP/proof/WidgetHost.xcresult"; then
++            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/proof/WidgetHost.xcresult" --output-path "$RUNNER_TEMP/proof/attachments"
++          fi
++      - name: Upload evidence
++        if: always()
++        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
++        with:
++          name: pr4890-installed-widget
++          path: ${{ runner.temp }}/proof
++          retention-days: 7
+diff --git a/Sources/CodexBar/CodexbarApp.swift b/Sources/CodexBar/CodexbarApp.swift
+index 8f29a4227..297bc074b 100644
+--- a/Sources/CodexBar/CodexbarApp.swift
++++ b/Sources/CodexBar/CodexbarApp.swift
+@@ -27,6 +27,7 @@ enum CodexBarEntryPoint {
+             exit(CodexBarCoreResourceSmoke.run())
+         }
+         #if DEBUG
++        if WidgetHostProof.runIfRequested() { return }
+         if MenuBarLayoutNativeProof.runIfRequested() {
+             return
+         }
+diff --git a/Sources/CodexBar/WidgetHostProof.swift b/Sources/CodexBar/WidgetHostProof.swift
+new file mode 100644
+index 000000000..6e21d1216
+--- /dev/null
++++ b/Sources/CodexBar/WidgetHostProof.swift
+@@ -0,0 +1,136 @@
++#if DEBUG
++import AppKit
++import CodexBarCore
++import WidgetKit
++
++/// Evidence-only fixture; never included on the product PR branch.
++@MainActor
++enum WidgetHostProof {
++    static func runIfRequested() -> Bool {
++        guard let index = CommandLine.arguments.firstIndex(of: "--widget-host-proof"),
++              CommandLine.arguments.indices.contains(index + 1) else { return false }
++        let app = NSApplication.shared
++        app.setActivationPolicy(.regular)
++        let delegate = Delegate(root: URL(fileURLWithPath: CommandLine.arguments[index + 1]))
++        app.delegate = delegate
++        withExtendedLifetime(delegate) { app.run() }
++        return true
++    }
++
++    @MainActor
++    final class Delegate: NSObject, NSApplicationDelegate {
++        let root: URL
++        var window: NSWindow!
++        var label: NSTextField!
++        var timer: Timer?
++        var phase = ""
++        init(root: URL) { self.root = root }
++        func applicationDidFinishLaunching(_ notification: Notification) {
++            self.window = NSWindow(
++                contentRect: NSRect(x: 20, y: 15, width: 900, height: 65),
++                styleMask: [.titled],
++                backing: .buffered,
++                defer: false)
++            self.window.title = "PR 4890 — SYNTHETIC DATA ONLY"
++            self.label = NSTextField(labelWithString: "")
++            self.label.frame = NSRect(x: 10, y: 5, width: 880, height: 55)
++            self.label.maximumNumberOfLines = 3
++            self.label.frame.size.width = 650
++            self.window.contentView?.addSubview(self.label)
++            let button = NSButton(title: "Use incomplete history", target: self, action: #selector(self.incomplete))
++            button.frame = NSRect(x: 670, y: 15, width: 210, height: 32)
++            self.window.contentView?.addSubview(button)
++            self.window.orderFrontRegardless()
++            self.tick()
++            self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
++                MainActor.assumeIsolated { self?.tick() }
++            }
++        }
++
++        @objc func incomplete() {
++            try! "incomplete".write(to: self.root.appendingPathComponent("phase"), atomically: true, encoding: .utf8)
++            self.tick()
++        }
++
++        func tick() {
++            let next = (try? String(contentsOf: self.root.appendingPathComponent("phase"), encoding: .utf8))?
++                .trimmingCharacters(in: .whitespacesAndNewlines) ?? "complete"
++            guard next != self.phase else { return }
++            self.phase = next
++            let incomplete = next == "incomplete"
++            let now = Date()
++            let formatter = DateFormatter()
++            formatter.dateFormat = "yyyy-MM-dd"
++            let days = (0..<14).map { offset in
++                CostUsageDailyReport.Entry(
++                    date: formatter.string(from: now.addingTimeInterval(Double(offset - 13) * 86400)),
++                    inputTokens: nil, outputTokens: nil, totalTokens: 100, costUSD: 10,
++                    modelsUsed: ["fixture-alpha", "fixture-beta"],
++                    modelBreakdowns: [
++                        .init(
++                            modelName: "fixture-alpha",
++                            costUSD: 8,
++                            totalTokens: 80,
++                            incompleteRequestCount: incomplete && offset == 13 ? 1 : 0),
++                        .init(modelName: "fixture-beta", costUSD: 2, totalTokens: 20),
++                    ])
++            }
++            let history = CostUsageTokenSnapshot(
++                sessionTokens: 100,
++                sessionCostUSD: 10,
++                last30DaysTokens: 1400,
++                last30DaysCostUSD: 140,
++                daily: days,
++                updatedAt: now)
++            let shares = UsageStore.widgetTopModels(from: history)
++            precondition(incomplete ? shares == nil : shares?.count == 2)
++            let entry = WidgetSnapshot.ProviderEntry(
++                provider: .claude,
++                updatedAt: now,
++                primary: RateWindow(
++                    usedPercent: 25,
++                    windowMinutes: 300,
++                    resetsAt: nil,
++                    resetDescription: nil),
++                secondary: nil,
++                tokenUsage: .init(
++                    sessionCostUSD: 10,
++                    sessionTokens: 100,
++                    last30DaysCostUSD: 140,
++                    last30DaysTokens: 1400),
++                dailyUsage: days.map { .init(
++                    dayKey: $0.date,
++                    totalTokens: $0.totalTokens,
++                    costUSD: $0.costUSD) },
++                topModels: shares)
++            let snapshot = WidgetSnapshot(entries: [entry], enabledProviders: [.claude], generatedAt: now)
++            guard let container = AppGroupSupport.currentContainerURL() else {
++                fatalError("Real app group unavailable; fallback is forbidden for this proof")
++            }
++            WidgetSnapshotStore.save(snapshot)
++            WidgetSelectionStore.saveSelectedProvider(.claude)
++            let decoded = WidgetSnapshotStore.load()!
++            precondition(decoded.entries.first?.topModels?.count == shares?.count)
++            WidgetCenter.shared.reloadAllTimelines()
++            let sha = Bundle.main.object(forInfoDictionaryKey: "CodexGitCommit") as? String ?? "unknown"
++            self.label.stringValue = "SYNTHETIC ONLY | \(next) | product 6f97fb9d7\nfixture build \(sha)\nReal app-group save/load + WidgetKit reload; provider fetching bypassed"
++            let report: [String: Any] = [
++                "phase": next,
++                "productSHA": "6f97fb9d7",
++                "fixtureSHA": sha,
++                "group": AppGroupSupport.currentGroupID(),
++                "containerIsGroupContainer": container.path.contains("Group Containers"),
++                "incompleteRequestCount": days.last!.incompleteRequestCount,
++                "matchingDayTokens": days.last!.totalTokens!,
++                "matchingDayCost": days.last!.costUSD!,
++                "decodedModelCount": decoded.entries.first?.topModels?.count ?? 0,
++                "dailyPointCount": decoded.entries.first!.dailyUsage.count,
++                "models": shares?.map { ["name": $0.modelName, "share": $0.share] } ?? [],
++                "reloadAllTimelines": true,
++            ]
++            try! JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
++                .write(to: self.root.appendingPathComponent("\(next)-transport.json"))
++        }
++    }
++}
++#endif

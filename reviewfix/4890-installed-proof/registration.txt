@@ -1,0 +1,1 @@
+     com.steipete.codexbar.debug.widget(0.83.1)

@@ -1,0 +1,2 @@
+84677dd0f7ccde0ee7f93c2afc79fa16581ff7d1c106a08f3414b8f92c223d9f  CodexBar.app/Contents/MacOS/CodexBar
+111f7dfdf86104624ac9e3bb51d6d5e991ad14fe49d3c177ab46bfecd247a942  CodexBar.app/Contents/PlugIns/CodexBarWidget.appex/Contents/MacOS/CodexBarWidget

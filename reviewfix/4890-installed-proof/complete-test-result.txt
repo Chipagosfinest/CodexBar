@@ -1,0 +1,6 @@
+Test Case '-[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndVerifyCompleteHistory]' started.
+Test Case '-[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndVerifyCompleteHistory]' passed (35.983 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 35.983 (35.984) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 35.983 (35.985) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 35.983 (35.986) seconds
+** TEST SUCCEEDED **

@@ -1,0 +1,23 @@
+{
+  "containerIsGroupContainer" : true,
+  "dailyPointCount" : 14,
+  "decodedModelCount" : 2,
+  "fixtureSHA" : "4b871d2",
+  "group" : "Y5PE65HELJ.com.steipete.codexbar.debug",
+  "incompleteRequestCount" : 0,
+  "matchingDayCost" : 10,
+  "matchingDayTokens" : 100,
+  "models" : [
+    {
+      "name" : "fixture-alpha",
+      "share" : 0.80000000000000004
+    },
+    {
+      "name" : "fixture-beta",
+      "share" : 0.20000000000000001
+    }
+  ],
+  "phase" : "complete",
+  "productSHA" : "6f97fb9d7",
+  "reloadAllTimelines" : true
+}

@@ -1,0 +1,205 @@
+Attributes: Application, 0xbf19eebc0, pid: 1584, title: 'Notification Center', Disabled
+Element subtree:
+ →Application, 0xbf19eebc0, pid: 1584, title: 'Notification Center', Disabled
+    Dialog, 0xbf19eed00, {{0.0, 0.0}, {1024.0, 768.0}}, title: 'Notification Center', Keyboard Focused, Disabled
+      Group, 0xbf19eee40, {{0.0, 0.0}, {1024.0, 768.0}}, Disabled
+        Group, 0xbf19eef80, {{272.0, 0.0}, {752.0, 668.0}}
+          ScrollView, 0xbf19ef0c0, {{272.0, 0.0}, {752.0, 668.0}}, Disabled
+            Group, 0xbf19ef200, {{664.0, 46.0}, {344.0, 89.0}}, identifier: 'A9C3016D-464A-465A-B76E-521356B0F13B', label: 'Login Items, App Background Activity, “start_hca.sh” can run in the background. You can manage background activity in Login Items & Extensions.'
+              Image, 0xbf19ef340, {{674.0, 71.0}, {39.0, 39.0}}
+              StaticText, 0xbf19ef480, {{722.0, 58.0}, {157.0, 16.0}}, identifier: 'title', value: App Background Act...
+              StaticText, 0xbf19ef5c0, {{722.0, 74.0}, {274.0, 48.0}}, identifier: 'body', value: “start_hca.sh” can...
+              StaticText, 0xbf19ef700, {{994.0, 55.4}, {0.0, 14.0}}
+          Group, 0xbf19ef840, {{512.0, 384.0}, {0.0, 0.0}}, identifier: 'widgets-overlay-view'
+    Window, 0xbf19ef980, {{368.0, 38.0}, {360.0, 360.0}}, title: 'CodexBar Switcher', Disabled
+      Group, 0xbf19efac0, {{368.0, 38.0}, {360.0, 360.0}}, Disabled
+        Group, 0xbf19efc00, {{368.0, 38.0}, {352.0, 352.0}}, identifier: 'widget-local:com.steipete.codexbar.debug:com.steipete.codexbar.debug.widget:CodexBarSwitcherWidget', label: 'CodexBar'
+          StaticText, 0xbf19efd40, {{394.0, 64.0}, {23.0, 23.0}}, value: Claude, selected
+          StaticText, 0xbf19efe80, {{424.0, 69.0}, {39.0, 14.0}}, value: Claude
+          StaticText, 0xbf183c640, {{470.0, 69.0}, {221.0, 13.0}}, value: 1 minute
+          StaticText, 0xbf183c8c0, {{394.0, 97.0}, {109.0, 16.0}}, value: Session 75% left
+          StaticText, 0xbf183c780, {{394.0, 156.0}, {29.0, 13.0}}, value: Today
+          StaticText, 0xbf19fe1c0, {{599.0, 156.0}, {103.0, 13.0}}, value: $10.00 · 100 tokens
+          StaticText, 0xbf1a6ee40, {{394.0, 173.0}, {20.0, 13.0}}, value: 30d
+          StaticText, 0xbf1a6ebc0, {{593.0, 173.0}, {109.0, 13.0}}, value: $140.00 · 1.4K tok...
+          StaticText, 0xbf1a6e800, {{394.0, 203.0}, {36.0, 13.0}}, value: Models
+          StaticText, 0xbf1a6e940, {{394.0, 222.0}, {62.0, 13.0}}, value: fixture-alpha
+          StaticText, 0xbf1a6ea80, {{678.0, 222.0}, {24.0, 13.0}}, value: 80%
+          StaticText, 0xbf1a6ef80, {{394.0, 248.0}, {58.0, 13.0}}, value: fixture-beta
+          StaticText, 0xbf1a6ed00, {{678.0, 248.0}, {24.0, 13.0}}, value: 20%
+    Window, 0xbf1a6f0c0, {{8.0, 218.0}, {360.0, 180.0}}, title: 'Featured', Disabled
+      Group, 0xbf1a6e6c0, {{8.0, 218.0}, {360.0, 180.0}}, Disabled
+        Group, 0xbf1a6e580, {{16.0, 226.0}, {344.0, 164.0}}, identifier: 'widget-local:com.apple.Photos:com.apple.Photos.PhotosReliveWidget:com.apple.Photos.PhotosReliveWidget', label: 'Photos'
+          Image, 0xbf1a6cc80, {{156.0, 261.0}, {64.0, 64.0}}, label: 'ContentUnavailablePhotosIcon'
+          StaticText, 0xbf1a6cb40, {{83.0, 329.0}, {211.0, 26.0}}, value: Photos will appear...
+    Window, 0xbf1a6f700, {{188.0, 38.0}, {180.0, 180.0}}, title: 'Forecast', Disabled
+      Group, 0xbf1a6f5c0, {{188.0, 38.0}, {180.0, 180.0}}, Disabled
+        Group, 0xbf1a6f840, {{196.0, 46.0}, {164.0, 164.0}}, identifier: 'widget-local:com.apple.weather:com.apple.weather.widget:com.apple.weather', label: 'Weather'
+          Other, 0xbf1a6fac0, {{214.0, 64.0}, {84.0, 128.0}}, label: 'New York, 59° Fahrenheit, Partly Cloudy, High of 60° Fahrenheit, Low of 44° Fahrenheit'
+    Window, 0xbf1a6df40, {{8.0, 38.0}, {180.0, 180.0}}, title: 'Month', Disabled
+      Group, 0xbf1a6fc00, {{8.0, 38.0}, {180.0, 180.0}}, Disabled
+        Group, 0xbf1a6f480, {{16.0, 46.0}, {164.0, 164.0}}, identifier: 'widget-local:com.apple.iCal:com.apple.iCal.CalendarWidgetExtension:com.apple.CalendarWidget.CalendarMonthWidget', label: 'Calendar'
+          Other, 0xbf1a6fd40, {{29.0, 64.0}, {138.0, 128.0}}, identifier: 'month-view-current-date', label: 'SUNDAY, NOVEMBER 01'
+    MenuBar, 0xbf1a6f980, {{0.0, 0.0}, {1024.0, 30.0}}, identifier: '_NS:430'
+      MenuBarItem, 0xbf1a6da40, {{0.0, 30.0}, {0.0, 0.0}}, title: 'Apple'
+        Menu, 0xbf1a6de00, {{0.0, 768.0}, {0.0, 0.0}}
+          MenuItem, 0xbf1a6d900, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_aboutThisMacRequested:', title: 'About This Mac'
+          MenuItem, 0xbf1a6c640, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_systemInformationRequested:', title: 'System Information'
+          MenuItem, 0xbf1a6fe80, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+          MenuItem, 0xbf1a6f200, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_systemSettingsRequested:', title: 'System Settings…, 1 update'
+          MenuItem, 0xbf1a6f340, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_appStoreRequested:', title: 'App Store'
+          MenuItem, 0xbf1a6ca00, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+          MenuItem, 0xbf19fb5c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentsRequested:', title: 'Recent Items'
+            Menu, 0xbf19fb840, {{0.0, 768.0}, {0.0, 0.0}}
+              MenuItem, 0xbf19fbe80, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Applications', Disabled
+              MenuItem, 0xbf19fb340, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Installer'
+              MenuItem, 0xbf19fb980, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “Installer” in Finder'
+              MenuItem, 0xbf1a67840, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'System Settings'
+              MenuItem, 0xbf1a67d40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “System Settings” in Finder'
+              MenuItem, 0xbf1a67c00, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+              MenuItem, 0xbf1a67ac0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Documents', Disabled
+              MenuItem, 0xbf1a67e80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'AnkaGuestAddons.pkg'
+              MenuItem, 0xbf1a67980, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “AnkaGuestAddons.pkg” in Finder'
+              MenuItem, 0xbf1ca0500, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+              MenuItem, 0xbf1ca03c0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Servers', Disabled
+              MenuItem, 0xbf1ca0280, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Macintosh HD'
+              MenuItem, 0xbf1ca0140, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+              MenuItem, 0xbf1ca0000, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_clearRecentItemsRequested:', title: 'Clear Menu'
+          MenuItem, 0xbf1ca0640, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+          MenuItem, 0xbf18f9f40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_forceQuitPanelRequested:', title: 'Force Quit…'
+          MenuItem, 0xbf18f9680, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_forceQuitRequested:', title: 'Force Quit Notification Center'
+          MenuItem, 0xbf18fa440, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+          MenuItem, 0xbf18fb840, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_sleepRequested:', title: 'Sleep'
+          MenuItem, 0xbf18fa580, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_restartRequested:', title: 'Restart…'
+          MenuItem, 0xbf18fb980, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_restartNowRequested:', title: 'Restart'
+          MenuItem, 0xbf18fbac0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_shutDownRequested:', title: 'Shut Down…'
+          MenuItem, 0xbf18fbd40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_shutDownNowRequested:', title: 'Shut Down'
+          MenuItem, 0xbf18fbc00, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+          MenuItem, 0xbf18fbe80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_lockScreenRequested:', title: 'Lock Screen'
+          MenuItem, 0xbf18fa1c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_logOutRequested:', title: 'Log Out Anka…'
+          MenuItem, 0xbf18f8b40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_logOutNowRequested:', title: 'Log Out Anka'
+          MenuItem, 0xbf18f8a00, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+      MenuBarItem, 0xbf18f88c0, {{0.0, 30.0}, {0.0, 0.0}}, identifier: '_NS:435', title: 'Notification Center'
+        Menu, 0xbf18f8780, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:440'
+      MenuBarItem, 0xbf18f8640, {{0.0, 30.0}, {0.0, 0.0}}, identifier: '_NS:445', title: 'File'
+        Menu, 0xbf18f8000, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:449'
+      MenuBarItem, 0xbf18f8140, {{0.0, 30.0}, {0.0, 0.0}}, identifier: '_NS:453', title: 'Edit'
+        Menu, 0xbf18f8280, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:457'
+          MenuItem, 0xbf18f83c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:299', title: 'Undo', Disabled
+          MenuItem, 0xbf18f8500, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:54', title: 'Redo', Disabled
+          MenuItem, 0xbf18f8c80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:461', Disabled
+          MenuItem, 0xbf18f8dc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:378', title: 'Cut', Disabled
+          MenuItem, 0xbf18f8f00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:410', title: 'Copy', Disabled
+          MenuItem, 0xbf18f9040, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:306', title: 'Paste', Disabled
+          MenuItem, 0xbf1ca43c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:228', title: 'Paste and Match Style', Disabled
+          MenuItem, 0xbf1ca75c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:348', title: 'Delete', Disabled
+          MenuItem, 0xbf1ca7700, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:188', title: 'Select All', Disabled
+          MenuItem, 0xbf1ca7840, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:462', Disabled
+          MenuItem, 0xbf1ca7e80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:463', title: 'Find'
+            Menu, 0xbf1ca7d40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:467'
+              MenuItem, 0xbf1ca7c00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:235', title: 'Find…', Disabled
+              MenuItem, 0xbf1ca7ac0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:241', title: 'Find and Replace…', Disabled
+              MenuItem, 0xbf1ca7980, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:354', title: 'Find Next', Disabled
+              MenuItem, 0xbf1ca70c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:149', title: 'Find Previous', Disabled
+              MenuItem, 0xbf1ca7200, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:276', title: 'Use Selection for Find', Disabled
+              MenuItem, 0xbf1ca7340, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:195', title: 'Jump to Selection', Disabled
+          MenuItem, 0xbf1ca7480, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:471', title: 'Spelling and Grammar'
+            Menu, 0xbf1ca6bc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:475'
+              MenuItem, 0xbf1ca6d00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:100', title: 'Show Spelling and Grammar'
+              MenuItem, 0xbf1ca6e40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:318', title: 'Check Document Now', Disabled
+              MenuItem, 0xbf1ca6f80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:480', Disabled
+              MenuItem, 0xbf1ca6580, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:360', title: 'Check Spelling While Typing', Disabled
+              MenuItem, 0xbf1ca66c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:336', title: 'Check Grammar With Spelling', Disabled
+              MenuItem, 0xbf1ca6800, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:61', title: 'Correct Spelling Automatically', Disabled
+          MenuItem, 0xbf1ca6a80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:481', title: 'Substitutions'
+            Menu, 0xbf1ca6940, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:485'
+              MenuItem, 0xbf1ca5180, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:422', title: 'Show Substitutions', Disabled
+              MenuItem, 0xbf1ca52c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:489', Disabled
+              MenuItem, 0xbf1ca5400, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:67', title: 'Smart Copy/Paste', Disabled
+              MenuItem, 0xbf1ca6440, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:312', title: 'Smart Quotes', Disabled
+              MenuItem, 0xbf1ca6300, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:366', title: 'Smart Dashes', Disabled
+              MenuItem, 0xbf1ca61c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:287', title: 'Smart Links', Disabled
+              MenuItem, 0xbf1ca6080, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:372', title: 'Data Detectors', Disabled
+              MenuItem, 0xbf1ca5f40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:94', title: 'Text Replacement', Disabled
+          MenuItem, 0xbf1ca5e00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:490', title: 'Transformations'
+            Menu, 0xbf1ca5cc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:494'
+              MenuItem, 0xbf1ca5b80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:397', title: 'Make Upper Case', Disabled
+              MenuItem, 0xbf1ca5a40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:293', title: 'Make Lower Case', Disabled
+              MenuItem, 0xbf1ca5900, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:202', title: 'Capitalize', Disabled
+          MenuItem, 0xbf1ca57c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:498', title: 'Speech'
+            Menu, 0xbf1ca5680, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:502'
+              MenuItem, 0xbf1ca5540, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:251', title: 'Start Speaking', Disabled
+              MenuItem, 0xbf1ca4500, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:156', title: 'Stop Speaking', Disabled
+          MenuItem, 0xbf1ca4640, {{0.0, 768.0}, {0.0, 0.0}}, Disabled
+          MenuItem, 0xbf1ca4780, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NSMenuItemAutoFillIdentifier', title: 'AutoFill'
+            Menu, 0xbf1ca5040, {{0.0, 768.0}, {0.0, 0.0}}
+              MenuItem, 0xbf1ca48c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_handleInsertFromContactsCommand:', title: 'Contact…', Disabled
+              MenuItem, 0xbf1ca4a00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_handleInsertFromPasswordsCommand:', title: 'Passwords…', Disabled
+              MenuItem, 0xbf1ca4f00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_handleInsertFromCreditCardsCommand:', title: 'Credit Card…', Disabled
+          MenuItem, 0xbf1ca4dc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'startDictation:', title: 'Start Dictation…'
+          MenuItem, 0xbf1ca4c80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontCharacterPalette:', title: 'Emoji & Symbols'
+      MenuBarItem, 0xbf1ca4b40, {{0.0, 30.0}, {0.0, 0.0}}, identifier: '_NS:506', title: 'Format'
+        Menu, 0xbf1cb0000, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:510'
+          MenuItem, 0xbf1cb0140, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:514', title: 'Font'
+            Menu, 0xbf1cb0280, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:518'
+              MenuItem, 0xbf1cb03c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:169', title: 'Show Fonts'
+              MenuItem, 0xbf1cb0500, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:79', title: 'Bold', Disabled
+              MenuItem, 0xbf1cb0640, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:215', title: 'Italic', Disabled
+              MenuItem, 0xbf1cb0780, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:221', title: 'Underline', Disabled
+              MenuItem, 0xbf1cb08c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:522', Disabled
+              MenuItem, 0xbf1cb0a00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:162', title: 'Bigger', Disabled
+              MenuItem, 0xbf1cb0b40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:325', title: 'Smaller', Disabled
+              MenuItem, 0xbf1cb0c80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:523', Disabled
+              MenuItem, 0xbf1cb0dc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:524', title: 'Kern'
+                Menu, 0xbf1cb0f00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:528'
+                  MenuItem, 0xbf1cb1040, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:89', title: 'Use Default', Disabled
+                  MenuItem, 0xbf1cb1180, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:282', title: 'Use None', Disabled
+                  MenuItem, 0xbf1cb12c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:41', title: 'Tighten', Disabled
+                  MenuItem, 0xbf1cb1400, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:342', title: 'Loosen', Disabled
+              MenuItem, 0xbf1cb1540, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:532', title: 'Ligatures'
+                Menu, 0xbf1cb1680, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:536'
+                  MenuItem, 0xbf1cb17c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:264', title: 'Use Default', Disabled
+                  MenuItem, 0xbf1cb1900, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:119', title: 'Use None', Disabled
+                  MenuItem, 0xbf1cb1a40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:416', title: 'Use All', Disabled
+              MenuItem, 0xbf1cb1b80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:540', title: 'Baseline'
+                Menu, 0xbf1cb1cc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:544'
+                  MenuItem, 0xbf1cb1e00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:35', title: 'Use Default', Disabled
+                  MenuItem, 0xbf1cb1f40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:182', title: 'Superscript', Disabled
+                  MenuItem, 0xbf1cb2080, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:107', title: 'Subscript', Disabled
+                  MenuItem, 0xbf1cb21c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:29', title: 'Raise', Disabled
+                  MenuItem, 0xbf1cb2300, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:13', title: 'Lower', Disabled
+              MenuItem, 0xbf1cb2440, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:548', Disabled
+              MenuItem, 0xbf1cb2580, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:269', title: 'Show Colors'
+              MenuItem, 0xbf1cb26c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:549', Disabled
+              MenuItem, 0xbf1cb2800, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:47', title: 'Copy Style', Disabled
+              MenuItem, 0xbf1cb2940, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:385', title: 'Paste Style', Disabled
+          MenuItem, 0xbf1cb2a80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:551', title: 'Text'
+            Menu, 0xbf1cb2bc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:555'
+              MenuItem, 0xbf1cb2d00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:257', title: 'Align Left', Disabled
+              MenuItem, 0xbf1cb2e40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:208', title: 'Center', Disabled
+              MenuItem, 0xbf1cb2f80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:113', title: 'Justify', Disabled
+              MenuItem, 0xbf1cb30c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:403', title: 'Align Right', Disabled
+              MenuItem, 0xbf1cb3200, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:559', Disabled
+              MenuItem, 0xbf1cb3340, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:560', title: 'Writing Direction'
+                Menu, 0xbf1cb3480, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:564'
+                  MenuItem, 0xbf1cb35c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:568', title: 'Paragraph', Disabled
+                  MenuItem, 0xbf1cb3700, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:246', title: '    Default', Disabled
+                  MenuItem, 0xbf1cb3840, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:132', title: '    Left to Right', Disabled
+                  MenuItem, 0xbf1cb3980, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:331', title: '    Right to Left', Disabled
+                  MenuItem, 0xbf1cb3ac0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:572', Disabled
+                  MenuItem, 0xbf1cb3c00, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:573', title: 'Selection', Disabled
+                  MenuItem, 0xbf1cb3d40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:143', title: '    Default', Disabled
+                  MenuItem, 0xbf1cb3e80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:73', title: '    Left to Right', Disabled
+                  MenuItem, 0xbf18fc000, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:176', title: '    Right to Left', Disabled
+              MenuItem, 0xbf18fc140, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:577', Disabled
+              MenuItem, 0xbf18fc280, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:391', title: 'Show Ruler', Disabled
+              MenuItem, 0xbf18fc3c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:137', title: 'Copy Ruler', Disabled
+              MenuItem, 0xbf18fc500, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NS:125', title: 'Paste Ruler', Disabled
+    TouchBar, 0xbf18fc640, {{80.0, 0.0}, {685.0, 30.0}}, Disabled
+Path to element:
+ →Application, 0xbf19eebc0, pid: 1584, title: 'Notification Center', Disabled
+Query chain:
+ →Find: Application 'com.apple.notificationcenterui'
+  Output: {
+    Application, 0xbf18fc780, pid: 1584, title: 'Notification Center', Disabled
+  }

@@ -1,0 +1,29 @@
+{
+  "productSHA": "6f97fb9d7e2ebe9855bbd344b8092395c351d43b",
+  "packageBuildSHA": "4b871d2777a370888e109a62490af063c7dec902",
+  "uiControllerSHA": "f7382a1ea7640c0cbb310ed4063cf9e4c5bae44c",
+  "packageBuildRun": "https://github.com/Chipagosfinest/CodexBar/actions/runs/41346842491",
+  "successfulHostRun": "https://github.com/Chipagosfinest/CodexBar/actions/runs/41349033025",
+  "installedBinaryHashesMatchBuild": true,
+  "exercisedProductSourcesMatch": {
+    "Sources/CodexBar/UsageStore/UsageStore+WidgetSnapshot.swift": "6e1c479ae4ff0121d2b64cc99b9f658b76077b4236e631510d61e83ef85aa20f",
+    "Sources/CodexBarCore/WidgetSnapshot.swift": "a03a3525e6365e4e708ea3199678c6be3b4e5e34130c7a30641864f80e58c3d7",
+    "Sources/CodexBarCore/AppGroupSupport.swift": "7909950ee75c08fa70b409e8d6a615acf7630a51e41cb737d26727e9d9a0c5a6",
+    "Sources/CodexBarWidget/WidgetTiles.swift": "4de73ec70413484d119df41954303007c15fd40963af4cc6f021068e3c148848",
+    "Sources/CodexBarWidget/WidgetDesignSystem.swift": "117a9319572c9f7c7b7fa999147473d2be0f098cb306d6257e95127e933f501f",
+    "Sources/CodexBarWidget/CodexBarWidgetViews.swift": "9ac9fc380be4036e0bf5d7df51689da096807d3d60934256e419752ea5ce9ec2",
+    "Sources/CodexBarWidget/CodexBarWidgetProvider.swift": "dd43d7a0c2a43b8094e081bd076bcf9bf71c70a759c168aa397f494f389288d4"
+  },
+  "screenshots": {
+    "complete-installed-large.png": {
+      "observed": "Installed 360x360 Claude widget: fixture-alpha 80%, fixture-beta 20%, synthetic complete banner.",
+      "proves": "Packaged WidgetKit host renders app-group transported complete model shares.",
+      "doesNotProve": "Live provider fetching or approval of chart replacement."
+    },
+    "incomplete-installed-large.png": {
+      "observed": "Same installed widget: Last 14 days, 14 bars, Peak $10, no model list, synthetic incomplete banner.",
+      "proves": "Actual host renders chart fallback after the running app publishes count 1 / nil shares through the group container.",
+      "doesNotProve": "Live provider fetching or approval of chart replacement."
+    }
+  }
+}

@@ -1,0 +1,56 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite WidgetTopModelsTests started.
+◇ Test "partial sole model and unnamed usage do not become one hundred percent" started.
+◇ Test "a usage day without a model split withholds top models" started.
+◇ Test "a day with unpriced requests ranks by complete tokens instead of partial spend" started.
+◇ Test "floating point spend summation preserves complete coverage" started.
+◇ Test "a day without a token count makes that model's token total unknown" started.
+◇ Test "daily coverage selects only a complete basis" started.
+◇ Test "fully priced models keep the leading three by spend share of all models" started.
+◇ Test "no comparable metric yields no top models" started.
+◇ Test "history aggregation sums each model across days and stays with its provider" started.
+◇ Test "incomplete history withholds model shares" started.
+◇ Test "one basis must cover the entire history" started.
+◇ Test "incomplete requests withhold shares even when model totals match" started.
+◇ Test "coverage must hold each day rather than cancelling across days" started.
+◇ Test "an unpriced model switches the share to tokens" started.
+◇ Test "an unmetered day without a model split withholds top models" started.
+◇ Test case passing 2 arguments modelTokens → 40, modelCost → 4.0 to "daily coverage selects only a complete basis" started.
+◇ Test case passing 2 arguments modelTokens → 40, modelCost → 10.0 to "daily coverage selects only a complete basis" started.
+◇ Test case passing 2 arguments modelTokens → 100, modelCost → 4.0 to "daily coverage selects only a complete basis" started.
+◇ Test case passing 2 arguments modelTokens → 100, modelCost → 10.0 to "daily coverage selects only a complete basis" started.
+◇ Test case passing 2 arguments coverage → false, partial → false to "incomplete history withholds model shares" started.
+◇ Test case passing 2 arguments coverage → true, partial → true to "incomplete history withholds model shares" started.
+◇ Test case passing 2 arguments modelTokens → 140, modelCost → 14.0 to "daily coverage selects only a complete basis" started.
+◇ Test case passing 2 arguments coverage → false, partial → true to "incomplete history withholds model shares" started.
+◇ Test case passing 1 argument incompleteRequests → nil to "incomplete requests withhold shares even when model totals match" started.
+◇ Test case passing 1 argument incompleteRequests → 0 to "incomplete requests withhold shares even when model totals match" started.
+◇ Test case passing 1 argument incompleteRequests → 1 to "incomplete requests withhold shares even when model totals match" started.
+✔ Test "no comparable metric yields no top models" passed after 0.001 seconds.
+✔ Test "incomplete history withholds model shares" with 3 test cases passed after 0.001 seconds.
+✔ Test "a usage day without a model split withholds top models" passed after 0.001 seconds.
+✔ Test "coverage must hold each day rather than cancelling across days" passed after 0.001 seconds.
+◇ Test case passing 1 argument incompleteRequests → 3 to "incomplete requests withhold shares even when model totals match" started.
+✔ Test "partial sole model and unnamed usage do not become one hundred percent" passed after 0.001 seconds.
+✔ Test "a day with unpriced requests ranks by complete tokens instead of partial spend" passed after 0.001 seconds.
+✔ Test "a day without a token count makes that model's token total unknown" passed after 0.001 seconds.
+✔ Test "an unmetered day without a model split withholds top models" passed after 0.001 seconds.
+✔ Test "floating point spend summation preserves complete coverage" passed after 0.001 seconds.
+✔ Test "one basis must cover the entire history" passed after 0.001 seconds.
+✔ Test "fully priced models keep the leading three by spend share of all models" passed after 0.001 seconds.
+✔ Test "an unpriced model switches the share to tokens" passed after 0.001 secondswarning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+✔ Test "history aggregation sums each model across days and stays with its provider" passed after 0.001 seconds.
+✔ Test "daily coverage selects only a complete basis" with 5 test cases passed after 0.001 seconds.
+✘ Test "incomplete requests withhold shares even when model totals match" recorded an issue with 1 argument incompleteRequests → 1 at WidgetTopModelsTests.swift:187:9: Expectation failed: (shares == nil) == ((incompleteRequests ?? 0) > 0)
+↳ (shares == nil) == ((incompleteRequests ?? 0) > 0) → false
+↳   (shares == nil) → false
+↳   ((incompleteRequests ?? 0) > 0) → true
+✘ Test "incomplete requests withhold shares even when model totals match" recorded an issue with 1 argument incompleteRequests → 3 at WidgetTopModelsTests.swift:187:9: Expectation failed: (shares == nil) == ((incompleteRequests ?? 0) > 0)
+↳ (shares == nil) == ((incompleteRequests ?? 0) > 0) → false
+↳   (shares == nil) → false
+↳   ((incompleteRequests ?? 0) > 0) → true
+✘ Test "incomplete requests withhold shares even when model totals match" with 4 test cases failed after 0.001 seconds with 2 issues.
+✘ Suite WidgetTopModelsTests failed after 0.001 seconds with 2 issues.
+✘ Test run with 15 tests in 1 suite failed after 0.001 seconds with 2 issues.

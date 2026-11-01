@@ -1,0 +1,6 @@
+Test Case '-[WidgetDesktopSmokeUITests.WidgetHostProofTests testRetainedWidgetShowsIncompleteHistoryChart]' started.
+Test Case '-[WidgetDesktopSmokeUITests.WidgetHostProofTests testRetainedWidgetShowsIncompleteHistoryChart]' passed (3.065 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.065 (3.067) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.065 (3.068) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.065 (3.070) seconds
+** TEST SUCCEEDED **
