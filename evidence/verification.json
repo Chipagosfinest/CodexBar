@@ -19,9 +19,9 @@
     ]
   },
   "quota-critical-cue": {
-    "sourceSHA": "54e543b2c2f3cc970b8afe0ced35818c60c0ee4f",
+    "sourceSHA": "2c84493b67dd736df387635fedd790fc940f90ab",
     "testExit": 0,
-    "tests": 138,
+    "tests": 139,
     "suiteSources": [
       "MenuCardModelTests.swift",
       "MenuCardProviderRegressionTests.swift",

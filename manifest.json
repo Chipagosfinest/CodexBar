@@ -84,7 +84,7 @@
       310,
       391
     ],
-    "sourceSHA": "54e543b2c2f3cc970b8afe0ced35818c60c0ee4f",
+    "sourceSHA": "2c84493b67dd736df387635fedd790fc940f90ab",
     "synthetic": true,
     "observed": "Production Claude menu card in light appearance; fixture values and example.com identity.",
     "proves": "Static production-view appearance and numeric labels.",
@@ -97,7 +97,7 @@
       310,
       391
     ],
-    "sourceSHA": "54e543b2c2f3cc970b8afe0ced35818c60c0ee4f",
+    "sourceSHA": "2c84493b67dd736df387635fedd790fc940f90ab",
     "synthetic": true,
     "observed": "Production Claude menu card in dark appearance; fixture values and example.com identity.",
     "proves": "Static production-view appearance and numeric labels.",
