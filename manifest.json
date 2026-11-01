@@ -1,7 +1,7 @@
 {
   "base": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
   "heads": {
-    "widgets": "7cfe4c032763dd6b04f1b61368865bfcbab61187",
+    "widgets": "63e6064995775a397b93fa4dff714fc81b50dc37",
     "share-card": "03f2146a365c74a7586dfa8541adc898644af4d8",
     "models": "61cbf2bd8c25d6d4b1144dbbf3fc3586f98fff7d"
   },
@@ -51,5 +51,6 @@
     "v2/widgets/widget-usage-small-dark.png": "427d5f6d9ce83e656a7dc981f9a0d3f2957e3c7df3e65df0c63fef13ecaf5ba1",
     "v2/widgets/widget-usage-small-light.png": "aa1768a7e9ffd1deeea100f0f11cfb6f5a01ed821678b67a7c202b1b466f8bc3"
   },
-  "exportProof": "V2ShareExportProofTests: sets NSApplication.shared.appearance, opens the shipped ShareStatsWindowController (ordered front, captured from its window frame view) and calls ShareStatsExporter.copyImage into a private NSPasteboard with no explicit appearance; the PNG is read back from the pasteboard. In-process test host, synthetic payload, no real accounts."
+  "exportProof": "V2ShareExportProofTests: sets NSApplication.shared.appearance, opens the shipped ShareStatsWindowController (ordered front, captured from its window frame view) and calls ShareStatsExporter.copyImage into a private NSPasteboard with no explicit appearance; the PNG is read back from the pasteboard. In-process test host, synthetic payload, no real accounts.",
+  "notes": "Widget images were rendered at 7cfe4c032; 63e606499 changes only share-basis rules for unpriced/unmetered days and the Xcode resource phase, not the rendered fixtures. Models images at 61cbf2bd8; share-card images at 03f2146a3."
 }
