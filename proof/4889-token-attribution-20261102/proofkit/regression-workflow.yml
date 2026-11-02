@@ -1,0 +1,50 @@
+name: PR4889 base regression proof
+on:
+  push:
+    branches: [proof/4889-regression-xcode27]
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: xcode-27
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: a3090c2f8130d125e31fd8338639f853a8dff4bd
+          persist-credentials: false
+          fetch-depth: 3
+      - name: Prove base failure with the existing model suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
+          export DEVELOPER_DIR=/Applications/Xcode_27.0.app/Contents/Developer
+          xcodebuild -version
+          swift --version
+          brew install python@3.14
+          export PATH="$(brew --prefix python@3.14)/libexec/bin:$PATH"
+          export PYTHONDONTWRITEBYTECODE=1
+          mkdir -p "$RUNNER_TEMP/tests"
+          files=(Sources/CodexBar/SpendDashboard/SpendDashboardModel.swift Sources/CodexBar/SpendDashboard/SpendDashboardModel+ModelBreakdown.swift Sources/CodexBar/SpendDashboard/SpendDashboardModelRanking.swift)
+          for f in "${files[@]}"; do git show 2e2b001f0da8a1ca606db141f53b4e8188a98359:"$f" > "$f"; done
+          source Scripts/test_environment.sh
+          swift test list > "$RUNNER_TEMP/tests/test-inventory.log" 2>&1
+          grep 'SpendDashboardModelTests' "$RUNNER_TEMP/tests/test-inventory.log" | tail -8
+          set +e
+          swift test --skip-build --filter SpendDashboardModelTests > "$RUNNER_TEMP/tests/base-red.log" 2>&1
+          red=$?
+          set -e
+          tail -45 "$RUNNER_TEMP/tests/base-red.log"
+          test "$red" -ne 0
+          grep -q 'Expectation failed' "$RUNNER_TEMP/tests/base-red.log"
+          grep -q 'ranking.rows.map' "$RUNNER_TEMP/tests/base-red.log"
+          for f in "${files[@]}"; do git show HEAD:"$f" > "$f"; done
+          printf '%s\n' 'Head regression and all affected suites passed in upstream CI run 41387596451, job 125092038496, at a3090c2f8130d125e31fd8338639f853a8dff4bd. See published CI excerpt for exact test names.' > "$RUNNER_TEMP/tests/head-proof-source.txt"
+          git diff --exit-code
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: regression-red-green
+          path: ${{ runner.temp }}/tests
+          retention-days: 7

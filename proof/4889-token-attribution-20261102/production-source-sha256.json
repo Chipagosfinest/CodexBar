@@ -1,0 +1,9 @@
+{
+  "product_sha": "a3090c2f8130d125e31fd8338639f853a8dff4bd",
+  "files": {
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel.swift": "c389a4e535819b28fb01e468a514ed1f89fd46d986b361cade39a8d80b56d3a7",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel+ModelBreakdown.swift": "3f4b65b30de86663ac48c7ec6a798575326b843dbaecd7e805e58dcde8556d5d",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModelRanking.swift": "e001ae28074453177115abf01c748a1e647a97a0d5a2be6e573ea1ddb1673d62",
+    "Sources/CodexBar/Settings/PreferencesSpendDashboardPane.swift": "3a4af8e70f9fb68d622c5e7e6051ae2fd11320b939c97f3cf2b99ccbf27e0c2d"
+  }
+}

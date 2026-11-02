@@ -1,0 +1,30 @@
+{
+  "product_sha": "a3090c2f8130d125e31fd8338639f853a8dff4bd",
+  "capture_run": "https://github.com/Chipagosfinest/CodexBar/actions/runs/41393244181",
+  "package_run": "https://github.com/Chipagosfinest/CodexBar/actions/runs/41387628491",
+  "controller_sha": "4cf160ef932fa5183347f1e7cc64c15ff6579cf4",
+  "checks_passed": 25,
+  "source_changes": false,
+  "inspected_screens": [
+    "tokens-2-models",
+    "priced-2-models",
+    "priced-3-show-all",
+    "priced-4-show-less",
+    "mixed-2-models",
+    "partial-2-models"
+  ],
+  "observations": {
+    "tokens": "Both synthetic Claude models show 75% / 25%, 2.8M / 920K, proportional bars; no false partial-model warning.",
+    "mixed": "No percentages/bars; partial warning retained.",
+    "partial": "No percentages/bars; partial warning retained.",
+    "expansion": "5 -> 7 -> 5 rows after actual control clicks."
+  },
+  "images_sha256": {
+    "mixed-2-models-screen.png": "97f66104ca1354f4119d598f2d17d07b71b23d407ed7e41398c9c358c3b2b5e6",
+    "priced-2-models-screen.png": "1972fcf0d9ff8a9b5670edecc04d7fa2538941da7fa6b6b70b4ea0760998392c",
+    "tokens-2-models-screen.png": "bf9cc1a1a61f5f5ad7ab0e07576f614ab48ce5cdabcd14c2cdaf45ce03725f2f",
+    "partial-2-models-screen.png": "a03be503efea57579a803666ffe4f5404aa793d110fe91c03499dfa2aa8a2301",
+    "priced-4-show-less-screen.png": "b172743bdb7435a31f4a05b400caba37a70483938c7945b9afae0b56c987a4d0",
+    "priced-3-show-all-screen.png": "51a7391ecf5006b3aa87c5982fbb9198993913017865edc69d2744954fe25670"
+  }
+}

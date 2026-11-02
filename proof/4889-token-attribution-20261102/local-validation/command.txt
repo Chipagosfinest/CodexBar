@@ -1,0 +1,4 @@
+Final product a3090c2f8130d125e31fd8338639f853a8dff4bd
+make check: exit 0
+Process-only environment: Python 3.13 with waitid/WNOWAIT, PYTHONDONTWRITEBYTECODE=1, XCODE_DEFAULT_TOOLCHAIN_OVERRIDE pointing to installed Command Line Tools. No source changes for environment setup.
+Independent read-only review: no correctness findings; follow-up extraction preserves behavior.

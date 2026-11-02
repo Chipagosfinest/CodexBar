@@ -1,0 +1,12 @@
+changes	pass	16s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125091946777	
+lint	pass	2m13s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125091946751	
+swift-test-macos	pass	47m58s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125092038496	
+lint-build-test	pass	7s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125105374170	
+prune-swiftpm-caches	skipping	0	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125105375971	
+GitGuardian Security Checks	pass	32s	https://dashboard.gitguardian.com	
+build-linux-cli (linux-arm64, ubuntu-24.04-arm)	pass	13m59s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125092038524	
+build-linux-cli (linux-x64, ubuntu-24.04)	pass	16m55s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125092038564	
+build-linux-musl-cli	pass	12m42s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125092038544	
+changes	pass	16s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125091946777	
+lint	pass	2m13s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125091946751	
+swift-test-macos	pass	47m58s	https://github.com/steipete/CodexBar/actions/runs/41387596451/job/125092038496	

@@ -1,0 +1,78 @@
+    0.67s CHECK PASS head: installed app binary equals package manifest 76b99895664e2e03e5a87c505ef6da676d7c986e77c8f8073a9f03a3bf42ce0d vs 76b99895664e2e03e5a87c505ef6da676d7c986e77c8f8073a9f03a3bf42ce0d
+    1.02s banner on display: [{'name': '', 'id': 28, 'x': 0, 'y': 722, 'w': 1024, 'h': 46, 'layer': 1000}]
+    4.13s all 23 hostnames resolve only to loopback after 4s
+    4.91s fixture answers all 23 hostnames over trusted TLS
+    4.91s === priced
+    5.06s phase -> priced
+    5.07s launched priced pid=1536
+    6.83s CHECK PASS priced: head app reached the provider fixture 
+   35.37s preclick display captured; icon drawn colors=26 inside screen={'w': 1024, 'x': 0, 'h': 768, 'y': 0}
+   35.38s click status item at 767,3 size 36x24
+   68.46s SHOT priced-1-pane menus=[] requests=30 
+   82.65s CHECK PASS priced: the Models segment is really selected {'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 501, 'y': 582, 'w': 78, 'h': 20, 'help': None, 'sub': 'AXSegment'}
+  165.02s SHOT priced-2-models menus=[] requests=31 clicked Models at 501,582; pane scrolled to the lens
+  174.55s priced texts: ["General", "iCloud Sync", "Usage & Spend", "Notifications", "Menu Bar", "Menu", "Advanced", "Hooks", "Plugins", "About", "Codex \u2014 Provider service status: Operational", "Claude \u2014 Provider service status: Operational", "OpenAI \u2014 Disabled", "Azure OpenAI \u2014 Disabled", "ClinePass \u2014 Disabled", "Usage & Spend", "Local estimated cost history across supported providers.", "Statistics time zone", "Daily usage uses a fixed time zone. Changing it may move usage to a different day.", "USD", "Local estimated history \u00b7 Coverage: 30 / 30", "Estimated spend", "$108.98", "Tracked tokens", "24M", "Subscriptions", "2", "Reasoning", "\u2014", "Priced 10 \u00b7 Unpriced 0 \u00b7 Unmetered 0 \u00b7 Estimated 0 \u00b7 List-price equivalent", "Estimated spend", "claude-opus-4-5, Claude, 41%, $45.00", "claude-sonnet-4-5, Claude, 19%, $21.00", "gpt-5.2-codex, Codex, 17%, $18.20", "gpt-5.2, Codex, 10%, $11.38", "gpt-5.1-codex-max, Codex, 9%, $9.75", "Estimated spend", "Oct 4, 2026 \u2013 Nov 2, 2026 \u00b7 Daily", "Click a bar to explore. Use the menu below for exact amounts.", "Recorded spend", "$108.98", "Highest recorded spend", "Oct 29, 2026 \u00b7 $21.80", "$21.80", "Claude", "$13.80", "Codex", "$8.00", "Daily estimated spend", "Day", "Providers", "Tracked tokens", "Requests", "Estimated spend", "Token activity", "24M in the last year", "Nov 3, 2025: 0", "Nov 4, 2025: 0", "Nov 5, 2025: 0", "Nov 6, 2025: 0", "Nov 7, 2025: 0", "Nov 8, 2025: 0", "Nov 9, 2025: 0", "Nov 1
+  183.14s priced rows: {"claude-opus-4-5": "claude-opus-4-5, Claude, 41%, $45.00", "claude-sonnet-4-5": "claude-sonnet-4-5, Claude, 19%, $21.00", "gpt-5.2-codex": "gpt-5.2-codex, Codex, 17%, $18.20", "gpt-5.2": "gpt-5.2, Codex, 10%, $11.38", "gpt-5.1-codex-max": "gpt-5.1-codex-max, Codex, 9%, $9.75"}
+  183.14s CHECK PASS priced: collapsed list shows five of seven models ['claude-opus-4-5', 'claude-sonnet-4-5', 'gpt-5.2-codex', 'gpt-5.2', 'gpt-5.1-codex-max']
+  183.14s CHECK PASS priced: basis is estimated spend with a share on every row {'claude-opus-4-5': 'claude-opus-4-5, Claude, 41%, $45.00', 'claude-sonnet-4-5': 'claude-sonnet-4-5, Claude, 19%, $21.00', 'gpt-5.2-codex': 'gpt-5.2-codex, Codex, 17%, $18.20', 'gpt-5.2': 'gpt-5.2, Codex, 10%, $11.38', 'gpt-5.1-codex-max': 'gpt-5.1-codex-max, Codex, 9%, $9.75'}
+  192.63s CHECK PASS priced: Show all control is offered Show all (7)
+  201.16s SHOT priced-3-show-all menus=[] requests=32 
+  205.69s CHECK PASS priced: Show all really reveals all seven rows ['claude-opus-4-5', 'claude-sonnet-4-5', 'gpt-5.2-codex', 'gpt-5.2', 'gpt-5.1-codex-max', 'claude-haiku-4-5', 'gpt-5.1-codex-mini']
+  209.32s CHECK PASS priced: Show less control is offered Show less
+  216.67s SHOT priced-4-show-less menus=[] requests=33 
+  224.24s CHECK PASS priced: Show less returns to five rows ['claude-opus-4-5', 'claude-sonnet-4-5', 'gpt-5.2-codex', 'gpt-5.2', 'gpt-5.1-codex-max']
+  224.24s recording exit=0
+  224.52s priced stopped
+  226.03s === tokens
+  226.18s phase -> tokens
+  226.18s launched tokens pid=6130
+  227.04s CHECK PASS tokens: head app reached the provider fixture 
+  255.10s preclick display captured; icon drawn colors=25 inside screen={'x': 0, 'h': 768, 'w': 1024, 'y': 0}
+  255.10s click status item at 767,3 size 36x24
+  283.13s SHOT tokens-1-pane menus=[] requests=35 
+  294.13s CHECK PASS tokens: the Models segment is really selected {'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 489, 'y': 583, 'w': 67, 'h': 20, 'help': None, 'sub': 'AXSegment'}
+  347.94s SHOT tokens-2-models menus=[] requests=35 clicked Models at 489,583; pane scrolled to the lens
+  356.20s tokens texts: ["General", "iCloud Sync", "Usage & Spend", "Notifications", "Menu Bar", "Menu", "Advanced", "Hooks", "Plugins", "About", "Codex \u2014 Disabled", "Claude \u2014 Provider service status: Operational", "OpenAI \u2014 Disabled", "Azure OpenAI \u2014 Disabled", "ClinePass \u2014 Disabled", "Usage & Spend", "Local estimated cost history across supported providers.", "Statistics time zone", "Daily usage uses a fixed time zone. Changing it may move usage to a different day.", "USD", "Partial estimate \u00b7 0 of 1 subscriptions have spend \u00b7 Coverage: 30 / 30", "Estimated spend", "\u2014", "Tracked tokens", "3.7M", "Subscriptions", "1", "Reasoning", "\u2014", "Priced 0 \u00b7 Unpriced 8 \u00b7 Unmetered 0 \u00b7 Estimated 0 \u00b7 Spend unavailable", "Tracked tokens", "fictional-unpriced-model, Claude, 75%, 2.8M", "fictional-unpriced-model-two, Claude, 25%, 920K", "Estimated spend", "Oct 4, 2026 \u2013 Nov 2, 2026 \u00b7 Daily", "Click a bar to explore. Use the menu below for exact amounts.", "Spend unavailable", "Daily estimated spend", "Day", "Providers", "Tracked tokens", "Requests", "Estimated spend", "Token activity", "3.7M in the last year", "Nov 3, 2025: 0", "Nov 4, 2025: 0", "Nov 5, 2025: 0", "Nov 6, 2025: 0", "Nov 7, 2025: 0", "Nov 8, 2025: 0", "Nov 9, 2025: 0", "Nov 10, 2025: 0", "Nov 11, 2025: 0", "Nov 12, 2025: 0", "Nov 13, 2025: 0", "Nov 14, 2025: 0", "Nov 15, 2025: 0", "Nov 16, 2025: 0", "Nov 17, 2025: 0", "Nov 18, 2025: 0", "Nov 19, 2025: 0", "Nov 20, 2025: 0", "
+  360.97s tokens rows: {"fictional-unpriced-model": "fictional-unpriced-model, Claude, 75%, 2.8M", "fictional-unpriced-model-two": "fictional-unpriced-model-two, Claude, 25%, 920K"}
+  363.73s CHECK PASS tokens: one provider with no price basis falls back to Tracked tokens, showing token values {'header': ['Tracked tokens'], 'rows': {'fictional-unpriced-model': 'fictional-unpriced-model, Claude, 75%, 2.8M', 'fictional-unpriced-model-two': 'fictional-unpriced-model-two, Claude, 25%, 920K'}}
+  363.73s CHECK PASS tokens: complete token attribution has no partial model warning ['Tracked tokens']
+  363.73s CHECK PASS tokens: both models carry correct token percentages {'fictional-unpriced-model': 'fictional-unpriced-model, Claude, 75%, 2.8M', 'fictional-unpriced-model-two': 'fictional-unpriced-model-two, Claude, 25%, 920K'}
+  363.73s CHECK PASS tokens: both models listed ['fictional-unpriced-model', 'fictional-unpriced-model-two']
+  363.73s recording exit=0
+  363.90s tokens stopped
+  365.47s === mixed
+  365.62s phase -> mixed
+  365.62s launched mixed pid=9856
+  366.75s CHECK PASS mixed: head app reached the provider fixture 
+  394.58s preclick display captured; icon drawn colors=26 inside screen={'y': 0, 'h': 768, 'x': 0, 'w': 1024}
+  394.59s click status item at 767,3 size 36x24
+  415.60s SHOT mixed-1-pane menus=[] requests=42 
+  425.50s CHECK PASS mixed: the Models segment is really selected {'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 501, 'y': 583, 'w': 78, 'h': 20, 'help': None, 'sub': 'AXSegment'}
+  473.55s SHOT mixed-2-models menus=[] requests=42 clicked Models at 501,583; pane scrolled to the lens
+  479.54s mixed texts: ["General", "iCloud Sync", "Usage & Spend", "Notifications", "Menu Bar", "Menu", "Advanced", "Hooks", "Plugins", "About", "Codex \u2014 Provider service status: Operational", "Claude \u2014 Provider service status: Operational", "OpenAI \u2014 Disabled", "Azure OpenAI \u2014 Disabled", "ClinePass \u2014 Disabled", "Usage & Spend", "Local estimated cost history across supported providers.", "Statistics time zone", "Daily usage uses a fixed time zone. Changing it may move usage to a different day.", "USD", "Partial estimate \u00b7 1 of 2 subscriptions have spend \u00b7 Coverage: 30 / 30", "Estimated spend", "~$7.42", "Tracked tokens", "3.2M", "Subscriptions", "2", "Reasoning", "\u2014", "Priced 4 \u00b7 Unpriced 4 \u00b7 Unmetered 0 \u00b7 Estimated 0 \u00b7 List-price equivalent", "Partial model breakdown", "gpt-5.2-codex, Codex, $7.42 \u00b7 2.3M tokens", "fictional-unpriced-model, Claude, 920K tokens", "Estimated spend", "Oct 4, 2026 \u2013 Nov 2, 2026 \u00b7 Daily", "Click a bar to explore. Use the menu below for exact amounts.", "Recorded spend", "\u2265 $7.42", "Highest recorded spend", "Oct 30, 2026 \u00b7 \u2265 $1.86", "\u2265 $1.86", "Codex", "$1.86", "Daily estimated spend", "Day", "Providers", "Tracked tokens", "Requests", "Estimated spend", "Token activity", "3.2M in the last year", "Nov 3, 2025: 0", "Nov 4, 2025: 0", "Nov 5, 2025: 0", "Nov 6, 2025: 0", "Nov 7, 2025: 0", "Nov 8, 2025: 0", "Nov 9, 2025: 0", "Nov 10, 2025: 0", "Nov 11, 2025: 0", "Nov 12, 2025: 0", "N
+  484.94s mixed rows: {"gpt-5.2-codex": "gpt-5.2-codex, Codex, $7.42 \u00b7 2.3M tokens", "fictional-unpriced-model": "fictional-unpriced-model, Claude, 920K tokens"}
+  487.90s CHECK PASS mixed: two providers plus an unpriced model withhold shares and any single basis {'header': ['Partial model breakdown'], 'rows': {'gpt-5.2-codex': 'gpt-5.2-codex, Codex, $7.42 · 2.3M tokens', 'fictional-unpriced-model': 'fictional-unpriced-model, Claude, 920K tokens'}}
+  487.91s CHECK PASS mixed: the unpriced history carries the partial warning ['Partial model breakdown']
+  487.91s CHECK PASS mixed: both models still listed ['gpt-5.2-codex', 'fictional-unpriced-model']
+  487.91s recording exit=0
+  488.22s mixed stopped
+  489.73s === partial
+  489.98s phase -> partial
+  489.98s launched partial pid=13378
+  491.53s CHECK PASS partial: head app reached the provider fixture 
+  519.19s preclick display captured; icon drawn colors=26 inside screen={'w': 1024, 'h': 768, 'x': 0, 'y': 0}
+  519.19s click status item at 767,3 size 36x24
+  539.95s SHOT partial-1-pane menus=[] requests=50 
+  548.06s CHECK PASS partial: the Models segment is really selected {'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 501, 'y': 583, 'w': 78, 'h': 20, 'help': None, 'sub': 'AXSegment'}
+  588.92s SHOT partial-2-models menus=[] requests=50 clicked Models at 501,583; pane scrolled to the lens
+  593.63s partial texts: ["General", "iCloud Sync", "Usage & Spend", "Notifications", "Menu Bar", "Menu", "Advanced", "Hooks", "Plugins", "About", "Codex \u2014 Provider service status: Operational", "Claude \u2014 Provider service status: Operational", "OpenAI \u2014 Disabled", "Azure OpenAI \u2014 Disabled", "ClinePass \u2014 Disabled", "Usage & Spend", "Local estimated cost history across supported providers.", "Statistics time zone", "Daily usage uses a fixed time zone. Changing it may move usage to a different day.", "USD", "Partial estimate \u00b7 Coverage: 30 / 30", "Estimated spend", "~$20.02", "Tracked tokens", "6M", "Subscriptions", "2", "Reasoning", "\u2014", "Priced 4 \u00b7 Unpriced 4 \u00b7 Unmetered 0 \u00b7 Estimated 4 \u00b7 List-price equivalent", "Partial model breakdown", "Estimated spend", "gpt-5.2-codex, Codex, $7.42", "Estimated spend", "Oct 4, 2026 \u2013 Nov 2, 2026 \u00b7 Daily", "Click a bar to explore. Use the menu below for exact amounts.", "Recorded spend", "\u2265 $20.02", "Highest recorded spend", "Oct 30, 2026 \u00b7 \u2265 $5.01", "\u2265 $5.01", "Claude", "\u2265 $3.15", "Codex", "$1.86", "Daily estimated spend", "Day", "Providers", "Tracked tokens", "Requests", "Estimated spend", "Token activity", "6M in the last year", "Nov 3, 2025: 0", "Nov 4, 2025: 0", "Nov 5, 2025: 0", "Nov 6, 2025: 0", "Nov 7, 2025: 0", "Nov 8, 2025: 0", "Nov 9, 2025: 0", "Nov 10, 2025: 0", "Nov 11, 2025: 0", "Nov 12, 2025: 0", "Nov 13, 2025: 0", "Nov 14, 2025: 0", "Nov 15, 2025: 0", "Nov 16, 
+  597.56s partial rows: {"gpt-5.2-codex": "gpt-5.2-codex, Codex, $7.42"}
+  601.22s CHECK PASS partial: unattributable history shows the partial warning and withholds shares {'header': ['Partial model breakdown', 'Estimated spend'], 'rows': {'gpt-5.2-codex': 'gpt-5.2-codex, Codex, $7.42'}}
+  601.22s recording exit=0
+  601.35s partial stopped
+  602.87s provider requests answered 200 by the fixture: 14 of 28
+  602.87s CHECK PASS app reached the fixture 14
+  602.87s resolver watch (sampled): 119 checks, 0 escapes
+  602.87s CHECK PASS no sampled resolver escape []
+  602.88s checks: 25 passed, 0 failed
+  602.88s done
