@@ -84,6 +84,10 @@ struct WidgetLowQuotaInkTests {
     }
 
     private static func expectWarningVisible(_ image: CGImage) throws {
+        // The only red on this tile is the low Sonnet figure. Pixels need no text recognition, so this
+        // holds on hosts without Vision, where the text checks below cannot run.
+        #expect(try self.redPixelCount(in: image) > 20)
+        guard VisionTextRecognition.isAvailable else { return }
         let text = try self.recognizedText(in: image)
         let compact = text.replacingOccurrences(of: " ", with: "")
         #expect(compact.contains("39%"), "Headline missing: \(text)")
@@ -92,13 +96,9 @@ struct WidgetLowQuotaInkTests {
         #expect(compact.contains("Sonnet"), "Sonnet row missing: \(text)")
         #expect(compact.contains("8%"), "Sonnet value missing: \(text)")
         #expect(!compact.contains("more"), "Rows folded into overflow: \(text)")
-        // The only red on this tile is the low Sonnet figure.
-        #expect(try self.redPixelCount(in: image) > 20)
     }
 
-    @Test(
-        .enabled(if: VisionTextRecognition.isAvailable, "Vision text recognition is unavailable on this host"),
-        arguments: [CGFloat(127), 132])
+    @Test(arguments: [CGFloat(127), 132])
     func `small switcher keeps a low model quota out of overflow`(content: CGFloat) throws {
         try WidgetLocalizationOverride.$language.withValue("en") {
             let entry = Self.claudeEntry()
@@ -114,9 +114,7 @@ struct WidgetLowQuotaInkTests {
         }
     }
 
-    @Test(
-        .enabled(if: VisionTextRecognition.isAvailable, "Vision text recognition is unavailable on this host"),
-        arguments: [CGFloat(127), 132])
+    @Test(arguments: [CGFloat(127), 132])
     func `small usage widget keeps a low model quota out of overflow`(content: CGFloat) throws {
         try WidgetLocalizationOverride.$language.withValue("en") {
             let entry = Self.claudeEntry()
