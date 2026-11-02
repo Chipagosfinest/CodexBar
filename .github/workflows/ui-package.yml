@@ -13,10 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { pr: "4899", sha: 292ba68c892dbf9d51bfc95e5cd824db983bb9eb }
-          - { pr: "4900", sha: 818e1e73784f20053912e8a7f59d677c9494e852 }
-          - { pr: "4901", sha: 1d28182bdb63b6a27edcdb91bebf1189a368efea }
-          - { pr: "4902", sha: ccadfbc339ea0205a271578daaef7f4a811ca092 }
+          - { pr: "4887", sha: 23bf4c17e7bc76c87dd0b75bc30f776cbac8333d }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
