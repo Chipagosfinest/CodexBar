@@ -5,16 +5,16 @@
    24.79s CHECK PASS logo row keeps every provider name for accessibility and hover [('Overview', 'Overview'), ('Codex', 'Codex'), ('Claude', 'Claude'), ('Command Code', 'Command Code'), ('Kimi Code', 'Kimi Code'), ('z.ai / GLM', 'z.ai / GLM'), ('OpenRouter', 'OpenRouter'), ('Moonshot / Kimi Open Platform', 'Moonshot / Kimi Open Platform'), ('DeepSeek', 'DeepSeek')]
    30.33s CHECK PASS hovering a logo shows its native tooltip window [{'layer': 103, 'w': 49, 'name': '', 'x': 797, 'h': 18, 'y': 69, 'id': 37}]
    31.14s SHOT f2-hover-claude-logo menus=[(708, 31, 310, 546)] requests=39 native tooltip, if any, is a new small window
-   35.54s SHOT f3-more-submenu-open menus=[(525, 519, 188, 34), (708, 31, 310, 546)] requests=39 
+   35.54s SHOT f3-more-submenu-open menus=[(525, 519, 188, 34), (708, 31, 310, 546)] requests=39
    35.61s CHECK PASS About is inside More About CodexBar (v0.83.1)
-   37.99s SHOT f4-about-highlighted menus=[(525, 519, 188, 34), (708, 31, 310, 546)] requests=39 
+   37.99s SHOT f4-about-highlighted menus=[(525, 519, 188, 34), (708, 31, 310, 546)] requests=39
    42.26s SHOT f5-about-activated menus=[] requests=39 Settings About window from the More submenu
    42.29s CHECK PASS More > About activates the Settings window [{'name': '', 'w': 1024, 'x': 1023, 'layer': 3, 'y': 31, 'id': 34, 'h': 674}, {'layer': 0, 'h': 592, 'name': 'About', 'id': 39, 'x': 112, 'y': 52, 'w': 800}]
   149.23s click status item at 767,3 size 36x24
   153.74s SHOT o1-overflow-row menus=[(708, 31, 310, 671)] requests=73 twelve inline rows, More (n), Quit on screen
   154.39s CHECK PASS a roster over twelve rows collapses the rest into More (n) ['More (7)', 'Kimi Code · Synthetic Account 10', 'Kimi Code · Synthetic Account 11', 'Kimi Code · Synthetic Account 12']
   160.24s SHOT o1b-scrolled-to-overflow-row menus=[(708, 31, 310, 671)] requests=73 real wheel events
-  165.09s SHOT o2-overflow-submenu menus=[(479, 524, 234, 178), (708, 31, 310, 671)] requests=73 
+  165.09s SHOT o2-overflow-submenu menus=[(479, 524, 234, 178), (708, 31, 310, 671)] requests=73
   165.39s CHECK PASS the overflow submenu lists account rows Kimi Code · Synthetic Account 10
   171.44s SHOT o3-overflow-activated menus=[] requests=88 clicked an overflow account
   171.47s defaults nav-after-overflow-click: {"mergedMenuLastSelectedWasOverview": false, "mergedOverviewAllAccounts": true, "mergedOverviewLayout": "compact", "selectedMenuProvider": "kimi"}
