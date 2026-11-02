@@ -4,7 +4,7 @@ import json, subprocess, sys, time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import kit, providers
-from kit import App, OUT, check, phase_begin, reached, say, state, record
+from kit import App, OUT, check, finding, phase_begin, reached, say, state, record
 HEAD_APP, _, HELPER = sys.argv[1], sys.argv[2], sys.argv[3]
 INSTALLED = Path('/Applications/CodexBar.app')
 subprocess.run(['ditto', HEAD_APP, str(INSTALLED)], check=True)
@@ -171,10 +171,16 @@ for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
                 app.shot('priced-4-show-less')
                 check('priced: Show less returns to five rows', len(model_rows(app)) == 5, list(model_rows(app)))
     elif tag == 'tokens':
-        check('tokens: one provider with unpriced models ranks by Tracked tokens with shares', 'Tracked tokens' in lens_headers(app) and rows and all('%' in v for v in rows.values()), {'header': lens_headers(app), 'rows': rows})
+        h = lens_headers(app)
+        check('tokens: one provider with no price basis falls back to Tracked tokens, showing token values', 'Tracked tokens' in h and 'Estimated spend' not in h and rows and not any('$' in v for v in rows.values()), {'header': h, 'rows': rows})
+        check('tokens: the unpriced history also carries the partial warning', 'Partial model breakdown' in h, h)
+        # An unpriced model always marks history incomplete in modelSummary, and that strips shares in SpendModelRanking.make(group).
+        finding('token fallback shows shares, as the unit-level ranking does', any('%' in v for v in rows.values()), rows)
         check('tokens: both models listed', len(rows) == 2, list(rows))
     elif tag == 'mixed':
-        check('mixed: two providers plus an unpriced model withhold shares and the basis', rows and not any('%' in v for v in rows.values()) and not lens_headers(app), {'header': lens_headers(app), 'rows': rows})
+        h = lens_headers(app)
+        check('mixed: two providers plus an unpriced model withhold shares and any single basis', rows and not any('%' in v for v in rows.values()) and 'Tracked tokens' not in h and 'Estimated spend' not in h, {'header': h, 'rows': rows})
+        check('mixed: the unpriced history carries the partial warning', 'Partial model breakdown' in h, h)
         check('mixed: both models still listed', 'fictional-unpriced-model' in rows and 'gpt-5.2-codex' in rows, list(rows))
     else:
         check('partial: unattributable history shows the partial warning and withholds shares', 'Partial model breakdown' in lens_headers(app) and rows and not any('%' in v for v in rows.values()), {'header': lens_headers(app), 'rows': rows})
