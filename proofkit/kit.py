@@ -342,6 +342,37 @@ class App:
         walk(self.bar())
         return out
 
+    def menu_items(self):
+        """The open root menu's rows, each with every label beneath it. Hosted rows expose text only on descendants."""
+        def labels(n):
+            own = [n.get('title') or n.get('desc') or n.get('value') or '']
+            for c in n.get('kids', []):
+                own += labels(c)
+            return [x for x in own if x]
+        for it in self.bar().get('kids', []):
+            for m in it.get('kids', []):
+                if m.get('role') == 'AXMenu':
+                    return [{'y': r['y'], 'h': r['h'], 'x': r['x'], 'w': r['w'], 'labels': labels(r),
+                             'action': r.get('identifier') or r.get('help')} for r in m.get('kids', [])]
+        return []
+
+    def row(self, text):
+        """The root-menu row whose subtree mentions text, wherever the app hosted it."""
+        for r in self.menu_items():
+            if r['w'] and any(text.lower() in l.lower() for l in r['labels']):
+                return r
+        return None
+
+    def hover(self, row, steps=25):
+        cx, cy = row['x'] + row['w'] / 2, row['y'] + row['h'] / 2
+        self.ui('move', cx, cy, steps)
+        return cx, cy
+
+    def click_row(self, row):
+        cx, cy = self.hover(row)
+        time.sleep(0.4)
+        self.ui('click', cx, cy)
+
     def shot(self, name, note=''):
         time.sleep(0.5)
         subprocess.run(['screencapture', '-x', '-C', str(OUT / f'{name}-screen.png')], check=True)

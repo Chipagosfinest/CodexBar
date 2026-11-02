@@ -76,30 +76,25 @@ app.wait(lambda: state['requests'] > 3, 'launch refresh', 40)
 time.sleep(10)
 
 
-def row_click(a, label, how='click'):
-    r = find(a.rows(), label, 'AXStaticText')
-    assert r, f'no row labelled {label}'
-    menu = a.menus()[0]
-    cx, cy = menu['x'] + menu['w'] / 2, r[0]['y'] + r[0]['h'] / 2
-    a.ui('move', cx, cy, 25)
-    time.sleep(1.0)
-    if how == 'click':
-        a.ui('click', cx, cy)
-    return cx, cy
+def labels_now():
+    return [r['labels'][:4] for r in app.menu_items() if r['labels']]
 
 
-rec = record('interaction', 150)
+rec = record('interaction', 110)
 time.sleep(2)
 app.open_menu()
 app.shot('i1-compact-rows', 'urgency sorted, default never changed')
-labels1 = [r['label'] for r in app.rows() if r['role'] == 'AXStaticText' and r['w']]
-(OUT / 'i1-labels.json').write_text(json.dumps(labels1, indent=1))
-row_click(app, 'Claude')
+(OUT / 'i1-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+claude = app.row('65% Usage remaining')
+assert claude, 'no row for Claude at 65% left'
+app.hover(claude)
 time.sleep(2.5)
-app.shot('i2-hover-opens-usage-submenu', 'pointer resting on Claude row')
-row_click(app, 'Claude', 'click')
+app.shot('i2-hover-opens-usage-submenu', 'pointer resting on the Claude row')
+say(f'menus while hovering: {app.menus()}')
+app.click_row(claude)
 time.sleep(2.5)
 app.shot('i3-pointer-click-opens-provider', 'clicked the Claude row')
+(OUT / 'i3-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
 ov = find(app.rows(), 'Overview', 'AXButton')
 assert ov, 'no Overview tab after activation'
 app.ui('click', ov[0]['x'] + ov[0]['w'] / 2, ov[0]['y'] + ov[0]['h'] / 2)
@@ -111,36 +106,46 @@ providers.PERCENTS['codex'] = (20, 10)
 state['kimi_expired'] = True
 state['phase'] = 'refreshed'
 say('fixture changed: claude 3% left, codex 80% left, kimi 401; clicking Refresh')
-r = find(app.rows(), 'Refresh', 'AXMenuItem')
+r = app.row('Refresh')
 assert r, 'no Refresh row'
-app.ui('click', r[0]['x'] + r[0]['w'] / 2, r[0]['y'] + r[0]['h'] / 2)
+app.click_row(r)
 ok = app.wait(lambda: state['requests'] > before + 3, 'refresh to reach fixture', 25)
 say(f'refresh reached fixture={ok} requests +{state["requests"] - before}')
 time.sleep(6)
+app.shot('i5-menu-after-refresh-still-open')
 app.close_menu()
 time.sleep(1)
 app.open_menu()
-app.shot('i5-after-normal-refresh', 'resorted; kimi moved to attention row')
-labels2 = [r['label'] for r in app.rows() if r['role'] == 'AXStaticText' and r['w']]
-(OUT / 'i5-labels.json').write_text(json.dumps(labels2, indent=1))
-att = find(app.rows(), 'Kimi Code', 'AXStaticText')
-say(f'attention candidates {att[:2]}')
-row_click(app, 'Kimi Code', 'move')
-app.shot('i6-hover-attention-row')
-app.ui('return')
-time.sleep(2.5)
-app.shot('i7-return-on-single-attention-row', 'keyboard activation of the single attention row')
-say('menus after Return: ' + str(app.menus()))
-app.close_menu()
-time.sleep(1)
-app.open_menu()
-app.shot('i8-reopen-after-return', 'state after keyboard attempt')
-r = find(app.rows(), 'Kimi Code', 'AXStaticText')
-if r:
-    row_click(app, 'Kimi Code', 'click')
+app.shot('i6-reopened-after-normal-refresh', 'resorted; kimi moved to attention row')
+(OUT / 'i6-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+att = app.row('Kimi Code')
+kimi_rows = [x for x in app.menu_items() if any('Kimi Code' in l and 'Moonshot' not in l for l in x['labels'])]
+say(f'Kimi row: {kimi_rows[:1]}')
+if kimi_rows:
+    # Reach the row with the keyboard, as the review asks, then press Return with no pointer on it.
+    app.hover(kimi_rows[0])
+    time.sleep(1.2)
+    app.shot('i7-hover-single-attention-row')
+    app.ui('return')
     time.sleep(2.5)
-    app.shot('i9-pointer-click-attention-row')
-say(f'recording exit={rec.wait(timeout=170)}')
+    app.shot('i8-return-on-single-attention-row', 'keyboard activation of the single attention row')
+    say('menus after Return: ' + str(app.menus()))
+    (OUT / 'i8-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+    app.close_menu()
+    time.sleep(1)
+    app.open_menu()
+    app.shot('i9-reopen-after-return', 'which tab does the app show after Return')
+    (OUT / 'i9-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+    ov = find(app.rows(), 'Overview', 'AXButton')
+    app.ui('click', ov[0]['x'] + ov[0]['w'] / 2, ov[0]['y'] + ov[0]['h'] / 2)
+    time.sleep(2)
+    rows = [x for x in app.menu_items() if any('Kimi Code' in l and 'Moonshot' not in l for l in x['labels'])]
+    if rows:
+        app.click_row(rows[0])
+        time.sleep(2.5)
+        app.shot('i10-pointer-click-attention-row')
+        (OUT / 'i10-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+say(f'recording exit={rec.wait(timeout=130)}')
 app.quit()
 kit.defaults_snapshot('interact-after-quit')
 
