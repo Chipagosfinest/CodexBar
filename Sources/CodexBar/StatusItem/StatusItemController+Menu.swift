@@ -651,7 +651,7 @@ extension StatusItemController {
             }
             menu.addItem(item)
         }
-        self.addOverviewOverflowItemIfNeeded(rows, to: menu)
+        self.addOverviewOverflowItemIfNeeded(rows, to: menu, menuWidth: menuWidth)
         return true
     }
 

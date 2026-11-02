@@ -6,18 +6,26 @@ extension StatusItemController {
     static let overviewInlineRowLimit = 12
 
     /// One level down, so a long all-accounts roster cannot push the footer off screen.
-    func addOverviewOverflowItemIfNeeded(_ rows: [MergedOverviewRow], to menu: NSMenu) {
+    func addOverviewOverflowItemIfNeeded(_ rows: [MergedOverviewRow], to menu: NSMenu, menuWidth: CGFloat) {
         guard rows.count > Self.overviewInlineRowLimit else { return }
-        menu.addItem(self.makeOverviewOverflowItem(Array(rows.dropFirst(Self.overviewInlineRowLimit))))
+        menu.addItem(self.makeOverviewOverflowItem(
+            Array(rows.dropFirst(Self.overviewInlineRowLimit)),
+            menuWidth: menuWidth))
     }
 
-    private func makeOverviewOverflowItem(_ rows: [MergedOverviewRow]) -> NSMenuItem {
+    func makeOverviewOverflowItem(_ rows: [MergedOverviewRow], menuWidth: CGFloat) -> NSMenuItem {
         let item = NSMenuItem(title: "\(L("More")) (\(rows.count))", action: nil, keyEquivalent: "")
         item.representedObject = "overviewOverflow"
         let submenu = NSMenu(title: item.title)
         submenu.autoenablesItems = false
         for row in rows {
-            let name = row.model?.providerName ?? row.provider.rawValue
+            let plugin = UserProviderPluginRegistry.plugin(for: row.provider)
+            // A plugin with no switcher tab has nowhere to navigate to, so its card shows here instead.
+            if let plugin, !plugin.manifest.topLevel {
+                submenu.addItem(self.makeUserPluginMenuCardItem(plugin, width: menuWidth))
+                continue
+            }
+            let name = row.model?.providerName ?? plugin?.manifest.name ?? row.provider.rawValue
             let account = row.accountID == nil ? nil : row.model?.email
             let title = [name, account].compactMap(\.self).joined(separator: " · ")
             let child = NSMenuItem(title: title, action: #selector(self.selectOverviewProvider(_:)), keyEquivalent: "")

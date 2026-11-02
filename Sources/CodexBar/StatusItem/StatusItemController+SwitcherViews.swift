@@ -162,7 +162,7 @@ final class ProviderSwitcherView: NSView {
             button.wantsLayer = true
             button.layer?.cornerRadius = 6
             button.state = (selected == segment.selection) ? .on : .off
-            button.toolTip = nil
+            button.toolTip = self.logosOnly ? segment.title : nil
             button.translatesAutoresizingMaskIntoConstraints = false
             button.heightAnchor.constraint(equalToConstant: self.rowHeight).isActive = true
             self.buttons.append(button)
@@ -583,7 +583,6 @@ final class ProviderSwitcherView: NSView {
             stacked.setTitleFontSize(NSFont.smallSystemFontSize - 3)
         }
         stacked.hidesTitle = self.logosOnly
-        stacked.toolTip = self.logosOnly ? segment.title : nil
         return stacked
     }
 

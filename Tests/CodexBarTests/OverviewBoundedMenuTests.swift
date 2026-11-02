@@ -47,7 +47,7 @@ struct OverviewBoundedMenuTests {
             account: fetcher.loadAccountInfo(),
             updater: DisabledUpdaterController(),
             preferencesSelection: PreferencesSelection(),
-            statusBar: NSStatusBar())
+            statusBar: testStatusBar())
     }
 
     private func overflowingController() -> StatusItemController {

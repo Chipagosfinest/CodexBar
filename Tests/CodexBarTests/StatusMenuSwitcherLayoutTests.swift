@@ -141,6 +141,11 @@ struct StatusMenuSwitcherLayoutTests {
         #expect(logos._test_rowHeight() == 28)
         #expect(logos.bounds.height == 28)
         #expect(logos._test_segmentTitles().contains("Copilot"))
+        // With no visible label the tooltip is the only way to name an unfamiliar logo.
+        let toolTips = logos.subviews.compactMap { ($0 as? NSButton)?.toolTip }
+        #expect(Set(toolTips) == Set(logos._test_segmentTitles()))
+        let labeledToolTips = labeled.subviews.compactMap { ($0 as? NSButton)?.toolTip }
+        #expect(labeledToolTips.isEmpty)
         for frame in logos._test_buttonFrames() {
             #expect(frame.maxX <= logos.bounds.maxX + 0.5)
         }
