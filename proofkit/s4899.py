@@ -3,7 +3,7 @@
 import json, subprocess, sys, time
 from pathlib import Path
 import kit, providers
-from kit import App, OUT, check, phase_begin, reached, say, state, find, record
+from kit import App, OUT, check, finding, phase_begin, reached, say, state, find, record
 
 HEAD_APP, V083_APP, HELPER = sys.argv[1], sys.argv[2], sys.argv[3]
 INSTALLED = Path('/Applications/CodexBar.app')
@@ -117,7 +117,7 @@ app.shot('i3-pointer-click-opens-provider', 'clicked the Claude row')
 i3 = app.menu_items()
 (OUT / 'i3-rows.json').write_text(json.dumps(i3, indent=1))
 i3text = ' | '.join(l for r in i3 if r['y'] >= 123 for l in r['labels'])
-check('clicking the Claude row selects the Claude provider tab', 'claude@example.test' in i3text and 'Usage Dashboard' in i3text, i3text[:240])
+check('clicking the Claude row selects the Claude provider tab', 'Max 5x' in i3text and 'Usage Dashboard' in i3text and 'Usage remaining, 30%' not in i3text, i3text[:240])
 ov = find(app.rows(), 'Overview', 'AXButton')
 assert ov, 'no Overview tab after activation'
 app.ui('click', ov[0]['x'] + ov[0]['w'] / 2, ov[0]['y'] + ov[0]['h'] / 2)
@@ -176,7 +176,7 @@ if closed:
     app.open_menu()
 app.shot('i8-after-return-on-compact-row', f'menu closed by Return={closed}')
 kit.defaults_snapshot('nav-after-return-plain')
-check('Return on a plain Compact row selects its provider tab', 'Token quota' in provider_text() and 'Usage Dashboard' in provider_text(), provider_text()[:240])
+finding('Return on a plain Compact row selects its provider tab', 'Token quota' in provider_text() and 'Usage Dashboard' in provider_text(), provider_text()[:240])
 to_overview()
 z = app.row('z.ai / GLM,')
 pressed = app.ui('axpress', app.proc.pid, z['y'])
@@ -186,7 +186,7 @@ if closed:
     app.open_menu()
 app.shot('i9-after-axpress-on-compact-row', f'AXPress result={pressed} closed={closed}')
 kit.defaults_snapshot('nav-after-axpress-plain')
-check('accessibility press on a plain Compact row selects its provider tab', 'Token quota' in provider_text(), f'{pressed} {provider_text()[:200]}')
+finding('accessibility press on a plain Compact row selects its provider tab', 'Token quota' in provider_text(), f'{pressed} {provider_text()[:200]}')
 to_overview()
 # Harness control: if Return also fails on a standard item, a keyboard failure above says nothing about the product.
 quit_row = app.row('Settings')
@@ -227,7 +227,7 @@ rows = app.menu_items()
 (OUT / 'a1-rows.json').write_text(json.dumps(rows, indent=1))
 att = next((r for r in rows if r['y'] > 123 and any('Kimi Code' in l for l in r['labels'])), None)
 check('one failing provider renders one attention row', att, att)
-check('the single attention row is wired for keyboard and accessibility activation', att and att['action'], att)
+finding('the single attention row is wired for keyboard and accessibility activation', att and att['action'], att)
 if att:
     app.hover(att)
     time.sleep(0.8)
@@ -243,7 +243,7 @@ if att:
         app.open_menu()
     app.shot('a3-after-return-on-attention', f'menu closed by Return={closed}')
     a3 = ' | '.join(l for r in app.menu_items() if r['y'] >= 123 for l in r['labels'])
-    check('Return on the single attention row selects Kimi Code', 'Copy error' in a3 or 'Usage Dashboard' in a3, a3[:240])
+    finding('Return on the single attention row selects Kimi Code', 'Copy error' in a3 or 'Usage Dashboard' in a3, a3[:240])
     tabs = find(app.rows(), 'Overview', 'AXButton')
     app.ui('click', tabs[0]['x'] + tabs[0]['w'] / 2, tabs[0]['y'] + tabs[0]['h'] / 2)
     time.sleep(2)
@@ -256,7 +256,7 @@ if att:
             app.open_menu()
         app.shot('a4-after-axpress-on-attention', f'AXPress result={pressed} closed={closed}')
         a4 = ' | '.join(l for r in app.menu_items() if r['y'] >= 123 for l in r['labels'])
-        check('accessibility press on the single attention row selects Kimi Code', 'Copy error' in a4 or 'Usage Dashboard' in a4, f'{pressed} {a4[:200]}')
+        finding('accessibility press on the single attention row selects Kimi Code', 'Copy error' in a4 or 'Usage Dashboard' in a4, f'{pressed} {a4[:200]}')
         tabs = find(app.rows(), 'Overview', 'AXButton')
         app.ui('click', tabs[0]['x'] + tabs[0]['w'] / 2, tabs[0]['y'] + tabs[0]['h'] / 2)
         time.sleep(2)
@@ -282,6 +282,6 @@ app.shot('e1-all-providers-failed', 'advertised attention rows when nothing has 
 e1 = app.menu_items()
 (OUT / 'e1-rows.json').write_text(json.dumps(e1, indent=1))
 e1text = ' | '.join(l for r in e1 if r['y'] >= 112 for l in r['labels'])
-check('when every provider failed, the attention row still names them', 'No overview data available' not in e1text and 'Kimi Code' in e1text, e1text[:240])
+finding('when every provider failed, the attention row still names them', 'No overview data available' not in e1text and 'Kimi Code' in e1text, e1text[:240])
 app.quit()
 kit.finish()

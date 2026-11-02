@@ -86,6 +86,14 @@ def check(name, ok, detail=''):
     return bool(ok)
 
 
+def finding(name, ok, detail=''):
+    """A product behavior outside the requested proof, measured and reported, which does not fail the capture."""
+    state.setdefault('findings', []).append({'finding': name, 'as_expected': bool(ok), 'detail': str(detail)[:600]})
+    say(f"FINDING {'ok' if ok else 'DEFECT'} {name} {str(detail)[:300]}")
+    (OUT / 'findings.json').write_text(json.dumps(state['findings'], indent=1))
+    return bool(ok)
+
+
 def phase_begin(name):
     """Starts a named fixture phase; only requests answered inside it count for that phase's oracle."""
     state['phase'] = name

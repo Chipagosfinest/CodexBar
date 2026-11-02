@@ -4,7 +4,7 @@ import json, subprocess, sys, time
 from datetime import timedelta
 from pathlib import Path
 import kit, providers
-from kit import App, OUT, check, phase_begin, reached, say, state, record
+from kit import App, OUT, check, finding, phase_begin, reached, say, state, record
 HEAD_APP, _, HELPER = sys.argv[1], sys.argv[2], sys.argv[3]
 INSTALLED = Path('/Applications/CodexBar.app')
 subprocess.run(['ditto', HEAD_APP, str(INSTALLED)], check=True)
@@ -79,13 +79,32 @@ app.shot('v3b-show-details-highlighted')
 app.ui('click', x, show_y)
 time.sleep(3)
 app.shot('v4-show-details-selects-provider', 'after clicking Show details')
-if not app.menus():
+closed = not app.menus()
+kit.defaults_snapshot('nav-after-show-details')
+
+
+def on_claude_tab():
+    text = ' | '.join(l for r in app.menu_items() if r['y'] >= 112 for l in r['labels'])
+    (OUT / 'v5-text.txt').write_text(text)
+    return 'Max 5x' in text and 'Usage Dashboard' in text and '5-hour usage' not in text, text[:240]
+
+
+if not closed:
+    app.close_menu()
+    time.sleep(0.8)
+app.open_menu()
+app.shot('v5-reopened-provider-tab', f'closed by the click={closed}')
+landed, detail = on_claude_tab()
+if not landed:
+    # Separate a slow rebuild from a lost selection before calling this a failure.
+    app.close_menu()
+    time.sleep(2)
     app.open_menu()
-    app.shot('v5-reopened-provider-tab')
-v5 = app.menu_items()
-(OUT / 'v5-rows.json').write_text(json.dumps(v5, indent=1))
-text = ' | '.join(l for r in v5 if r['y'] >= 112 for l in r['labels'])
-check('Show details lands on the Claude provider tab', 'claude@example.test' in text and 'Usage Dashboard' in text and '5-hour usage' not in text, text[:240])
+    app.shot('v6-second-reopen')
+    landed2, detail = on_claude_tab()
+    finding('the first reopen after Show details already shows the provider tab', False, 'second reopen landed=' + str(landed2))
+    landed = landed2
+check('Show details lands on the Claude provider tab', landed, detail)
 say(f'recording exit={rec.wait(timeout=100)}')
 app.quit()
 

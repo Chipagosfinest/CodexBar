@@ -31,10 +31,10 @@ def case_priced():
 
 
 def case_tokens():
-    """One provider, one unpriced fictitious model: spend shares would overstate, so shares must use tokens."""
+    """One provider, only unpriced fictitious models: no spend basis exists, so shares must use tokens."""
     for b in range(4):
-        kit.write_claude(NOW - timedelta(days=b), 'claude-sonnet-4-5', 600000, 90000, session=f's{b}')
-        kit.write_claude(NOW - timedelta(days=b), 'fictional-unpriced-model', 200000, 30000, session=f'u{b}')
+        kit.write_claude(NOW - timedelta(days=b), 'fictional-unpriced-model', 600000, 90000, session=f's{b}')
+        kit.write_claude(NOW - timedelta(days=b), 'fictional-unpriced-model-two', 200000, 30000, session=f'u{b}')
 
 
 def case_mixed():
@@ -45,11 +45,11 @@ def case_mixed():
 
 
 def case_partial():
-    """A request that never completed is excluded from totals, so named rows are only part of the whole."""
+    """Claude mixes priced and unpriced models, so its history is not attributable; Codex's named rows are only part."""
     for b in range(4):
         kit.write_claude(NOW - timedelta(days=b), 'claude-sonnet-4-5', 600000, 90000, session=f's{b}')
-        kit.write_claude(NOW - timedelta(days=b), 'claude-opus-4-5', 300000, 40000, session=f'o{b}')
-    kit.write_claude(NOW, 'claude-sonnet-4-5', 50000, 0, session='cut', stop=None)
+        kit.write_claude(NOW - timedelta(days=b), 'fictional-unpriced-model', 200000, 30000, session=f'u{b}')
+        kit.write_codex(NOW - timedelta(days=b), 'gpt-5.2-codex', 500000, 70000)
 
 
 def open_pane(app):
@@ -62,7 +62,7 @@ def open_pane(app):
     time.sleep(3)
 
 
-MODELS = ('claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4-5', 'gpt-5.2-codex', 'gpt-5.1-codex-mini', 'gpt-5.2',
+MODELS = ('fictional-unpriced-model-two', 'claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4-5', 'gpt-5.2-codex', 'gpt-5.1-codex-mini', 'gpt-5.2',
           'gpt-5.1-codex-max', 'fictional-unpriced-model')
 
 
@@ -101,15 +101,24 @@ def models_lens(app, tag):
     say(f'{tag} texts: ' + json.dumps(app.texts())[:1500])
 
 
+def lens_headers(app):
+    """Only the Models lens's own basis header: the pane's summary above also says Tracked tokens."""
+    w = app.win_rows()
+    top = next(r for r in w if r['label'] == 'Models' and r['w'])['y']
+    first = min((r['y'] for r in w if r['w'] and r['role'] == 'AXStaticText' and r['label'].split(',')[0] in MODELS), default=top + 60)
+    return [r['label'] for r in w if r['w'] and r['role'] == 'AXStaticText' and top < r['y'] < first]
+
+
 def visible_text(app):
     return ' | '.join(r['label'] for r in app.win_rows() if r['w'] and r['label'])
 
 
+ONLY_CLAUDE = [{'id': 'codex', 'enabled': False}, providers.CONFIG[1]]
 results = {}
 for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
-                        ('tokens', case_tokens, providers.CONFIG[1:2]),
+                        ('tokens', case_tokens, ONLY_CLAUDE),
                         ('mixed', case_mixed, providers.CONFIG[:2]),
-                        ('partial', case_partial, providers.CONFIG[1:2])):
+                        ('partial', case_partial, providers.CONFIG[:2])):
     say(f'=== {tag}')
     wipe()
     build()
@@ -117,7 +126,7 @@ for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
     kit.defaults_reset()
     # Keep the menu short enough on this 1024x768 display that its Settings row is onscreen; spend scope is unaffected.
     providers.overview_defaults(tokenCostUsageEnabled=True, mergedOverviewLayout='compact', mergedOverviewSelectedProviders=['claude'],
-                                mergedOverviewSelectionEditedActiveProviders=[p['id'] for p in cfg])
+                                mergedOverviewSelectionEditedActiveProviders=[p['id'] for p in cfg if p['enabled']])
     phase_begin(tag)
     app = App(INSTALLED, HELPER, tag)
     app.wait(lambda: reached(tag, 'api.anthropic.com'), 'launch refresh', 40)
@@ -152,14 +161,13 @@ for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
                 app.shot('priced-4-show-less')
                 check('priced: Show less returns to five rows', len(model_rows(app)) == 5, list(model_rows(app)))
     elif tag == 'tokens':
-        check('tokens: one provider with an unpriced model ranks by Tracked tokens with shares', 'Tracked tokens' in text and rows and all('%' in v for v in rows.values()), rows)
-        check('tokens: both models listed', 'fictional-unpriced-model' in rows and 'claude-sonnet-4-5' in rows, list(rows))
+        check('tokens: one provider with unpriced models ranks by Tracked tokens with shares', 'Tracked tokens' in lens_headers(app) and rows and all('%' in v for v in rows.values()), {'header': lens_headers(app), 'rows': rows})
+        check('tokens: both models listed', len(rows) == 2, list(rows))
     elif tag == 'mixed':
-        lens = [r['label'] for r in app.win_rows() if r['w'] and r['role'] == 'AXStaticText' and r['label'] == 'Tracked tokens']
-        check('mixed: two providers plus an unpriced model withhold shares and the basis', rows and not any('%' in v for v in rows.values()) and not lens, rows)
+        check('mixed: two providers plus an unpriced model withhold shares and the basis', rows and not any('%' in v for v in rows.values()) and not lens_headers(app), {'header': lens_headers(app), 'rows': rows})
         check('mixed: both models still listed', 'fictional-unpriced-model' in rows and 'gpt-5.2-codex' in rows, list(rows))
     else:
-        check('partial: an incomplete request shows the partial warning and withholds shares', 'Partial model breakdown' in text and rows and not any('%' in v for v in rows.values()), rows)
+        check('partial: unattributable history shows the partial warning and withholds shares', 'Partial model breakdown' in lens_headers(app) and rows and not any('%' in v for v in rows.values()), {'header': lens_headers(app), 'rows': rows})
     say(f'recording exit={rec.wait(timeout=60)}')
     app.quit()
 (OUT / 'models-results.json').write_text(json.dumps(results, indent=1))
