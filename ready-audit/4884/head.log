@@ -1,0 +1,27 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuCardNumericTypographyTests started.
+◇ Test "equal length percentages retain their width" started.
+◇ Test "digits in metric titles keep proportional typography" started.
+◇ Test "countdown digits retain width in the measured header" started.
+✔ Test "equal length percentages retain their width" passed after 0.061 seconds.
+✔ Test "digits in metric titles keep proportional typography" passed after 0.061 seconds.
+✔ Test "countdown digits retain width in the measured header" passed after 0.063 seconds.
+✔ Suite MenuCardNumericTypographyTests passed after 0.063 seconds.
+✔ Test run with 3 tests in 1 suite passed after 0.064 seconds.
+Building for debugging...
+[0/7] /private/tmp/codex-ready-audit/4884-typography/head/.build/arm64-apple-macosx/debug/TypographyProofPackageTests.derived/runner.swift
+[1/7] Write sources
+[4/7] Write swift-version--1AB21518FC5DEDBE.txt
+[6/9] Compiling CodexBar Colors.swift
+[7/9] Emitting module CodexBar
+[8/10] Compiling CodexBar Header.swift
+[9/12] Compiling ProofTests MenuCardNumericTypographyTests.swift
+[10/12] Emitting module ProofTests
+[11/14] Emitting module TypographyProofPackageTests
+[12/14] Compiling TypographyProofPackageTests runner.swift
+[12/14] Write Objects.LinkFileList
+[13/14] Linking TypographyProofPackageTests
+Build complete! (34.34s)
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.

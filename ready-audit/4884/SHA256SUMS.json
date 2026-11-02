@@ -1,0 +1,20 @@
+{
+  "README.md": "e47d5cb778c73b12b4dc2d8a25eef3b8ee8dda3f99e8ee1f067ef85cc245a4a7",
+  "base-compatible-tests/Package.swift": "4ef4191e490dc7195a32773d269384f1b4dfaeb3c17ebdb6b03346e105b9c20b",
+  "base-compatible-tests/Sources/CodexBar/Colors.swift": "6b46fdf83626f016a5122d03372e109dbc2117391e8baf602fa9fc57a2ebadd8",
+  "base-compatible-tests/Sources/CodexBar/Header.swift": "13f20c7a890b5f5cfbdc9b8f2798938d8ca2ca8b53f980fb7749a9baa644878a",
+  "base-compatible-tests/Tests/ProofTests/MenuCardNumericTypographyTests.swift": "bb2c18cf958b4e3f559e88234910bce9015de6b9208bc36d35eb6ddc1485910a",
+  "base-compatible-tests.log": "4f03004ba309491427f3de7ddb11961d69934f906f4e97724d2b90caba704efb",
+  "base-exact-tests/Package.swift": "4ef4191e490dc7195a32773d269384f1b4dfaeb3c17ebdb6b03346e105b9c20b",
+  "base-exact-tests/Sources/CodexBar/Colors.swift": "6b46fdf83626f016a5122d03372e109dbc2117391e8baf602fa9fc57a2ebadd8",
+  "base-exact-tests/Sources/CodexBar/Header.swift": "13f20c7a890b5f5cfbdc9b8f2798938d8ca2ca8b53f980fb7749a9baa644878a",
+  "base-exact-tests/Tests/ProofTests/MenuCardNumericTypographyTests.swift": "97c0ed5a0690f779bbe8bd9ecf1144b7dff39ba5872d649962c1169d76b5ddc8",
+  "base-exact-tests.log": "7556a8ab37d1fcebcb419eea0a3138f8972a11595a02f6e65d90b13dc43138d1",
+  "head/Package.swift": "4ef4191e490dc7195a32773d269384f1b4dfaeb3c17ebdb6b03346e105b9c20b",
+  "head/Sources/CodexBar/Colors.swift": "6b46fdf83626f016a5122d03372e109dbc2117391e8baf602fa9fc57a2ebadd8",
+  "head/Sources/CodexBar/Header.swift": "3cd70e38051a0cd9f74633af989d84fe4bfb1ccb8557357f64ba54a0d25036ad",
+  "head/Tests/ProofTests/MenuCardNumericTypographyTests.swift": "97c0ed5a0690f779bbe8bd9ecf1144b7dff39ba5872d649962c1169d76b5ddc8",
+  "head.log": "f836c5bc1b79ccfa09d78363f6a3566a1a0d6d85ca3e2cf49d143b2fcdb58925",
+  "manifest.json": "d996ece3a73f1dd93c0f7a73f40fc093f52ec2fc04df76e398233aab2674c133",
+  "run-proof.py": "67f7cb1d66b66f1bb81d3589f2ed25eaa558721b4e4a1c4d52abdf419e37171c"
+}

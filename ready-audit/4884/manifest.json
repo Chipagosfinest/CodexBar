@@ -1,0 +1,31 @@
+{
+  "head": "8c311de2545db92f4914629d3f0692a5dbf18acf",
+  "base": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+  "cases": [
+    {
+      "label": "head",
+      "sha": "8c311de2545db92f4914629d3f0692a5dbf18acf",
+      "exit": 0,
+      "headerFullFileSHA256": "66ddbf225dcef71b45e22f125f725cd83abb79a595409199ab5f5eb9908e0804",
+      "extractedHeaderSHA256": "3cd70e38051a0cd9f74633af989d84fe4bfb1ccb8557357f64ba54a0d25036ad",
+      "testsAdaptedForOldAPI": false
+    },
+    {
+      "label": "base-exact-tests",
+      "sha": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+      "exit": 1,
+      "headerFullFileSHA256": "d4278b58ad4109e09431e3341a3fd625107a0152036d8672e7890fa0bc5f3a6a",
+      "extractedHeaderSHA256": "13f20c7a890b5f5cfbdc9b8f2798938d8ca2ca8b53f980fb7749a9baa644878a",
+      "testsAdaptedForOldAPI": false
+    },
+    {
+      "label": "base-compatible-tests",
+      "sha": "897bff31731bb4b21b105f6e8bf4c32a8a8bf095",
+      "exit": 1,
+      "headerFullFileSHA256": "d4278b58ad4109e09431e3341a3fd625107a0152036d8672e7890fa0bc5f3a6a",
+      "extractedHeaderSHA256": "13f20c7a890b5f5cfbdc9b8f2798938d8ca2ca8b53f980fb7749a9baa644878a",
+      "testsAdaptedForOldAPI": true
+    }
+  ],
+  "scope": "Extracted production MetricRowHeader and MenuHighlightStyle compiled with SwiftUI/AppKit; original PR Swift Testing cases. No packaged app or full target claim."
+}
