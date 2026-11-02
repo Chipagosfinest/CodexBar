@@ -7,9 +7,9 @@ permissions:
   contents: read
   actions: read
 env:
-  PROOF_PR: "4902"
-  PROOF_SHA: c254d8b459b2654be70fbf016c55bf86db2a7815
-  PROOF_SCENARIO: s4902.py
+  PROOF_PR: "4888"
+  PROOF_SHA: 073d0643a51c7dc5e14f3b3f7f27afa27dda3f47
+  PROOF_SCENARIO: s4888.py
   PACKAGE_RUN: "41364828152"
 jobs:
   package:
@@ -59,6 +59,8 @@ jobs:
       - name: Prepare
         run: |
           set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)  # Select Xcode for widget host tests.
+          sudo xcode-select -s "$latest/Contents/Developer"
           out="$RUNNER_TEMP/proof"; mkdir -p "$out"; echo "PROOF_OUT=$out" >> "$GITHUB_ENV"
           { sw_vers; launchctl managername; } > "$out/environment.txt" 2>&1
           cp "$RUNNER_TEMP"/pkg/{product-sha.txt,binary-sha256.txt,tracked-source-changes.txt} "$out/"

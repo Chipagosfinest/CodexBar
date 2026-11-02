@@ -56,6 +56,19 @@ func describe(_ el: AXUIElement, _ depth: Int, _ limit: Int) -> [String: Any] {
     return o
 }
 switch args[1] {
+case "screen":
+    let b = CGDisplayBounds(CGMainDisplayID())
+    print(json(["x": b.origin.x, "y": b.origin.y, "w": b.size.width, "h": b.size.height]))
+case "iconcheck": // path x y w h, in points: how many distinct colours are drawn in that region of a capture.
+    guard let rep = NSBitmapImageRep(data: (try? Data(contentsOf: URL(fileURLWithPath: args[2]))) ?? Data()) else { print("{}"); exit(0) }
+    let scale = Double(rep.pixelsWide) / Double(CGDisplayBounds(CGMainDisplayID()).size.width)
+    let (x0, y0, w0, h0) = (Double(args[3])! * scale, Double(args[4])! * scale, Double(args[5])! * scale, Double(args[6])! * scale)
+    var seen = Set<UInt32>()
+    for y in Int(y0)..<min(Int(y0 + h0), rep.pixelsHigh) { for x in Int(x0)..<min(Int(x0 + w0), rep.pixelsWide) {
+        guard let c = rep.colorAt(x: x, y: y)?.usingColorSpace(.sRGB) else { continue }
+        seen.insert(UInt32(c.redComponent * 255) << 16 | UInt32(c.greenComponent * 255) << 8 | UInt32(c.blueComponent * 255))
+    } }
+    print(json(["colors": seen.count]))
 case "trusted": print(AXIsProcessTrusted(), CGPreflightScreenCaptureAccess(), CGPreflightPostEventAccess())
 case "windows": print(json(ownerWindows(args.count > 2 ? args[2] : "CodexBar")))
 case "tree":  // pid, optional attribute (AXExtrasMenuBar or AXWindows)

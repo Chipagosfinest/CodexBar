@@ -8,7 +8,10 @@ HEAD_APP, _, HELPER = sys.argv[1], sys.argv[2], sys.argv[3]
 INSTALLED = Path('/Applications/CodexBar.app')
 subprocess.run(['ditto', HEAD_APP, str(INSTALLED)], check=True)
 kit.start_fixture(); providers.install(); kit.write_credentials(); kit.write_config(providers.CONFIG)
-providers.overview_defaults()
+# Detailed cards overflow this 1024x768 display, which would hide the footer under test. A saved Compact layout and
+# subset keep More reachable; the switcher still shows all nine segments.
+providers.overview_defaults(mergedOverviewLayout='compact', mergedOverviewSelectedProviders=['claude', 'kimi', 'zai'],
+                            mergedOverviewSelectionEditedActiveProviders=providers.OVERVIEW_IDS)
 app = App(INSTALLED, HELPER, 'footer')
 app.wait(lambda: state['requests'] > 3, 'launch refresh', 40)
 time.sleep(10)
@@ -52,6 +55,7 @@ for p in cfg:
             {'id': str(uuid.UUID(int=i + 1)), 'label': f'Synthetic Account {i + 1:02d}', 'token': f'synthetic-kimi-{i + 1}',
              'addedAt': 1760000000 + i, 'lastUsed': None} for i in range(14)]}
 kit.write_config(cfg)
+kit.defaults_reset()
 providers.overview_defaults(mergedOverviewLayout='compact', mergedOverviewAllAccounts=True)
 app = App(INSTALLED, HELPER, 'overflow')
 app.wait(lambda: state['requests'] > 3, 'launch refresh', 40)

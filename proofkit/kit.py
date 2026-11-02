@@ -314,13 +314,30 @@ class App:
         say(f'TIMEOUT waiting for {what}')
         return False
 
+    def screen(self):
+        return json.loads(self.ui('screen'))
+
+    def in_screen(self, x, y):
+        s = self.screen()
+        return s['x'] <= x < s['x'] + s['w'] and s['y'] <= y < s['y'] + s['h']
+
     def open_menu(self):
         assert self.wait(self.items, 'status item', 40), 'no status item'
         it = self.items()[0]
+        # Acceptance gate: the icon must be proven onscreen and visibly drawn before anything clicks it.
+        cx, cy = it['x'] + it['w'] / 2, it['y'] + it['h'] / 2
+        assert self.in_screen(cx, cy), f'status item centre {cx},{cy} is outside {self.screen()}'
+        state['opens'] = state.get('opens', 0) + 1
+        pre = OUT / f'preclick-{self.name}-{state["opens"]}.png'
+        subprocess.run(['screencapture', '-x', str(pre)], check=True)
+        drawn = json.loads(self.ui('iconcheck', pre, it['x'], it['y'], it['w'], it['h']) or '{}')
+        assert drawn.get('colors', 0) > 2, f'status item region has no drawn icon: {drawn}'
+        say(f'preclick display captured; icon drawn colors={drawn.get("colors")} inside screen={self.screen()}')
         say(f'click status item at {it["x"]},{it["y"]} size {it["w"]}x{it["h"]}')
         self.ui('click', it['x'] + it['w'] / 2, it['y'] + it['h'] / 2)
         assert self.wait(self.menus, 'menu window', 10), 'menu did not open from a real click'
         time.sleep(1.2)
+        assert self.menu_items(), 'menu opened empty'
 
     def close_menu(self):
         for _ in range(4):
@@ -365,6 +382,7 @@ class App:
 
     def hover(self, row, steps=25):
         cx, cy = row['x'] + row['w'] / 2, row['y'] + row['h'] / 2
+        assert self.in_screen(cx, cy), f'row centre {cx},{cy} is outside the display; a click here would prove nothing'
         self.ui('move', cx, cy, steps)
         return cx, cy
 
@@ -372,6 +390,36 @@ class App:
         cx, cy = self.hover(row)
         time.sleep(0.4)
         self.ui('click', cx, cy)
+
+    def win_rows(self):
+        """Every node in the app's ordinary windows, flattened, with frames, for Settings and the share preview."""
+        out = []
+
+        def walk(n):
+            out.append({'role': n.get('role'), 'label': n.get('title') or n.get('desc') or n.get('value') or '',
+                        'x': n.get('x'), 'y': n.get('y'), 'w': n.get('w'), 'h': n.get('h'), 'help': n.get('help'), 'sub': n.get('sub')})
+            for c in n.get('kids', []):
+                walk(c)
+        for w in json.loads(self.ui('tree', self.proc.pid, 'AXWindows', 22, timeout=60) or '[]'):
+            walk(w)
+        return out
+
+    def click_at(self, r):
+        cx, cy = r['x'] + r['w'] / 2, r['y'] + r['h'] / 2
+        assert self.in_screen(cx, cy), f'target {r.get("label")} at {cx},{cy} is outside the display'
+        self.ui('move', cx, cy, 15)
+        time.sleep(0.3)
+        self.ui('click', cx, cy)
+
+    def press(self, label, roles=None):
+        """A real click on the visible window control with this exact accessible label."""
+        hits = [r for r in self.win_rows() if r['label'] == label and r['w'] and (roles is None or r['role'] in roles)]
+        assert hits, f'no visible control labelled {label!r}'
+        self.click_at(hits[0])
+        return hits[0]
+
+    def texts(self):
+        return [r['label'] for r in self.win_rows() if r['role'] == 'AXStaticText' and r['label'] and r['w']]
 
     def shot(self, name, note=''):
         time.sleep(0.5)
@@ -401,7 +449,13 @@ def find(rows, text, role=None):
     return [r for r in rows if text.lower() in (r['label'] or '').lower() and (role is None or r['role'] == role) and r['w']]
 
 
-def finish():
+def finish(require_provider_requests=True):
+    # Acceptance gate: a run where the app never reached a provider, or never opened, is a false green.
+    provider = sum(1 for line in open(OUT / 'fixture-requests.jsonl') if '__proof_fixture' not in line and '"status": 200' in line)
+    say(f'provider requests answered 200 by the fixture: {provider}')
+    if require_provider_requests:
+        assert provider > 0, 'zero provider requests: this run proves nothing'
+    assert not state.get('resolver_escapes'), f"resolver escapes: {state.get('resolver_escapes')}"
     (OUT / 'resolver-watch.json').write_text(json.dumps({'checks': state.get('resolver_checks', 0), 'escapes': state.get('resolver_escapes', [])}))
     say(f"resolver watch: {state.get('resolver_checks', 0)} checks, {len(state.get('resolver_escapes', []))} escapes")
     if state['unknown']:
