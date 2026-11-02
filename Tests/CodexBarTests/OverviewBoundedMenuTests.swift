@@ -93,6 +93,61 @@ struct OverviewBoundedMenuTests {
     }
 
     @Test
+    func `selecting an overflow row rebuilds the root menu it opened from`() async throws {
+        let previousMenuRefresh = StatusItemController.menuRefreshEnabled
+        StatusItemController.setMenuRefreshEnabledForTesting(true)
+        defer { StatusItemController.setMenuRefreshEnabledForTesting(previousMenuRefresh) }
+
+        let controller = self.overflowingController()
+        defer { controller.releaseStatusItemsForTesting() }
+        let menu = controller.makeMenu()
+        controller.mergedMenu = menu
+        controller.populateMenu(menu, provider: nil)
+        controller.openMenus[ObjectIdentifier(menu)] = menu
+        let overflow = try #require(menu.items.first { ($0.representedObject as? String) == "overviewOverflow" })
+        let child = try #require(overflow.submenu?.items.first)
+
+        var rebuilt: [NSMenu] = []
+        controller._test_openMenuRebuildObserver = { rebuilt.append($0) }
+        defer { controller._test_openMenuRebuildObserver = nil }
+
+        controller.selectOverviewProvider(child)
+        for _ in 0..<100 where rebuilt.isEmpty {
+            await Task.yield()
+            try? await Task.sleep(for: .milliseconds(10))
+        }
+
+        #expect(rebuilt.first === menu)
+        let ids = menu.items.compactMap { $0.representedObject as? String }
+        #expect(!ids.contains("overviewOverflow"))
+        #expect(!ids.contains { $0.hasPrefix("overviewRow-") })
+    }
+
+    /// A click that lands after AppKit collapsed the submenu reaches no row: the menus just close.
+    @Test
+    func `closing the overflow submenu without activating a row stays on Overview`() throws {
+        let controller = self.overflowingController()
+        defer { controller.releaseStatusItemsForTesting() }
+        let menu = controller.makeMenu()
+        controller.mergedMenu = menu
+        let providerBefore = controller.settings.selectedMenuProvider
+
+        // Opening the root rebuilds it, so the submenu has to come from the opened menu.
+        controller.menuWillOpen(menu)
+        let overflow = try #require(menu.items.first { ($0.representedObject as? String) == "overviewOverflow" })
+        let submenu = try #require(overflow.submenu)
+        #expect(submenu.supermenu === menu)
+        controller.menuWillOpen(submenu)
+        controller.menuDidClose(submenu)
+        controller.menuDidClose(menu)
+        controller.menuWillOpen(menu)
+
+        #expect(controller.settings.mergedMenuLastSelectedWasOverview)
+        #expect(controller.settings.selectedMenuProvider == providerBefore)
+        #expect(menu.items.contains { ($0.representedObject as? String) == "overviewOverflow" })
+    }
+
+    @Test
     func `a short roster has no overflow row`() {
         let controller = self.controller(layout: .compact)
         defer { controller.releaseStatusItemsForTesting() }
