@@ -45,26 +45,26 @@ def texts(app):
     return [r['label'] for r in app.rows() if r['label']]
 
 
-for name, refresh, seconds in (('far-manual', 'manual', 3600), ('near-manual', 'manual', 150), ('far-minute', 'oneMinute', 3600)):
-    phase_begin(name)
-    reset['t'] = kit.epoch(timedelta(seconds=seconds))
-    kit.defaults_reset()
-    providers.overview_defaults(refreshFrequency=refresh, mergedOverviewSelectedProviders=SELECT,
-                                mergedOverviewSelectionEditedActiveProviders=SELECT, unifiedIconSource='allProviders')
-    app = App(HEAD_APP, HELPER, name)
-    app.wait(app.items, 'status item', 40)
-    for t in (15, 30, 60):
-        time.sleep(t - (0 if t == 15 else {30: 15, 60: 30}[t]))
-        say(f'{name} t={t}: {label(app)!r}')
-    app.open_menu()
-    app.shot(f'{name}-menu', 'menu open')
-    (OUT / f'{name}-labels.json').write_text(json.dumps(texts(app), indent=1))
-    say(f'{name} menu rows: {[x for x in texts(app) if "left" in x.lower() or "weekly" in x.lower() or "session" in x.lower()][:10]}')
-    app.close_menu()
-    if name == 'near-manual':
-        n = sum(1 for e in state.get('log', []) if e['path'] == '/backend-api/wham/usage' and e['phase'] == name)
-        time.sleep(100)
-        m = sum(1 for e in state.get('log', []) if e['path'] == '/backend-api/wham/usage' and e['phase'] == name)
-        say(f'near-manual after reset: {label(app)!r} requests {n}->{m}')
-    app.quit()
+phase_begin('reset')
+reset['t'] = kit.epoch(timedelta(seconds=75))
+kit.defaults_reset()
+providers.overview_defaults(refreshFrequency='manual', mergedOverviewSelectedProviders=SELECT,
+                            mergedOverviewSelectionEditedActiveProviders=SELECT, unifiedIconSource='allProviders')
+app = App(HEAD_APP, HELPER, 'reset')
+app.wait(app.items, 'status item', 40)
+time.sleep(20)
+before_label = label(app)
+check('manual refresh: Codex at 100% weekly warns before its reset', 'Codex near limit, 0% left' in before_label, before_label)
+app.ui('move', 300, 400, 8)
+app.shot('reset-1-warning')
+count = lambda: sum(1 for e in state.get('log', []) if e['path'] == '/backend-api/wham/usage')
+n = count()
+# Reset passes at about 75s; the redraw tick is at most a minute later. Plain sleeps so the driver provokes nothing.
+time.sleep(max(0, reset['t'] - kit.epoch(timedelta(0))) + 70)
+after_label = label(app)
+m = count()
+check('manual refresh: the warning clears after the reset from the clock alone, with no new request',
+      'near limit' not in after_label and m == n, f'requests {n}->{m} {before_label!r} -> {after_label!r}')
+app.shot('reset-2-cleared')
+app.quit()
 kit.finish()
