@@ -3,6 +3,12 @@ import sys
 root=pathlib.Path(sys.argv[3]); root.mkdir(parents=True,exist_ok=True)
 stable=pathlib.Path(sys.argv[1])
 head=pathlib.Path(sys.argv[2])
+expected_head='11935aee6ec16fe23595dbddaada349562218547'
+actual_head=subprocess.check_output(['git','-C',str(head.parent.parent.parent),'rev-parse','HEAD'],text=True).strip()
+assert actual_head==expected_head,(actual_head,expected_head)
+stable_version=subprocess.check_output([str(stable),'--version'],text=True).strip()
+assert stable_version=='CodexBar 0.83.0',stable_version
+binary_hashes={'stable':hashlib.sha256(stable.read_bytes()).hexdigest(),'head':hashlib.sha256(head.read_bytes()).hexdigest()}
 rows=[]
 for mode in ['auto','manual','off']:
  cfg=root/f'{mode}.json'; cfg.write_text(json.dumps({'version':1,'providers':[{'id':'ollama','enabled':True,'cookieSource':mode,**({'cookieHeader':'session=synthetic-upgrade-fixture'} if mode=='manual' else {})}]}))
@@ -16,6 +22,6 @@ for mode in ['auto','manual','off']:
  before_dump=get(stable,'dump'); after_dump=get(head,'dump'); validation=get(head,'validate')
  assert before_dump==after_dump,(mode,before_dump,after_dump)
  assert cfg.read_bytes()==before
- rows.append({'savedCookieSource':mode,'writtenBy':'released v0.83.0 CLI','head':'11935aee6ec16fe23595dbddaada349562218547','decodedNormalizedConfigEqual':True,'fileUnchanged':True,'configSHA256':digest,'validation':validation})
+ rows.append({'savedCookieSource':mode,'writtenBy':'released v0.83.0 CLI','head':actual_head,'stableReportedVersion':stable_version,'executableSHA256':binary_hashes,'decodedNormalizedConfigEqual':True,'fileUnchanged':True,'configSHA256':digest,'validation':validation})
 (root/'results.json').write_text(json.dumps(rows,indent=2)+'\n')
 print(json.dumps(rows,indent=2))

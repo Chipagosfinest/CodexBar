@@ -11,8 +11,10 @@ Downloaded the official released `CodexBarCLI-v0.83.0-macos-arm64.tar.gz` and ve
 The released CLI writes three isolated configs with Auto source and Auto, Manual and Off cookie modes. The freshly built head CLI and stable CLI decode to equal normalized JSON; head validation reports no issues; saved bytes stay unchanged in all three cases. `4903-upgrade-results.json` contains observed hashes and assertions. Reproduce with:
 
 ```sh
-python3 4903-config-upgrade.py /absolute/stable/CodexBarCLI /absolute/head/CodexBarCLI /tmp/isolated-upgrade
+python3 /absolute/evidence/4903-config-upgrade.py /absolute/stable/CodexBarCLI /absolute/head/CodexBarCLI /tmp/isolated-upgrade
 ```
+
+The reproducer checks the stable reported version and head worktree SHA, and records both executable hashes. Build the head CLI freshly from the specified clean worktree before running; a worktree SHA alone does not identify arbitrary replacement binaries.
 
 Only synthetic settings and a synthetic cookie are used. No real config, browser, defaults domain, Keychain, provider account or credential is accessed.
 
@@ -21,7 +23,7 @@ Only synthetic settings and a synthetic cookie are used. No real config, browser
 `4903-routing.swift` calls the production descriptor's resolver with a synthetic ambient API key and each cookie mode. Compile it from the PR worktree:
 
 ```sh
-swiftc -parse-as-library -I .build/debug -Xcc -fmodule-map-file=.build/out/Intermediates.noindex/GeneratedModuleMaps/CQuickJS.modulemap -L .build/debug -lCodexBarCore 4903-routing.swift -o /tmp/4903-routing
+swiftc -parse-as-library -I .build/debug -Xcc -fmodule-map-file=.build/out/Intermediates.noindex/GeneratedModuleMaps/CQuickJS.modulemap -L .build/debug -lCodexBarCore /absolute/evidence/4903-routing.swift -o /tmp/4903-routing
 /tmp/4903-routing
 ```
 

@@ -3,6 +3,11 @@
     "savedCookieSource": "auto",
     "writtenBy": "released v0.83.0 CLI",
     "head": "11935aee6ec16fe23595dbddaada349562218547",
+    "stableReportedVersion": "CodexBar 0.83.0",
+    "executableSHA256": {
+      "stable": "ac282e970df39f9c487105ba47f555a3cb5014b13ff5b95a3821f0948f7ef0df",
+      "head": "f746fba330c0981faf397764073c59111e8c4009c311cd8de4311e89b9df137f"
+    },
     "decodedNormalizedConfigEqual": true,
     "fileUnchanged": true,
     "configSHA256": "2cce7c80792d05e1783f3a5ef6c20d8926ae41b939bf683c1f6c8b0e0b04bbea",
@@ -12,6 +17,11 @@
     "savedCookieSource": "manual",
     "writtenBy": "released v0.83.0 CLI",
     "head": "11935aee6ec16fe23595dbddaada349562218547",
+    "stableReportedVersion": "CodexBar 0.83.0",
+    "executableSHA256": {
+      "stable": "ac282e970df39f9c487105ba47f555a3cb5014b13ff5b95a3821f0948f7ef0df",
+      "head": "f746fba330c0981faf397764073c59111e8c4009c311cd8de4311e89b9df137f"
+    },
     "decodedNormalizedConfigEqual": true,
     "fileUnchanged": true,
     "configSHA256": "9387a9b89063c009a9e58648304298cab5b6a67a34fe8b94e1af14ae769ac720",
@@ -21,6 +31,11 @@
     "savedCookieSource": "off",
     "writtenBy": "released v0.83.0 CLI",
     "head": "11935aee6ec16fe23595dbddaada349562218547",
+    "stableReportedVersion": "CodexBar 0.83.0",
+    "executableSHA256": {
+      "stable": "ac282e970df39f9c487105ba47f555a3cb5014b13ff5b95a3821f0948f7ef0df",
+      "head": "f746fba330c0981faf397764073c59111e8c4009c311cd8de4311e89b9df137f"
+    },
     "decodedNormalizedConfigEqual": true,
     "fileUnchanged": true,
     "configSHA256": "17a401e2f1078889550a9b955d6353b8dfc0587b69c41dd60b27be1d27cfc73b",
