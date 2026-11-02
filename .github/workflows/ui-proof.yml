@@ -68,10 +68,12 @@ jobs:
           test ! -s "$out/tracked-source-changes.txt"
           git rev-parse HEAD > "$out/kit-sha.txt"
           ditto -x -k "$RUNNER_TEMP/pkg/CodexBar.zip" "$RUNNER_TEMP/head"
+          test "$(shasum -a 256 "$RUNNER_TEMP/head/CodexBar.app/Contents/MacOS/CodexBar" | cut -d' ' -f1)" = "$(cut -d' ' -f1 "$out/binary-sha256.txt")"  # extracted bytes match the manifest
           swiftc -O -o "$RUNNER_TEMP/uihelper" proofkit/uihelper.swift
           curl -fsSL -o "$RUNNER_TEMP/v083.zip" https://github.com/steipete/CodexBar/releases/download/v0.83.0/CodexBar-macos-universal-0.83.0.zip
           shasum -a 256 "$RUNNER_TEMP/v083.zip" > "$out/v083-zip-sha256.txt"
           curl -fsSL https://github.com/steipete/CodexBar/releases/download/v0.83.0/CodexBar-macos-universal-0.83.0.zip.sha256 >> "$out/v083-zip-sha256.txt"
+          test "$(awk 'NR==1{print $1}' "$out/v083-zip-sha256.txt")" = "$(awk 'NR==2{print $1}' "$out/v083-zip-sha256.txt")"  # stable checksum matches download
           ditto -x -k "$RUNNER_TEMP/v083.zip" "$RUNNER_TEMP/v083"
           codesign -dv "$RUNNER_TEMP/v083/CodexBar.app" > "$out/v083-codesign.txt" 2>&1 || true
       - name: Drive the installed app

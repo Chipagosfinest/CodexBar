@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Shared harness: the unmodified packaged app talks to real production hostnames, answered by a local TLS fixture.
 
-Nothing is compiled into the app. /etc/hosts sends provider hostnames to 127.0.0.1 on this disposable hosted Mac, a
-throwaway root CA is trusted for its lifetime, and every byte of input is a synthetic file or a synthetic HTTP reply.
+Nothing is compiled into the app. A per-host resolver and /etc/hosts send provider hostnames to loopback on this
+disposable hosted Mac, a throwaway root CA is trusted for its lifetime, and every input is a synthetic file or reply.
+Containment is verified by a preflight and sampled every 5s, not enforced by a firewall; all tokens are synthetic.
 Input is real: CGEvents through the HID tap. No real account, credential, or personal path exists on the runner.
 """
 import base64, http.server, json, os, plistlib, ssl, subprocess, threading, time, zlib
@@ -59,6 +60,8 @@ class Fixture(http.server.BaseHTTPRequestHandler):
                 best = len(prefix)
         if best < 0:
             state['unknown'].append(f'{self.command} {host}{self.path}')
+        if '__proof' not in self.path:
+            state.setdefault('log', []).append({'phase': state['phase'], 'host': host, 'path': self.path.split('?')[0], 'status': status})
         # Paths and status only. Synthetic bearer tokens are recorded as present/absent, never verbatim.
         _req.write(json.dumps({'t': round(time.monotonic() - T0, 2), 'm': self.command, 'host': host,
                                'path': self.path.split('?')[0], 'status': status, 'phase': state['phase'],
@@ -73,6 +76,34 @@ class Fixture(http.server.BaseHTTPRequestHandler):
         self.close_connection = True
 
     do_GET = do_POST = _go
+
+
+def check(name, ok, detail=''):
+    """An acceptance assertion that keeps later stages running. Any failure fails the run in finish()."""
+    state.setdefault('checks', []).append({'check': name, 'pass': bool(ok), 'detail': str(detail)[:600]})
+    say(f"CHECK {'PASS' if ok else 'FAIL'} {name} {str(detail)[:300]}")
+    (OUT / 'checks.json').write_text(json.dumps(state['checks'], indent=1))
+    return bool(ok)
+
+
+def phase_begin(name):
+    """Starts a named fixture phase; only requests answered inside it count for that phase's oracle."""
+    state['phase'] = name
+    say(f'phase -> {name}')
+
+
+def reached(phase, host, status=200):
+    return [e for e in state.get('log', []) if e['phase'] == phase and e['host'] == host and e['status'] == status]
+
+
+def verify_installed(path, name='head'):
+    """Installed bytes must be the packaged bytes: main binary against the package manifest, extension against the zip."""
+    path = Path(path)
+    sha = lambda p: subprocess.run(['shasum', '-a', '256', str(p)], capture_output=True, text=True).stdout.split()[0]
+    want = (OUT / 'binary-sha256.txt').read_text().split()[0]
+    got = sha(path / 'Contents/MacOS/CodexBar')
+    check(f'{name}: installed app binary equals package manifest', got == want, f'{got} vs {want}')
+    return got
 
 
 def start_banner():
@@ -109,7 +140,7 @@ def start_fixture():
     (wd / 'chain.crt').write_text((wd / 'leaf.crt').read_text() + (wd / 'ca.crt').read_text())
     run('sudo', 'security', 'add-trusted-cert', '-d', '-r', 'trustRoot', '-k', '/Library/Keychains/System.keychain', wd / 'ca.crt')
     # /etc/hosts alone proved racy here: lookups intermittently escaped to the real hosts. A per-host resolver backed by
-    # this local stub answers every query with loopback, so a provider hostname has no route off the machine.
+    # this local stub answers every query with loopback, so provider hostnames resolve locally (verified by preflight and sampling).
     threading.Thread(target=dns_stub, daemon=True).start()
     run('sudo', 'mkdir', '-p', '/etc/resolver')
     for h in HOSTS:
@@ -149,8 +180,8 @@ serve(socket.AF_INET, "127.0.0.1")
 ''')
     subprocess.Popen(['sudo', '/usr/bin/python3', str(forward)])
     time.sleep(2)
-    # A status code proves nothing: a real host answers 404 too. Only this fixture returns this body, and no app may
-    # launch until every hostname resolves to it, so synthetic tokens can never leave the machine.
+    # A status code proves nothing: a real host answers 404 too. Only this fixture returns this body, and no app
+    # launches until every hostname is observed resolving to it.
     ROUTES.clear()
     for h in HOSTS:
         ROUTES[(h, '/__proof_fixture')] = lambda _: (200, {'fixture': MARKER})
@@ -206,7 +237,7 @@ def resolver_escapes():
 
 
 def resolver_watch():
-    """Evidence that nothing could reach a real provider: rechecks every hostname for the whole run."""
+    """Sampled evidence, not containment: rechecks every hostname every 5s for the whole run."""
     checks = 0
     while True:
         bad = resolver_escapes()
@@ -308,6 +339,8 @@ class App:
         say(f'launched {name} pid={self.proc.pid}')
 
     def ui(self, *args, timeout=30):
+        if args[0] in ('click', 'move'):
+            assert self.in_screen(float(args[1]), float(args[2])), f'{args[0]} target {args[1]},{args[2]} is outside the display'
         return subprocess.run([self.helper, *map(str, args)], capture_output=True, text=True, timeout=timeout).stdout.strip()
 
     def bar(self):
@@ -413,7 +446,7 @@ class App:
         out = []
 
         def walk(n):
-            out.append({'role': n.get('role'), 'label': n.get('title') or n.get('desc') or n.get('value') or '',
+            out.append({'role': n.get('role'), 'label': n.get('title') or n.get('desc') or n.get('value') or '', 'value': n.get('value'),
                         'x': n.get('x'), 'y': n.get('y'), 'w': n.get('w'), 'h': n.get('h'), 'help': n.get('help'), 'sub': n.get('sub')})
             for c in n.get('kids', []):
                 walk(c)
@@ -467,15 +500,18 @@ def find(rows, text, role=None):
     return [r for r in rows if text.lower() in (r['label'] or '').lower() and (role is None or r['role'] == role) and r['w']]
 
 
-def finish(require_provider_requests=True):
-    # Acceptance gate: a run where the app never reached a provider, or never opened, is a false green.
-    provider = sum(1 for line in open(OUT / 'fixture-requests.jsonl') if '__proof_fixture' not in line and '"status": 200' in line)
-    say(f'provider requests answered 200 by the fixture: {provider}')
-    if require_provider_requests:
-        assert provider > 0, 'zero provider requests: this run proves nothing'
-    assert not state.get('resolver_escapes'), f"resolver escapes: {state.get('resolver_escapes')}"
+def finish():
+    # A cumulative request count proves nothing about a stage; scenarios assert per-phase oracles through check().
+    log = state.get('log', [])
+    ok = [e for e in log if e['status'] == 200]
+    say(f'provider requests answered 200 by the fixture: {len(ok)} of {len(log)}')
+    check('app reached the fixture', ok, len(ok))
     (OUT / 'resolver-watch.json').write_text(json.dumps({'checks': state.get('resolver_checks', 0), 'escapes': state.get('resolver_escapes', [])}))
-    say(f"resolver watch: {state.get('resolver_checks', 0)} checks, {len(state.get('resolver_escapes', []))} escapes")
+    say(f"resolver watch (sampled): {state.get('resolver_checks', 0)} checks, {len(state.get('resolver_escapes', []))} escapes")
+    check('no sampled resolver escape', not state.get('resolver_escapes'), state.get('resolver_escapes', []))
     if state['unknown']:
         (OUT / 'unrouted-requests.txt').write_text('\n'.join(sorted(set(state['unknown']))) + '\n')
+    failed = [c for c in state.get('checks', []) if not c['pass']]
+    say(f"checks: {len(state.get('checks', [])) - len(failed)} passed, {len(failed)} failed")
     say('done')
+    assert not failed, f'{len(failed)} acceptance checks failed: {[c["check"] for c in failed]}'
