@@ -1,0 +1,42 @@
+=== head-pass
+✔ Suite MenuCardStaleTintTests passed after 0.175 seconds.
+✔ Test "account subtitle override does not hide a failed refresh" passed after 0.174 seconds.
+✔ Test "failed first fetch has no retained measurement to tint" passed after 0.174 seconds.
+✔ Test "failed quota refresh preserves fresh supplemental cost tint" passed after 0.174 seconds.
+✔ Test "failed refresh tints retained bars neutral" passed after 0.174 seconds.
+✔ Test "successful refresh keeps the provider tint" passed after 0.174 seconds.
+✔ Test run with 5 tests in 1 suite passed after 0.175 seconds.
+Build complete! (1706.59s)
+=== head-neutralised-fail
+✘ Suite MenuCardStaleTintTests failed after 0.197 seconds with 5 issues.
+✘ Test "account subtitle override does not hide a failed refresh" failed after 0.196 seconds with 2 issues.
+✘ Test "account subtitle override does not hide a failed refresh" recorded an issue at MenuCardStaleTintTests.swift:90:9: Expectation failed: (model → Model(provider: CodexBarCore.UsageProvider.claude
+✘ Test "account subtitle override does not hide a failed refresh" recorded an issue at MenuCardStaleTintTests.swift:91:9: Expectation failed: (self.quotaBarTint(model) → #CC7C5EFF) == (UsageMenuCardVi
+✔ Test "failed first fetch has no retained measurement to tint" passed after 0.191 seconds.
+✘ Test "failed quota refresh preserves fresh supplemental cost tint" failed after 0.191 seconds with 1 issue.
+✘ Test "failed quota refresh preserves fresh supplemental cost tint" recorded an issue at MenuCardStaleTintTests.swift:73:9: Expectation failed: (self.quotaBarTint(failed) → #CC7C5EFF) == (UsageMenuCa
+✘ Test "failed refresh tints retained bars neutral" failed after 0.191 seconds with 2 issues.
+✘ Test "failed refresh tints retained bars neutral" recorded an issue at MenuCardStaleTintTests.swift:82:9: Expectation failed: (model → Model(provider: CodexBarCore.UsageProvider.claude, providerName
+✘ Test "failed refresh tints retained bars neutral" recorded an issue at MenuCardStaleTintTests.swift:83:9: Expectation failed: (self.quotaBarTint(model) → #CC7C5EFF) == (UsageMenuCardView.Model.stale
+✔ Test "successful refresh keeps the provider tint" passed after 0.191 seconds.
+✘ Test run with 5 tests in 1 suite failed after 0.197 seconds with 5 issues.
+Build complete! (67.40s)
+=== base-fail
+    |                                                                      `- error: type 'UsageMenuCardView.Model' has no member 'staleProgressColor'
+    |                                                                     `- error: type 'UsageMenuCardView.Model' has no member 'staleProgressColor'
+    |                                                                    `- error: value of type 'MetricRow' has no member 'barTint'
+    |                                          `- error: extra argument 'isRetainedMeasurement' in call
+    |                                          `- error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+    |                        `- error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+    |                       `- error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:105:24: error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:59:42: error: extra argument 'isRetainedMeasurement' in call
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:59:42: error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:59:68: error: value of type 'MetricRow' has no member 'barTint'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:73:70: error: type 'UsageMenuCardView.Model' has no member 'staleProgressColor'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:82:23: error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:83:69: error: type 'UsageMenuCardView.Model' has no member 'staleProgressColor'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:90:23: error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:91:69: error: type 'UsageMenuCardView.Model' has no member 'staleProgressColor'
+/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuCardStaleTintTests.swift:97:24: error: value of type 'UsageMenuCardView.Model' has no member 'showsRetainedMeasurement'
+error: fatalError

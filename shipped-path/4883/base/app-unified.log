@@ -1,0 +1,5 @@
+Timestamp               Ty Process[PID:TID]
+2026-11-02 00:52:35.809 E  CodexBar[19349:d919] [com.apple.defaults:User Defaults] Couldn't read values in CFPrefsPlistSource<0x726c84700> (Domain: Y5PE65HELJ.com.steipete.codexbar.debug, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers, detaching from cfprefsd
+2026-11-02 00:52:40.925 Df CodexBar[19349:d919] [com.apple.WebKit:ViewState] 0x12a10c190 [pageProxyID=7, webPageID=8, PID=19414, DisplayID=1] RemoteLayerTreeDrawingAreaProxyMac::scheduleDisplayRefreshCallbacks
+2026-11-02 00:52:40.955 Df CodexBar[19349:d919] [com.apple.WebKit:ViewState] 0x12a10c190 [pageProxyID=7, webPageID=8, PID=19414, DisplayID=1] RemoteLayerTreeDrawingAreaProxyMac::didRefreshDisplay
+2026-11-02 00:52:44.284 E  CodexBar[19349:d919] [com.steipete.codexbar:app] slow menu operation (durationMs=330.7 items=10 openMenus=0 operation=populateMenu provider=commandcode storeRefreshing=0)

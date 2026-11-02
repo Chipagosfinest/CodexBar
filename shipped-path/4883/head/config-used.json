@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "providers": [
+    {
+      "id": "codex",
+      "enabled": false
+    },
+    {
+      "id": "claude",
+      "enabled": false
+    },
+    {
+      "id": "commandcode",
+      "enabled": true,
+      "source": "api",
+      "apiKey": "synthetic-commandcode-key"
+    }
+  ]
+}

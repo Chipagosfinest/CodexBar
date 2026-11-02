@@ -1,0 +1,15 @@
+   0.09s trusted(ax,screen,post)=true true true
+   3.12s launch refresh reached fixture=True windows=[]
+   8.64s clicking status item at {'x': 740, 'w': 55, 'y': 3, 'h': 24}
+  14.53s {"state": "1-success", "note": "launch refresh succeeded", "menu_open": true, "requests_ok": 4, "requests_dropped": 0, "purple_pixels": 2316}
+  14.53s 2-first-failure: fixture=fail, Command-R in the open menu
+  14.77s 2-first-failure: refresh reached fixture=True
+  18.42s {"state": "2-first-failure", "note": "first failure: the consecutive-failure gate keeps it silent", "menu_open": true, "requests_ok": 4, "requests_dropped": 6, "purple_pixels": 2316}
+  18.42s 3-failed-retained: fixture=fail, Command-R in the open menu
+  18.60s 3-failed-retained: refresh reached fixture=True
+  22.17s {"state": "3-failed-retained", "note": "second failure: error surfaces with the retained snapshot", "menu_open": true, "requests_ok": 4, "requests_dropped": 12, "purple_pixels": 98}
+  22.18s 4-recovered: fixture=recovered, Command-R in the open menu
+  22.33s 4-recovered: refresh reached fixture=True
+  25.91s {"state": "4-recovered", "note": "fixture recovered with new values", "menu_open": true, "requests_ok": 6, "requests_dropped": 12, "purple_pixels": 2272}
+  44.02s recording exit=0
+  47.55s done

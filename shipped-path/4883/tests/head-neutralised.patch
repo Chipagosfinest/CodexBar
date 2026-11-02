@@ -1,0 +1,26 @@
+diff --git a/Sources/CodexBar/Menu/MenuCardMetricRow.swift b/Sources/CodexBar/Menu/MenuCardMetricRow.swift
+index 69d71426e..5d1c3a29c 100644
+--- a/Sources/CodexBar/Menu/MenuCardMetricRow.swift
++++ b/Sources/CodexBar/Menu/MenuCardMetricRow.swift
+@@ -12,7 +12,7 @@ struct MetricRow: View {
+ 
+     /// Precedence: a retained (stale) measurement stays neutral, so no per-metric cue may tint it as current.
+     var barTint: Color {
+-        self.isRetainedMeasurement ? UsageMenuCardView.Model.staleProgressColor : self.progressColor
++        self.progressColor
+     }
+ 
+     var body: some View {
+diff --git a/Sources/CodexBar/Menu/MenuCardView.swift b/Sources/CodexBar/Menu/MenuCardView.swift
+index d43f66b30..4ca88e16c 100644
+--- a/Sources/CodexBar/Menu/MenuCardView.swift
++++ b/Sources/CodexBar/Menu/MenuCardView.swift
+@@ -973,7 +973,7 @@ extension UsageMenuCardView.Model {
+                 now: input.now)
+         let redacted = Self.redactedText(input: input, subtitle: subtitle)
+         // Derived from the refresh outcome, not the subtitle, which account overrides can replace.
+-        let showsRetainedMeasurement = input.snapshot != nil && Self.lastError(input: input) != nil
++        let showsRetainedMeasurement = false
+         let placeholder = Self.placeholder(input: input)
+         let providerDetails = Self.visibleProviderDetails(
+             input: input,

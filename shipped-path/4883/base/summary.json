@@ -1,0 +1,34 @@
+[
+  {
+    "state": "1-success",
+    "note": "launch refresh succeeded",
+    "menu_open": true,
+    "requests_ok": 4,
+    "requests_dropped": 0,
+    "purple_pixels": 2316
+  },
+  {
+    "state": "2-first-failure",
+    "note": "first failure: the consecutive-failure gate keeps it silent",
+    "menu_open": true,
+    "requests_ok": 4,
+    "requests_dropped": 6,
+    "purple_pixels": 2316
+  },
+  {
+    "state": "3-failed-retained",
+    "note": "second failure: error surfaces with the retained snapshot",
+    "menu_open": true,
+    "requests_ok": 4,
+    "requests_dropped": 12,
+    "purple_pixels": 2316
+  },
+  {
+    "state": "4-recovered",
+    "note": "fixture recovered with new values",
+    "menu_open": true,
+    "requests_ok": 6,
+    "requests_dropped": 12,
+    "purple_pixels": 2272
+  }
+]

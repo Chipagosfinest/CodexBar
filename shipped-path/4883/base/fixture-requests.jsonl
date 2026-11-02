@@ -1,0 +1,18 @@
+{"t": 2.38, "path": "/alpha/billing/credits", "phase": "success", "auth_is_synthetic_key": true, "response": 200, "body": {"credits": {"monthlyCredits": 80, "monthlyCreditsGranted": 100, "purchasedCredits": 0, "windowLimits": {"fiveHour": {"cap": 100, "used": 89, "resetAt": "2026-11-02T02:52:38.000Z"}, "weekly": {"cap": 100, "used": 40, "resetAt": "2026-11-05T00:52:38.000Z"}}}}}
+{"t": 2.38, "path": "/alpha/billing/subscriptions", "phase": "success", "auth_is_synthetic_key": true, "response": 200, "body": {"success": true, "data": {"planId": "individual-pro", "status": "active", "currentPeriodEnd": "2026-11-22T00:52:38.000Z"}}}
+{"t": 2.88, "path": "/alpha/billing/credits", "phase": "success", "auth_is_synthetic_key": true, "response": 200, "body": {"credits": {"monthlyCredits": 80, "monthlyCreditsGranted": 100, "purchasedCredits": 0, "windowLimits": {"fiveHour": {"cap": 100, "used": 89, "resetAt": "2026-11-02T02:52:38.000Z"}, "weekly": {"cap": 100, "used": 40, "resetAt": "2026-11-05T00:52:38.000Z"}}}}}
+{"t": 2.88, "path": "/alpha/billing/subscriptions", "phase": "success", "auth_is_synthetic_key": true, "response": 200, "body": {"success": true, "data": {"planId": "individual-pro", "status": "active", "currentPeriodEnd": "2026-11-22T00:52:38.000Z"}}}
+{"t": 11.1, "path": "/alpha/billing/subscriptions", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 11.1, "path": "/alpha/billing/credits", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 11.1, "path": "/alpha/billing/subscriptions", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 11.1, "path": "/alpha/billing/credits", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 11.1, "path": "/alpha/billing/subscriptions", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 11.1, "path": "/alpha/billing/credits", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 14.51, "path": "/alpha/billing/subscriptions", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 14.51, "path": "/alpha/billing/credits", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 14.52, "path": "/alpha/billing/subscriptions", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 14.52, "path": "/alpha/billing/credits", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 14.52, "path": "/alpha/billing/subscriptions", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 14.52, "path": "/alpha/billing/credits", "phase": "fail", "auth_is_synthetic_key": true, "response": "connection closed with no reply"}
+{"t": 18.04, "path": "/alpha/billing/subscriptions", "phase": "recovered", "auth_is_synthetic_key": true, "response": 200, "body": {"success": true, "data": {"planId": "individual-pro", "status": "active", "currentPeriodEnd": "2026-11-22T00:52:53.000Z"}}}
+{"t": 18.04, "path": "/alpha/billing/credits", "phase": "recovered", "auth_is_synthetic_key": true, "response": 200, "body": {"credits": {"monthlyCredits": 79, "monthlyCreditsGranted": 100, "purchasedCredits": 0, "windowLimits": {"fiveHour": {"cap": 100, "used": 90, "resetAt": "2026-11-02T02:52:53.000Z"}, "weekly": {"cap": 100, "used": 41, "resetAt": "2026-11-05T00:52:53.000Z"}}}}}

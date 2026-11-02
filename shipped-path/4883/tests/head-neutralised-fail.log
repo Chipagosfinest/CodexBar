@@ -1,0 +1,58 @@
+[0/1] Planning build
+Building for debugging...
+[0/17] Write sources
+[1/17] Write swift-version-7974D3F7F03D5E95.txt
+[3/8] Compiling CodexBar MenuCardView.swift
+[4/8] Emitting module CodexBar
+/Users/runner/work/CodexBar/CodexBar/product/Sources/CodexBar/AgentSessionsStore.swift:58:13: warning: 'nonisolated(unsafe)' has no effect on property 'powerAssertionID', consider using 'nonisolated'
+ 56 |     private let remoteFetcher: RemoteSessionFetcher
+ 57 |     private let powerAssertion: AgentSessionPowerAssertion
+ 58 |     private nonisolated(unsafe) var powerAssertionID: UInt32? // Read last in deinit: its getter escapes self.
+    |             `- warning: 'nonisolated(unsafe)' has no effect on property 'powerAssertionID', consider using 'nonisolated'
+ 59 |     private let periodicSleep: PeriodicSleep
+ 60 |     private let powerState: PowerState
+
+/Users/runner/work/CodexBar/CodexBar/product/Sources/CodexBar/Providers/Claude/UsageStore+ClaudeDebug.swift:132:50: warning: string interpolation produces a debug description for an optional value; did you mean to make this explicit?
+130 | 
+131 |                     let sessionReset = web.sessionResetsAt?.description ?? "nil"
+132 |                     lines.append("session_used=\(web.sessionPercentUsed)% resetsAt=\(sessionReset)")
+    |                                                  |   |- note: use a default value parameter to avoid this warning
+    |                                                  |   |- note: provide a default value to avoid this warning
+    |                                                  |   `- note: use 'String(describing:)' to silence this warning
+    |                                                  `- warning: string interpolation produces a debug description for an optional value; did you mean to make this explicit?
+133 | 
+134 |                     if let weekly = web.weeklyPercentUsed {
+[5/8] Compiling CodexBar MenuCardMetricRow.swift
+[5/10] Write Objects.LinkFileList
+[6/10] Linking CodexBar
+[7/10] Applying CodexBar
+[8/10] Write Objects.LinkFileList
+[9/10] Linking CodexBarPackageTests
+Build complete! (67.40s)
+Test Suite 'Selected tests' started at 2026-11-01 22:41:52.720.
+Test Suite 'CodexBarPackageTests.xctest' started at 2026-11-01 22:41:52.737.
+Test Suite 'CodexBarPackageTests.xctest' passed at 2026-11-01 22:41:52.737.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite 'Selected tests' passed at 2026-11-01 22:41:52.737.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.018) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite MenuCardStaleTintTests started.
+◇ Test "failed quota refresh preserves fresh supplemental cost tint" started.
+◇ Test "successful refresh keeps the provider tint" started.
+◇ Test "failed first fetch has no retained measurement to tint" started.
+◇ Test "failed refresh tints retained bars neutral" started.
+◇ Test "account subtitle override does not hide a failed refresh" started.
+✘ Test "failed quota refresh preserves fresh supplemental cost tint" recorded an issue at MenuCardStaleTintTests.swift:73:9: Expectation failed: (self.quotaBarTint(failed) → #CC7C5EFF) == (UsageMenuCardView.Model.staleProgressColor → AppKitPlatformColorProvider(platformColor: Catalog color: System secondaryLabelColor))
+✘ Test "failed refresh tints retained bars neutral" recorded an issue at MenuCardStaleTintTests.swift:82:9: Expectation failed: (model → Model(provider: CodexBarCore.UsageProvider.claude, providerName: "Claude", email: "", accountIdentityFingerprint: nil, subtitleText: "Claude Code credentials changed.", subtitleStyle: CodexBar.UsageMenuCardView.Model.SubtitleStyle.error, lastKnownUsageText: nil, usesLiveSubtitle: false, planText: nil, planEmphasis: CodexBar.UsageMenuCardView.Model.PlanEmphasis.none, metrics: [CodexBar.UsageMenuCardView.Model.Metric(id: "primary", title: "Session", percent: 34.0, percentStyle: CodexBar.UsageMenuCardView.Model.PercentStyle.used, statusText: nil, resetText: Optional("Resets in 1h"), detailText: nil, dailyTargetText: nil, detailLeftText: Optional("46% in reserve"), detailRightText: Optional("Lasts until reset"), pacePercent: Optional(80.0), detailIsPaceDerived: true, paceOnTop: true, warningMarkerPercents: [], workdayMarkerPercents: [], workdayTickAppearance: CodexBar.WorkdayTickAppearance.subtle, cardStyle: false, sessionEquivalentDetail: nil, isSyntheticCreditLane: false, helpText: nil), CodexBar.UsageMenuCardView.Model.Metric(id: "secondary", title: "Weekly", percent: 61.0, percentStyle: CodexBar.UsageMenuCardView.Model.PercentStyle.used, statusText: nil, resetText: Optional("Resets in 1d"), detailText: nil, dailyTargetText: nil, detailLeftText: nil, detailRightText: nil, pacePercent: nil, detailIsPaceDerived: false, paceOnTop: true, warningMarkerPercents: [], workdayMarkerPercents: [], workdayTickAppearance: CodexBar.WorkdayTickAppearance.subtle, cardStyle: false, sessionEquivalentDetail: nil, isSyntheticCreditLane: false, helpText: nil)], usageNotes: [], subscriptionNotes: [], providerDetails: [], detailPaceVisible: true, providerDetailRawTitles: [], throughput: nil, openAIAPIUsage: nil, inlineUsageDashboard: nil, creditsText: nil, creditsRemaining: nil, creditsShowProgress: true, creditsProgressPercent: nil, creditsScaleText: nil, creditsHintText: nil, creditsHintCopyText: nil, limitResetCredits: nil, cloudCredits: nil, providerCost: nil, tokenUsage: nil, placeholder: nil, showsRetainedMeasurement: false, progressColor: #CC7C5EFF)).showsRetainedMeasurement → false
+✘ Test "failed refresh tints retained bars neutral" recorded an issue at MenuCardStaleTintTests.swift:83:9: Expectation failed: (self.quotaBarTint(model) → #CC7C5EFF) == (UsageMenuCardView.Model.staleProgressColor → AppKitPlatformColorProvider(platformColor: Catalog color: System secondaryLabelColor))
+✘ Test "failed quota refresh preserves fresh supplemental cost tint" failed after 0.191 seconds with 1 issue.
+✔ Test "failed first fetch has no retained measurement to tint" passed after 0.191 seconds.
+✔ Test "successful refresh keeps the provider tint" passed after 0.191 seconds.
+✘ Test "failed refresh tints retained bars neutral" failed after 0.191 seconds with 2 issues.
+✘ Test "account subtitle override does not hide a failed refresh" recorded an issue at MenuCardStaleTintTests.swift:90:9: Expectation failed: (model → Model(provider: CodexBarCore.UsageProvider.claude, providerName: "Claude", email: "", accountIdentityFingerprint: nil, subtitleText: "Work account", subtitleStyle: CodexBar.UsageMenuCardView.Model.SubtitleStyle.info, lastKnownUsageText: nil, usesLiveSubtitle: false, planText: nil, planEmphasis: CodexBar.UsageMenuCardView.Model.PlanEmphasis.none, metrics: [CodexBar.UsageMenuCardView.Model.Metric(id: "primary", title: "Session", percent: 34.0, percentStyle: CodexBar.UsageMenuCardView.Model.PercentStyle.used, statusText: nil, resetText: Optional("Resets in 1h"), detailText: nil, dailyTargetText: nil, detailLeftText: Optional("46% in reserve"), detailRightText: Optional("Lasts until reset"), pacePercent: Optional(80.0), detailIsPaceDerived: true, paceOnTop: true, warningMarkerPercents: [], workdayMarkerPercents: [], workdayTickAppearance: CodexBar.WorkdayTickAppearance.subtle, cardStyle: false, sessionEquivalentDetail: nil, isSyntheticCreditLane: false, helpText: nil), CodexBar.UsageMenuCardView.Model.Metric(id: "secondary", title: "Weekly", percent: 61.0, percentStyle: CodexBar.UsageMenuCardView.Model.PercentStyle.used, statusText: nil, resetText: Optional("Resets in 1d"), detailText: nil, dailyTargetText: nil, detailLeftText: nil, detailRightText: nil, pacePercent: nil, detailIsPaceDerived: false, paceOnTop: true, warningMarkerPercents: [], workdayMarkerPercents: [], workdayTickAppearance: CodexBar.WorkdayTickAppearance.subtle, cardStyle: false, sessionEquivalentDetail: nil, isSyntheticCreditLane: false, helpText: nil)], usageNotes: [], subscriptionNotes: [], providerDetails: [], detailPaceVisible: true, providerDetailRawTitles: [], throughput: nil, openAIAPIUsage: nil, inlineUsageDashboard: nil, creditsText: nil, creditsRemaining: nil, creditsShowProgress: true, creditsProgressPercent: nil, creditsScaleText: nil, creditsHintText: nil, creditsHintCopyText: nil, limitResetCredits: nil, cloudCredits: nil, providerCost: nil, tokenUsage: nil, placeholder: nil, showsRetainedMeasurement: false, progressColor: #CC7C5EFF)).showsRetainedMeasurement → false
+✘ Test "account subtitle override does not hide a failed refresh" recorded an issue at MenuCardStaleTintTests.swift:91:9: Expectation failed: (self.quotaBarTint(model) → #CC7C5EFF) == (UsageMenuCardView.Model.staleProgressColor → AppKitPlatformColorProvider(platformColor: Catalog color: System secondaryLabelColor))
+✘ Test "account subtitle override does not hide a failed refresh" failed after 0.196 seconds with 2 issues.
+✘ Suite MenuCardStaleTintTests failed after 0.197 seconds with 5 issues.
+✘ Test run with 5 tests in 1 suite failed after 0.197 seconds with 5 issues.

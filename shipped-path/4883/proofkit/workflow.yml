@@ -1,0 +1,85 @@
+name: PR 4883 shipped menu refresh proof
+on:
+  push:
+    branches: [proof/pr4883-shipped-path]
+permissions:
+  contents: read
+env:
+  HEAD_SHA: d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0
+  BASE_SHA: 897bff31731bb4b21b105f6e8bf4c32a8a8bf095
+jobs:
+  menu:
+    runs-on: macos-26
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: head
+            sha: d7ce5b51b3f6f6651012b7e5a1eb291632f0bbe0
+          - label: base
+            sha: 897bff31731bb4b21b105f6e8bf4c32a8a8bf095
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: { persist-credentials: false }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: Chipagosfinest/CodexBar
+          ref: ${{ matrix.sha }}
+          path: product
+          persist-credentials: false
+      - name: Select newest Xcode
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          out="$RUNNER_TEMP/proof"; mkdir -p "$out"; echo "PROOF_OUT=$out" >> "$GITHUB_ENV"
+          { sw_vers; launchctl managername; xcodebuild -version; swift --version; } > "$out/environment.txt" 2>&1
+      - name: Package unmodified app from the exact commit
+        working-directory: product
+        run: |
+          set -euo pipefail
+          command -v xcodegen >/dev/null || brew install xcodegen
+          ARCHES=arm64 CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh debug > "$PROOF_OUT/package.log" 2>&1 || { tail -40 "$PROOF_OUT/package.log"; exit 1; }
+          git status --porcelain --untracked-files=no > "$PROOF_OUT/tracked-source-changes.txt"
+          git rev-parse HEAD > "$PROOF_OUT/product-sha.txt"
+          shasum -a 256 CodexBar.app/Contents/MacOS/CodexBar > "$PROOF_OUT/binary-sha256.txt"
+      - name: Drive the shipped menu against the loopback fixture
+        env:
+          PROOF_LABEL: ${{ matrix.label }}
+        run: |
+          set -euo pipefail
+          swiftc -O -o "$RUNNER_TEMP/uihelper" proofkit/uihelper.swift
+          python3 proofkit/drive.py product/CodexBar.app "$RUNNER_TEMP/uihelper"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: menu-${{ matrix.label }}
+          path: ${{ env.PROOF_OUT }}
+          retention-days: 7
+  tests:
+    if: false  # Proven in run 41355865737; artifacts retained.
+    runs-on: macos-26
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: { persist-credentials: false }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: Chipagosfinest/CodexBar
+          ref: ${{ env.HEAD_SHA }}
+          path: product
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Base fail, mutation fail, head pass
+        run: |
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          out="$RUNNER_TEMP/proof"; mkdir -p "$out"; echo "PROOF_OUT=$out" >> "$GITHUB_ENV"
+          bash proofkit/tests.sh product "$out"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: tests
+          path: ${{ env.PROOF_OUT }}
+          retention-days: 7
