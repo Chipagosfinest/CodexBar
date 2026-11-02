@@ -1,0 +1,46 @@
+name: UI proof packages
+on:
+  push:
+    branches: [proof/ui-lane]
+    paths: [proofkit/packages.txt]
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: macos-26
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { pr: "4900", sha: c64d91d2fe09168a68048d43d9228b9d154c6e3a }
+          - { pr: "4901", sha: 6283c26c7ca8fefc0a4cba3477ac45ecf3564a45 }
+          - { pr: "4902", sha: c254d8b459b2654be70fbf016c55bf86db2a7815 }
+          - { pr: "4887", sha: 23bf4c17e7bc76c87dd0b75bc30f776cbac8333d }
+          - { pr: "4888", sha: 073d0643a51c7dc5e14f3b3f7f27afa27dda3f47 }
+          - { pr: "4889", sha: 2e2b001f0da8a1ca606db141f53b4e8188a98359 }
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: steipete/CodexBar
+          ref: ${{ matrix.sha }}
+          path: product
+          persist-credentials: false
+      - name: Package the unmodified release app from the exact commit
+        working-directory: product
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          command -v xcodegen >/dev/null || brew install xcodegen
+          mkdir -p "$RUNNER_TEMP/pkg"
+          ARCHES=arm64 CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh release > "$RUNNER_TEMP/pkg/package.log" 2>&1 || { tail -60 "$RUNNER_TEMP/pkg/package.log"; exit 1; }
+          git rev-parse HEAD > "$RUNNER_TEMP/pkg/product-sha.txt"
+          git status --porcelain --untracked-files=no > "$RUNNER_TEMP/pkg/tracked-source-changes.txt"
+          shasum -a 256 CodexBar.app/Contents/MacOS/CodexBar > "$RUNNER_TEMP/pkg/binary-sha256.txt"
+          ditto -c -k --sequesterRsrc --keepParent CodexBar.app "$RUNNER_TEMP/pkg/CodexBar.zip"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: pkg-${{ matrix.pr }}
+          path: ${{ runner.temp }}/pkg
+          retention-days: 7

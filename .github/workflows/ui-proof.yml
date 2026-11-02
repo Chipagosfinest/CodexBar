@@ -2,6 +2,7 @@ name: UI proof
 on:
   push:
     branches: [proof/ui-lane]
+    paths-ignore: [proofkit/packages.txt, .github/workflows/ui-package.yml]
 permissions:
   contents: read
   actions: read
