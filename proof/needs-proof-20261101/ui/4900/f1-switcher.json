@@ -1,0 +1,92 @@
+[
+ {
+  "role": "AXButton",
+  "label": "Overview",
+  "x": 713,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "Overview",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Codex",
+  "x": 746,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "Codex",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Claude",
+  "x": 780,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "Claude",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Command Code",
+  "x": 813,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "Command Code",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Kimi Code",
+  "x": 846,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "Kimi Code",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "z.ai / GLM",
+  "x": 879,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "z.ai / GLM",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "OpenRouter",
+  "x": 913,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "OpenRouter",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Moonshot / Kimi Open Platform",
+  "x": 946,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "Moonshot / Kimi Open Platform",
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "DeepSeek",
+  "x": 979,
+  "y": 35,
+  "w": 34,
+  "h": 30,
+  "help": "DeepSeek",
+  "id": null
+ }
+]

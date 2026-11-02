@@ -1,0 +1,57 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "76866e7a01721bc2f3ca60b9d4b01ded2aa7b78ba773aa887a79ff2784331b10 vs 76866e7a01721bc2f3ca60b9d4b01ded2aa7b78ba773aa887a79ff2784331b10"
+ },
+ {
+  "check": "nine switcher segments",
+  "pass": true,
+  "detail": "['Overview', 'Codex', 'Claude', 'Command Code', 'Kimi Code', 'z.ai / GLM', 'OpenRouter', 'Moonshot / Kimi Open Platform', 'DeepSeek']"
+ },
+ {
+  "check": "logo row keeps every provider name for accessibility and hover",
+  "pass": true,
+  "detail": "[('Overview', 'Overview'), ('Codex', 'Codex'), ('Claude', 'Claude'), ('Command Code', 'Command Code'), ('Kimi Code', 'Kimi Code'), ('z.ai / GLM', 'z.ai / GLM'), ('OpenRouter', 'OpenRouter'), ('Moonshot / Kimi Open Platform', 'Moonshot / Kimi Open Platform'), ('DeepSeek', 'DeepSeek')]"
+ },
+ {
+  "check": "hovering a logo shows its native tooltip window",
+  "pass": true,
+  "detail": "[{'layer': 103, 'w': 49, 'name': '', 'x': 797, 'h': 18, 'y': 69, 'id': 37}]"
+ },
+ {
+  "check": "About is inside More",
+  "pass": true,
+  "detail": "About CodexBar (v0.83.1)"
+ },
+ {
+  "check": "More > About activates the Settings window",
+  "pass": true,
+  "detail": "[{'name': '', 'w': 1024, 'x': 1023, 'layer': 3, 'y': 31, 'id': 34, 'h': 674}, {'layer': 0, 'h': 592, 'name': 'About', 'id': 39, 'x': 112, 'y': 52, 'w': 800}]"
+ },
+ {
+  "check": "a roster over twelve rows collapses the rest into More (n)",
+  "pass": true,
+  "detail": "['More (7)', 'Kimi Code \u00b7 Synthetic Account 10', 'Kimi Code \u00b7 Synthetic Account 11', 'Kimi Code \u00b7 Synthetic Account 12']"
+ },
+ {
+  "check": "the overflow submenu lists account rows",
+  "pass": true,
+  "detail": "Kimi Code \u00b7 Synthetic Account 10"
+ },
+ {
+  "check": "clicking an overflow row selects that provider",
+  "pass": true,
+  "detail": "Kimi Code | Kimi API error: HTTP 404 | Copy error | Usage Dashboard | Refresh | Refresh | \u2318 R | Settings... | More | About CodexBar (v0.83.1) | Quit"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "48"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

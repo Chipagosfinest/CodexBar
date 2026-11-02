@@ -1,0 +1,16 @@
+{
+  "run": 41375203027,
+  "productSHA": "818e1e73784f20053912e8a7f59d677c9494e852",
+  "controllerSHA": "1995eff73794254af76a7136783287b5a6bd2cdf",
+  "checksPassed": 11,
+  "imagesInspected": {
+    "f2-hover-claude-logo-screen.png": "324b4e25df5db865a25b0d445ee4a21f851dddc92915b9d738aa913e345ec4eb",
+    "f3-more-submenu-open-screen.png": "8f1ae0b3ea4510eb56211ac38ed749a626a7607e6da7ee8a58836123f05a10d2",
+    "f5-about-activated-screen.png": "44f80691fb51da1be4ca57a6b7f8059896667a1dd1c33cb18386feaeef203f38",
+    "o1b-scrolled-to-overflow-row-screen.png": "7f9541eb2ed6b13e8ec35bd9f5de29b5ea5544643229579779cf999a162f5801",
+    "o2-overflow-submenu-screen.png": "00f6967b384fe9684d9f700870f2cf7d325de4a7d91e0416bde572ba1c526a69",
+    "o4-reopened-after-overflow-click-screen.png": "548ddda9487cd788fdbe5adae2f1cdc08dfcec1f49a661dd671173fa7d68947c"
+  },
+  "observed": "Actual Claude hover tooltip, More submenu with About, About settings pane after activation; separate all-account roster with More7, account10 overflow item and reopened selected Kimi tab. Native synthetic/full-SHA banner visible.",
+  "limits": "First case has8enabled provider tabs but3 selected Overview providers. Overflow fake accounts have no successful usage fetch; selected Kimi tab shows HTTP404. Provider navigation is proved, not successful account fetch or account-specific selection, non-top-level plugin runtime behavior, or combined4899 integration."
+}
