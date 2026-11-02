@@ -90,6 +90,7 @@ if over:
         time.sleep(3)
         app.shot('o3-overflow-activated', 'clicked an overflow account')
         say(f'menus after overflow click: {app.menus()}')
+        kit.defaults_snapshot('nav-after-overflow-click')
         if not app.menus():
             app.open_menu()
             app.shot('o4-reopened-after-overflow-click', 'selected provider tab')

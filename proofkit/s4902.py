@@ -36,6 +36,11 @@ def all_labels():
     return [r['label'] for r in app.rows() if r['label']]
 
 
+def visible_labels():
+    """Only nodes with a real frame. Every row's unopened flyout also sits in the tree, at zero size."""
+    return [r['label'] for r in app.rows() if r['label'] and r['w']]
+
+
 app.open_menu()
 app.shot('v1-compact-open')
 (OUT / 'v1-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
@@ -47,8 +52,10 @@ check('hovering the Compact row opens a flyout window', opened, app.menus())
 time.sleep(1.5)
 app.shot('v2-hover-claude-flyout', 'pointer rests on the Compact Claude row')
 (OUT / 'v2-flyout.json').write_text(json.dumps(app.rows(), indent=1))
-labels = all_labels()
-check('the flyout hosts the full provider card', labels.count('Session 65% left') >= 2 and 'Plan Usage' in labels and 'Show details' in labels, [l for l in labels if 'left' in l or l in ('Plan Usage', 'Show details')][:10])
+labels = visible_labels()
+fly = min(app.menus(), key=lambda w: w['x'])
+check('the flyout hosts the full provider card', fly['h'] > 150 and 'Session 65% left' in labels and 'Weekly 78% left' in labels and 'Plan Usage' in labels and 'Show details' in labels,
+      {'flyout': fly, 'labels': [l for l in labels if 'left' in l or l in ('Plan Usage', 'Show details')][:10]})
 
 
 def flyout_points():
@@ -78,7 +85,7 @@ if not app.menus():
 v5 = app.menu_items()
 (OUT / 'v5-rows.json').write_text(json.dumps(v5, indent=1))
 text = ' | '.join(l for r in v5 if r['y'] >= 112 for l in r['labels'])
-check('Show details lands on the Claude provider tab', 'claude@example.test' in text and 'Usage Dashboard' in text and 'Kimi' not in text, text[:240])
+check('Show details lands on the Claude provider tab', 'claude@example.test' in text and 'Usage Dashboard' in text and '5-hour usage' not in text, text[:240])
 say(f'recording exit={rec.wait(timeout=100)}')
 app.quit()
 
@@ -96,7 +103,8 @@ app.hover(claude)
 check('first flyout opened before the refresh', app.wait(lambda: len(app.menus()) > 1, 'flyout', 6), app.menus())
 time.sleep(1.5)
 app.shot('r1-first-flyout', 'before the refresh: Session and Weekly only')
-first = all_labels()
+first = visible_labels()
+fly = min(app.menus(), key=lambda w: w['x'])
 check('first flyout shows no Sonnet window yet', not any('Sonnet' in l for l in first), [l for l in first if 'left' in l][:8])
 (OUT / 'r1-flyout.json').write_text(json.dumps(app.rows(), indent=1))
 providers.EXTRA_CLAUDE['seven_day_sonnet'] = {'utilization': 80, 'resets_at': kit.iso(timedelta(days=5))}
@@ -118,9 +126,11 @@ if claude:
     time.sleep(2)
     app.shot('r3-reopened-flyout', 'review asks: does the reopened card show the new values and Sonnet window?')
     (OUT / 'r3-flyout.json').write_text(json.dumps(app.rows(), indent=1))
-    later = all_labels()
-    check('the reopened flyout renders the current card', later.count('Session 30% left') >= 2 and sum('Sonnet' in l for l in later) >= 2,
-          [l for l in later if 'left' in l][:10])
+    later = visible_labels()
+    fly2 = min(app.menus(), key=lambda w: w['x'])
+    check('the reopened flyout renders the current card: new values, new Sonnet window, taller frame',
+          'Session 30% left' in later and 'Sonnet 20% left' in later and fly2['h'] > fly['h'],
+          {'before': fly['h'], 'after': fly2['h'], 'labels': [l for l in later if 'left' in l][:10]})
 say(f'recording exit={rec.wait(timeout=60)}')
 app.quit()
 kit.finish()

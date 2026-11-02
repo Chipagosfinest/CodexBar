@@ -7,10 +7,10 @@ permissions:
   contents: read
   actions: read
 env:
-  PROOF_PR: "4887"
-  PROOF_SHA: 23bf4c17e7bc76c87dd0b75bc30f776cbac8333d
-  PROOF_SCENARIO: s4887.py
-  PACKAGE_RUN: "41370581783"
+  PROOF_PR: "4901"
+  PROOF_SHA: 1d28182bdb63b6a27edcdb91bebf1189a368efea
+  PROOF_SCENARIO: s4901.py
+  PACKAGE_RUN: "41370526426"
 jobs:
   package:
     runs-on: macos-26

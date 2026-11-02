@@ -67,19 +67,25 @@ MODELS = ('claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4-5', 'gpt-5.2-c
 
 
 def model_rows(app):
-    """Visible model rows, each a combined accessibility element naming exactly one model."""
+    """Visible rows: each is one accessibility element reading 'model, provider, share, value'."""
     rows = {}
     for r in app.win_rows():
-        if r['w'] and r['role'] != 'AXStaticText' and r['label']:
-            hit = [m for m in MODELS if r['label'].startswith(m) or f', {m}' in r['label'] or r['label'] == m]
-            if hit:
-                rows[max(hit, key=len)] = r['label']
-    if rows:
-        return rows
-    for t in app.texts():
-        if t in MODELS:
-            rows[t] = t
+        if r['w'] and r['role'] == 'AXStaticText' and r['label'].split(',')[0] in MODELS:
+            rows[r['label'].split(',')[0]] = r['label']
     return rows
+
+
+def bring_lens_onscreen(app):
+    """The lens sits below the fold on this display, so scroll the Settings pane with real wheel events."""
+    r = next(r for r in app.win_rows() if r['label'] == 'Models' and r['w'])
+    app.ui('move', r['x'] + r['w'] / 2, 300, 10)
+    for _ in range(50):
+        r = next(r for r in app.win_rows() if r['label'] == 'Models' and r['w'])
+        if r['y'] < 130:
+            break
+        app.ui('scroll', -3)
+        time.sleep(0.15)
+    time.sleep(0.6)
 
 
 def models_lens(app, tag):
@@ -89,7 +95,8 @@ def models_lens(app, tag):
     time.sleep(2)
     now = next((r for r in app.win_rows() if r['label'] == 'Models' and r['w']), {})
     check(f'{tag}: the Models segment is really selected', str(now.get('value')) == '1', now)
-    app.shot(f'{tag}-2-models', f'clicked Models at {hit["x"]},{hit["y"]}')
+    bring_lens_onscreen(app)
+    app.shot(f'{tag}-2-models', f'clicked Models at {hit["x"]},{hit["y"]}; pane scrolled to the lens')
     (OUT / f'{tag}-2-models.json').write_text(json.dumps(app.win_rows(), indent=1))
     say(f'{tag} texts: ' + json.dumps(app.texts())[:1500])
 
@@ -126,7 +133,8 @@ for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
     say(f'{tag} rows: {json.dumps(rows)}')
     if tag == 'priced':
         check('priced: collapsed list shows five of seven models', len(rows) == 5, list(rows))
-        check('priced: basis is estimated spend with shares', 'Estimated spend' in text and '%' in text, text[:200])
+        check('priced: basis is estimated spend with a share on every row', 'Estimated spend' in text and all('%' in v for v in rows.values()), rows)
+        (OUT / 'priced-2b-lens.json').write_text(json.dumps(app.win_rows(), indent=1))
         show = next((r['label'] for r in app.win_rows() if r['w'] and r['label'].lower().startswith('show all')), None)
         check('priced: Show all control is offered', show, show)
         if show:
@@ -144,13 +152,14 @@ for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
                 app.shot('priced-4-show-less')
                 check('priced: Show less returns to five rows', len(model_rows(app)) == 5, list(model_rows(app)))
     elif tag == 'tokens':
-        check('tokens: one provider with an unpriced model ranks by Tracked tokens with shares', 'Tracked tokens' in text and '%' in text and 'Estimated spend' not in text, text[:300])
+        check('tokens: one provider with an unpriced model ranks by Tracked tokens with shares', 'Tracked tokens' in text and rows and all('%' in v for v in rows.values()), rows)
         check('tokens: both models listed', 'fictional-unpriced-model' in rows and 'claude-sonnet-4-5' in rows, list(rows))
     elif tag == 'mixed':
-        check('mixed: two providers plus an unpriced model withhold the basis header', 'Tracked tokens' not in text and 'Estimated spend' not in text, text[:300])
+        lens = [r['label'] for r in app.win_rows() if r['w'] and r['role'] == 'AXStaticText' and r['label'] == 'Tracked tokens']
+        check('mixed: two providers plus an unpriced model withhold shares and the basis', rows and not any('%' in v for v in rows.values()) and not lens, rows)
         check('mixed: both models still listed', 'fictional-unpriced-model' in rows and 'gpt-5.2-codex' in rows, list(rows))
     else:
-        check('partial: an incomplete request shows the partial warning', 'Partial model breakdown' in text, text[:300])
+        check('partial: an incomplete request shows the partial warning and withholds shares', 'Partial model breakdown' in text and rows and not any('%' in v for v in rows.values()), rows)
     say(f'recording exit={rec.wait(timeout=60)}')
     app.quit()
 (OUT / 'models-results.json').write_text(json.dumps(results, indent=1))

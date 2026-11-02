@@ -329,6 +329,7 @@ def defaults_snapshot(name):
     r = subprocess.run(['defaults', 'export', BUNDLE, '-'], capture_output=True)
     data = plistlib.loads(r.stdout) if r.returncode == 0 and r.stdout else {}
     keep = {k: v for k, v in data.items() if k.startswith('merged') or k in ('tokenCostUsageEnabled', 'selectedMenuProvider')}
+    keep.pop('mergedOverviewSelectionEditedActiveProviders', None) if name.startswith('nav-') else None
     (OUT / f'defaults-{name}.json').write_text(json.dumps(keep, indent=2, default=str, sort_keys=True))
     say(f'defaults {name}: {json.dumps(keep, default=str, sort_keys=True)}')
     return keep

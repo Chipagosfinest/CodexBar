@@ -175,6 +175,7 @@ closed = not app.menus()
 if closed:
     app.open_menu()
 app.shot('i8-after-return-on-compact-row', f'menu closed by Return={closed}')
+kit.defaults_snapshot('nav-after-return-plain')
 check('Return on a plain Compact row selects its provider tab', 'Token quota' in provider_text() and 'Usage Dashboard' in provider_text(), provider_text()[:240])
 to_overview()
 z = app.row('z.ai / GLM,')
@@ -184,6 +185,7 @@ closed = not app.menus()
 if closed:
     app.open_menu()
 app.shot('i9-after-axpress-on-compact-row', f'AXPress result={pressed} closed={closed}')
+kit.defaults_snapshot('nav-after-axpress-plain')
 check('accessibility press on a plain Compact row selects its provider tab', 'Token quota' in provider_text(), f'{pressed} {provider_text()[:200]}')
 to_overview()
 # Harness control: if Return also fails on a standard item, a keyboard failure above says nothing about the product.

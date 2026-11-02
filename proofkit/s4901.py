@@ -9,7 +9,15 @@ INSTALLED = Path('/Applications/CodexBar.app')
 subprocess.run(['ditto', HEAD_APP, str(INSTALLED)], check=True)
 kit.verify_installed(INSTALLED)
 kit.start_fixture(); providers.install(); kit.write_credentials(); kit.write_config(providers.CONFIG[:2])
-providers.write_history(14)
+# A different provider mix each day, so a hovered day's shares differ from the range's and from each other.
+from datetime import datetime, timedelta, timezone
+NOW = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0) - timedelta(hours=1)
+for back in range(14):
+    day = NOW - timedelta(days=back)
+    claude_weight = 1 + (back * 3) % 7
+    kit.write_claude(day, 'claude-opus-4-5', 200000 * claude_weight, 40000 * claude_weight, session=f'opus{back}')
+    kit.write_claude(day, 'claude-haiku-4-5', 300000, 50000, session=f'haiku{back}')
+    kit.write_codex(day, 'gpt-5.2-codex', 400000 * (8 - claude_weight), 60000 * (8 - claude_weight))
 providers.overview_defaults(tokenCostUsageEnabled=True, mergedOverviewLayout='compact')
 phase_begin('chart')
 app = App(INSTALLED, HELPER, 'chart')
