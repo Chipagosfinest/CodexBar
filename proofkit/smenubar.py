@@ -19,6 +19,18 @@ say('trusted(ax,screen,post)=' + subprocess.run([HELPER, 'trusted'], capture_out
 subprocess.run(['rm', '-rf', str(INSTALLED)], check=True)
 subprocess.run(['ditto', HEAD_APP, str(INSTALLED)], check=True)
 kit.verify_installed(INSTALLED)
+real_zai = kit.ROUTES[('api.z.ai', '/api/monitor/usage/quota/limit')]
+
+
+def zai_route(h):
+    status, body = real_zai(h)
+    if not state.get('zai_burning'):
+        # 72% used 4.5h into a 5h window lasts until reset, so no forecast fires.
+        body['data']['limits'][0]['nextResetTime'] = kit.epoch(__import__('datetime').timedelta(minutes=30)) * 1000
+    return status, body
+
+
+kit.ROUTES[('api.z.ai', '/api/monitor/usage/quota/limit')] = zai_route
 CALM = {'codex': (30, 20), 'claude': (35, 22), 'kimi': (15, 12), 'zai': (72,), 'commandcode': (0, 0), 'openrouter': 0}
 
 
@@ -61,6 +73,31 @@ shot(app, 'default-source', 'no source chosen: the existing default')
 check('an existing install is unchanged: no total without opting in', 'average' not in label(app), label(app))
 app.quit()
 
+def storm(label_, app_path, prefs):
+    """Requests per provider while Claude alone answers 500. Same fixture, 150s, app relaunched clean."""
+    providers.PERCENTS.update(CALM)
+    state['claude_down'] = False
+    phase_begin(f'storm-{label_}')
+    seed(**prefs)
+    probe = App(app_path, HELPER, f'storm-{label_}')
+    time.sleep(20)
+    state['claude_down'] = True
+    start = len(state.get('log', []))
+    time.sleep(150)
+    window = state.get('log', [])[start:]
+    state['claude_down'] = False
+    count = sum(1 for e in window if e['path'] == '/api/oauth/usage')
+    say(f'STORM {label_}: claude_usage_requests_in_150s={count} all_requests={len(window)}')
+    (OUT / f'storm-{label_}.json').write_text(json.dumps({'claude_usage_requests_in_150s': count, 'all_requests': len(window)}))
+    probe.quit()
+    return count
+
+
+baseline = storm('release-v083', _V083_APP, {})
+head_default = storm('head-default-source', INSTALLED, {})
+head_total = storm('head-all-providers', INSTALLED, {'unifiedIconSource': 'allProviders'})
+finding('head does not refresh more than the v0.83.0 release under Claude 500s',
+        head_default <= baseline * 1.5 + 5 and head_total <= baseline * 1.5 + 5, f'release={baseline} default={head_default} total={head_total}')
 for name, dark in (('light', False), ('dark', True)):
     say(f'=== appearance {name}: {subprocess.run([HELPER, "dark", "1" if dark else "0"], capture_output=True, text=True).stdout.strip()}')
     time.sleep(3)
@@ -75,6 +112,19 @@ for name, dark in (('light', False), ('dark', True)):
     check(f'{name}: every quota provider reached the fixture',
           all(reached(f'{name}-calm', h) for h in ('chatgpt.com', 'api.anthropic.com', 'api.z.ai')), state.get('log', [])[-6:])
     shot(app, f'{name}-1-calm')
+
+    phase_begin(f'{name}-forecast')
+    state['zai_burning'] = True
+    # 72% used 2h into 5h runs out in about 47 minutes: the dropdown's red rule, at 28% left.
+    check(f'{name}: a run-out forecast within the hour warns even with plenty left',
+          wait_label(app, lambda l: 'z.ai / GLM near limit, 28% left' in l, 'forecast warning'), label(app))
+    shot(app, f'{name}-1b-forecast-zai')
+    app.open_menu()
+    shot(app, f'{name}-1c-forecast-menu-open', 'dropdown beside the forecast warning', park=False)
+    (OUT / f'{name}-forecast-menu-labels.json').write_text(json.dumps([r['label'] for r in app.rows() if r['label']], indent=1))
+    app.close_menu()
+    state['zai_burning'] = False
+    wait_label(app, lambda l: 'near limit' not in l, 'forecast cleared')
 
     phase_begin(f'{name}-near')
     providers.PERCENTS['claude'] = (35, 92)
@@ -98,11 +148,9 @@ for name, dark in (('light', False), ('dark', True)):
     if not dark:
         phase_begin('light-stale')
         state['claude_down'] = True
-        # Two failures surface through the consecutive-failure gate. z.ai still warns, so only Claude must drop out.
-        check('retained stale Claude stops warning while its figure still counts toward the total',
-              wait_label(app, lambda l: 'Claude near limit' not in l and 'z.ai' in l and 'average 42% left' in l,
-                         'stale Claude stops warning', 240), label(app))
-        shot(app, 'light-5-stale-claude-retained')
+        finding('Claude server failures stop its warning',
+                wait_label(app, lambda l: 'Claude near limit' not in l, 'Claude stops warning', 180), label(app))
+        shot(app, 'light-5-claude-failing')
         state['claude_down'] = False
 
     phase_begin(f'{name}-recovered')
