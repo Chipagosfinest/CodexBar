@@ -1,0 +1,49 @@
+    0.83s CHECK PASS head: installed app binary equals package manifest fe4bfeb86b713b0977d5844105f316ddf787d10c9c22f98d578ab20d970344fe vs fe4bfeb86b713b0977d5844105f316ddf787d10c9c22f98d578ab20d970344fe
+    1.25s banner on display: [{'h': 46, 'y': 722, 'id': 34, 'layer': 1000, 'name': '', 'x': 0, 'w': 1024}]
+    4.61s all 23 hostnames resolve only to loopback after 5s
+    7.32s fixture answers all 23 hostnames over trusted TLS
+    7.40s === light
+    8.11s appearance dark=False: osascript rc=0  AppleInterfaceStyle=''
+   10.12s phase -> light
+   10.13s launched share-light pid=49823
+   11.47s CHECK PASS light: head app reached the fixture 
+   44.76s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'h': 768, 'y': 0, 'w': 1024}
+   44.76s click status item at 767,3 size 36x24
+   48.15s SHOT s1-light-menu menus=[(708, 31, 310, 668)] requests=29 
+   54.52s SHOT s2-light-preview menus=[] requests=29 share preview window from the menu item
+   54.54s windows: [{"name": "Share AI Usage", "h": 557, "w": 780, "x": 102, "y": 31, "layer": 0, "id": 39}]
+   54.76s preview texts: ["CodexBar", "EST. 30-DAY SPEND", "TOP MODELS", "BY USAGE", "$235.89", "01", "Claude", "54%", "29.9M", "02", "GPT", "Codex", "46%", "25.1M", "TRACKED TOKENS \u00b7 30 DAYS", "55M", "Claude Max 5x", "Codex Pro 20x", "LOCAL \u00b7 AGGREGATE ONLY", "DATA THROUGH NOV 2, 2026", "Nothing is uploaded. This image is created on your Mac.", "Share AI Usage"]
+   54.79s clipboard cleared, changeCount=1
+   58.58s SHOT s3-light-after-copy menus=[] requests=29 feedback on the button after a real click
+   58.61s pasteboard after Copy Image: {"png": true, "changeCount": 2, "w": 1200, "h": 630, "types": ["public.png", "Apple PNG pasteboard type", "public.tiff", "NeXT TIFF v4.0 pasteboard type"]}
+   58.61s CHECK PASS light: Copy Image put a 1200x630 image on the pasteboard {'png': True, 'changeCount': 2, 'w': 1200, 'h': 630, 'types': ['public.png', 'Apple PNG pasteboard type', 'public.tiff', 'NeXT TIFF v4.0 pasteboard type']}
+   58.65s CHECK PASS light: the preview reports the copy ['Copy Image', 'Copy Stats', 'Image copied']
+   58.65s CHECK PASS light: the card names both providers from transcripts Share AI Usage | CodexBar | EST. 30-DAY SPEND | TOP MODELS | BY USAGE | $235.89 | 01 | Claude | 54% | 29.9M | 02 | GPT | Codex | 46% | 25.1M | TRACKED TOKENS · 30 DAYS | 55M | Claude Max 5x | Codex Pro 20x | LOCAL · AGGREGATE ONLY | DATA THROUGH NOV 2, 2026 | Copy Image | Copy Stats | Save... | Imag
+   77.53s recording exit=0
+   77.78s share-light stopped
+   79.35s === dark
+   79.88s appearance dark=True: osascript rc=0  AppleInterfaceStyle='Dark'
+   81.92s phase -> dark
+   81.92s launched share-dark pid=52352
+   82.77s CHECK PASS dark: head app reached the fixture 
+  115.73s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'x': 0, 'h': 768, 'w': 1024}
+  115.73s click status item at 767,3 size 36x24
+  118.50s SHOT s1-dark-menu menus=[(708, 31, 310, 668)] requests=35 
+  125.09s SHOT s2-dark-preview menus=[] requests=35 share preview window from the menu item
+  125.11s windows: [{"layer": 0, "w": 780, "x": 102, "id": 47, "h": 557, "y": 31, "name": "Share AI Usage"}]
+  125.31s preview texts: ["CodexBar", "EST. 30-DAY SPEND", "TOP MODELS", "BY USAGE", "$235.89", "01", "Claude", "54%", "29.9M", "02", "GPT", "Codex", "46%", "25.1M", "TRACKED TOKENS \u00b7 30 DAYS", "55M", "Claude Max 5x", "Codex Pro 20x", "LOCAL \u00b7 AGGREGATE ONLY", "DATA THROUGH NOV 2, 2026", "Nothing is uploaded. This image is created on your Mac.", "Share AI Usage"]
+  125.32s clipboard cleared, changeCount=3
+  129.42s SHOT s3-dark-after-copy menus=[] requests=35 feedback on the button after a real click
+  129.45s pasteboard after Copy Image: {"changeCount": 4, "h": 630, "png": true, "w": 1200, "types": ["public.png", "Apple PNG pasteboard type", "public.tiff", "NeXT TIFF v4.0 pasteboard type"]}
+  129.45s CHECK PASS dark: Copy Image put a 1200x630 image on the pasteboard {'changeCount': 4, 'h': 630, 'png': True, 'w': 1200, 'types': ['public.png', 'Apple PNG pasteboard type', 'public.tiff', 'NeXT TIFF v4.0 pasteboard type']}
+  129.51s CHECK PASS dark: the preview reports the copy ['Copy Image', 'Copy Stats', 'Image copied']
+  129.51s CHECK PASS dark: the card names both providers from transcripts Share AI Usage | CodexBar | EST. 30-DAY SPEND | TOP MODELS | BY USAGE | $235.89 | 01 | Claude | 54% | 29.9M | 02 | GPT | Codex | 46% | 25.1M | TRACKED TOKENS · 30 DAYS | 55M | Claude Max 5x | Codex Pro 20x | LOCAL · AGGREGATE ONLY | DATA THROUGH NOV 2, 2026 | Copy Image | Copy Stats | Save... | Imag
+  148.21s recording exit=0
+  148.32s share-dark stopped
+  150.16s appearance dark=False: osascript rc=0  AppleInterfaceStyle=''
+  152.21s provider requests answered 200 by the fixture: 8 of 12
+  152.21s CHECK PASS app reached the fixture 8
+  152.21s resolver watch (sampled): 29 checks, 0 escapes
+  152.21s CHECK PASS no sampled resolver escape []
+  152.21s checks: 11 passed, 0 failed
+  152.21s done

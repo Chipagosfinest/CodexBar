@@ -1,0 +1,67 @@
+name: PR 4888 cleanup proof
+on:
+  push:
+    branches: [proof/cs2006-4888]
+permissions:
+  contents: read
+jobs:
+  proof:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: before
+            sha: 073d0643a51c7dc5e14f3b3f7f27afa27dda3f47
+          - label: after
+            sha: 10fe499a3726cda7e8fe6867f6be378d80b548d1
+    runs-on: macos-26
+    timeout-minutes: 55
+    env:
+      PROOF_PR: '4888'
+      PROOF_SHA: ${{ matrix.sha }}
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: Chipagosfinest/CodexBar
+          ref: ${{ matrix.sha }}
+          path: product
+          persist-credentials: false
+      - name: Prepare hosted tools
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          command -v xcodegen >/dev/null || brew install xcodegen
+          mkdir -p "$RUNNER_TEMP/proof"
+          echo "PROOF_OUT=$RUNNER_TEMP/proof" >> "$GITHUB_ENV"
+          echo "PROOF_HELPER=$RUNNER_TEMP/uihelper" >> "$GITHUB_ENV"
+          git rev-parse HEAD > "$RUNNER_TEMP/proof/kit-sha.txt"
+          git -C product rev-parse HEAD > "$RUNNER_TEMP/proof/product-sha.txt"
+          { sw_vers; xcodebuild -version; swift --version; } > "$RUNNER_TEMP/proof/environment.txt"
+          swiftc -O -o "$RUNNER_TEMP/uihelper" proofkit/uihelper.swift
+      - name: Package exact product commit
+        working-directory: product
+        run: |
+          set -euo pipefail
+          ARCHES=arm64 CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh release > "$PROOF_OUT/package.log" 2>&1 || { tail -60 "$PROOF_OUT/package.log"; exit 1; }
+          git status --porcelain --untracked-files=no > "$PROOF_OUT/tracked-source-changes.txt"
+          test ! -s "$PROOF_OUT/tracked-source-changes.txt"
+          shasum -a 256 CodexBar.app/Contents/MacOS/CodexBar > "$PROOF_OUT/binary-sha256.txt"
+      - name: Real Share window and Copy Image
+        run: python3 proofkit/s4888.py "$GITHUB_WORKSPACE/product/CodexBar.app" unused "$PROOF_HELPER"
+      - name: Focused share tests
+        working-directory: product
+        run: |
+          set -o pipefail
+          source Scripts/test_environment.sh
+          swift test --no-parallel --filter ShareStats 2>&1 | tee "$PROOF_OUT/focused-tests.log"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: cleanup-4888-${{ matrix.label }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/proof
+          retention-days: 14

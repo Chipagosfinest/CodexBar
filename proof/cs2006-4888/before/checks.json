@@ -1,0 +1,57 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "d248bb3ea07a03ac8af1b22463da471629a3d81558b136cbc89b9674b078de22 vs d248bb3ea07a03ac8af1b22463da471629a3d81558b136cbc89b9674b078de22"
+ },
+ {
+  "check": "light: head app reached the fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "light: Copy Image put a 1200x630 image on the pasteboard",
+  "pass": true,
+  "detail": "{'changeCount': 2, 'types': ['public.png', 'Apple PNG pasteboard type', 'public.tiff', 'NeXT TIFF v4.0 pasteboard type'], 'png': True, 'w': 1200, 'h': 630}"
+ },
+ {
+  "check": "light: the preview reports the copy",
+  "pass": true,
+  "detail": "['Copy Image', 'Copy Stats', 'Image copied']"
+ },
+ {
+  "check": "light: the card names both providers from transcripts",
+  "pass": true,
+  "detail": "Share AI Usage | CodexBar | EST. 30-DAY SPEND | TOP MODELS | BY USAGE | $235.89 | 01 | Claude | 54% | 29.9M | 02 | GPT | Codex | 46% | 25.1M | TRACKED TOKENS \u00b7 30 DAYS | 55M | Claude Max 5x | Codex Pro 20x | LOCAL \u00b7 AGGREGATE ONLY | DATA THROUGH NOV 2, 2026 | Copy Image | Copy Stats | Save... | Image copied | Share AI Usage"
+ },
+ {
+  "check": "dark: head app reached the fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "dark: Copy Image put a 1200x630 image on the pasteboard",
+  "pass": true,
+  "detail": "{'changeCount': 4, 'w': 1200, 'types': ['public.png', 'Apple PNG pasteboard type', 'public.tiff', 'NeXT TIFF v4.0 pasteboard type'], 'png': True, 'h': 630}"
+ },
+ {
+  "check": "dark: the preview reports the copy",
+  "pass": true,
+  "detail": "['Copy Image', 'Copy Stats', 'Image copied']"
+ },
+ {
+  "check": "dark: the card names both providers from transcripts",
+  "pass": true,
+  "detail": "Share AI Usage | CodexBar | EST. 30-DAY SPEND | TOP MODELS | BY USAGE | $235.89 | 01 | Claude | 54% | 29.9M | 02 | GPT | Codex | 46% | 25.1M | TRACKED TOKENS \u00b7 30 DAYS | 55M | Claude Max 5x | Codex Pro 20x | LOCAL \u00b7 AGGREGATE ONLY | DATA THROUGH NOV 2, 2026 | Copy Image | Copy Stats | Save... | Image copied | Share AI Usage"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "8"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]
