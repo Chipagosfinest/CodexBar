@@ -1,0 +1,18 @@
+    0.64s CHECK PASS head: installed app binary equals package manifest 04dfcea1faa1401c1819a96f16a6e677547e68c38c0b627d91fb9d6a7bfc19a7 vs 04dfcea1faa1401c1819a96f16a6e677547e68c38c0b627d91fb9d6a7bfc19a7
+   38.39s click status item at 767,3 size 36x24
+   41.71s SHOT c1-rest menus=[(708, 31, 310, 593)] requests=30 chart at rest: label reads Today
+   41.83s CHECK PASS the chart exposes one element per day of the range 30 first=[{'role': 'AXUnknown', 'label': 'Oct 4: $0.00', 'x': 728, 'y': 128, 'w': 7, 'h': 40, 'help': '2 of 2 subscriptions have spend\nCoverage: 30 / 30 · List-price equivalent\nPriced 28 · Unpriced 0 · Unmetered 0 · Estimated 0', 'id': None}] last=[{'role': 'AXUnknown', 'label': 'Nov 2: $13.33, Co
+   41.97s CHECK PASS at rest the label reads Today ['$205.94', '30d', '44.1M tokens', 'Today $13.33', 'Claude 58%', 'Codex 42%', 'Refresh', '⌘ R']
+   45.39s SHOT c2-hover-early menus=[(708, 31, 310, 593)] requests=30 over: Oct 21: $13.79, Codex $9.24, Claude $4.55
+   45.51s CHECK PASS c2-hover-early: hover selects that day in the readout Oct 21 ['$205.94', '30d', '44.1M tokens', 'Oct 21: $13.79', 'Claude 33%', 'Codex 67%']
+   49.03s SHOT c3-hover-mid menus=[(708, 31, 310, 593)] requests=30 over: Oct 27: $15.17, Claude $10.55, Codex $4.62
+   49.15s CHECK PASS c3-hover-mid: hover selects that day in the readout Oct 27 ['$205.94', '30d', '44.1M tokens', 'Oct 27: $15.17', 'Claude 70%', 'Codex 30%']
+   52.48s SHOT c4-hover-latest menus=[(708, 31, 310, 593)] requests=30 over: Nov 1: $14.71, Claude $8.55, Codex $6.16
+   52.60s CHECK PASS c4-hover-latest: hover selects that day in the readout Nov 1 ['$205.94', '30d', '44.1M tokens', 'Nov 1: $14.71', 'Claude 58%', 'Codex 42%']
+   56.26s SHOT c5-pointer-left-chart menus=[(708, 31, 310, 593)] requests=30 selection clears on exit
+   56.69s CHECK PASS leaving the chart clears the selection ['$205.94', '30d', '44.1M tokens', 'Today $13.33', 'Claude 58%', 'Codex 42%', 'Refresh', '⌘ R']
+   56.70s CHECK PASS legend shares update to the hovered day {'rest': ('Claude 58%', 'Codex 42%'), 'hovered': [('Claude 33%', 'Codex 67%'), ('Claude 70%', 'Codex 30%'), ('Claude 58%', 'Codex 42%')]}
+   56.84s CHECK PASS the legend returns to range shares on exit ('Claude 58%', 'Codex 42%')
+   98.04s provider requests answered 200 by the fixture: 4 of 7
+   98.04s CHECK PASS app reached the fixture 4
+   98.04s CHECK PASS no sampled resolver escape []

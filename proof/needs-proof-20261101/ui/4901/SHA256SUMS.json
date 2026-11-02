@@ -1,0 +1,16 @@
+{
+  "README.md": "638536cb7ad4a4b9e50aba3d2998208c598ada8e7322f78cd405f87191a5c766",
+  "binary-sha256.txt": "569223115954c7d58a696836616f9da5ff79658da0a7ec772c15736a2566e8c6",
+  "c1-points.json": "1553f60805a93b2ef48e40cdab644819c9a2cc06e26dc3f479d62f35dd066ff2",
+  "c1-rest-screen.png": "46d0d9ffd1f3028b11a653b2ea15f2dd42f2f72ece368485f18fbf910be99bac",
+  "c2-hover-early-screen.png": "7c8e4d1efeed8578c8d91c333ce121e2f85384b09ec66a0f3458dab0cd628a5c",
+  "c3-hover-mid-screen.png": "84525f41fad5c2fc6536911e2fd68bedc973dc9d8083e92cef0f5677ceffc229",
+  "c4-hover-latest-screen.png": "f4bff19055cbd648e9e6b8ddd81b7a924801e6d524178d006a256ce346972972",
+  "c5-pointer-left-chart-screen.png": "8da2c800b41eeff8666bfd07bd071937c9f8158a59c371823751e9a8b84a9611",
+  "checks.json": "de88d0289d999f7f151d2faf90626767b1fa630b2e319d1e1610dffab0763e54",
+  "hover-readouts.json": "05199940396f829c126a6fbbf650b60284c7dd9e821e8dee640e700354662e2d",
+  "interaction-log.txt": "d3aaa9603e4c8c3f2f64d9ec8b71367cd968caa76d8e79d4411378cfb0e9e61e",
+  "kit-sha.txt": "d1d2ed3ee7fc7cfb5660c5d845ef9f1fe9fad534a2c8b962bf1695bebf777d2a",
+  "parent-inspection.json": "044eb18f116fc216b02076f995f53e4a3959f5f17e3921d4d0d2bd0f01152c25",
+  "product-sha.txt": "4fbe5804f70158a019ddd7acaa593cf9c0603cb717c73eda411f9acf8cf8058d"
+}

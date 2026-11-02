@@ -1,0 +1,57 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "04dfcea1faa1401c1819a96f16a6e677547e68c38c0b627d91fb9d6a7bfc19a7 vs 04dfcea1faa1401c1819a96f16a6e677547e68c38c0b627d91fb9d6a7bfc19a7"
+ },
+ {
+  "check": "the chart exposes one element per day of the range",
+  "pass": true,
+  "detail": "30 first=[{'role': 'AXUnknown', 'label': 'Oct 4: $0.00', 'x': 728, 'y': 128, 'w': 7, 'h': 40, 'help': '2 of 2 subscriptions have spend\\nCoverage: 30 / 30 \u00b7 List-price equivalent\\nPriced 28 \u00b7 Unpriced 0 \u00b7 Unmetered 0 \u00b7 Estimated 0', 'id': None}] last=[{'role': 'AXUnknown', 'label': 'Nov 2: $13.33, Codex $10.78, Claude $2.55', 'x': 991, 'y': 128, 'w': 7, 'h': 40, 'help': '2 of 2 subscriptions have spend\\nCoverage: 30 / 30 \u00b7 List-price equivalent\\nPriced 28 \u00b7 Unpriced 0 \u00b7 Unmetered 0 \u00b7 Estimated 0', 'id': None}]"
+ },
+ {
+  "check": "at rest the label reads Today",
+  "pass": true,
+  "detail": "['$205.94', '30d', '44.1M tokens', 'Today $13.33', 'Claude 58%', 'Codex 42%', 'Refresh', '\u2318 R']"
+ },
+ {
+  "check": "c2-hover-early: hover selects that day in the readout",
+  "pass": true,
+  "detail": "Oct 21 ['$205.94', '30d', '44.1M tokens', 'Oct 21: $13.79', 'Claude 33%', 'Codex 67%']"
+ },
+ {
+  "check": "c3-hover-mid: hover selects that day in the readout",
+  "pass": true,
+  "detail": "Oct 27 ['$205.94', '30d', '44.1M tokens', 'Oct 27: $15.17', 'Claude 70%', 'Codex 30%']"
+ },
+ {
+  "check": "c4-hover-latest: hover selects that day in the readout",
+  "pass": true,
+  "detail": "Nov 1 ['$205.94', '30d', '44.1M tokens', 'Nov 1: $14.71', 'Claude 58%', 'Codex 42%']"
+ },
+ {
+  "check": "leaving the chart clears the selection",
+  "pass": true,
+  "detail": "['$205.94', '30d', '44.1M tokens', 'Today $13.33', 'Claude 58%', 'Codex 42%', 'Refresh', '\u2318 R']"
+ },
+ {
+  "check": "legend shares update to the hovered day",
+  "pass": true,
+  "detail": "{'rest': ('Claude 58%', 'Codex 42%'), 'hovered': [('Claude 33%', 'Codex 67%'), ('Claude 70%', 'Codex 30%'), ('Claude 58%', 'Codex 42%')]}"
+ },
+ {
+  "check": "the legend returns to range shares on exit",
+  "pass": true,
+  "detail": "('Claude 58%', 'Codex 42%')"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "4"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

@@ -1,0 +1,53 @@
+{
+ "c2-hover-early": {
+  "hovered_element": "Oct 21: $13.79, Codex $9.24, Claude $4.55",
+  "texts": [
+   "$205.94",
+   "30d",
+   "44.1M tokens",
+   "Oct 21: $13.79",
+   "Claude 33%",
+   "Codex 67%",
+   "Refresh",
+   "\u2318 R"
+  ]
+ },
+ "c3-hover-mid": {
+  "hovered_element": "Oct 27: $15.17, Claude $10.55, Codex $4.62",
+  "texts": [
+   "$205.94",
+   "30d",
+   "44.1M tokens",
+   "Oct 27: $15.17",
+   "Claude 70%",
+   "Codex 30%",
+   "Refresh",
+   "\u2318 R"
+  ]
+ },
+ "c4-hover-latest": {
+  "hovered_element": "Nov 1: $14.71, Claude $8.55, Codex $6.16",
+  "texts": [
+   "$205.94",
+   "30d",
+   "44.1M tokens",
+   "Nov 1: $14.71",
+   "Claude 58%",
+   "Codex 42%",
+   "Refresh",
+   "\u2318 R"
+  ]
+ },
+ "c5-pointer-left-chart": {
+  "texts": [
+   "$205.94",
+   "30d",
+   "44.1M tokens",
+   "Today $13.33",
+   "Claude 58%",
+   "Codex 42%",
+   "Refresh",
+   "\u2318 R"
+  ]
+ }
+}
