@@ -10,6 +10,9 @@ INSTALLED = Path('/Applications/CodexBar.app')
 SELECT = ['codex', 'claude', 'kimi', 'zai', 'deepseek']
 kit.start_fixture()
 providers.install()
+real_claude = kit.ROUTES[('api.anthropic.com', '/api/oauth/usage')]
+kit.ROUTES[('api.anthropic.com', '/api/oauth/usage')] = (
+    lambda h: (500, {'error': {'message': 'Temporary failure'}}) if state.get('claude_down') else real_claude(h))
 kit.write_credentials()
 kit.write_config([p for p in providers.CONFIG if p['id'] in SELECT])
 say('trusted(ax,screen,post)=' + subprocess.run([HELPER, 'trusted'], capture_output=True, text=True).stdout.strip())
@@ -32,7 +35,10 @@ def wait_label(app, pred, what, timeout=200):
     return ok
 
 
-def shot(app, name, note=''):
+def shot(app, name, note='', park=True):
+    if park:
+        app.ui('move', 300, 400, 8)  # Keep the pointer off the status item so no frame hides a logo.
+        time.sleep(0.4)
     app.shot(name, note)
     (OUT / f'{name}-item.json').write_text(json.dumps(app.items()[0] if app.items() else {}))
 
@@ -77,7 +83,7 @@ for name, dark in (('light', False), ('dark', True)):
           wait_label(app, lambda l: 'Claude near limit, 8% left' in l and 'average 48% left' in l, 'Claude near limit'), label(app))
     shot(app, f'{name}-2-near-limit-claude')
     app.open_menu()
-    shot(app, f'{name}-3-near-limit-menu-open', 'real click on the status item')
+    shot(app, f'{name}-3-near-limit-menu-open', 'real click on the status item', park=False)
     (OUT / f'{name}-menu-labels.json').write_text(json.dumps([r['label'] for r in app.rows() if r['label']], indent=1))
     app.close_menu()
 
@@ -91,11 +97,13 @@ for name, dark in (('light', False), ('dark', True)):
 
     if not dark:
         phase_begin('light-stale')
-        state['all_fail'] = True
-        finding('failed refreshes on every provider never raise the warning from stale data',
-                wait_label(app, lambda l: 'near limit' not in l, 'stale clears warning', 240), label(app))
-        shot(app, 'light-5-stale-all-failing')
-        state['all_fail'] = False
+        state['claude_down'] = True
+        # Two failures surface through the consecutive-failure gate. z.ai still warns, so only Claude must drop out.
+        check('retained stale Claude stops warning while its figure still counts toward the total',
+              wait_label(app, lambda l: 'Claude near limit' not in l and 'z.ai' in l and 'average 42% left' in l,
+                         'stale Claude stops warning', 240), label(app))
+        shot(app, 'light-5-stale-claude-retained')
+        state['claude_down'] = False
 
     phase_begin(f'{name}-recovered')
     providers.PERCENTS.update(CALM)
@@ -106,12 +114,12 @@ for name, dark in (('light', False), ('dark', True)):
     if not dark:
         try:
             app.open_menu()
-            app.click_row(app.row('Settings'))
+            app.click_row(app.scroll_to(lambda r: any(l.startswith('Settings') for l in r['labels']), 'Settings row'))
             app.wait(lambda: any(w['layer'] == 0 and w['w'] > 300 for w in app.windows()), 'Settings window', 10)
             time.sleep(1)
             app.press('Menu Bar')
             time.sleep(1.5)
-            shot(app, 'light-7-settings')
+            shot(app, 'light-7-settings', park=False)
             finding('Settings shows All providers as the chosen combined icon source', 'All providers' in ' '.join(
                 str(r['label']) + str(r['value']) for r in app.win_rows()), '')
         except Exception as error:  # A Settings navigation miss must not cost the appearance matrix.

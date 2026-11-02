@@ -8,7 +8,7 @@ permissions:
   actions: read
 env:
   PROOF_PR: "menubar-total"
-  PROOF_SHA: 603ab21ee6db6d87eb2da44e7f9fd9ddf48ff7a7
+  PROOF_SHA: 998aab76c47ae0b05846e8376fb5126411def645
   PROOF_SCENARIO: smenubar.py
   PACKAGE_RUN: ""
 jobs:
