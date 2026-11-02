@@ -75,7 +75,24 @@ class Fixture(http.server.BaseHTTPRequestHandler):
     do_GET = do_POST = _go
 
 
+def start_banner():
+    """Provenance on the real display, in every capture and recording. Run by the proof controller, not the product."""
+    helper = os.environ['PROOF_HELPER']
+    kit_sha = (OUT / 'kit-sha.txt').read_text().strip()[:9]
+    text = (f"SYNTHETIC DATA ONLY - no real account. PR #{os.environ['PROOF_PR']} - product {os.environ['PROOF_SHA']}\n"
+            f"Unmodified app packaged from that commit; provider hosts answered by a local fixture; kit {kit_sha}")
+    state['banner'] = subprocess.Popen([helper, 'banner', text])
+    for _ in range(40):
+        time.sleep(0.25)
+        shown = json.loads(subprocess.run([helper, 'windows', 'uihelper'], capture_output=True, text=True).stdout or '[]')
+        if shown:
+            say(f'banner on display: {shown}')
+            return
+    raise AssertionError('provenance banner never reached the display')
+
+
 def start_fixture():
+    start_banner()
     wd = Path(os.environ['RUNNER_TEMP']) / 'tls'
     wd.mkdir(exist_ok=True)
     san = ','.join(f'DNS:{h}' for h in HOSTS)
@@ -425,6 +442,7 @@ class App:
         time.sleep(0.5)
         subprocess.run(['screencapture', '-x', '-C', str(OUT / f'{name}-screen.png')], check=True)
         (OUT / f'{name}-ax.json').write_text(self.ui('tree', self.proc.pid, 'AXExtrasMenuBar'))
+        assert state['banner'].poll() is None, 'provenance banner died'
         say(f'SHOT {name} menus={[(w["x"], w["y"], w["w"], w["h"]) for w in self.menus()]} requests={state["requests"]} {note}')
 
     def quit(self):

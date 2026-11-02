@@ -35,6 +35,13 @@ def case_tokens():
         kit.write_claude(NOW - timedelta(days=b), 'fictional-unpriced-model', 200000, 30000, session=f'u{b}')
 
 
+def case_mixed():
+    """Two providers and one unpriced model: tokens do not compare across providers, so shares must be withheld."""
+    for b in range(4):
+        kit.write_claude(NOW - timedelta(days=b), 'fictional-unpriced-model', 200000, 30000, session=f'u{b}')
+        kit.write_codex(NOW - timedelta(days=b), 'gpt-5.2-codex', 500000, 70000)
+
+
 def case_partial():
     """A request that never completed is excluded from totals, so named rows are only part of the whole."""
     for b in range(4):
@@ -66,6 +73,7 @@ def models_lens(app, tag):
 results = {}
 for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
                         ('tokens', case_tokens, providers.CONFIG[1:2]),
+                        ('mixed', case_mixed, providers.CONFIG[:2]),
                         ('partial', case_partial, providers.CONFIG[1:2])):
     say(f'=== {tag}')
     wipe()

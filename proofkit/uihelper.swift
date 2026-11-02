@@ -56,6 +56,25 @@ func describe(_ el: AXUIElement, _ depth: Int, _ limit: Int) -> [String: Any] {
     return o
 }
 switch args[1] {
+case "banner": // Real on-display provenance. A separate nonactivating panel, drawn over the Dock so it covers no app UI.
+    let app = NSApplication.shared
+    app.setActivationPolicy(.accessory)
+    let screen = NSScreen.main!.frame
+    let panel = NSPanel(contentRect: NSRect(x: screen.minX, y: screen.minY, width: screen.width, height: 46),
+                        styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
+    panel.level = .statusBar
+    panel.isFloatingPanel = true
+    panel.hidesOnDeactivate = false
+    panel.ignoresMouseEvents = true
+    panel.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
+    panel.backgroundColor = NSColor(calibratedRed: 0.55, green: 0.1, blue: 0.1, alpha: 1)
+    let label = NSTextField(wrappingLabelWithString: args[2])
+    label.font = .monospacedSystemFont(ofSize: 11, weight: .semibold)
+    label.textColor = .white
+    label.frame = NSRect(x: 10, y: 4, width: screen.width - 20, height: 38)
+    panel.contentView?.addSubview(label)
+    panel.orderFrontRegardless()
+    app.run()
 case "screen":
     let b = CGDisplayBounds(CGMainDisplayID())
     print(json(["x": b.origin.x, "y": b.origin.y, "w": b.size.width, "h": b.size.height]))

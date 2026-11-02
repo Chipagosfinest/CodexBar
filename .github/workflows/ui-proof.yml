@@ -7,9 +7,9 @@ permissions:
   contents: read
   actions: read
 env:
-  PROOF_PR: "4889"
-  PROOF_SHA: 2e2b001f0da8a1ca606db141f53b4e8188a98359
-  PROOF_SCENARIO: s4889.py
+  PROOF_PR: "4888"
+  PROOF_SHA: 073d0643a51c7dc5e14f3b3f7f27afa27dda3f47
+  PROOF_SCENARIO: s4888.py
   PACKAGE_RUN: "41364828152"
 jobs:
   package:
@@ -76,6 +76,7 @@ jobs:
           codesign -dv "$RUNNER_TEMP/v083/CodexBar.app" > "$out/v083-codesign.txt" 2>&1 || true
       - name: Drive the installed app
         run: |
+          export PROOF_HELPER="$RUNNER_TEMP/uihelper"
           python3 proofkit/$PROOF_SCENARIO "$RUNNER_TEMP/head/CodexBar.app" "$RUNNER_TEMP/v083/CodexBar.app" "$RUNNER_TEMP/uihelper"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
