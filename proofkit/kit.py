@@ -21,6 +21,7 @@ _req = open(OUT / 'fixture-requests.jsonl', 'a', buffering=1)
 state = {'phase': 'normal', 'requests': 0, 'unknown': []}
 ROUTES = {}  # (host, path-prefix) -> callable(handler) -> (status, json-object)
 BUNDLE = os.environ.get('PROOF_BUNDLE', 'com.steipete.codexbar')
+MARKER = 'codexbar-proof-fixture-only'
 
 
 def say(msg):
@@ -119,10 +120,19 @@ while True:
 ''')
     subprocess.Popen(['sudo', '/usr/bin/python3', str(forward)])
     time.sleep(2)
-    check = subprocess.run(['curl', '-sS', '-o', '/dev/null', '-w', '%{http_code}', 'https://api.anthropic.com/__preflight'],
-                           capture_output=True, text=True)
-    say(f'fixture TLS preflight curl -> {check.stdout} {check.stderr.strip()}')
-    assert check.stdout == '404', 'fixture is not reachable through the trusted CA and hosts entries'
+    # A status code proves nothing: a real host answers 404 too. Only this fixture returns this body, and no app may
+    # launch until every hostname resolves to it, so synthetic tokens can never leave the machine.
+    ROUTES.clear()
+    for h in HOSTS:
+        ROUTES[(h, '/__proof_fixture')] = lambda _: (200, {'fixture': MARKER})
+    subprocess.run(['sudo', 'launchctl', 'kickstart', '-k', 'system/com.apple.mDNSResponder'], capture_output=True)
+    time.sleep(3)
+    say('etc-hosts tail: ' + ' | '.join(open('/etc/hosts').read().strip().splitlines()[-3:]))
+    say('resolver: ' + subprocess.run(['dscacheutil', '-q', 'host', '-a', 'name', 'api.anthropic.com'], capture_output=True, text=True).stdout.replace(chr(10), ' '))
+    for h in HOSTS:
+        check = subprocess.run(['curl', '-sS', '-m', '10', f'https://{h}/__proof_fixture'], capture_output=True, text=True)
+        assert MARKER in check.stdout, f'{h} is not answered by the fixture: {check.stdout[:80]} {check.stderr.strip()}'
+    say(f'fixture answers all {len(HOSTS)} hostnames over trusted TLS')
 
 
 def jwt(payload):
