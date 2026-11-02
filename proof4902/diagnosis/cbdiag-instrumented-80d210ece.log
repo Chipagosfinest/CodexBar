@@ -1,0 +1,180 @@
+1793595544.5579991 ===== attempt 0: open
+1793595544.594627 POPULATE StatusItemMenu#75761(items=0,super=false) overview=true
+1793595544.75907 WILLOPEN StatusItemMenu#75761(items=12,super=false) open=0 overview=true
+1793595544.760371 DIDCLOSE StatusItemMenu#75761(items=12,super=false) highlighted=- open=1 overview=true
+1793595544.771905 WILLOPEN OverviewProviderDetailMenu#22953(items=1,super=true) open=0 overview=true
+1793595544.776444 FLYOUT removeAllItems count=1 highlighted=-
+1793595544.791223 DIDCLOSE OverviewProviderDetailMenu#22953(items=4,super=true) highlighted=- open=1 overview=true
+1793595544.8195481 WILLOPEN NSMenu#2384(items=1,super=true) open=0 overview=true
+1793595544.941186 DIDCLOSE NSMenu#2384(items=3,super=true) highlighted=- open=1 overview=true
+1793595544.977573 WILLOPEN OverviewProviderDetailMenu#69454(items=1,super=true) open=0 overview=true
+1793595544.981283 FLYOUT removeAllItems count=1 highlighted=-
+1793595544.9891748 DIDCLOSE OverviewProviderDetailMenu#69454(items=3,super=true) highlighted=- open=1 overview=true
+1793595545.003107 WILLOPEN OverviewProviderDetailMenu#61581(items=1,super=true) open=0 overview=true
+1793595545.006721 FLYOUT removeAllItems count=1 highlighted=-
+1793595545.016856 DIDCLOSE OverviewProviderDetailMenu#61581(items=3,super=true) highlighted=- open=1 overview=true
+1793595546.323657 EVENT 1 window=NSStatusBarWindow loc=(17.0, 15.0)
+1793595546.334389 NOTE NSMenuDidBeginTrackingNotification menu=StatusItemMenu#75761(items=12,super=false) item=- action=-
+1793595546.388212 WILLOPEN StatusItemMenu#75761(items=12,super=false) open=0 overview=true
+1793595548.4991488 WILLOPEN OverviewProviderDetailMenu#22953(items=4,super=true) open=1 overview=true
+1793595548.501226 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595548.5014071 FLYOUT removeAllItems count=4 highlighted=-
+1793595548.50318 DIDCLOSE OverviewProviderDetailMenu#22953(items=4,super=true) highlighted=- open=2 overview=true
+1793595548.549861 WILLOPEN NSMenu#38259(items=1,super=true) open=1 overview=true
+1793595548.5911288 DIDCLOSE NSMenu#38259(items=3,super=true) highlighted=- open=2 overview=true
+1793595548.660653 WILLOPEN OverviewProviderDetailMenu#69454(items=3,super=true) open=1 overview=true
+1793595548.668048 REFRESHHOSTED rebuild OverviewProviderDetailMenu#69454(items=3,super=true)
+1793595548.668264 FLYOUT removeAllItems count=3 highlighted=-
+1793595548.6693602 DIDCLOSE OverviewProviderDetailMenu#69454(items=3,super=true) highlighted=- open=2 overview=true
+1793595548.70686 WILLOPEN OverviewProviderDetailMenu#61581(items=3,super=true) open=1 overview=true
+1793595548.708482 REFRESHHOSTED rebuild OverviewProviderDetailMenu#61581(items=3,super=true)
+1793595548.70861 FLYOUT removeAllItems count=3 highlighted=-
+1793595548.709499 DIDCLOSE OverviewProviderDetailMenu#61581(items=3,super=true) highlighted=- open=2 overview=true
+1793595549.305783 ===== attempt 0: hover
+1793595550.289176 HIGHLIGHT StatusItemMenu#75761(items=12,super=false) item= hasView=true action=menuCardNoOp: enabled=true target=true event=5
+1793595550.5654569 WILLOPEN OverviewProviderDetailMenu#22953(items=4,super=true) open=1 overview=true
+1793595550.5730739 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595550.5843592 FLYOUT removeAllItems count=4 highlighted=-
+1793595552.061439 ===== attempt 0: move to show details
+1793595552.737323 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item= hasView=true action=- enabled=true target=false event=5
+1793595553.037922 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=- hasView=false action=- enabled=false target=false event=5
+1793595553.1023169 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=Plan Usage hasView=false action=submenuAction: enabled=true target=true event=5
+1793595553.374415 WILLOPEN NSMenu#72316(items=1,super=true) open=2 overview=true
+1793595553.4158049 DIDCLOSE NSMenu#72316(items=3,super=true) highlighted=- open=3 overview=true
+1793595553.416574 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=Show details hasView=false action=selectOverviewProvider: enabled=true target=true event=5
+1793595555.6204538 ===== attempt 0: click
+1793595556.583749 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=- hasView=false action=- enabled=false target=false event=2
+1793595556.584197 HIGHLIGHT StatusItemMenu#75761(items=12,super=false) item=- hasView=false action=- enabled=false target=false event=2
+1793595556.6006532 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595556.600755 FLYOUT removeAllItems count=4 highlighted=Show details
+1793595556.601644 DIDCLOSE OverviewProviderDetailMenu#22953(items=4,super=true) highlighted=Show details open=2 overview=true
+1793595556.6026192 DIDCLOSE StatusItemMenu#75761(items=12,super=false) highlighted= open=1 overview=true
+1793595556.604972 NOTE NSMenuDidEndTrackingNotification menu=StatusItemMenu#75761(items=12,super=false) item=- action=-
+1793595556.605608 ACTION selectOverviewProvider(sender) rep=overviewRow-claude menu=nil super=nil
+1793595559.089104 ===== attempt 0: after click menus=[]
+1793595559.759704 WILLOPEN StatusItemMenu#75761(items=12,super=false) open=0 overview=true
+1793595559.761005 DIDCLOSE StatusItemMenu#75761(items=12,super=false) highlighted=- open=1 overview=true
+1793595559.772826 WILLOPEN OverviewProviderDetailMenu#22953(items=4,super=true) open=0 overview=true
+1793595559.785207 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595559.785396 FLYOUT removeAllItems count=4 highlighted=-
+1793595559.786542 DIDCLOSE OverviewProviderDetailMenu#22953(items=4,super=true) highlighted=- open=1 overview=true
+1793595559.814839 WILLOPEN NSMenu#4488(items=1,super=true) open=0 overview=true
+1793595559.841902 DIDCLOSE NSMenu#4488(items=3,super=true) highlighted=- open=1 overview=true
+1793595559.885978 WILLOPEN OverviewProviderDetailMenu#69454(items=3,super=true) open=0 overview=true
+1793595559.887821 REFRESHHOSTED rebuild OverviewProviderDetailMenu#69454(items=3,super=true)
+1793595559.887949 FLYOUT removeAllItems count=3 highlighted=-
+1793595559.888929 DIDCLOSE OverviewProviderDetailMenu#69454(items=3,super=true) highlighted=- open=1 overview=true
+1793595559.9169688 WILLOPEN OverviewProviderDetailMenu#61581(items=3,super=true) open=0 overview=true
+1793595559.9188972 REFRESHHOSTED rebuild OverviewProviderDetailMenu#61581(items=3,super=true)
+1793595559.91905 FLYOUT removeAllItems count=3 highlighted=-
+1793595559.9203649 DIDCLOSE OverviewProviderDetailMenu#61581(items=3,super=true) highlighted=- open=1 overview=true
+1793595560.000961 ===== attempt 1: open
+1793595560.613532 EVENT 1 window=NSStatusBarWindow loc=(17.0, 15.0)
+1793595560.6150742 NOTE NSMenuDidBeginTrackingNotification menu=StatusItemMenu#75761(items=12,super=false) item=- action=-
+1793595560.621574 WILLOPEN StatusItemMenu#75761(items=12,super=false) open=0 overview=true
+1793595562.0915651 WILLOPEN OverviewProviderDetailMenu#22953(items=4,super=true) open=1 overview=true
+1793595562.0938048 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595562.094156 FLYOUT removeAllItems count=4 highlighted=-
+1793595562.096631 DIDCLOSE OverviewProviderDetailMenu#22953(items=4,super=true) highlighted=- open=2 overview=true
+1793595562.141746 WILLOPEN NSMenu#91496(items=1,super=true) open=1 overview=true
+1793595562.1883202 DIDCLOSE NSMenu#91496(items=3,super=true) highlighted=- open=2 overview=true
+1793595562.2452579 WILLOPEN OverviewProviderDetailMenu#69454(items=3,super=true) open=1 overview=true
+1793595562.249306 REFRESHHOSTED rebuild OverviewProviderDetailMenu#69454(items=3,super=true)
+1793595562.249661 FLYOUT removeAllItems count=3 highlighted=-
+1793595562.252377 DIDCLOSE OverviewProviderDetailMenu#69454(items=3,super=true) highlighted=- open=2 overview=true
+1793595562.2951531 WILLOPEN OverviewProviderDetailMenu#61581(items=3,super=true) open=1 overview=true
+1793595562.298589 REFRESHHOSTED rebuild OverviewProviderDetailMenu#61581(items=3,super=true)
+1793595562.298759 FLYOUT removeAllItems count=3 highlighted=-
+1793595562.300037 DIDCLOSE OverviewProviderDetailMenu#61581(items=3,super=true) highlighted=- open=2 overview=true
+1793595565.0350049 ===== attempt 1: hover
+1793595565.787064 HIGHLIGHT StatusItemMenu#75761(items=12,super=false) item= hasView=true action=menuCardNoOp: enabled=true target=true event=5
+1793595566.0654511 WILLOPEN OverviewProviderDetailMenu#22953(items=4,super=true) open=1 overview=true
+1793595566.0668368 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595566.0669641 FLYOUT removeAllItems count=4 highlighted=-
+1793595567.732466 ===== attempt 1: move to show details
+1793595568.228497 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item= hasView=true action=- enabled=true target=false event=5
+1793595568.493953 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=- hasView=false action=- enabled=false target=false event=5
+1793595568.568151 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=Plan Usage hasView=false action=submenuAction: enabled=true target=true event=5
+1793595568.840425 WILLOPEN NSMenu#97090(items=1,super=true) open=2 overview=true
+1793595569.2190719 DIDCLOSE NSMenu#97090(items=3,super=true) highlighted=- open=3 overview=true
+1793595569.223672 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=Show details hasView=false action=selectOverviewProvider: enabled=true target=true event=13
+1793595570.9178472 ===== attempt 1: click
+1793595571.841327 HIGHLIGHT OverviewProviderDetailMenu#22953(items=4,super=true) item=- hasView=false action=- enabled=false target=false event=2
+1793595571.842205 HIGHLIGHT StatusItemMenu#75761(items=12,super=false) item=- hasView=false action=- enabled=false target=false event=2
+1793595571.8550792 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595571.855356 FLYOUT removeAllItems count=4 highlighted=Show details
+1793595571.869879 DIDCLOSE OverviewProviderDetailMenu#22953(items=4,super=true) highlighted=Show details open=2 overview=true
+1793595571.871286 DIDCLOSE StatusItemMenu#75761(items=12,super=false) highlighted= open=1 overview=true
+1793595571.871609 NOTE NSMenuDidEndTrackingNotification menu=StatusItemMenu#75761(items=12,super=false) item=- action=-
+1793595571.87191 ACTION selectOverviewProvider(sender) rep=overviewRow-claude menu=nil super=nil
+1793595574.384676 ===== attempt 1: after click menus=[]
+1793595575.057006 WILLOPEN StatusItemMenu#75761(items=12,super=false) open=0 overview=true
+1793595575.058115 DIDCLOSE StatusItemMenu#75761(items=12,super=false) highlighted=- open=1 overview=true
+1793595575.068799 WILLOPEN OverviewProviderDetailMenu#22953(items=4,super=true) open=0 overview=true
+1793595575.0730991 REFRESHHOSTED rebuild OverviewProviderDetailMenu#22953(items=4,super=true)
+1793595575.073205 FLYOUT removeAllItems count=4 highlighted=-
+1793595575.075124 DIDCLOSE OverviewProviderDetailMenu#22953(items=4,super=true) highlighted=- open=1 overview=true
+1793595575.104218 WILLOPEN NSMenu#95932(items=1,super=true) open=0 overview=true
+1793595575.156162 DIDCLOSE NSMenu#95932(items=3,super=true) highlighted=- open=1 overview=true
+1793595575.2157788 WILLOPEN OverviewProviderDetailMenu#69454(items=3,super=true) open=0 overview=true
+1793595575.21808 REFRESHHOSTED rebuild OverviewProviderDetailMenu#69454(items=3,super=true)
+1793595575.218257 FLYOUT removeAllItems count=3 highlighted=-
+1793595575.235383 DIDCLOSE OverviewProviderDetailMenu#69454(items=3,super=true) highlighted=- open=1 overview=true
+1793595575.270162 WILLOPEN OverviewProviderDetailMenu#61581(items=3,super=true) open=0 overview=true
+1793595575.27217 REFRESHHOSTED rebuild OverviewProviderDetailMenu#61581(items=3,super=true)
+1793595575.272301 FLYOUT removeAllItems count=3 highlighted=-
+1793595575.2821069 DIDCLOSE OverviewProviderDetailMenu#61581(items=3,super=true) highlighted=- open=1 overview=true
+1793595575.346914 ===== attempt 2: open
+1793595576.079747 EVENT 1 window=NSStatusBarWindow loc=(17.0, 15.0)
+1793595576.081685 NOTE NSMenuDidBeginTrackingNotification menu=StatusItemMenu#75761(items=12,super=false) item=- action=-
+1793595576.088997 WILLOPEN StatusItemMenu#75761(items=12,super=false) open=0 overview=true
+1793595576.154985 POPULATE StatusItemMenu#75761(items=12,super=false) overview=true
+1793595577.4854379 WILLOPEN OverviewProviderDetailMenu#23334(items=1,super=true) open=1 overview=true
+1793595577.486278 FLYOUT removeAllItems count=1 highlighted=-
+1793595577.49101 DIDCLOSE OverviewProviderDetailMenu#23334(items=4,super=true) highlighted=- open=2 overview=true
+1793595577.5233278 WILLOPEN NSMenu#92887(items=1,super=true) open=1 overview=true
+1793595577.564454 DIDCLOSE NSMenu#92887(items=3,super=true) highlighted=- open=2 overview=true
+1793595577.608943 WILLOPEN OverviewProviderDetailMenu#13995(items=1,super=true) open=1 overview=true
+1793595577.610359 FLYOUT removeAllItems count=1 highlighted=-
+1793595577.613215 DIDCLOSE OverviewProviderDetailMenu#13995(items=3,super=true) highlighted=- open=2 overview=true
+1793595577.6437302 WILLOPEN OverviewProviderDetailMenu#40049(items=1,super=true) open=1 overview=true
+1793595577.6448789 FLYOUT removeAllItems count=1 highlighted=-
+1793595577.648243 DIDCLOSE OverviewProviderDetailMenu#40049(items=3,super=true) highlighted=- open=2 overview=true
+1793595580.403622 ===== attempt 2: hover
+1793595581.304677 HIGHLIGHT StatusItemMenu#75761(items=12,super=false) item= hasView=true action=menuCardNoOp: enabled=true target=true event=5
+1793595581.58293 WILLOPEN OverviewProviderDetailMenu#23334(items=4,super=true) open=1 overview=true
+1793595581.585431 REFRESHHOSTED rebuild OverviewProviderDetailMenu#23334(items=4,super=true)
+1793595581.585603 FLYOUT removeAllItems count=4 highlighted=-
+1793595583.315254 ===== attempt 2: move to show details
+1793595583.932214 HIGHLIGHT OverviewProviderDetailMenu#23334(items=4,super=true) item= hasView=true action=- enabled=true target=false event=5
+1793595584.2261748 HIGHLIGHT OverviewProviderDetailMenu#23334(items=4,super=true) item=- hasView=false action=- enabled=false target=false event=5
+1793595584.2888079 HIGHLIGHT OverviewProviderDetailMenu#23334(items=4,super=true) item=Plan Usage hasView=false action=submenuAction: enabled=true target=true event=5
+1793595584.569357 WILLOPEN NSMenu#38463(items=1,super=true) open=2 overview=true
+1793595584.958157 DIDCLOSE NSMenu#38463(items=3,super=true) highlighted=- open=3 overview=true
+1793595584.961286 HIGHLIGHT OverviewProviderDetailMenu#23334(items=4,super=true) item=Show details hasView=false action=selectOverviewProvider: enabled=true target=true event=13
+1793595586.559308 ===== attempt 2: click
+1793595587.482191 HIGHLIGHT OverviewProviderDetailMenu#23334(items=4,super=true) item=- hasView=false action=- enabled=false target=false event=2
+1793595587.4831529 HIGHLIGHT StatusItemMenu#75761(items=12,super=false) item=- hasView=false action=- enabled=false target=false event=2
+1793595587.501731 REFRESHHOSTED rebuild OverviewProviderDetailMenu#23334(items=4,super=true)
+1793595587.502033 FLYOUT removeAllItems count=4 highlighted=Show details
+1793595587.503264 DIDCLOSE OverviewProviderDetailMenu#23334(items=4,super=true) highlighted=Show details open=2 overview=true
+1793595587.5045881 DIDCLOSE StatusItemMenu#75761(items=12,super=false) highlighted= open=1 overview=true
+1793595587.51507 NOTE NSMenuDidEndTrackingNotification menu=StatusItemMenu#75761(items=12,super=false) item=- action=-
+1793595587.515749 ACTION selectOverviewProvider(sender) rep=overviewRow-claude menu=nil super=nil
+1793595590.0255759 ===== attempt 2: after click menus=[]
+1793595590.707627 WILLOPEN StatusItemMenu#75761(items=12,super=false) open=0 overview=true
+1793595590.71019 DIDCLOSE StatusItemMenu#75761(items=12,super=false) highlighted=- open=1 overview=true
+1793595590.720974 WILLOPEN OverviewProviderDetailMenu#23334(items=4,super=true) open=0 overview=true
+1793595590.734761 REFRESHHOSTED rebuild OverviewProviderDetailMenu#23334(items=4,super=true)
+1793595590.734939 FLYOUT removeAllItems count=4 highlighted=-
+1793595590.736151 DIDCLOSE OverviewProviderDetailMenu#23334(items=4,super=true) highlighted=- open=1 overview=true
+1793595590.771483 WILLOPEN NSMenu#65803(items=1,super=true) open=0 overview=true
+1793595590.80639 DIDCLOSE NSMenu#65803(items=3,super=true) highlighted=- open=1 overview=true
+1793595590.853298 WILLOPEN OverviewProviderDetailMenu#13995(items=3,super=true) open=0 overview=true
+1793595590.855311 REFRESHHOSTED rebuild OverviewProviderDetailMenu#13995(items=3,super=true)
+1793595590.855421 FLYOUT removeAllItems count=3 highlighted=-
+1793595590.8563008 DIDCLOSE OverviewProviderDetailMenu#13995(items=3,super=true) highlighted=- open=1 overview=true
+1793595590.883213 WILLOPEN OverviewProviderDetailMenu#40049(items=3,super=true) open=0 overview=true
+1793595590.8850288 REFRESHHOSTED rebuild OverviewProviderDetailMenu#40049(items=3,super=true)
+1793595590.8851352 FLYOUT removeAllItems count=3 highlighted=-
+1793595590.886004 DIDCLOSE OverviewProviderDetailMenu#40049(items=3,super=true) highlighted=- open=1 overview=true

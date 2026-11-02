@@ -1,0 +1,160 @@
+diff --git a/Sources/CodexBar/Settings/SettingsStore+Defaults.swift b/Sources/CodexBar/Settings/SettingsStore+Defaults.swift
+index 06b4e8499..544b365d3 100644
+--- a/Sources/CodexBar/Settings/SettingsStore+Defaults.swift
++++ b/Sources/CodexBar/Settings/SettingsStore+Defaults.swift
+@@ -952,6 +952,7 @@ extension SettingsStore {
+         get { self.mergedMenuLastSelectedWasOverviewStorage }
+         set {
+             self.mergedMenuLastSelectedWasOverviewStorage = newValue
++            diag4902("SETTING wasOverview=\(newValue)\n\(Thread.callStackSymbols.prefix(8).joined(separator: "\n"))")
+             self.userDefaults.set(newValue, forKey: "mergedMenuLastSelectedWasOverview")
+         }
+     }
+diff --git a/Sources/CodexBar/StatusItem/Diag4902.swift b/Sources/CodexBar/StatusItem/Diag4902.swift
+new file mode 100644
+index 000000000..e3a76bf06
+--- /dev/null
++++ b/Sources/CodexBar/StatusItem/Diag4902.swift
+@@ -0,0 +1,46 @@
++import AppKit
++import Foundation
++
++nonisolated func diag4902(_ message: String) {
++    let line = "\(Date().timeIntervalSince1970) \(message)\n"
++    guard let file = fopen("/tmp/cbdiag.log", "a") else { return }
++    fputs(line, file)
++    fclose(file)
++}
++
++@MainActor
++enum Diag4902 {
++    private static var installed = false
++    private static let observer = Diag4902Observer()
++    static func describe(_ menu: NSMenu?) -> String {
++        guard let menu else { return "nil" }
++        return "\(type(of: menu))#\(UInt(bitPattern: ObjectIdentifier(menu).hashValue) % 100_000)(items=\(menu.items.count),super=\(menu.supermenu != nil))"
++    }
++    static func install() {
++        guard !self.installed else { return }
++        self.installed = true
++        let names: [Notification.Name] = [
++            NSMenu.willSendActionNotification, NSMenu.didSendActionNotification,
++            NSMenu.didBeginTrackingNotification, NSMenu.didEndTrackingNotification,
++        ]
++        for name in names {
++            NotificationCenter.default.addObserver(
++                observer, selector: #selector(Diag4902Observer.handle(_:)), name: name, object: nil)
++        }
++        NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .leftMouseUp]) { event in
++            let window = event.window.map { String(describing: type(of: $0)) } ?? "nil"
++            diag4902("EVENT \(event.type.rawValue) window=\(window) loc=\(event.locationInWindow)")
++            return event
++        }
++    }
++}
++
++@MainActor
++final class Diag4902Observer: NSObject {
++    @objc func handle(_ note: Notification) {
++        let item = note.userInfo?["MenuItem"] as? NSMenuItem
++        let title = item?.title ?? "-"
++        let action = item?.action.map { NSStringFromSelector($0) } ?? "-"
++        diag4902("NOTE \(note.name.rawValue) menu=\(Diag4902.describe(note.object as? NSMenu)) item=\(title) action=\(action)")
++    }
++}
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+HostedSubmenus.swift b/Sources/CodexBar/StatusItem/StatusItemController+HostedSubmenus.swift
+index 213f14758..96f19ce98 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+HostedSubmenus.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+HostedSubmenus.swift
+@@ -181,6 +181,7 @@ extension StatusItemController {
+             return
+         }
+ 
++        diag4902("REFRESHHOSTED rebuild \(Diag4902.describe(menu))")
+         menu.removeAllItems()
+         let t0 = CACurrentMediaTime()
+         MainThreadActivityBreadcrumb.push("refreshChart:\(identity.chartID)")
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+Menu.swift b/Sources/CodexBar/StatusItem/StatusItemController+Menu.swift
+index 0c9de281f..a4ecc529e 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+Menu.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+Menu.swift
+@@ -64,6 +64,8 @@ extension StatusItemController {
+     }
+ 
+     func menuWillOpen(_ menu: NSMenu) {
++        Diag4902.install()
++        diag4902("WILLOPEN \(Diag4902.describe(menu)) open=\(self.openMenus.count) overview=\(self.settings.mergedMenuLastSelectedWasOverview)")
+         if menu.supermenu == nil {
+             // Records interaction and may bring an adaptive timer forward; never refreshes
+             // synchronously. Root opens only: hover-opening a hosted chart submenu must not kick
+@@ -169,6 +171,7 @@ extension StatusItemController {
+     }
+ 
+     func menuDidClose(_ menu: NSMenu) {
++        diag4902("DIDCLOSE \(Diag4902.describe(menu)) highlighted=\(menu.highlightedItem?.title ?? "-") open=\(self.openMenus.count) overview=\(self.settings.mergedMenuLastSelectedWasOverview)")
+         let wasHostedSubviewMenu = self.isHostedSubviewMenu(menu)
+         self.forgetClosedMenu(menu)
+         if wasHostedSubviewMenu {
+@@ -219,6 +222,7 @@ extension StatusItemController {
+     }
+ 
+     func populateMenu(_ menu: NSMenu, provider: UsageProvider?) {
++        diag4902("POPULATE \(Diag4902.describe(menu)) overview=\(self.settings.mergedMenuLastSelectedWasOverview)")
+         let trace = self.beginMenuOperationTrace(
+             "populateMenu",
+             breadcrumb: "populateMenu:\(provider?.rawValue ?? "merged")")
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+MenuTracking.swift b/Sources/CodexBar/StatusItem/StatusItemController+MenuTracking.swift
+index c47de97e9..ef0a3860b 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+MenuTracking.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+MenuTracking.swift
+@@ -171,6 +171,7 @@ extension StatusItemController {
+     }
+ 
+     func menu(_ menu: NSMenu, willHighlight item: NSMenuItem?, eventType: NSEvent.EventType?) {
++        diag4902("HIGHLIGHT \(Diag4902.describe(menu)) item=\(item?.title ?? "-") hasView=\(item?.view != nil) action=\(item?.action.map { NSStringFromSelector($0) } ?? "-") enabled=\(item?.isEnabled ?? false) target=\(item?.target != nil) event=\(eventType?.rawValue ?? 0)")
+         let key = ObjectIdentifier(menu)
+         let wasKeyboardHighlighted = self.keyboardHighlightedMenus.contains(key)
+         switch eventType {
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+OverviewSubmenus.swift b/Sources/CodexBar/StatusItem/StatusItemController+OverviewSubmenus.swift
+index e98098dc1..661252ece 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+OverviewSubmenus.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+OverviewSubmenus.swift
+@@ -5,6 +5,22 @@ import CodexBarCore
+ final class OverviewProviderDetailMenu: NSMenu {
+     /// Hydrated rows carry no chart ID, so reopening reads the provider from here to rebuild a stale card.
+     var provider: UsageProvider?
++    override func performActionForItem(at index: Int) {
++        diag4902("FLYOUT performActionForItem index=\(index) title=\(self.item(at: index)?.title ?? "?")")
++        super.performActionForItem(at: index)
++    }
++    override func removeAllItems() {
++        diag4902("FLYOUT removeAllItems count=\(self.items.count) highlighted=\(self.highlightedItem?.title ?? "-")")
++        super.removeAllItems()
++    }
++    override func cancelTracking() {
++        diag4902("FLYOUT cancelTracking\n\(Thread.callStackSymbols.prefix(10).joined(separator: "\n"))")
++        super.cancelTracking()
++    }
++    override func cancelTrackingWithoutAnimation() {
++        diag4902("FLYOUT cancelTrackingWithoutAnimation\n\(Thread.callStackSymbols.prefix(10).joined(separator: "\n"))")
++        super.cancelTrackingWithoutAnimation()
++    }
+ }
+ 
+ extension StatusItemController {
+@@ -99,6 +115,7 @@ extension StatusItemController {
+     }
+ 
+     @objc func selectOverviewProvider(_ sender: NSMenuItem) {
++        diag4902("ACTION selectOverviewProvider(sender) rep=\(sender.representedObject ?? "nil") menu=\(Diag4902.describe(sender.menu)) super=\(Diag4902.describe(sender.menu?.supermenu))")
+         guard let represented = sender.representedObject as? String,
+               represented.hasPrefix(Self.overviewRowIdentifierPrefix)
+         else {
+@@ -115,6 +132,7 @@ extension StatusItemController {
+     }
+ 
+     func selectOverviewProvider(_ provider: ProviderInstanceID, menu: NSMenu) {
++        diag4902("ACTION selectOverviewProvider provider=\(provider.rawValue) wasOverview=\(self.settings.mergedMenuLastSelectedWasOverview)")
+         if !self.settings.mergedMenuLastSelectedWasOverview, self.selectedMenuProvider == provider { return }
+         self.preservingMergedSwitcherContentCachesDuringInvalidation {
+             self.settings.mergedMenuLastSelectedWasOverview = false

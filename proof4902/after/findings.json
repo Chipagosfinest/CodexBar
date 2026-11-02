@@ -1,0 +1,12 @@
+[
+ {
+  "finding": "Show details after visiting the nested chart selects the provider tab",
+  "as_expected": true,
+  "detail": "Claude | claude@example.test | Updated just now | Max 5x | Session 65% left | Resets in 3h | Usage remaining | 5% in reserve \u00b7 Lasts until reset | Weekly 78% left | Resets in 5d | Usage remaining | 7% in reserve \u00b7 Lasts until reset | Plan U"
+ },
+ {
+  "finding": "Show details reached directly selects the provider tab",
+  "as_expected": true,
+  "detail": "Claude | claude@example.test | Updated just now | Max 5x | Session 65% left | Resets in 3h | Usage remaining | 5% in reserve \u00b7 Lasts until reset | Weekly 78% left | Resets in 5d | Usage remaining | 7% in reserve \u00b7 Lasts until reset | Plan U"
+ }
+]

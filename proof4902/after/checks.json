@@ -1,0 +1,92 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "9f0f6b31d98bea861459f1bfc037368cca7f6e802141299627bf5fbc9c14cbce vs 9f0f6b31d98bea861459f1bfc037368cca7f6e802141299627bf5fbc9c14cbce"
+ },
+ {
+  "check": "Compact Overview has a Claude row",
+  "pass": true,
+  "detail": "['Claude', 'claude@example.test', 'Updated just now', 'Max 5x', 'Session 65% left', 'Resets in 3h']"
+ },
+ {
+  "check": "hovering the Compact row opens a flyout window",
+  "pass": true,
+  "detail": "[{'x': 403, 'y': 118, 'layer': 101, 'w': 310, 'id': 36, 'h': 250, 'name': ''}, {'x': 708, 'y': 31, 'id': 34, 'name': '', 'w': 310, 'h': 594, 'layer': 101}]"
+ },
+ {
+  "check": "the flyout hosts the full provider card",
+  "pass": true,
+  "detail": "{'flyout': {'id': 36, 'w': 310, 'x': 403, 'name': '', 'h': 250, 'y': 118, 'layer': 101}, 'labels': ['Session 65% left', 'Weekly 78% left', 'Plan Usage', 'Show details']}"
+ },
+ {
+  "check": "the nested chart opens from the flyout",
+  "pass": true,
+  "detail": "[{'h': 250, 'name': '', 'id': 36, 'layer': 101, 'y': 118, 'x': 403, 'w': 310}, {'name': '', 'w': 310, 'layer': 101, 'y': 215, 'h': 484, 'id': 37, 'x': 708}, {'x': 708, 'h': 594, 'y': 31, 'layer': 101, 'name': '', 'id': 34, 'w': 310}]"
+ },
+ {
+  "check": "the click after the nested chart closed the menu and saved the Claude tab",
+  "pass": true,
+  "detail": "{'mergedMenuLastSelectedWasOverview': False, 'mergedOverviewLayout': 'compact', 'mergedOverviewSelectedProviders': ['claude', 'kimi', 'zai'], 'selectedMenuProvider': 'claude'}"
+ },
+ {
+  "check": "flyout reopens for the direct Show details path",
+  "pass": true,
+  "detail": "[{'id': 39, 'y': 118, 'h': 250, 'name': '', 'w': 310, 'layer': 101, 'x': 403}, {'x': 708, 'id': 38, 'name': '', 'y': 31, 'w': 310, 'h': 594, 'layer': 101}]"
+ },
+ {
+  "check": "the direct click closed the menu and saved the Claude tab",
+  "pass": true,
+  "detail": "{'mergedMenuLastSelectedWasOverview': False, 'mergedOverviewLayout': 'compact', 'mergedOverviewSelectedProviders': ['claude', 'kimi', 'zai'], 'selectedMenuProvider': 'claude'}"
+ },
+ {
+  "check": "pointer click on the Compact row selects the Claude provider tab",
+  "pass": true,
+  "detail": "Claude | claude@example.test | Updated just now | Max 5x | Session 65% left | Resets in 3h | Usage remaining | 5% in reserve \u00b7 Lasts until reset | Weekly 78% left | Resets in 5d | Usage remaining | 7% in reserve \u00b7 Lasts until reset | Plan U"
+ },
+ {
+  "check": "Show details selects the provider tab both after the nested chart and directly",
+  "pass": true,
+  "detail": "after chart=True direct=True"
+ },
+ {
+  "check": "first flyout opened before the refresh",
+  "pass": true,
+  "detail": "[{'w': 310, 'id': 48, 'name': '', 'h': 250, 'layer': 101, 'y': 118, 'x': 403}, {'x': 708, 'layer': 101, 'h': 594, 'y': 31, 'w': 310, 'id': 47, 'name': ''}]"
+ },
+ {
+  "check": "first flyout shows no Sonnet window yet",
+  "pass": true,
+  "detail": "['Session 65% left', 'Weekly 78% left']"
+ },
+ {
+  "check": "the refresh reached the provider with Overview open",
+  "pass": true,
+  "detail": "1"
+ },
+ {
+  "check": "Claude row is still present after the refresh",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "flyout reopens after the refresh",
+  "pass": true,
+  "detail": "[{'y': 118, 'layer': 101, 'h': 290, 'id': 48, 'name': '', 'w': 310, 'x': 403}, {'name': '', 'y': 31, 'h': 634, 'layer': 101, 'w': 310, 'x': 708, 'id': 47}]"
+ },
+ {
+  "check": "the reopened flyout renders the current card: new values, new Sonnet window, taller frame",
+  "pass": true,
+  "detail": "{'before': 250, 'after': 290, 'labels': ['Session 30% left', 'Weekly 56% left', 'Sonnet 20% left']}"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "34"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]
