@@ -948,12 +948,8 @@ extension UserProviderPluginTests {
         defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
         let fixture = try Fixture()
         defer { fixture.remove() }
-        _ = try fixture.write(
-            name: "card.js",
-            source: Self.menuPlugin(id: "card-meter", name: "Card Meter", topLevel: false))
-        _ = try fixture.write(
-            name: "tab.js",
-            source: Self.menuPlugin(id: "tab-meter", name: "Tab Meter", topLevel: true))
+        _ = try fixture.write(name: "card.js", source: Self.menuPlugin(id: "card-m", name: "Card", topLevel: false))
+        _ = try fixture.write(name: "tab.js", source: Self.menuPlugin(id: "tab-m", name: "Tab Meter", topLevel: true))
         let plugins = UserProviderPluginRegistry.refresh(
             loader: fixture.loader(transport: RecordingTransport(responseJSON: "{}"))).compactMap(\.plugin)
         let card = try #require(plugins.first { !$0.manifest.topLevel })
