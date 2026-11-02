@@ -104,7 +104,51 @@ if not landed:
     landed2, detail = on_claude_tab()
     finding('the first reopen after Show details already shows the provider tab', False, 'second reopen landed=' + str(landed2))
     landed = landed2
-check('Show details lands on the Claude provider tab', landed, detail)
+finding('Show details after visiting the nested chart selects the provider tab', landed, detail)
+results_after_chart = landed
+
+
+def overview_tab():
+    if not app.menus():
+        app.open_menu()
+    tab = next(r for r in app.rows() if r['role'] == 'AXButton' and r['label'] == 'Overview' and r['w'])
+    app.ui('click', tab['x'] + tab['w'] / 2, tab['y'] + tab['h'] / 2)
+    time.sleep(1.5)
+
+
+# Direct path, no nested chart first: the same item, reached straight from the row.
+overview_tab()
+claude = provider_row('Claude')
+app.hover(claude)
+check('flyout reopens for the direct Show details path', app.wait(lambda: len(app.menus()) > 1, 'flyout', 6), app.menus())
+time.sleep(1)
+x, chart_y, show_y = flyout_points()
+app.ui('move', x, show_y, 20)
+time.sleep(1.0)
+app.shot('v7-direct-show-details-highlighted')
+app.ui('click', x, show_y)
+time.sleep(3)
+direct_closed = not app.menus()
+app.shot('v8-after-direct-show-details', f'closed={direct_closed}')
+kit.defaults_snapshot('nav-after-direct-show-details')
+if direct_closed:
+    app.open_menu()
+app.shot('v9-reopened-after-direct-show-details')
+direct, detail = on_claude_tab()
+finding('Show details reached directly selects the provider tab', direct, detail)
+# The row click itself is the other route to the provider tab.
+if not direct:
+    overview_tab()
+claude = provider_row('Claude')
+if claude and not direct:
+    app.click_row(claude)
+    time.sleep(2.5)
+    if not app.menus():
+        app.open_menu()
+    app.shot('v10-row-click-selects-provider', 'pointer click on the Compact row')
+    row_click, detail = on_claude_tab()
+    check('pointer click on the Compact row selects the Claude provider tab', row_click, detail)
+check('provider-tab selection reachable from the flyout (Show details)', results_after_chart or direct, f'after chart={results_after_chart} direct={direct}')
 say(f'recording exit={rec.wait(timeout=100)}')
 app.quit()
 

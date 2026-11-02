@@ -54,8 +54,17 @@ def case_partial():
 
 def open_pane(app):
     app.open_menu()
-    app.click_row(app.row('Settings'))
-    assert app.wait(lambda: any(w['layer'] == 0 and w['w'] > 300 for w in app.windows()), 'Settings window', 12), 'no Settings window'
+    opened = False
+    for attempt in range(2):
+        target = next(r for r in app.menu_items() if any(l.startswith('Settings') for l in r['labels']) and r['y'] > 100)
+        app.click_row(target)
+        opened = app.wait(lambda: any(w['layer'] == 0 and w['w'] > 300 for w in app.windows()), 'Settings window', 12)
+        if opened:
+            break
+        app.shot(f'{app.name}-settings-attempt-{attempt}', f'no window after clicking {target["labels"][:2]} at y={target["y"]}')
+        if not app.menus():
+            app.open_menu()
+    assert opened, 'no Settings window'
     time.sleep(2)
     (OUT / f'{app.name}-settings-window.json').write_text(json.dumps(app.win_rows(), indent=1))
     app.press('Usage & Spend')
