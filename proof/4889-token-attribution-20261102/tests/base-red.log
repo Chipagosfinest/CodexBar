@@ -1,0 +1,119 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite SpendDashboardModelTests started.
+◇ Test "currency coverage counts only overlapping provider days" started.
+◇ Test "unpriced history keeps spend unavailable and lists named models" started.
+◇ Test "partial contributing model history is unavailable instead of a lower bound" started.
+◇ Test "chart domain uses the exact requested window despite sparse points" started.
+◇ Test "dashboard source contract includes only cost capable descriptors" started.
+◇ Test "same named projects keep distinct paths and row identities" started.
+◇ Test "explicit zero malformed date is ignored without affecting valid window rows" started.
+◇ Test "Codex account indices use app locale numerals" started.
+◇ Test "uncovered source affects only its own currency model history" started.
+◇ Test "models lens withholds shares when model history is partial" started.
+◇ Test "project rows stay attributed per source" started.
+◇ Test "stored day keys stay put when the display timezone changes" started.
+◇ Test "malformed date only with unknown usage is unavailable not zero" started.
+◇ Test "metered spend stays on the snapshot window instead of a shorter range" started.
+◇ Test "currency coverage intersects disjoint provider windows" started.
+◇ Test "covered inactive sources contribute zero without hiding active totals" started.
+◇ Test "project rows report unknown aggregates as nil but keep known ones" started.
+◇ Test "vendor reported daily spend keeps vendor metered provenance" started.
+◇ Test "token mix keeps missing classes unset and supports a 90 day window" started.
+◇ Test "partial Codex model history rejects a malformed named cost" started.
+◇ Test "ISO history stays Gregorian while preserving the injected timezone" started.
+◇ Test "full 30 day coverage keeps empty and known zero spend distinct from unavailable" started.
+◇ Test "unknown usage without a breakdown makes model history unavailable" started.
+◇ Test "uncovered same currency source keeps complete model rows without ranking them as complete" started.
+◇ Test "project rows drop projects without attributable window days" started.
+◇ Test "malformed date mixed with valid usage fails the source closed" started.
+◇ Test "openCodex stays on a separate ledger from native Codex" started.
+◇ Test "project rows exclude days outside the requested window" started.
+◇ Test "project rows aggregate windowed entries and rank by cost" started.
+◇ Test "models lens withholds token shares for unattributed currency group history" started.
+◇ Test "only uncovered source reports model breakdown unavailable" started.
+◇ Test "Codex requests freeze source home auth and cache identity" started.
+◇ Test "partially attributed Codex history retains its priced model rows" started.
+◇ Test "blank model names fail closed unless their usage is explicitly zero" started.
+◇ Test "Codex history with only unpriced routing rows stays unavailable" started.
+◇ Test "zero usage without a breakdown keeps model history complete" started.
+◇ Test "incomplete duplicate day sources do not render partial chart stacks" started.
+◇ Test "unpriced Codex routing row retains priced model rows as partial" started.
+◇ Test "count labels avoid plural agreement and localize numbers" started.
+◇ Test "mixed invalid entry metrics make source and group totals unavailable" started.
+◇ Test "hourly points come from request buckets instead of session last activity" started.
+◇ Test "full 30 day coverage keeps unpriced spend unavailable instead of zero" started.
+◇ Test "native currencies stay separate and rank only within their currency" started.
+◇ Test "models lens ranks fully attributed unpriced Claude currency group by tokens" started.
+◇ Test "invalid model breakdowns make model history unavailable" started.
+◇ Test "invalid costs and arithmetic overflow never become spend" started.
+◇ Test "partial named breakdown totals make model history unavailable" started.
+◇ Test "daily values aggregate once and produce deterministic nonoverlapping stacks" started.
+◇ Test "windows anchor to injected now and report covered days honestly" started.
+✔ Test "partial contributing model history is unavailable instead of a lower bound" passed after 0.059 seconds.
+✔ Test "unpriced history keeps spend unavailable and lists named models" passed after 0.059 seconds.
+✔ Test "currency coverage counts only overlapping provider days" passed after 0.074 seconds.
+✘ Test "models lens ranks fully attributed unpriced Claude currency group by tokens" recorded an issue at SpendDashboardModelTests.swift:832:9: Expectation failed: !ranking.isPartial
+↳ !ranking.isPartial → true
+↳   ranking.isPartial → false
+↳     ranking → SpendModelRanking(basis: Optional(CodexBar.SpendModelRanking.Basis.tokens), rows: [CodexBar.SpendModelRanking.Row(model: CodexBar.SpendDashboardModel.ModelRow(rank: 2, provider: CodexBarCore.UsageProvider.claude, providerName: "Claude", modelName: "claude-sonnet-4-5", totalTokens: Optional(2800000), totalCost: nil, tokenMix: CodexBarCore.CostUsageTokenMix(inputTokens: nil, outputTokens: nil, cacheReadTokens: nil, cacheCreationTokens: nil, reasoningTokens: nil, overflowedClasses: 0), incompleteRequestCount: 0), value: 2800000.0, share: nil), CodexBar.SpendModelRanking.Row(model: CodexBar.SpendDashboardModel.ModelRow(rank: 1, provider: CodexBarCore.UsageProvider.claude, providerName: "Claude", modelName: "claude-opus-4-5", totalTokens: Optional(920000), totalCost: nil, tokenMix: CodexBarCore.CostUsageTokenMix(inputTokens: nil, outputTokens: nil, cacheReadTokens: nil, cacheCreationTokens: nil, reasoningTokens: nil, overflowedClasses: 0), incompleteRequestCount: 0), value: 920000.0, share: nil)], isPartial: true)
+↳       basis → .tokens
+↳         some → .tokens
+↳       rows → [CodexBar.SpendModelRanking.Row(model: CodexBar.SpendDashboardModel.ModelRow(rank: 2, provider: CodexBarCore.UsageProvider.claude, providerName: "Claude", modelName: "claude-sonnet-4-5", totalTokens: Optional(2800000), totalCost: nil, tokenMix: CodexBarCore.CostUsageTokenMix(inputTokens: nil, outputTokens: nil, cacheReadTokens: nil, cacheCreationTokens: nil, reasoningTokens: nil, overflowedClasses: 0), incompleteRequestCount: 0), value: 2800000.0, share: nil), CodexBar.SpendModelRanking.Row(model: CodexBar.SpendDashboardModel.ModelRow(rank: 1, provider: CodexBarCore.UsageProvider.claude, providerName: "Claude", modelName: "claude-opus-4-5", totalTokens: Optional(920000), totalCost: nil, tokenMix: CodexBarCore.CostUsageTokenMix(inputTokens: nil, outputTokens: nil, cacheReadTokens: nil, cacheCreationTokens: nil, reasoningTokens: nil, overflowedClasses: 0), incompleteRequestCount: 0), value: 920000.0, share: nil)]
+↳       isPartial → true
+↳     isPartial → true
+✘ Test "models lens ranks fully attributed unpriced Claude currency group by tokens" recorded an issue at SpendDashboardModelTests.swift:835:9: Expectation failed: ranking.rows.map(\.share) == [2_800_000.0 / 3_720_000, 920_000.0 / 3_720_000]
+↳ ranking.rows.map(\.share) == [2_800_000.0 / 3_720_000, 920_000.0 / 3_720_000] → false
+↳   ranking.rows.map(\.share) → [nil, nil]
+↳   [2_800_000.0 / 3_720_000, 920_000.0 / 3_720_000] → [Optional(0.7526881720430108), Optional(0.24731182795698925)]
+✔ Test "same named projects keep distinct paths and row identities" passed after 0.077 seconds.
+✔ Test "chart domain uses the exact requested window despite sparse points" passed after 0.077 seconds.
+✔ Test "explicit zero malformed date is ignored without affecting valid window rows" passed after 0.077 seconds.
+✔ Test "uncovered source affects only its own currency model history" passed after 0.077 seconds.
+✔ Test "models lens withholds shares when model history is partial" passed after 0.077 seconds.
+✔ Test "project rows stay attributed per source" passed after 0.077 seconds.
+✔ Test "Codex account indices use app locale numerals" passed after 0.077 seconds.
+✔ Test "malformed date only with unknown usage is unavailable not zero" passed after 0.077 seconds.
+✔ Test "metered spend stays on the snapshot window instead of a shorter range" passed after 0.077 seconds.
+✔ Test "stored day keys stay put when the display timezone changes" passed after 0.077 seconds.
+✔ Test "dashboard source contract includes only cost capable descriptors" passed after 0.077 seconds.
+✔ Test "covered inactive sources contribute zero without hiding active totals" passed after 0.077 seconds.
+✔ Test "project rows report unknown aggregates as nil but keep known ones" passed after 0.077 seconds.
+✔ Test "currency coverage intersects disjoint provider windows" passed after 0.077 seconds.
+✔ Test "partial Codex model history rejects a malformed named cost" passed after 0.077 seconds.
+✔ Test "vendor reported daily spend keeps vendor metered provenance" passed after 0.077 seconds.
+✔ Test "token mix keeps missing classes unset and supports a 90 day window" passed after 0.077 seconds.
+✔ Test "ISO history stays Gregorian while preserving the injected timezone" passed after 0.077 seconds.
+✔ Test "unknown usage without a breakdown makes model history unavailable" passed after 0.077 seconds.
+✔ Test "project rows drop projects without attributable window days" passed after 0.077 seconds.
+✔ Test "malformed date mixed with valid usage fails the source closed" passed after 0.077 seconds.
+✔ Test "full 30 day coverage keeps empty and known zero spend distinct from unavailable" passed after 0.077 seconds.
+✔ Test "project rows exclude days outside the requested window" passed after 0.077 seconds.
+✔ Test "project rows aggregate windowed entries and rank by cost" passed after 0.077 seconds.
+✔ Test "models lens withholds token shares for unattributed currency group history" passed after 0.077 seconds.
+✔ Test "openCodex stays on a separate ledger from native Codex" passed after 0.077 seconds.
+✔ Test "only uncovered source reports model breakdown unavailable" passed after 0.077 seconds.
+✔ Test "partially attributed Codex history retains its priced model rows" passed after 0.077 seconds.
+✔ Test "blank model names fail closed unless their usage is explicitly zero" passed after 0.077 seconds.
+✔ Test "Codex history with only unpriced routing rows stays unavailable" passed after 0.077 seconds.
+✔ Test "zero usage without a breakdown keeps model history complete" passed after 0.068 seconds.
+✔ Test "incomplete duplicate day sources do not render partial chart stacks" passed after 0.068 seconds.
+✔ Test "Codex requests freeze source home auth and cache identity" passed after 0.077 seconds.
+✔ Test "unpriced Codex routing row retains priced model rows as partial" passed after 0.068 seconds.
+✔ Test "mixed invalid entry metrics make source and group totals unavailable" passed after 0.068 seconds.
+✔ Test "hourly points come from request buckets instead of session last activity" passed after 0.068 seconds.
+✔ Test "full 30 day coverage keeps unpriced spend unavailable instead of zero" passed after 0.068 seconds.
+✔ Test "native currencies stay separate and rank only within their currency" passed after 0.068 seconds.
+✔ Test "uncovered same currency source keeps complete model rows without ranking them as complete" passed after 0.077 seconds.
+✔ Test "invalid model breakdowns make model history unavailable" passed after 0.068 seconds.
+✔ Test "invalid costs and arithmetic overflow never become spend" passed after 0.068 seconds.
+✔ Test "partial named breakdown totals make model history unavailable" passed after 0.068 seconds.
+✔ Test "daily values aggregate once and produce deterministic nonoverlapping stacks" passed after 0.068 seconds.
+✘ Test "models lens ranks fully attributed unpriced Claude currency group by tokens" failed after 0.068 seconds with 2 issues.
+✔ Test "windows anchor to injected now and report covered days honestly" passed after 0.069 seconds.
+✔ Test "count labels avoid plural agreement and localize numbers" passed after 0.083 seconds.
+✘ Suite SpendDashboardModelTests failed after 0.093 seconds with 2 issues.
+✘ Test run with 49 tests in 1 suite failed after 0.093 seconds with 2 issues.
+Note: Some test targets reported failures:
+  - CodexBarTests (Swift Testing)

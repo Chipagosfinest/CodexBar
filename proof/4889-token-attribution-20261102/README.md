@@ -1,0 +1,13 @@
+# PR 4889 token-attribution fix proof
+
+Final product: `a3090c2f8130d125e31fd8338639f853a8dff4bd`.
+
+- `before/`: original unmodified-product capture at `2e2b001f0`, from run 41378504740 and assets commit 38b8372ddfed098dbbb0a6c443e668685d1e5ceb. Same two synthetic unpriced Claude models; tokens but no shares/bars.
+- `head/`: original full-screen images and AX output from successful capture run 41393244181, controller `4cf160ef932fa5183347f1e7cc64c15ff6579cf4`. 25/25 checks pass. Every selected PNG was inspected at original resolution; the token models show 75% / 25% and proportional bars. Mixed-provider and partial histories still suppress shares. No movie claim.
+- `package/`: successful package job in run 41387628491 built the unmodified final product. The installed binary matches SHA-256 `76b99895664e2e03e5a87c505ef6da676d7c986e77c8f8073a9f03a3bf42ce0d`; tracked-source diff is empty. That earlier combined run's separate test attempt was not valid red evidence and was superseded.
+- `tests/`: successful base-proof run 41396160849 executes all 49 model tests with the three production files restored from the pre-fix product and the committed regression tests unchanged. The new group test fails on exactly the partial flag and erased shares; the attribution-gap guard passes. Head results are the actual CI excerpt from run 41387596451/job 125092038496: both new tests and the three affected suites pass. The entire final-head CI is green.
+- `proofkit/`: full reusable synthetic controller and workflows. Capture consumes the verified package; build recipe is `ARCHES=arm64 CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh release` at the final product SHA. The base-proof workflow selects Xcode 27, matching repository CI, records native test inventory, applies only the three pre-fix production files, and runs the whole model suite with project Keychain/file isolation controls on a disposable runner.
+
+Synthetic fixtures only; no real accounts, personal history, credentials or Keychain prompts. Selected screens and published text were inspected/scanned for personal data. Source and binary hashes are included.
+
+Diagnostic attempts are not presented as regression failures: the older Xcode compiler could not type-check the test's `#expect`; the first Xcode 27 attempt built but a sentence-name filter without literal backticks selected no tests, and its temporary native-build HOME cleanup encountered a read-only MetalToolchain mount. The corrected run uses the existing suite filter and a normal disposable runner home with project test isolation; it demonstrates the actual assertion failures.

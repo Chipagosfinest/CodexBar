@@ -1,0 +1,7 @@
+2026-11-02T04:57:42.2640880Z ◇ Test "models lens ranks fully attributed unpriced Claude currency group by tokens" started.
+2026-11-02T04:57:42.2642610Z ✔ Test "models lens ranks fully attributed unpriced Claude currency group by tokens" passed after 0.001 seconds.
+2026-11-02T04:57:42.2643360Z ◇ Test "models lens withholds token shares for unattributed currency group history" started.
+2026-11-02T04:57:42.2643950Z ✔ Test "models lens withholds token shares for unattributed currency group history" passed after 0.001 seconds.
+2026-11-02T04:57:42.2676890Z ✔ Suite SpendDashboardModelTests passed after 0.088 seconds.
+2026-11-02T04:57:49.9869900Z ✔ Suite SpendDashboardPartialCostTests passed after 0.024 seconds.
+2026-11-02T04:58:19.7757460Z ✔ Suite SpendModelRankingTests passed after 0.002 seconds.

@@ -1,0 +1,14 @@
+{
+  "base_product_sha": "2e2b001f0da8a1ca606db141f53b4e8188a98359",
+  "head_product_sha": "a3090c2f8130d125e31fd8338639f853a8dff4bd",
+  "base_run": "https://github.com/Chipagosfinest/CodexBar/actions/runs/41396160849",
+  "head_ci_run": "https://github.com/steipete/CodexBar/actions/runs/41387596451",
+  "base_result": "49 tests executed; new fully attributed unpriced Claude group fails with exactly 2 expected issues; attribution-gap guard passes.",
+  "head_result": "Both new tests and all three affected suites pass in PR CI.",
+  "base_source_sha256": {
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel.swift": "a9a7e3ff6da39ded476b99fcf2b09a97d1ce798edd27b80ec9682c4381738cef",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel+ModelBreakdown.swift": "05743272a35c771e71339a0f9b8d593669eaffdf3c3e93c08eba8974b4d9aad7",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModelRanking.swift": "ff79e0534414271b6e2972e6a7c229cf3a7870fba390c94fffd8dbd3953f6285"
+  },
+  "test_source_sha256": "1823b3094b1bdf8003c6bdfc851b48b9a19def536b04d5a6c14e149a4a3c07e2"
+}
