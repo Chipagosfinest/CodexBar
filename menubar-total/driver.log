@@ -1,0 +1,108 @@
+    0.28s banner on display: [{'id': 30, 'h': 46, 'x': 0, 'w': 1024, 'layer': 1000, 'y': 722, 'name': ''}]
+    3.49s all 23 hostnames resolve only to loopback after 3s
+    3.97s fixture answers all 23 hostnames over trusted TLS
+    3.99s trusted(ax,screen,post)=true true true
+    4.68s CHECK PASS head: installed app binary equals package manifest 547749928bce3c47608c691d06fb87bdffe115dd6376e5f600ceb06512e94501 vs 547749928bce3c47608c691d06fb87bdffe115dd6376e5f600ceb06512e94501
+    4.68s phase -> default-source
+    4.78s launched default-source pid=1536
+   18.59s SHOT default-source menus=[] requests=34 no source chosen: the existing default
+   19.06s CHECK PASS an existing install is unchanged: no total without opting in CodexBar
+   19.12s default-source stopped
+   20.68s phase -> storm-release-v083
+   20.88s launched storm-release-v083 pid=1808
+  108.77s preclick display captured; icon drawn colors=26 inside screen={'x': 0, 'w': 1024, 'h': 768, 'y': 0}
+  108.78s click status item at 767,3 size 36x24
+  346.71s STORM release-v083: claude_usage_requests_in_170s=3 all_requests=27
+  346.91s storm-release-v083 stopped
+  348.42s phase -> storm-head-default-source
+  348.54s launched storm-head-default-source pid=8775
+  436.24s preclick display captured; icon drawn colors=26 inside screen={'h': 768, 'w': 1024, 'x': 0, 'y': 0}
+  436.25s click status item at 767,3 size 36x24
+  673.90s STORM head-default-source: claude_usage_requests_in_170s=3 all_requests=27
+  673.99s storm-head-default-source stopped
+  675.51s phase -> storm-head-all-providers
+  675.63s launched storm-head-all-providers pid=17237
+  763.74s preclick display captured; icon drawn colors=182 inside screen={'w': 1024, 'h': 768, 'x': 0, 'y': 0}
+  763.74s click status item at 710,3 size 85x24
+ 1001.88s STORM head-all-providers: claude_usage_requests_in_170s=3 all_requests=27
+ 1002.08s storm-head-all-providers stopped
+ 1003.63s STORM RESULT release=3 default=3 total=3
+ 1003.63s FINDING ok head does not refresh more than the v0.83.0 release in the original failing order release=3 default=3 total=3
+ 1004.88s === appearance light: ok
+ 1007.93s phase -> light-calm
+ 1008.07s launched total-light pid=25802
+ 1010.95s label after calm total: 'All providers, average 62% left'
+ 1011.14s CHECK PASS light: calm total averages the four quota providers and skips balance-only DeepSeek All providers, average 62% left
+ 1011.14s CHECK PASS light: every quota provider reached the fixture [{'phase': 'light-calm', 'host': 'api.kimi.com', 'path': '/coding/v1/usages', 'status': 200}, {'phase': 'light-calm', 'host': 'api.z.ai', 'path': '/api/monitor/usage/model-usage', 'status': 404}, {'phase': 'light-calm', 'host': 'api.anthropic.com', 'path': '/api/oauth/profile', 'status': 200}, {'pha
+ 1013.06s SHOT light-1-calm menus=[] requests=216 
+ 1013.37s phase -> light-forecast
+ 1069.68s label after forecast warning: 'z.ai / GLM near limit, 28% left, All providers, average 62% left'
+ 1069.80s CHECK PASS light: a run-out forecast within the hour warns even with plenty left z.ai / GLM near limit, 28% left, All providers, average 62% left
+ 1071.49s SHOT light-1b-forecast-zai menus=[] requests=227 
+ 1072.12s preclick display captured; icon drawn colors=173 inside screen={'h': 768, 'y': 0, 'x': 0, 'w': 1024}
+ 1072.12s click status item at 702,3 size 93x24
+ 1074.99s SHOT light-1c-forecast-menu-open menus=[(691, 31, 310, 668)] requests=227 dropdown beside the forecast warning
+ 1129.04s label after forecast cleared: 'All providers, average 62% left'
+ 1129.04s phase -> light-near
+ 1189.71s label after Claude near limit: 'Claude near limit, 8% left, All providers, average 48% left'
+ 1189.84s CHECK PASS light: a live quota change raises the warning naming Claude with the total kept Claude near limit, 8% left, All providers, average 48% left
+ 1191.56s SHOT light-2-near-limit-claude menus=[] requests=249 
+ 1192.55s preclick display captured; icon drawn colors=182 inside screen={'x': 0, 'y': 0, 'h': 768, 'w': 1024}
+ 1192.55s click status item at 710,3 size 85x24
+ 1195.37s SHOT light-3-near-limit-menu-open menus=[(699, 31, 310, 668)] requests=250 real click on the status item
+ 1196.49s phase -> light-two
+ 1249.22s label after second provider near limit: 'z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left'
+ 1249.35s CHECK PASS light: the tighter of two near-limit providers leads, and both are announced z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left
+ 1249.78s CHECK PASS light: tightest provider is announced first z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left
+ 1251.61s SHOT light-4-two-near-limit menus=[] requests=261 
+ 1251.90s phase -> light-stale
+ 1369.43s label after Claude stops warning: 'z.ai / GLM near limit, 3% left, All providers, average 53% left'
+ 1369.55s FINDING ok Claude server failures stop its warning z.ai / GLM near limit, 3% left, All providers, average 53% left
+ 1371.43s SHOT light-5-claude-failing menus=[] requests=283 
+ 1371.82s phase -> light-recovered
+ 1429.63s label after recovered: 'All providers, average 62% left'
+ 1429.75s CHECK PASS light: recovery returns to the calm total All providers, average 62% left
+ 1431.66s SHOT light-6-recovered menus=[] requests=304 
+ 1432.52s preclick display captured; icon drawn colors=106 inside screen={'w': 1024, 'y': 0, 'x': 0, 'h': 768}
+ 1432.52s click status item at 726,3 size 69x24
+ 1546.02s SHOT light-7-settings menus=[] requests=313 
+ 1549.78s CHECK PASS Settings shows All providers (average) in the Combined icon source row itself ['Codex — Provider service status: Operational/Codex — Provider service status: Operational', '/None', '/None', 'Claude — Provider service status: Operational/Claude — Provider service status: Operational', 'Combined icon source/Combined icon source', "Shows the average of each provider's tightest l
+ 1549.92s total-light stopped
+ 1552.32s === appearance dark: ok
+ 1555.39s phase -> dark-calm
+ 1555.57s launched total-dark pid=41067
+ 1558.07s label after calm total: 'All providers, average 62% left'
+ 1558.18s CHECK PASS dark: calm total averages the four quota providers and skips balance-only DeepSeek All providers, average 62% left
+ 1558.18s CHECK PASS dark: every quota provider reached the fixture [{'phase': 'dark-calm', 'host': 'api.z.ai', 'path': '/api/monitor/usage/model-usage', 'status': 404}, {'phase': 'dark-calm', 'host': 'chatgpt.com', 'path': '/backend-api/wham/rate-limit-reset-credits', 'status': 404}, {'phase': 'dark-calm', 'host': 'api.anthropic.com', 'path': '/api/oauth/profile', 
+ 1559.93s SHOT dark-1-calm menus=[] requests=334 
+ 1560.21s phase -> dark-forecast
+ 1616.89s label after forecast warning: 'z.ai / GLM near limit, 28% left, All providers, average 62% left'
+ 1617.00s CHECK PASS dark: a run-out forecast within the hour warns even with plenty left z.ai / GLM near limit, 28% left, All providers, average 62% left
+ 1618.91s SHOT dark-1b-forecast-zai menus=[] requests=345 
+ 1619.72s preclick display captured; icon drawn colors=172 inside screen={'y': 0, 'x': 0, 'w': 1024, 'h': 768}
+ 1619.72s click status item at 702,3 size 93x24
+ 1622.60s SHOT dark-1c-forecast-menu-open menus=[(691, 31, 310, 671)] requests=345 dropdown beside the forecast warning
+ 1676.88s label after forecast cleared: 'All providers, average 62% left'
+ 1676.89s phase -> dark-near
+ 1736.80s label after Claude near limit: 'Claude near limit, 8% left, All providers, average 48% left'
+ 1736.92s CHECK PASS dark: a live quota change raises the warning naming Claude with the total kept Claude near limit, 8% left, All providers, average 48% left
+ 1738.97s SHOT dark-2-near-limit-claude menus=[] requests=367 
+ 1740.22s preclick display captured; icon drawn colors=182 inside screen={'x': 0, 'y': 0, 'w': 1024, 'h': 768}
+ 1740.22s click status item at 710,3 size 85x24
+ 1743.23s SHOT dark-3-near-limit-menu-open menus=[(699, 31, 310, 671)] requests=368 real click on the status item
+ 1744.52s phase -> dark-two
+ 1796.55s label after second provider near limit: 'z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left'
+ 1796.67s CHECK PASS dark: the tighter of two near-limit providers leads, and both are announced z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left
+ 1797.01s CHECK PASS dark: tightest provider is announced first z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left
+ 1798.99s SHOT dark-4-two-near-limit menus=[] requests=379 
+ 1799.35s phase -> dark-recovered
+ 1856.94s label after recovered: 'All providers, average 62% left'
+ 1857.07s CHECK PASS dark: recovery returns to the calm total All providers, average 62% left
+ 1858.96s SHOT dark-6-recovered menus=[] requests=390 
+ 1859.33s total-dark stopped
+ 1861.83s provider requests answered 200 by the fixture: 175 of 367
+ 1861.83s CHECK PASS app reached the fixture 175
+ 1861.84s resolver watch (sampled): 367 checks, 0 escapes
+ 1861.84s CHECK PASS no sampled resolver escape []
+ 1861.86s checks: 19 passed, 0 failed
+ 1861.86s done

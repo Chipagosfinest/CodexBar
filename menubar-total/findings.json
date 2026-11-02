@@ -1,0 +1,12 @@
+[
+ {
+  "finding": "head does not refresh more than the v0.83.0 release in the original failing order",
+  "as_expected": true,
+  "detail": "release=3 default=3 total=3"
+ },
+ {
+  "finding": "Claude server failures stop its warning",
+  "as_expected": true,
+  "detail": "z.ai / GLM near limit, 3% left, All providers, average 53% left"
+ }
+]
