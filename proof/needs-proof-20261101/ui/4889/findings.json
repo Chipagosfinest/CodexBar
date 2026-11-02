@@ -1,0 +1,7 @@
+[
+ {
+  "finding": "token fallback shows shares, as the unit-level ranking does",
+  "as_expected": false,
+  "detail": "{'fictional-unpriced-model': 'fictional-unpriced-model, Claude, 2.8M', 'fictional-unpriced-model-two': 'fictional-unpriced-model-two, Claude, 920K'}"
+ }
+]

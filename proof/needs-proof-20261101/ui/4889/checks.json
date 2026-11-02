@@ -1,0 +1,122 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "ee130de90f4c25087386474ea5419ecc91e8b5806dd98434d019f949b5204004 vs ee130de90f4c25087386474ea5419ecc91e8b5806dd98434d019f949b5204004"
+ },
+ {
+  "check": "priced: head app reached the provider fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "priced: the Models segment is really selected",
+  "pass": true,
+  "detail": "{'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 501, 'y': 582, 'w': 78, 'h': 20, 'help': None, 'sub': 'AXSegment'}"
+ },
+ {
+  "check": "priced: collapsed list shows five of seven models",
+  "pass": true,
+  "detail": "['claude-opus-4-5', 'claude-sonnet-4-5', 'gpt-5.2-codex', 'gpt-5.2', 'gpt-5.1-codex-max']"
+ },
+ {
+  "check": "priced: basis is estimated spend with a share on every row",
+  "pass": true,
+  "detail": "{'claude-opus-4-5': 'claude-opus-4-5, Claude, 41%, $45.00', 'claude-sonnet-4-5': 'claude-sonnet-4-5, Claude, 19%, $21.00', 'gpt-5.2-codex': 'gpt-5.2-codex, Codex, 17%, $18.20', 'gpt-5.2': 'gpt-5.2, Codex, 10%, $11.38', 'gpt-5.1-codex-max': 'gpt-5.1-codex-max, Codex, 9%, $9.75'}"
+ },
+ {
+  "check": "priced: Show all control is offered",
+  "pass": true,
+  "detail": "Show all (7)"
+ },
+ {
+  "check": "priced: Show all really reveals all seven rows",
+  "pass": true,
+  "detail": "['claude-opus-4-5', 'claude-sonnet-4-5', 'gpt-5.2-codex', 'gpt-5.2', 'gpt-5.1-codex-max', 'claude-haiku-4-5', 'gpt-5.1-codex-mini']"
+ },
+ {
+  "check": "priced: Show less control is offered",
+  "pass": true,
+  "detail": "Show less"
+ },
+ {
+  "check": "priced: Show less returns to five rows",
+  "pass": true,
+  "detail": "['claude-opus-4-5', 'claude-sonnet-4-5', 'gpt-5.2-codex', 'gpt-5.2', 'gpt-5.1-codex-max']"
+ },
+ {
+  "check": "tokens: head app reached the provider fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "tokens: the Models segment is really selected",
+  "pass": true,
+  "detail": "{'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 489, 'y': 583, 'w': 67, 'h': 20, 'help': None, 'sub': 'AXSegment'}"
+ },
+ {
+  "check": "tokens: one provider with no price basis falls back to Tracked tokens, showing token values",
+  "pass": true,
+  "detail": "{'header': ['Partial model breakdown', 'Tracked tokens'], 'rows': {'fictional-unpriced-model': 'fictional-unpriced-model, Claude, 2.8M', 'fictional-unpriced-model-two': 'fictional-unpriced-model-two, Claude, 920K'}}"
+ },
+ {
+  "check": "tokens: the unpriced history also carries the partial warning",
+  "pass": true,
+  "detail": "['Partial model breakdown', 'Tracked tokens']"
+ },
+ {
+  "check": "tokens: both models listed",
+  "pass": true,
+  "detail": "['fictional-unpriced-model', 'fictional-unpriced-model-two']"
+ },
+ {
+  "check": "mixed: head app reached the provider fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "mixed: the Models segment is really selected",
+  "pass": true,
+  "detail": "{'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 501, 'y': 583, 'w': 78, 'h': 20, 'help': None, 'sub': 'AXSegment'}"
+ },
+ {
+  "check": "mixed: two providers plus an unpriced model withhold shares and any single basis",
+  "pass": true,
+  "detail": "{'header': ['Partial model breakdown'], 'rows': {'gpt-5.2-codex': 'gpt-5.2-codex, Codex, $7.42 \u00b7 2.3M tokens', 'fictional-unpriced-model': 'fictional-unpriced-model, Claude, 920K tokens'}}"
+ },
+ {
+  "check": "mixed: the unpriced history carries the partial warning",
+  "pass": true,
+  "detail": "['Partial model breakdown']"
+ },
+ {
+  "check": "mixed: both models still listed",
+  "pass": true,
+  "detail": "['gpt-5.2-codex', 'fictional-unpriced-model']"
+ },
+ {
+  "check": "partial: head app reached the provider fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "partial: the Models segment is really selected",
+  "pass": true,
+  "detail": "{'role': 'AXRadioButton', 'label': 'Models', 'value': '1', 'x': 501, 'y': 583, 'w': 78, 'h': 20, 'help': None, 'sub': 'AXSegment'}"
+ },
+ {
+  "check": "partial: unattributable history shows the partial warning and withholds shares",
+  "pass": true,
+  "detail": "{'header': ['Partial model breakdown', 'Estimated spend'], 'rows': {'gpt-5.2-codex': 'gpt-5.2-codex, Codex, $7.42'}}"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "14"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]
