@@ -74,29 +74,39 @@ check('an existing install is unchanged: no total without opting in', 'average' 
 app.quit()
 
 def storm(label_, app_path, prefs):
-    """Requests per provider while Claude alone answers 500. Same fixture, 150s, app relaunched clean."""
+    """Original failing order: near limit, menu opened and closed, a second provider near limit, then Claude 500s."""
     providers.PERCENTS.update(CALM)
     state['claude_down'] = False
+    state['zai_burning'] = False
     phase_begin(f'storm-{label_}')
     seed(**prefs)
     probe = App(app_path, HELPER, f'storm-{label_}')
-    time.sleep(20)
+    time.sleep(25)
+    providers.PERCENTS['claude'] = (35, 92)
+    time.sleep(62)
+    probe.open_menu()
+    time.sleep(3)
+    probe.close_menu()
+    providers.PERCENTS['zai'] = (97,)
+    time.sleep(62)
     state['claude_down'] = True
     start = len(state.get('log', []))
-    time.sleep(150)
+    time.sleep(170)
     window = state.get('log', [])[start:]
     state['claude_down'] = False
     count = sum(1 for e in window if e['path'] == '/api/oauth/usage')
-    say(f'STORM {label_}: claude_usage_requests_in_150s={count} all_requests={len(window)}')
-    (OUT / f'storm-{label_}.json').write_text(json.dumps({'claude_usage_requests_in_150s': count, 'all_requests': len(window)}))
+    say(f'STORM {label_}: claude_usage_requests_in_170s={count} all_requests={len(window)}')
+    (OUT / f'storm-{label_}.json').write_text(json.dumps({'claude_usage_requests_in_170s': count, 'all_requests': len(window)}))
     probe.quit()
+    providers.PERCENTS.update(CALM)
     return count
 
 
 baseline = storm('release-v083', _V083_APP, {})
 head_default = storm('head-default-source', INSTALLED, {})
 head_total = storm('head-all-providers', INSTALLED, {'unifiedIconSource': 'allProviders'})
-finding('head does not refresh more than the v0.83.0 release under Claude 500s',
+say(f'STORM RESULT release={baseline} default={head_default} total={head_total}')
+finding('head does not refresh more than the v0.83.0 release in the original failing order',
         head_default <= baseline * 1.5 + 5 and head_total <= baseline * 1.5 + 5, f'release={baseline} default={head_default} total={head_total}')
 for name, dark in (('light', False), ('dark', True)):
     say(f'=== appearance {name}: {subprocess.run([HELPER, "dark", "1" if dark else "0"], capture_output=True, text=True).stdout.strip()}')
@@ -167,9 +177,23 @@ for name, dark in (('light', False), ('dark', True)):
             time.sleep(1)
             app.press('Menu Bar')
             time.sleep(1.5)
+            pane = [w for w in app.windows() if w['layer'] == 0 and w['w'] > 300][0]
+            app.ui('move', pane['x'] + pane['w'] * 0.7, pane['y'] + pane['h'] * 0.6, 10)
+            row = []
+            for _ in range(40):
+                row = [r for r in app.win_rows() if r['label'] == 'Combined icon source' and r['w']]
+                if row and pane['y'] + 60 < row[0]['y'] < pane['y'] + pane['h'] - 80:
+                    break
+                app.ui('scroll', -3)
+                time.sleep(0.25)
+            time.sleep(0.8)
             shot(app, 'light-7-settings', park=False)
-            finding('Settings shows All providers as the chosen combined icon source', 'All providers' in ' '.join(
-                str(r['label']) + str(r['value']) for r in app.win_rows()), '')
+            rows = app.win_rows()
+            near = [r for r in rows if row and r['w'] and abs(r['y'] - row[0]['y']) < 26]
+            (OUT / 'settings-rows.json').write_text(json.dumps(near, indent=1, default=str))
+            check('Settings shows All providers (average) in the Combined icon source row itself',
+                  any('All providers (average)' in str(r['label']) + str(r['value']) for r in near),
+                  [str(r['label']) + '/' + str(r['value']) for r in near])
         except Exception as error:  # A Settings navigation miss must not cost the appearance matrix.
             finding('Settings pane could be driven', False, repr(error))
     app.quit()

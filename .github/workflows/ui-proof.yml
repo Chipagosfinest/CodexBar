@@ -8,9 +8,9 @@ permissions:
   actions: read
 env:
   PROOF_PR: "menubar-total"
-  PROOF_SHA: 998aab76c47ae0b05846e8376fb5126411def645
-  PROOF_SCENARIO: sstorm.py
-  PACKAGE_RUN: "41384816796"
+  PROOF_SHA: 5713251646bd4b8e159502e840a9713e622ae102
+  PROOF_SCENARIO: smenubar.py
+  PACKAGE_RUN: ""
 jobs:
   package:
     runs-on: macos-26
@@ -46,7 +46,7 @@ jobs:
   drive:
     needs: package
     runs-on: macos-26
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with: { persist-credentials: false }
