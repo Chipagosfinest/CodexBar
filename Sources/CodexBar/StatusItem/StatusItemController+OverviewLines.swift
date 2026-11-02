@@ -107,17 +107,28 @@ extension StatusItemController {
         return item
     }
 
+    /// Compact can still say something when every selected provider has failed; Detailed keeps its empty state.
+    func overviewHasCompactAttention(providers: [ProviderInstanceID]) -> Bool {
+        self.settings.mergedOverviewLayout == .compact && !self.overviewErrorOnlyProviders(providers).isEmpty
+    }
+
+    private func overviewErrorOnlyProviders(
+        _ providers: [ProviderInstanceID]) -> [(ProviderInstanceID, UsageMenuCardView.Model)]
+    {
+        providers.compactMap { instanceID in
+            guard let provider = instanceID.firstPartyProvider else { return nil }
+            let model = self.store.menuCardModel(for: provider)
+            return model.isOverviewErrorOnly ? (instanceID, model) : nil
+        }
+    }
+
     /// Error-only providers are not limit rows, but a signed-out provider must not vanish without a word.
     private func makeOverviewAttentionItem(
         providers: [ProviderInstanceID],
         menuWidth: CGFloat,
         interactionMenu: NSMenu) -> NSMenuItem?
     {
-        let failing = providers.compactMap { instanceID -> (ProviderInstanceID, UsageMenuCardView.Model)? in
-            guard let provider = instanceID.firstPartyProvider else { return nil }
-            let model = self.store.menuCardModel(for: provider)
-            return model.isOverviewErrorOnly ? (instanceID, model) : nil
-        }
+        let failing = self.overviewErrorOnlyProviders(providers)
         guard let first = failing.first else { return nil }
         let isSingle = failing.count == 1
         let instanceID = first.0
@@ -132,13 +143,13 @@ extension StatusItemController {
             child.representedObject = "\(Self.overviewRowIdentifierPrefix)\(id.rawValue)"
             submenu?.addItem(child)
         }
-        return self.makeMenuCardItem(
+        let item = self.makeMenuCardItem(
             OverviewAttentionRowView(
                 provider: isSingle ? first.1.provider : nil,
                 name: isSingle ? first.1.providerName : nil,
                 message: isSingle ? first.1.subtitleText : failing.map(\.1.providerName).joined(separator: ", "),
                 width: menuWidth),
-            id: "overviewAttention",
+            id: isSingle ? "\(Self.overviewRowIdentifierPrefix)\(instanceID.rawValue)" : "overviewAttention",
             width: menuWidth,
             heightCacheScope: "overviewLine",
             heightCacheFingerprint: "attention",
@@ -148,5 +159,11 @@ extension StatusItemController {
                 guard let self, let interactionMenu else { return }
                 self.selectOverviewProvider(instanceID, menu: interactionMenu)
             })
+        if isSingle {
+            // Keep the single row wired for keyboard activation and accessibility action paths.
+            item.target = self
+            item.action = #selector(self.selectOverviewProvider(_:))
+        }
+        return item
     }
 }

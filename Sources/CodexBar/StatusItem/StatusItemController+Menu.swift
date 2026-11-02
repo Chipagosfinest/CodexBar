@@ -555,7 +555,9 @@ extension StatusItemController {
         let interactionMenu = captureMenu ?? menu
         let providerScopes = self.overviewProviderScopes(enabledProviders: enabledProviders)
         let rows = self.store.mergedOverviewRows(for: providerScopes.visible)
-        guard !rows.isEmpty else { return false }
+        guard !rows.isEmpty || self.overviewHasCompactAttention(providers: providerScopes.visible) else {
+            return false
+        }
 
         let t0 = CACurrentMediaTime()
         defer { self.logChartRenderDurationIfSlow("addOverviewRows(\(rows.count))", startedAt: t0) }

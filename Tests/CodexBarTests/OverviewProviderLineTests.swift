@@ -311,6 +311,94 @@ struct OverviewProviderLineTests {
         #expect(menu.items.last?.title == L("Quit"))
     }
 
+    private func populatedOverview(
+        providers: [UsageProvider],
+        failing: [UsageProvider],
+        layout: MergedOverviewLayout = .compact,
+        deselected: [UsageProvider] = []) -> (menu: NSMenu, controller: StatusItemController)
+    {
+        let (controller, store) = self.controller(providers: providers)
+        controller.settings.mergedOverviewLayout = layout
+        for provider in deselected {
+            _ = controller.settings.setMergedOverviewProviderSelection(
+                provider: provider.instanceID,
+                isSelected: false,
+                activeProviders: providers.map(\.instanceID))
+        }
+        for provider in failing {
+            store._setSnapshotForTesting(nil, provider: provider)
+            store._setErrorForTesting("\(provider.rawValue) session expired", provider: provider)
+        }
+        let menu = controller.makeMenu()
+        controller.mergedMenu = menu
+        controller.populateMenu(menu, provider: nil)
+        return (menu, controller)
+    }
+
+    @Test
+    func `compact names every provider when all of them have failed`() throws {
+        let wasEnabled = StatusItemController.menuCardRenderingEnabled
+        StatusItemController.menuCardRenderingEnabled = true
+        defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
+        let (menu, controller) = self.populatedOverview(providers: [.claude, .kimi], failing: [.claude, .kimi])
+        defer { controller.releaseStatusItemsForTesting() }
+
+        #expect(!menu.items.contains { $0.title == L("No overview data available.") })
+        let attention = try #require(menu.items.first { ($0.representedObject as? String) == "overviewAttention" })
+        let children = attention.submenu?.items.compactMap { $0.representedObject as? String }
+        #expect(children == ["overviewRow-claude", "overviewRow-kimi"])
+    }
+
+    @Test
+    func `compact shows the row when the only selected provider has failed`() {
+        let wasEnabled = StatusItemController.menuCardRenderingEnabled
+        StatusItemController.menuCardRenderingEnabled = true
+        defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
+        let (menu, controller) = self.populatedOverview(
+            providers: [.kimi, .codex],
+            failing: [.kimi],
+            deselected: [.codex])
+        defer { controller.releaseStatusItemsForTesting() }
+
+        #expect(!menu.items.contains { $0.title == L("No overview data available.") })
+        #expect(menu.items.contains { ($0.representedObject as? String) == "overviewRow-kimi" })
+    }
+
+    @Test
+    func `detailed keeps its empty state when every provider has failed`() {
+        let wasEnabled = StatusItemController.menuCardRenderingEnabled
+        StatusItemController.menuCardRenderingEnabled = true
+        defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
+        let (menu, controller) = self.populatedOverview(
+            providers: [.claude, .kimi],
+            failing: [.claude, .kimi],
+            layout: .detailed)
+        defer { controller.releaseStatusItemsForTesting() }
+
+        #expect(menu.items.contains { $0.title == L("No overview data available.") })
+        #expect(!menu.items.contains { ($0.representedObject as? String) == "overviewAttention" })
+    }
+
+    @Test
+    func `a single attention row selects its provider through the native menu action`() throws {
+        let wasEnabled = StatusItemController.menuCardRenderingEnabled
+        StatusItemController.menuCardRenderingEnabled = true
+        defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
+        let (menu, controller) = self.populatedOverview(providers: [.codex, .kimi], failing: [.kimi])
+        defer { controller.releaseStatusItemsForTesting() }
+
+        let row = try #require(menu.items.first { ($0.representedObject as? String) == "overviewRow-kimi" })
+        #expect(row.submenu == nil)
+        #expect(row.isEnabled)
+        let target = try #require(row.target as? StatusItemController)
+        #expect(target === controller)
+        let action = try #require(row.action)
+        _ = target.perform(action, with: row)
+
+        #expect(controller.selectedMenuProvider == UsageProvider.kimi.instanceID)
+        #expect(!controller.settings.mergedMenuLastSelectedWasOverview)
+    }
+
     @Test
     func `a provider row is one line however many windows it has`() {
         let wasEnabled = StatusItemController.menuCardRenderingEnabled
