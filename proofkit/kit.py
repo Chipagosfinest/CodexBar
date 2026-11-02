@@ -22,6 +22,7 @@ state = {'phase': 'normal', 'requests': 0, 'unknown': []}
 ROUTES = {}  # (host, path-prefix) -> callable(handler) -> (status, json-object)
 BUNDLE = os.environ.get('PROOF_BUNDLE', 'com.steipete.codexbar')
 MARKER = 'codexbar-proof-fixture-only'
+DNS_PORT = 5354
 
 
 def say(msg):
@@ -90,6 +91,14 @@ def start_fixture():
         '-days', '2', '-out', wd / 'leaf.crt', '-extfile', wd / 'ext')
     (wd / 'chain.crt').write_text((wd / 'leaf.crt').read_text() + (wd / 'ca.crt').read_text())
     run('sudo', 'security', 'add-trusted-cert', '-d', '-r', 'trustRoot', '-k', '/Library/Keychains/System.keychain', wd / 'ca.crt')
+    # /etc/hosts alone proved racy here: lookups intermittently escaped to the real hosts. A per-host resolver backed by
+    # this local stub answers every query with loopback, so a provider hostname has no route off the machine.
+    threading.Thread(target=dns_stub, daemon=True).start()
+    run('sudo', 'mkdir', '-p', '/etc/resolver')
+    for h in HOSTS:
+        f = wd / f'resolver-{h}'
+        f.write_text(f'nameserver 127.0.0.1\nport {DNS_PORT}\n')
+        run('sudo', 'cp', f, f'/etc/resolver/{h}')
     hosts = wd / 'hosts'
     hosts.write_text(open('/etc/hosts').read() + ''.join(f'127.0.0.1 {h}\n::1 {h}\n' for h in HOSTS))
     run('sudo', 'cp', hosts, '/etc/hosts')
@@ -129,13 +138,67 @@ serve(socket.AF_INET, "127.0.0.1")
     for h in HOSTS:
         ROUTES[(h, '/__proof_fixture')] = lambda _: (200, {'fixture': MARKER})
     subprocess.run(['sudo', 'launchctl', 'kickstart', '-k', 'system/com.apple.mDNSResponder'], capture_output=True)
-    time.sleep(3)
-    say('etc-hosts tail: ' + ' | '.join(open('/etc/hosts').read().strip().splitlines()[-3:]))
-    say('resolver: ' + subprocess.run(['dscacheutil', '-q', 'host', '-a', 'name', 'api.anthropic.com'], capture_output=True, text=True).stdout.replace(chr(10), ' '))
+    deadline = time.monotonic() + 90
+    while True:
+        bad = resolver_escapes()
+        if not bad:
+            break
+        assert time.monotonic() < deadline, f'hostnames still resolve off the machine: {bad}'
+        subprocess.run(['sudo', 'dscacheutil', '-flushcache'], capture_output=True)
+        time.sleep(3)
+    say(f'all {len(HOSTS)} hostnames resolve only to loopback after {time.monotonic() - T0:.0f}s')
     for h in HOSTS:
         check = subprocess.run(['curl', '-sS', '-m', '10', f'https://{h}/__proof_fixture'], capture_output=True, text=True)
         assert MARKER in check.stdout, f'{h} is not answered by the fixture: {check.stdout[:80]} {check.stderr.strip()}'
     say(f'fixture answers all {len(HOSTS)} hostnames over trusted TLS')
+    threading.Thread(target=resolver_watch, daemon=True).start()
+
+
+def dns_stub():
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('127.0.0.1', DNS_PORT))
+    while True:
+        q, addr = s.recvfrom(512)
+        end = 12
+        while q[end]:
+            end += q[end] + 1
+        question = q[12:end + 5]
+        qtype = int.from_bytes(q[end + 1:end + 3], 'big')
+        answer = b''
+        if qtype == 1:
+            answer = b'\xc0\x0c\x00\x01\x00\x01\x00\x00\x00\x3c\x00\x04\x7f\x00\x00\x01'
+        elif qtype == 28:
+            answer = b'\xc0\x0c\x00\x1c\x00\x01\x00\x00\x00\x3c\x00\x10' + bytes(15) + b'\x01'
+        s.sendto(q[:2] + b'\x81\x80\x00\x01' + (b'\x00\x01' if answer else b'\x00\x00') + b'\x00\x00\x00\x00' + question + answer, addr)
+
+
+def resolver_escapes():
+    import socket
+    bad = {}
+    for h in HOSTS:
+        try:
+            addrs = {i[4][0] for i in socket.getaddrinfo(h, 443)}
+        except OSError as e:
+            bad[h] = str(e)
+            continue
+        off = addrs - {'127.0.0.1', '::1'}
+        if off:
+            bad[h] = sorted(off)
+    return bad
+
+
+def resolver_watch():
+    """Evidence that nothing could reach a real provider: rechecks every hostname for the whole run."""
+    checks = 0
+    while True:
+        bad = resolver_escapes()
+        checks += 1
+        state['resolver_checks'] = checks
+        if bad:
+            state.setdefault('resolver_escapes', []).append(bad)
+            say(f'RESOLVER ESCAPE {bad}')
+        time.sleep(5)
 
 
 def jwt(payload):
@@ -308,6 +371,8 @@ def find(rows, text, role=None):
 
 
 def finish():
+    (OUT / 'resolver-watch.json').write_text(json.dumps({'checks': state.get('resolver_checks', 0), 'escapes': state.get('resolver_escapes', [])}))
+    say(f"resolver watch: {state.get('resolver_checks', 0)} checks, {len(state.get('resolver_escapes', []))} escapes")
     if state['unknown']:
         (OUT / 'unrouted-requests.txt').write_text('\n'.join(sorted(set(state['unknown']))) + '\n')
     say('done')
