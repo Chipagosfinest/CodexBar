@@ -1,0 +1,14 @@
+{
+  "run": 41373620841,
+  "productSHA": "073d0643a51c7dc5e14f3b3f7f27afa27dda3f47",
+  "controllerSHA": "19fd1f8359cd344011662c16513eac3cf6228d02",
+  "checksPassed": 11,
+  "imagesInspected": {
+    "s3-light-after-copy-screen.png": "270f56ad8736c55d562ac38b0672e7bf32558df14dda89f0963df20617f28baf",
+    "s3-dark-after-copy-screen.png": "75b75c462c17483effc7ff3b4ff5cc640d7b1846c115aa385f990d0bbecb0f7a",
+    "s4-light-clipboard.png": "f846b05df2b6d56b107e740e933b6e65af3db92d475961d1c3249b8408aaa2bf",
+    "s4-dark-clipboard.png": "510b6ed5ad5678ff294c7ba1eab6e520cdb14462c983da7a928e339f4d39b4ec"
+  },
+  "observed": "Light/dark app preview with Copy Image, Image copied feedback; actual raw clipboard images match appearance and 1200x630 size. Synthetic/full product SHA banner visible on both screen captures.",
+  "notClaimed": "No live accounts; sampled DNS is not absolute containment; movies not independently inspected by parent."
+}

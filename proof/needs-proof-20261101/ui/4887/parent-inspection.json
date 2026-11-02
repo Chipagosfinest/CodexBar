@@ -1,0 +1,22 @@
+{
+  "run": 41373647484,
+  "productSHA": "23bf4c17e7bc76c87dd0b75bc30f776cbac8333d",
+  "controllerSHA": "059b969338e5c37eba909249fab588d529984cd1",
+  "checksPassed": 9,
+  "imagesInspected": {
+    "installed-large-screen_0_1695D937-CD5B-43E2-9852-F6737F3CD78C.png": {
+      "file": "2DBDD768-A511-4138-A83D-11E4CDBEE4CA.png",
+      "sha256": "c8c9a2bc3acc512caf6eb8eff5a19eff9949e8e75e9b9f6fa1d7f9286b2bc35e"
+    },
+    "installed-medium-screen_0_6D5A81C2-8390-4437-B345-10EB4EB3A4B5.png": {
+      "file": "01BB6BA1-4DF1-4B84-B4BF-D860AE99AB43.png",
+      "sha256": "003ca3a467db6aeaa5f421f382b7edca40b3e573a95be9a677db40f6342d508f"
+    },
+    "installed-small-screen_0_02E47ED7-E7C8-468B-9682-2366E9390399.png": {
+      "file": "BF782469-76B4-4599-A24C-E3BC5897AE92.png",
+      "sha256": "b44f828c11579f0752dd032349865d769255402e34ef40171e2cd5936ccbf2e6"
+    }
+  },
+  "observed": "Actual installed Switcher resized small/medium/large, Claude official mark, 39% Session left, large14-day chart, Sonnet8% warning cue. Native synthetic/full product SHA banner visible. App and extension installed hashes match package per checks.",
+  "limitations": "Notifications obscure upper-right portions of wider captures. No claim of full right-column visibility, every tint/appearance mode, real accounts, or full resource byte fingerprint. Current head has no model-share feature; split into4890."
+}

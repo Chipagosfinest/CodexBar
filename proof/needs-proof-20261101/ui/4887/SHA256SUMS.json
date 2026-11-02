@@ -1,0 +1,16 @@
+{
+  "README.md": "d8b404cab7d486eefa6d248688e6957e0d265f96520c9a38ce0f99132d4141c1",
+  "app-entitlements.plist": "349d17dbcc264f5ff7eadcfd376e458bc4aa9c417d1085a7417caa12a7b0b38b",
+  "binary-sha256.txt": "95d9fb30e142121691d285a26e104965bb4f551171800310c8e2671b634afd22",
+  "checks.json": "62b1dd975cb8c02a806889027f261914df4e9aefe9c31355364175410ecbc999",
+  "extension-sha256.txt": "52241a7cda5b0bf1d5958931c4d8ea6bda8702b7cc30bc9d3d5499840fcc1390",
+  "installed-large.png": "c8c9a2bc3acc512caf6eb8eff5a19eff9949e8e75e9b9f6fa1d7f9286b2bc35e",
+  "installed-medium.png": "003ca3a467db6aeaa5f421f382b7edca40b3e573a95be9a677db40f6342d508f",
+  "installed-small.png": "b44f828c11579f0752dd032349865d769255402e34ef40171e2cd5936ccbf2e6",
+  "kit-sha.txt": "26705d78e27ddfdc92c0a7e73aeccdeaf2aba7691ff0e1032a0a1682cb1c9ce6",
+  "parent-inspection.json": "24cd54b61faeeb09cfc4f66552e653f4b0ae4fdb329476cfe760585d7fc5b278",
+  "product-sha.txt": "e7b079e1975a2038adb9a99ff5f34148d6bb6eef3abe4d372d69622d9351992e",
+  "transport-report.json": "05f05cd9c2c446aff0a060638c3d8ae4bfa55b55305f6d4ebb52f115a82b7843",
+  "ui-test-result.txt": "03b25d772ad43dd821ea178277e0fea477e9d16371e3ce568f23c697151b506a",
+  "widget-entitlements.plist": "a2f7d474fa956cba7de1d893d52da033595bfdaf67431fce6c3c54ca2c6b8969"
+}

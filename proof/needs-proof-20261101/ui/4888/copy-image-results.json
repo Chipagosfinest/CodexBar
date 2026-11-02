@@ -1,0 +1,102 @@
+{
+ "light": {
+  "clicked": {
+   "role": "AXButton",
+   "label": "Copy Image",
+   "value": null,
+   "x": 126,
+   "y": 516,
+   "w": 124,
+   "h": 24,
+   "help": null,
+   "sub": null
+  },
+  "pasteboard": {
+   "w": 1200,
+   "png": true,
+   "changeCount": 2,
+   "h": 630,
+   "types": [
+    "public.png",
+    "Apple PNG pasteboard type",
+    "public.tiff",
+    "NeXT TIFF v4.0 pasteboard type"
+   ]
+  },
+  "texts": [
+   "{\"error\": \"no fixture route\"}",
+   "CodexBar",
+   "EST. 30-DAY SPEND",
+   "TOP MODELS",
+   "BY USAGE",
+   "$235.89",
+   "01",
+   "Claude",
+   "54%",
+   "29.9M",
+   "02",
+   "GPT",
+   "Codex",
+   "46%",
+   "25.1M",
+   "TRACKED TOKENS \u00b7 30 DAYS",
+   "55M",
+   "Claude Max 5x",
+   "Codex Pro 20x",
+   "LOCAL \u00b7 AGGREGATE ONLY",
+   "DATA THROUGH NOV 2, 2026",
+   "Image copied",
+   "Share AI Usage"
+  ]
+ },
+ "dark": {
+  "clicked": {
+   "role": "AXButton",
+   "label": "Copy Image",
+   "value": null,
+   "x": 126,
+   "y": 516,
+   "w": 124,
+   "h": 24,
+   "help": null,
+   "sub": null
+  },
+  "pasteboard": {
+   "types": [
+    "public.png",
+    "Apple PNG pasteboard type",
+    "public.tiff",
+    "NeXT TIFF v4.0 pasteboard type"
+   ],
+   "png": true,
+   "w": 1200,
+   "changeCount": 4,
+   "h": 630
+  },
+  "texts": [
+   "{\"error\": \"no fixture route\"}",
+   "CodexBar",
+   "EST. 30-DAY SPEND",
+   "TOP MODELS",
+   "BY USAGE",
+   "$235.89",
+   "01",
+   "Claude",
+   "54%",
+   "29.9M",
+   "02",
+   "GPT",
+   "Codex",
+   "46%",
+   "25.1M",
+   "TRACKED TOKENS \u00b7 30 DAYS",
+   "55M",
+   "Claude Max 5x",
+   "Codex Pro 20x",
+   "LOCAL \u00b7 AGGREGATE ONLY",
+   "DATA THROUGH NOV 2, 2026",
+   "Image copied",
+   "Share AI Usage"
+  ]
+ }
+}

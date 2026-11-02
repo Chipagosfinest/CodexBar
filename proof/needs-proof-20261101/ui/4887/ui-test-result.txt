@@ -1,0 +1,6 @@
+Test Case '-[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndResize]' started.
+Test Case '-[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndResize]' passed (45.352 seconds).
+	 Executed 1 test, with 0 failures (0 unexpected) in 45.352 (45.353) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 45.352 (45.353) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 45.352 (45.354) seconds
+** TEST SUCCEEDED **

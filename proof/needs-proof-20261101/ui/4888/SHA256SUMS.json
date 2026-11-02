@@ -1,0 +1,13 @@
+{
+  "README.md": "0f662e8827e0ab8ec858ebe51260ed69e752be94c5aa184eaa58a4bb822b0d45",
+  "binary-sha256.txt": "8423cf0a1f034f33db26050c22dae4b43d9a86eef69a4b2cc707ff7cba829dc3",
+  "checks.json": "5f590d4176938cad1420db5390928e9a4c86e90ed06988577c6d0e6a49874fb2",
+  "copy-image-results.json": "a159ee11f7dab4db19e8658cf355d0fa78d0e252b30bddedf9ff6c6d7d76b095",
+  "dark-after-copy.png": "75b75c462c17483effc7ff3b4ff5cc640d7b1846c115aa385f990d0bbecb0f7a",
+  "dark-clipboard.png": "510b6ed5ad5678ff294c7ba1eab6e520cdb14462c983da7a928e339f4d39b4ec",
+  "kit-sha.txt": "b8b0f7903c5474da8ef57ced0a4a1857e4bfa73e81d34623ec2f392b5ad9409c",
+  "light-after-copy.png": "270f56ad8736c55d562ac38b0672e7bf32558df14dda89f0963df20617f28baf",
+  "light-clipboard.png": "f846b05df2b6d56b107e740e933b6e65af3db92d475961d1c3249b8408aaa2bf",
+  "parent-inspection.json": "6ca59ea9f5bab28dd979bcda7291edfc43dbc11ab0fdf18aa3a79dbfaecab273",
+  "product-sha.txt": "09595bfe6a8b32bfd217f569ae75fc41c6b5d9701df1c54da45796fcde267f17"
+}

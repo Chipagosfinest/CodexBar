@@ -1,0 +1,57 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "0c8f2cbf701b18bf1dd52f3f500dd169706397a3d7a88914dfafd30eb2804cff vs 0c8f2cbf701b18bf1dd52f3f500dd169706397a3d7a88914dfafd30eb2804cff"
+ },
+ {
+  "check": "light: head app reached the fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "light: Copy Image put a 1200x630 image on the pasteboard",
+  "pass": true,
+  "detail": "{'w': 1200, 'png': True, 'changeCount': 2, 'h': 630, 'types': ['public.png', 'Apple PNG pasteboard type', 'public.tiff', 'NeXT TIFF v4.0 pasteboard type']}"
+ },
+ {
+  "check": "light: the preview reports the copy",
+  "pass": true,
+  "detail": "['Copy Image', 'Copy Stats', 'Image copied']"
+ },
+ {
+  "check": "light: the card names both providers from transcripts",
+  "pass": true,
+  "detail": "{\"error\": \"no fixture route\"} | Share AI Usage | CodexBar | EST. 30-DAY SPEND | TOP MODELS | BY USAGE | $235.89 | 01 | Claude | 54% | 29.9M | 02 | GPT | Codex | 46% | 25.1M | TRACKED TOKENS \u00b7 30 DAYS | 55M | Claude Max 5x | Codex Pro 20x | LOCAL \u00b7 AGGREGATE ONLY | DATA THROUGH NOV 2, 2026 | Copy Image | Copy Stats | Save... | Image copied | Share AI Usage"
+ },
+ {
+  "check": "dark: head app reached the fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "dark: Copy Image put a 1200x630 image on the pasteboard",
+  "pass": true,
+  "detail": "{'types': ['public.png', 'Apple PNG pasteboard type', 'public.tiff', 'NeXT TIFF v4.0 pasteboard type'], 'png': True, 'w': 1200, 'changeCount': 4, 'h': 630}"
+ },
+ {
+  "check": "dark: the preview reports the copy",
+  "pass": true,
+  "detail": "['Copy Image', 'Copy Stats', 'Image copied']"
+ },
+ {
+  "check": "dark: the card names both providers from transcripts",
+  "pass": true,
+  "detail": "{\"error\": \"no fixture route\"} | Share AI Usage | CodexBar | EST. 30-DAY SPEND | TOP MODELS | BY USAGE | $235.89 | 01 | Claude | 54% | 29.9M | 02 | GPT | Codex | 46% | 25.1M | TRACKED TOKENS \u00b7 30 DAYS | 55M | Claude Max 5x | Codex Pro 20x | LOCAL \u00b7 AGGREGATE ONLY | DATA THROUGH NOV 2, 2026 | Copy Image | Copy Stats | Save... | Image copied | Share AI Usage"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "8"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]
