@@ -1,0 +1,2 @@
+38a89860923a9b45eee03ba947f7f6f66d1bbad6f1b64ed83bef5b7e81f68b2c  /Users/runner/work/_temp/v083.zip
+38a89860923a9b45eee03ba947f7f6f66d1bbad6f1b64ed83bef5b7e81f68b2c  CodexBar-macos-universal-0.83.0.zip

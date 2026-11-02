@@ -1,0 +1,198 @@
+[
+ {
+  "y": 36,
+  "h": 76,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Overview",
+   "Codex",
+   "Claude",
+   "Command Code",
+   "Kimi Code",
+   "z.ai / GLM",
+   "OpenRouter",
+   "Moonshot / Kimi Open Platform",
+   "DeepSeek"
+  ],
+  "action": null
+ },
+ {
+  "y": 112,
+  "h": 11,
+  "x": 708,
+  "w": 310,
+  "labels": [],
+  "action": null
+ },
+ {
+  "y": 123,
+  "h": 15,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Usage",
+   "Left",
+   "Resets"
+  ],
+  "action": null
+ },
+ {
+  "y": 138,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Session",
+   "Weekly",
+   "Usage remaining",
+   "Nov 1, 2026 at 11:16\u202fPM to Nov 1, 2026 at 11:46\u202fPM",
+   "Nov 2, 2026 at 4:16\u202fAM to Nov 2, 2026 at 4:46\u202fAM",
+   "Nov 2, 2026 at 2:16\u202fAM to Nov 2, 2026 at 2:46\u202fAM",
+   "11:16\u202fPM",
+   "4:16\u202fAM",
+   "8% Usage remaining",
+   "Showing last-known usage captured just now.",
+   "Session",
+   "Weekly",
+   "Plan utilization chart",
+   "0 to 5",
+   "Nov 2 at 4:16 am: 92% used"
+  ],
+  "action": "menuCardNoOp:"
+ },
+ {
+  "y": 162,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "z.ai / GLM, \u2192 0% ~52m, Usage remaining, 30%, 3h"
+  ],
+  "action": "selectOverviewProvider:"
+ },
+ {
+  "y": 186,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Kimi Code, Kimi Code API key is invalid or expired. Please refresh your API key."
+  ],
+  "action": null
+ },
+ {
+  "y": 210,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Command Code, 5-hour, Usage remaining, 45%, 2h"
+  ],
+  "action": "selectOverviewProvider:"
+ },
+ {
+  "y": 234,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "OpenRouter, Credits, Usage remaining, 40%"
+  ],
+  "action": "selectOverviewProvider:"
+ },
+ {
+  "y": 258,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Session",
+   "Weekly",
+   "Usage remaining",
+   "Nov 2, 2026 at 12:16\u202fAM to Nov 2, 2026 at 12:46\u202fAM",
+   "Nov 2, 2026 at 5:16\u202fAM to Nov 2, 2026 at 5:46\u202fAM",
+   "Nov 2, 2026 at 2:16\u202fAM to Nov 2, 2026 at 2:46\u202fAM",
+   "12:16\u202fAM",
+   "5:16\u202fAM",
+   "65% Usage remaining",
+   "Showing last-known usage captured just now.",
+   "Session",
+   "Weekly",
+   "Plan utilization chart",
+   "0 to 5",
+   "Nov 2 at 5:16 am: 35% used"
+  ],
+  "action": "menuCardNoOp:"
+ },
+ {
+  "y": 282,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Moonshot / Kimi Open Platform"
+  ],
+  "action": "selectOverviewProvider:"
+ },
+ {
+  "y": 306,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "DeepSeek"
+  ],
+  "action": "selectOverviewProvider:"
+ },
+ {
+  "y": 330,
+  "h": 11,
+  "x": 708,
+  "w": 310,
+  "labels": [],
+  "action": null
+ },
+ {
+  "y": 341,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Refresh",
+   "Refresh",
+   "\u2318 R"
+  ],
+  "action": null
+ },
+ {
+  "y": 365,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Settings..."
+  ],
+  "action": "showSettingsGeneral"
+ },
+ {
+  "y": 389,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "About CodexBar (v0.83.1)"
+  ],
+  "action": "showSettingsAbout"
+ },
+ {
+  "y": 413,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Quit"
+  ],
+  "action": "quit"
+ }
+]

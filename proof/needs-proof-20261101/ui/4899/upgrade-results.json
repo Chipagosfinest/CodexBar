@@ -1,0 +1,143 @@
+{
+  "a-saved-detailed-subset": {
+    "seeded": {
+      "mergedOverviewLayout": "detailed",
+      "mergedOverviewSelectedProviders": [
+        "claude",
+        "kimi",
+        "zai"
+      ],
+      "mergedOverviewSelectionEditedActiveProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter",
+        "moonshot",
+        "deepseek"
+      ]
+    },
+    "after_v083": {
+      "mergedOverviewLayout": "detailed",
+      "mergedOverviewSelectedProviders": [
+        "claude",
+        "kimi",
+        "zai"
+      ],
+      "mergedOverviewSelectionEditedActiveProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter",
+        "moonshot",
+        "deepseek"
+      ]
+    },
+    "after_head": {
+      "mergedOverviewLayout": "detailed",
+      "mergedOverviewSelectedProviders": [
+        "claude",
+        "kimi",
+        "zai"
+      ],
+      "mergedOverviewSelectionEditedActiveProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter",
+        "moonshot",
+        "deepseek"
+      ]
+    },
+    "unchanged": true
+  },
+  "b-saved-compact-six-of-eight": {
+    "seeded": {
+      "mergedOverviewLayout": "compact",
+      "mergedOverviewSelectedProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter"
+      ],
+      "mergedOverviewSelectionEditedActiveProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter",
+        "moonshot",
+        "deepseek"
+      ]
+    },
+    "after_v083": {
+      "mergedOverviewLayout": "compact",
+      "mergedOverviewSelectedProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter"
+      ],
+      "mergedOverviewSelectionEditedActiveProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter",
+        "moonshot",
+        "deepseek"
+      ]
+    },
+    "after_head": {
+      "mergedOverviewLayout": "compact",
+      "mergedOverviewSelectedProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter"
+      ],
+      "mergedOverviewSelectionEditedActiveProviders": [
+        "codex",
+        "claude",
+        "commandcode",
+        "kimi",
+        "zai",
+        "openrouter",
+        "moonshot",
+        "deepseek"
+      ]
+    },
+    "unchanged": true
+  },
+  "c-never-changed-defaults": {
+    "seeded": {
+      "mergedOverviewLayout": null,
+      "mergedOverviewSelectedProviders": null,
+      "mergedOverviewSelectionEditedActiveProviders": null
+    },
+    "after_v083": {
+      "mergedOverviewLayout": null,
+      "mergedOverviewSelectedProviders": null,
+      "mergedOverviewSelectionEditedActiveProviders": null
+    },
+    "after_head": {
+      "mergedOverviewLayout": null,
+      "mergedOverviewSelectedProviders": null,
+      "mergedOverviewSelectionEditedActiveProviders": null
+    },
+    "unchanged": true
+  }
+}

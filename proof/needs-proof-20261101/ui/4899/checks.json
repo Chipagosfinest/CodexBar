@@ -1,0 +1,122 @@
+[
+ {
+  "check": "a-saved-detailed-subset: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a vs 3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a"
+ },
+ {
+  "check": "a-saved-detailed-subset: head app itself reached the fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "explicit Detailed + subset: head renders Detailed cards of only the saved three",
+  "pass": true,
+  "detail": "Session | Weekly | Usage remaining | Nov 2, 2026 at 12:12\u202fAM to Nov 2, 2026 at 12:42\u202fAM | Nov 2, 2026 at 5:12\u202fAM to Nov 2, 2026 at 5:42\u202fAM | Nov 2, 2026 at 2:12\u202fAM to Nov 2, 2026 at 2:42\u202fAM | 12:12\u202fAM | 5:12\u202fAM | 65% Usage remaining | Showing last-known usage captured just now. | Session | Weekly | "
+ },
+ {
+  "check": "a-saved-detailed-subset: raw saved preferences unchanged across the upgrade",
+  "pass": true,
+  "detail": "{'mergedOverviewLayout': 'detailed', 'mergedOverviewSelectedProviders': ['claude', 'kimi', 'zai'], 'mergedOverviewSelectionEditedActiveProviders': ['codex', 'claude', 'commandcode', 'kimi', 'zai', 'openrouter', 'moonshot', 'deepseek']}"
+ },
+ {
+  "check": "b-saved-compact-six-of-eight: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a vs 3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a"
+ },
+ {
+  "check": "b-saved-compact-six-of-eight: head app itself reached the fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "explicit Compact + six of eight: head renders one-line rows of only the saved six",
+  "pass": true,
+  "detail": "Usage | Left | Resets | Session | Weekly | Usage remaining | Nov 1, 2026 at 11:13\u202fPM to Nov 1, 2026 at 11:43\u202fPM | Nov 2, 2026 at 4:13\u202fAM to Nov 2, 2026 at 4:43\u202fAM | Nov 2, 2026 at 2:13\u202fAM to Nov 2, 2026 at 2:43\u202fAM | 11:13\u202fPM | 4:13\u202fAM | 8% Usage remaining | Showing last-known usage captured just now"
+ },
+ {
+  "check": "b-saved-compact-six-of-eight: raw saved preferences unchanged across the upgrade",
+  "pass": true,
+  "detail": "{'mergedOverviewLayout': 'compact', 'mergedOverviewSelectedProviders': ['codex', 'claude', 'commandcode', 'kimi', 'zai', 'openrouter'], 'mergedOverviewSelectionEditedActiveProviders': ['codex', 'claude', 'commandcode', 'kimi', 'zai', 'openrouter', 'moonshot', 'deepseek']}"
+ },
+ {
+  "check": "c-never-changed-defaults: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a vs 3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a"
+ },
+ {
+  "check": "c-never-changed-defaults: head app itself reached the fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "unset layout: effective default CHANGES to Compact, showing all eight rows (intentional; owner decision open)",
+  "pass": true,
+  "detail": "height=411 Usage | Left | Resets | Session | Weekly | Usage remaining | Nov 1, 2026 at 11:14\u202fPM to Nov 1, 2026 at 11:44\u202fPM | Nov 2, 2026 at 4:14\u202fAM to Nov 2, 2026 at 4:44\u202fAM | Nov 2, 2026 at 2:14\u202fAM to Nov 2, 2026 at 2:44\u202fAM | 11:14\u202fPM | 4:14\u202fAM | 8% "
+ },
+ {
+  "check": "c-never-changed-defaults: raw saved preferences unchanged across the upgrade",
+  "pass": true,
+  "detail": "{'mergedOverviewLayout': None, 'mergedOverviewSelectedProviders': None, 'mergedOverviewSelectionEditedActiveProviders': None}"
+ },
+ {
+  "check": "interaction launch reached fixture",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "hovering a Compact row opens its usage submenu",
+  "pass": true,
+  "detail": "[{'layer': 101, 'id': 82, 'y': 215, 'x': 403, 'w': 310, 'h': 484, 'name': ''}, {'x': 708, 'id': 80, 'w': 310, 'h': 411, 'name': '', 'layer': 101, 'y': 31}]"
+ },
+ {
+  "check": "clicking the Claude row selects the Claude provider tab",
+  "pass": true,
+  "detail": "Claude | claude@example.test | Updated just now | Max 5x | Session 65% left | Resets in 3h | Usage remaining | 5% in reserve \u00b7 Lasts until reset | Weekly 78% left | Resets in 5d | Usage remaining | 7% in reserve \u00b7 Lasts until reset | Plan U"
+ },
+ {
+  "check": "normal refresh requested new data from the head app",
+  "pass": true,
+  "detail": "anthropic=1 chatgpt=2"
+ },
+ {
+  "check": "refresh re-sorted: Claude, now 3% left, moved above Codex at 8% left",
+  "pass": true,
+  "detail": "138 162"
+ },
+ {
+  "check": "refresh rendered the new z.ai value, 25% left",
+  "pass": true,
+  "detail": "['z.ai / GLM, \u2192 0% ~41m, Usage remaining, 25%, 3h']"
+ },
+ {
+  "check": "harness control: Return activates a standard highlighted menu item",
+  "pass": true,
+  "detail": "[{'y': 31, 'id': 86, 'w': 1024, 'x': 1023, 'name': '', 'h': 674, 'layer': 3}, {'name': 'General', 'id': 89, 'h': 592, 'x': 112, 'y': 52, 'layer': 0, 'w': 800}]"
+ },
+ {
+  "check": "one failing provider renders one attention row",
+  "pass": true,
+  "detail": "{'y': 186, 'h': 24, 'x': 708, 'w': 310, 'labels': ['Kimi Code, Kimi Code API key is invalid or expired. Please refresh your API key.'], 'action': None}"
+ },
+ {
+  "check": "pointer click on the single attention row selects Kimi Code",
+  "pass": true,
+  "detail": "Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | \u2318 R | Settings... | About CodexBar (v0.83.1) | Quit"
+ },
+ {
+  "check": "all-failed launch asked the fixture and was refused",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "126"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

@@ -1,0 +1,19 @@
+{
+  "mergedMenuLastSelectedWasOverview": true,
+  "mergedOverviewLayout": "detailed",
+  "mergedOverviewSelectedProviders": [
+    "claude",
+    "kimi",
+    "zai"
+  ],
+  "mergedOverviewSelectionEditedActiveProviders": [
+    "codex",
+    "claude",
+    "commandcode",
+    "kimi",
+    "zai",
+    "openrouter",
+    "moonshot",
+    "deepseek"
+  ]
+}

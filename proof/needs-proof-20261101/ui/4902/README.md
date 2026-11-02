@@ -1,0 +1,3 @@
+Actual unmodified packaged app at ccadfbc339ea0205a271578daaef7f4a811ca092. Synthetic data, Compact with three selected providers. Hover/full card/nested chart/pointer row selection/refresh reopen pass. Show details fails to select its provider, both direct and after chart; overall workflow fails correctly. No movie claim. Run 41377091115. No post-4899 integration or rebase claimed.
+
+All screenshot pixels are original; full product SHA and synthetic banner were visible during capture. SHA256SUMS covers the files in this directory. Sampled DNS observation is not a fail-closed containment proof.

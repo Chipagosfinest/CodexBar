@@ -1,0 +1,832 @@
+[
+ {
+  "role": "AXMenuBar",
+  "label": "",
+  "x": 767,
+  "y": 3,
+  "w": 36,
+  "h": 24,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuBarItem",
+  "label": "CodexBar",
+  "x": 767,
+  "y": 3,
+  "w": 36,
+  "h": 24,
+  "help": null,
+  "id": "CodexBar.StatusItem"
+ },
+ {
+  "role": "AXMenu",
+  "label": "",
+  "x": 708,
+  "y": 31,
+  "w": 310,
+  "h": 634,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 36,
+  "w": 310,
+  "h": 76,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Overview",
+  "x": 723,
+  "y": 35,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Codex",
+  "x": 779,
+  "y": 35,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Claude",
+  "x": 835,
+  "y": 35,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Command Code",
+  "x": 891,
+  "y": 35,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Kimi Code",
+  "x": 947,
+  "y": 35,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "z.ai / GLM",
+  "x": 723,
+  "y": 75,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "OpenRouter",
+  "x": 779,
+  "y": 75,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "Moonshot / Kimi Open Platform",
+  "x": 835,
+  "y": 75,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXButton",
+  "label": "DeepSeek",
+  "x": 891,
+  "y": 75,
+  "w": 56,
+  "h": 38,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 112,
+  "w": 310,
+  "h": 11,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 123,
+  "w": 310,
+  "h": 176,
+  "help": null,
+  "id": "menuCardNoOp:"
+ },
+ {
+  "role": "AXMenu",
+  "label": "",
+  "x": 403,
+  "y": 118,
+  "w": 310,
+  "h": 290,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 403,
+  "y": 123,
+  "w": 310,
+  "h": 221,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXGroup",
+  "label": "",
+  "x": 403,
+  "y": 123,
+  "w": 310,
+  "h": 221,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Claude",
+  "x": 423,
+  "y": 132.5,
+  "w": 45,
+  "h": 16,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "claude@example.test",
+  "x": 581,
+  "y": 134.5,
+  "w": 112,
+  "h": 14,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Updated just now",
+  "x": 423,
+  "y": 152.5,
+  "w": 85,
+  "h": 13,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Max 5x",
+  "x": 658,
+  "y": 152.5,
+  "w": 35,
+  "h": 13,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Session 30% left",
+  "x": 423,
+  "y": 188.5,
+  "w": 106,
+  "h": 16,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Resets in 3h",
+  "x": 633,
+  "y": 191.5,
+  "w": 60,
+  "h": 13,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXUnknown",
+  "label": "Usage remaining",
+  "x": 423,
+  "y": 211,
+  "w": 270,
+  "h": 6,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "30% in deficit \u00b7 Projected empty in 52m",
+  "x": 423,
+  "y": 222.5,
+  "w": 192,
+  "h": 13,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Weekly 56% left",
+  "x": 423,
+  "y": 247.5,
+  "w": 102,
+  "h": 16,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Resets in 5d",
+  "x": 633,
+  "y": 250.5,
+  "w": 60,
+  "h": 13,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXUnknown",
+  "label": "Usage remaining",
+  "x": 423,
+  "y": 270,
+  "w": 270,
+  "h": 6,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "15% in deficit \u00b7 Runs out in 2d 13h",
+  "x": 423,
+  "y": 281.5,
+  "w": 164,
+  "h": 13,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Sonnet 20% left",
+  "x": 423,
+  "y": 306.5,
+  "w": 101,
+  "h": 16,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Resets in 5d",
+  "x": 633,
+  "y": 309.5,
+  "w": 60,
+  "h": 13,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXUnknown",
+  "label": "Usage remaining",
+  "x": 423,
+  "y": 329,
+  "w": 270,
+  "h": 6,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 403,
+  "y": 344,
+  "w": 310,
+  "h": 11,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "Plan Usage",
+  "x": 403,
+  "y": 355,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenu",
+  "label": "",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": null,
+  "label": "",
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": null,
+  "label": "",
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "Show details",
+  "x": 403,
+  "y": 379,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": "selectOverviewProvider:"
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 299,
+  "w": 310,
+  "h": 11,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 310,
+  "w": 310,
+  "h": 136,
+  "help": null,
+  "id": "menuCardNoOp:"
+ },
+ {
+  "role": "AXMenu",
+  "label": "",
+  "x": 0,
+  "y": 542,
+  "w": 310,
+  "h": 226,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 0,
+  "y": 582,
+  "w": 310,
+  "h": 181,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXGroup",
+  "label": "",
+  "x": 0,
+  "y": 587,
+  "w": 310,
+  "h": 181,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Kimi Code",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Updated just now",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "LEVEL_INTERMEDIATE",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "5-hour usage 85% left",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Resets in 4h",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXUnknown",
+  "label": "Usage remaining",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "5% in reserve \u00b7 Lasts until reset",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "7-day usage 88% left",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Resets in 6d",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXUnknown",
+  "label": "Usage remaining",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "2% in reserve \u00b7 Lasts until reset",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 0,
+  "y": 571,
+  "w": 310,
+  "h": 11,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "Show details",
+  "x": 0,
+  "y": 547,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": "selectOverviewProvider:"
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 446,
+  "w": 310,
+  "h": 11,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 457,
+  "w": 310,
+  "h": 96,
+  "help": null,
+  "id": "menuCardNoOp:"
+ },
+ {
+  "role": "AXMenu",
+  "label": "",
+  "x": 0,
+  "y": 543,
+  "w": 310,
+  "h": 225,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 0,
+  "y": 583,
+  "w": 310,
+  "h": 180,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXGroup",
+  "label": "",
+  "x": 0,
+  "y": 588,
+  "w": 310,
+  "h": 180,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "z.ai / GLM",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Updated just now",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Pro",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "5-hour 30% left",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Resets in 3h",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXUnknown",
+  "label": "Usage remaining",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "30% in deficit \u00b7 Projected empty in 52m",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "QUOTA DETAILS",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Token quota",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "70% used",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "100 limit \u00b7 30 remaining",
+  "x": 0,
+  "y": 768,
+  "w": 0,
+  "h": 0,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 0,
+  "y": 572,
+  "w": 310,
+  "h": 11,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "Show details",
+  "x": 0,
+  "y": 548,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": "selectOverviewProvider:"
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "",
+  "x": 708,
+  "y": 553,
+  "w": 310,
+  "h": 11,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "Refresh",
+  "x": 708,
+  "y": 564,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "Refresh",
+  "x": 724,
+  "y": 567,
+  "w": 243.6328125,
+  "h": 18,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXStaticText",
+  "label": "\u2318 R",
+  "x": 977.6328125,
+  "y": 567,
+  "w": 42,
+  "h": 18,
+  "help": null,
+  "id": null
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "Settings...",
+  "x": 708,
+  "y": 588,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": "showSettingsGeneral"
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "About CodexBar (v0.83.1)",
+  "x": 708,
+  "y": 612,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": "showSettingsAbout"
+ },
+ {
+  "role": "AXMenuItem",
+  "label": "Quit",
+  "x": 708,
+  "y": 636,
+  "w": 310,
+  "h": 24,
+  "help": null,
+  "id": "quit"
+ }
+]

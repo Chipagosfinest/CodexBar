@@ -1,0 +1,108 @@
+[
+ {
+  "y": 36,
+  "h": 76,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Overview",
+   "Codex",
+   "Claude",
+   "Command Code",
+   "Kimi Code",
+   "z.ai / GLM",
+   "OpenRouter",
+   "Moonshot / Kimi Open Platform",
+   "DeepSeek"
+  ],
+  "action": null
+ },
+ {
+  "y": 112,
+  "h": 11,
+  "x": 708,
+  "w": 310,
+  "labels": [],
+  "action": null
+ },
+ {
+  "y": 123,
+  "h": 69,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Kimi Code",
+   "Kimi Code API key is invalid or expired. Please refresh your API key.",
+   "Copy error"
+  ],
+  "action": null
+ },
+ {
+  "y": 192,
+  "h": 11,
+  "x": 708,
+  "w": 310,
+  "labels": [],
+  "action": null
+ },
+ {
+  "y": 203,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Usage Dashboard"
+  ],
+  "action": "openDashboard"
+ },
+ {
+  "y": 227,
+  "h": 11,
+  "x": 708,
+  "w": 310,
+  "labels": [],
+  "action": null
+ },
+ {
+  "y": 238,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Refresh",
+   "Refresh",
+   "\u2318 R"
+  ],
+  "action": null
+ },
+ {
+  "y": 262,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Settings..."
+  ],
+  "action": "showSettingsGeneral"
+ },
+ {
+  "y": 286,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "About CodexBar (v0.83.1)"
+  ],
+  "action": "showSettingsAbout"
+ },
+ {
+  "y": 310,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Quit"
+  ],
+  "action": "quit"
+ }
+]

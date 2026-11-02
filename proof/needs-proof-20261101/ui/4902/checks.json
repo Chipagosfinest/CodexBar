@@ -1,0 +1,82 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "00900d19011ca42170a07551382b02129b2e947c89cc38b8b39c3e2092ecf932 vs 00900d19011ca42170a07551382b02129b2e947c89cc38b8b39c3e2092ecf932"
+ },
+ {
+  "check": "Compact Overview has a Claude row",
+  "pass": true,
+  "detail": "['Claude', 'claude@example.test', 'Updated just now', 'Max 5x', 'Session 65% left', 'Resets in 3h']"
+ },
+ {
+  "check": "hovering the Compact row opens a flyout window",
+  "pass": true,
+  "detail": "[{'layer': 101, 'w': 310, 'h': 250, 'id': 38, 'y': 118, 'name': '', 'x': 403}, {'id': 36, 'layer': 101, 'h': 594, 'w': 310, 'name': '', 'x': 708, 'y': 31}]"
+ },
+ {
+  "check": "the flyout hosts the full provider card",
+  "pass": true,
+  "detail": "{'flyout': {'y': 118, 'name': '', 'id': 38, 'h': 250, 'x': 403, 'layer': 101, 'w': 310}, 'labels': ['Session 65% left', 'Weekly 78% left', 'Plan Usage', 'Show details']}"
+ },
+ {
+  "check": "the nested chart opens from the flyout",
+  "pass": true,
+  "detail": "[{'id': 38, 'layer': 101, 'name': '', 'x': 403, 'y': 118, 'w': 310, 'h': 250}, {'y': 215, 'name': '', 'h': 484, 'layer': 101, 'x': 708, 'id': 39, 'w': 310}, {'y': 31, 'w': 310, 'layer': 101, 'name': '', 'x': 708, 'h': 594, 'id': 36}]"
+ },
+ {
+  "check": "flyout reopens for the direct Show details path",
+  "pass": true,
+  "detail": "[{'h': 250, 'name': '', 'y': 118, 'w': 310, 'x': 403, 'layer': 101, 'id': 43}, {'name': '', 'id': 42, 'h': 594, 'y': 31, 'w': 310, 'x': 708, 'layer': 101}]"
+ },
+ {
+  "check": "pointer click on the Compact row selects the Claude provider tab",
+  "pass": true,
+  "detail": "Claude | claude@example.test | Updated 1m ago | Max 5x | Session 65% left | Resets in 2h 59m | Usage remaining | 5% in reserve \u00b7 Lasts until reset | Weekly 78% left | Resets in 4d 23h | Usage remaining | 7% in reserve \u00b7 Lasts until reset | "
+ },
+ {
+  "check": "provider-tab selection reachable from the flyout (Show details)",
+  "pass": false,
+  "detail": "after chart=False direct=False"
+ },
+ {
+  "check": "first flyout opened before the refresh",
+  "pass": true,
+  "detail": "[{'w': 310, 'id': 52, 'layer': 101, 'name': '', 'h': 250, 'x': 403, 'y': 118}, {'w': 310, 'layer': 101, 'y': 31, 'h': 594, 'name': '', 'id': 51, 'x': 708}]"
+ },
+ {
+  "check": "first flyout shows no Sonnet window yet",
+  "pass": true,
+  "detail": "['Session 65% left', 'Weekly 78% left']"
+ },
+ {
+  "check": "the refresh reached the provider with Overview open",
+  "pass": true,
+  "detail": "1"
+ },
+ {
+  "check": "Claude row is still present after the refresh",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "flyout reopens after the refresh",
+  "pass": true,
+  "detail": "[{'h': 290, 'name': '', 'w': 310, 'id': 52, 'layer': 101, 'x': 403, 'y': 118}, {'id': 51, 'name': '', 'x': 708, 'w': 310, 'h': 634, 'y': 31, 'layer': 101}]"
+ },
+ {
+  "check": "the reopened flyout renders the current card: new values, new Sonnet window, taller frame",
+  "pass": true,
+  "detail": "{'before': 250, 'after': 290, 'labels': ['Session 30% left', 'Weekly 56% left', 'Sonnet 20% left']}"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "34"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

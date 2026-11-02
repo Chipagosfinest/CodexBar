@@ -1,0 +1,11 @@
+Executable=/Users/runner/work/_temp/v083/CodexBar.app/Contents/MacOS/CodexBar
+Identifier=com.steipete.codexbar
+Format=app bundle with Mach-O universal (x86_64 arm64)
+CodeDirectory v=20500 size=79777 flags=0x10000(runtime) hashes=2482+7 location=embedded
+Signature size=8984
+Timestamp=Oct 31, 2026 at 10:08:18 AM
+Info.plist entries=19
+TeamIdentifier=Y5PE65HELJ
+Runtime Version=27.0.0
+Sealed Resources version=2 rules=13 files=576
+Internal requirements count=1 size=184

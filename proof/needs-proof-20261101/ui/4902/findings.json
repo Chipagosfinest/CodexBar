@@ -1,0 +1,17 @@
+[
+ {
+  "finding": "the first reopen after Show details already shows the provider tab",
+  "as_expected": false,
+  "detail": "second reopen landed=False"
+ },
+ {
+  "finding": "Show details after visiting the nested chart selects the provider tab",
+  "as_expected": false,
+  "detail": "Claude | claude@example.test | Updated just now | Max 5x | Session 65% left | Resets in 3h | Usage remaining | 5% in reserve \u00b7 Lasts until reset | Weekly 78% left | Resets in 5d | Usage remaining | 7% in reserve \u00b7 Lasts until reset | Plan U"
+ },
+ {
+  "finding": "Show details reached directly selects the provider tab",
+  "as_expected": false,
+  "detail": "Claude | claude@example.test | Updated 1m ago | Max 5x | Session 65% left | Resets in 2h 59m | Usage remaining | 5% in reserve \u00b7 Lasts until reset | Weekly 78% left | Resets in 4d 23h | Usage remaining | 7% in reserve \u00b7 Lasts until reset | "
+ }
+]
