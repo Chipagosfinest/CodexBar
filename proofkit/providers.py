@@ -45,7 +45,7 @@ def kimi(_):
 
 
 def zai(_):
-    five, _week = PERCENTS['zai'], 0
+    five = PERCENTS['zai'][0]
     return 200, {'code': 200, 'success': True, 'msg': 'ok', 'data': {'planName': 'Pro', 'limits': [
         {'type': 'TOKENS_LIMIT', 'unit': 3, 'number': 5, 'percentage': five, 'usage': 100, 'currentValue': five, 'remaining': 100 - five,
          'nextResetTime': epoch(timedelta(hours=3)) * 1000}]}}

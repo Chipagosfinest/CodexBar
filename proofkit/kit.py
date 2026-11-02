@@ -54,7 +54,7 @@ class Fixture(http.server.BaseHTTPRequestHandler):
         best = -1
         for (h, prefix), fn in ROUTES.items():
             if h == host and self.path.startswith(prefix) and len(prefix) > best:
-                status, body = fn(self)
+                status, body = (401, {'error': {'message': 'Unauthorized'}}) if state.get('all_fail') and '__proof' not in prefix else fn(self)
                 best = len(prefix)
         if best < 0:
             state['unknown'].append(f'{self.command} {host}{self.path}')
@@ -91,7 +91,7 @@ def start_fixture():
     (wd / 'chain.crt').write_text((wd / 'leaf.crt').read_text() + (wd / 'ca.crt').read_text())
     run('sudo', 'security', 'add-trusted-cert', '-d', '-r', 'trustRoot', '-k', '/Library/Keychains/System.keychain', wd / 'ca.crt')
     hosts = wd / 'hosts'
-    hosts.write_text(open('/etc/hosts').read() + ''.join(f'127.0.0.1 {h}\n' for h in HOSTS))
+    hosts.write_text(open('/etc/hosts').read() + ''.join(f'127.0.0.1 {h}\n::1 {h}\n' for h in HOSTS))
     run('sudo', 'cp', hosts, '/etc/hosts')
     run('sudo', 'dscacheutil', '-flushcache')
     # Port 443 needs root; forward it to the unprivileged fixture rather than running this whole harness as root.
@@ -113,10 +113,13 @@ def pump(a, b):
     for s in (a, b):
         try: s.shutdown(socket.SHUT_RDWR)
         except OSError: pass
-l = socket.socket(); l.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); l.bind(("127.0.0.1", 443)); l.listen(128)
-while True:
-    c, _ = l.accept(); u = socket.create_connection(("127.0.0.1", 8443))
-    threading.Thread(target=pump, args=(c, u), daemon=True).start(); threading.Thread(target=pump, args=(u, c), daemon=True).start()
+def serve(family, addr):
+    l = socket.socket(family); l.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); l.bind((addr, 443)); l.listen(128)
+    while True:
+        c, _ = l.accept(); u = socket.create_connection(("127.0.0.1", 8443))
+        threading.Thread(target=pump, args=(c, u), daemon=True).start(); threading.Thread(target=pump, args=(u, c), daemon=True).start()
+threading.Thread(target=serve, args=(socket.AF_INET6, "::1"), daemon=True).start()
+serve(socket.AF_INET, "127.0.0.1")
 ''')
     subprocess.Popen(['sudo', '/usr/bin/python3', str(forward)])
     time.sleep(2)
