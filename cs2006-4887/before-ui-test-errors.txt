@@ -1,0 +1,4 @@
+UITests.swift:233: error: -[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndResize] : XCTAssertTrue failed - Small tile lost the Weekly row
+UITests.swift:234: error: -[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndResize] : XCTAssertTrue failed - Small tile lost the low Sonnet row
+UITests.swift:235: error: -[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndResize] : XCTAssertFalse failed - Small tile folded its windows into overflow
+UITests.swift:276: error: -[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndResize] : XCTAssertEqual failed: ("XCTWaiterResult(rawValue: 2)") is not equal to ("XCTWaiterResult(rawValue: 1)") - Pager did not switch provider

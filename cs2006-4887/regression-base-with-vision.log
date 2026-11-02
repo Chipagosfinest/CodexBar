@@ -1,0 +1,138 @@
+warning: 'run-4887': ignoring broken symlink /private/tmp/cs2006/run-4887/TestsPlugin/ProviderPluginExtensionParityTests.swift
+warning: 'run-4887': ignoring broken symlink /private/tmp/cs2006/run-4887/TestsPlugin/T3ChatReference.swift
+warning: 'run-4887': ignoring broken symlink /private/tmp/cs2006/run-4887/TestsPlugin/ProviderPluginParityTests.swift
+warning: 'run-4887': ignoring broken symlink /private/tmp/cs2006/run-4887/TestsPlugin/Sub2APIPluginGoldenTests.swift
+warning: 'run-4887': ignoring broken symlink /private/tmp/cs2006/run-4887/TestsPlugin/ProviderPluginRuntimeTests.swift
+warning: 'run-4887': ignoring broken symlink /private/tmp/cs2006/run-4887/TestsPlugin/ProviderPluginDetailsParityTests.swift
+warning: 'run-4887': ignoring broken symlink /private/tmp/cs2006/run-4887/TestsPlugin/ManusReference.swift
+[0/1] Planning build
+Building for debugging...
+[0/19] Write sources
+[1/19] Write swift-version--1AB21518FC5DEDBE.txt
+[3/9] Compiling LocalWidgetTests VisionTextRecognitionAvailability.swift
+[4/9] Emitting module LocalWidgetTests
+[5/9] Compiling LocalWidgetTests WidgetLowQuotaInkTests.swift
+[6/11] Emitting module CodexBarPackageTests
+[7/11] Compiling CodexBarPackageTests runner.swift
+[7/11] Write Objects.LinkFileList
+[8/11] Linking CodexBar
+[9/11] Applying CodexBar
+[10/11] Linking CodexBarPackageTests
+Build complete! (5.16s)
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite WidgetLowQuotaInkTests started.
+◇ Test "masked modes draw a low bar stronger than a healthy one" started.
+◇ Test "small usage widget keeps a low model quota out of overflow" started.
+◇ Test "small switcher keeps a low model quota out of overflow" started.
+◇ Test "full colour draws a low bar red and a healthy bar in neutral ink" started.
+◇ Test case passing 1 argument content → 132.0 to "small usage widget keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 127.0 to "small usage widget keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 132.0 to "small switcher keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 127.0 to "small switcher keeps a low model quota out of overflow" started.
+✔ Test "masked modes draw a low bar stronger than a healthy one" passed after 0.016 seconds.
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:90:9: Expectation failed: compact.contains("Weekly")
+↳ Weekly row missing: Claude 1 minute 39% Resets 11:13 PM +2 more Session left
+↳ compact.contains("Weekly") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2moreSessionleft"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:91:9: Expectation failed: compact.contains("70%")
+↳ Weekly value missing: Claude 1 minute 39% Resets 11:13 PM +2 more Session left
+↳ compact.contains("70%") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2moreSessionleft"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:92:9: Expectation failed: compact.contains("Sonnet")
+↳ Sonnet row missing: Claude 1 minute 39% Resets 11:13 PM +2 more Session left
+↳ compact.contains("Sonnet") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2moreSessionleft"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:93:9: Expectation failed: compact.contains("8%")
+↳ Sonnet value missing: Claude 1 minute 39% Resets 11:13 PM +2 more Session left
+↳ compact.contains("8%") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2moreSessionleft"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:94:9: Expectation failed: !compact.contains("more")
+↳ Rows folded into overflow: Claude 1 minute 39% Resets 11:13 PM +2 more Session left
+↳ !compact.contains("more") → true
+↳   compact.contains("more") → false
+↳     compact → "Claude1minute39%Resets11:13PM+2moreSessionleft"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:96:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:90:9: Expectation failed: compact.contains("Weekly")
+↳ Weekly row missing: Claude 1 minute 39% Resets 11:13 PM Session left +2 more
+↳ compact.contains("Weekly") → false
+↳   compact → "Claude1minute39%Resets11:13PMSessionleft+2more"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:91:9: Expectation failed: compact.contains("70%")
+↳ Weekly value missing: Claude 1 minute 39% Resets 11:13 PM Session left +2 more
+↳ compact.contains("70%") → false
+↳   compact → "Claude1minute39%Resets11:13PMSessionleft+2more"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:92:9: Expectation failed: compact.contains("Sonnet")
+↳ Sonnet row missing: Claude 1 minute 39% Resets 11:13 PM Session left +2 more
+↳ compact.contains("Sonnet") → false
+↳   compact → "Claude1minute39%Resets11:13PMSessionleft+2more"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:93:9: Expectation failed: compact.contains("8%")
+↳ Sonnet value missing: Claude 1 minute 39% Resets 11:13 PM Session left +2 more
+↳ compact.contains("8%") → false
+↳   compact → "Claude1minute39%Resets11:13PMSessionleft+2more"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:94:9: Expectation failed: !compact.contains("more")
+↳ Rows folded into overflow: Claude 1 minute 39% Resets 11:13 PM Session left +2 more
+↳ !compact.contains("more") → true
+↳   compact.contains("more") → false
+↳     compact → "Claude1minute39%Resets11:13PMSessionleft+2more"
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:96:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:90:9: Expectation failed: compact.contains("Weekly")
+↳ Weekly row missing: Claude 1 minute 39% Resets 11:13 PM +2 more > Session left
+↳ compact.contains("Weekly") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2more>Sessionleft"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:91:9: Expectation failed: compact.contains("70%")
+↳ Weekly value missing: Claude 1 minute 39% Resets 11:13 PM +2 more > Session left
+↳ compact.contains("70%") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2more>Sessionleft"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:92:9: Expectation failed: compact.contains("Sonnet")
+↳ Sonnet row missing: Claude 1 minute 39% Resets 11:13 PM +2 more > Session left
+↳ compact.contains("Sonnet") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2more>Sessionleft"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:93:9: Expectation failed: compact.contains("8%")
+↳ Sonnet value missing: Claude 1 minute 39% Resets 11:13 PM +2 more > Session left
+↳ compact.contains("8%") → false
+↳   compact → "Claude1minute39%Resets11:13PM+2more>Sessionleft"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:94:9: Expectation failed: !compact.contains("more")
+↳ Rows folded into overflow: Claude 1 minute 39% Resets 11:13 PM +2 more > Session left
+↳ !compact.contains("more") → true
+↳   compact.contains("more") → false
+↳     compact → "Claude1minute39%Resets11:13PM+2more>Sessionleft"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:96:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue witwarning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+h 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:90:9: Expectation failed: compact.contains("Weekly")
+↳ Weekly row missing: Claude 1 minute 39% Resets 11:13 PM > Session left +2 more
+↳ compact.contains("Weekly") → false
+↳   compact → "Claude1minute39%Resets11:13PM>Sessionleft+2more"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:91:9: Expectation failed: compact.contains("70%")
+↳ Weekly value missing: Claude 1 minute 39% Resets 11:13 PM > Session left +2 more
+↳ compact.contains("70%") → false
+↳   compact → "Claude1minute39%Resets11:13PM>Sessionleft+2more"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:92:9: Expectation failed: compact.contains("Sonnet")
+↳ Sonnet row missing: Claude 1 minute 39% Resets 11:13 PM > Session left +2 more
+↳ compact.contains("Sonnet") → false
+↳   compact → "Claude1minute39%Resets11:13PM>Sessionleft+2more"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:93:9: Expectation failed: compact.contains("8%")
+↳ Sonnet value missing: Claude 1 minute 39% Resets 11:13 PM > Session left +2 more
+↳ compact.contains("8%") → false
+↳   compact → "Claude1minute39%Resets11:13PM>Sessionleft+2more"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:94:9: Expectation failed: !compact.contains("more")
+↳ Rows folded into overflow: Claude 1 minute 39% Resets 11:13 PM > Session left +2 more
+↳ !compact.contains("more") → true
+↳   compact.contains("more") → false
+↳     compact → "Claude1minute39%Resets11:13PM>Sessionleft+2more"
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:96:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✔ Test "full colour draws a low bar red and a healthy bar in neutral ink" passed after 0.813 seconds.
+✘ Test "small switcher keeps a low model quota out of overflow" with 2 test cases failed after 0.813 seconds with 12 issues.
+✘ Test "small usage widget keeps a low model quota out of overflow" with 2 test cases failed after 0.813 seconds with 12 issues.
+✘ Suite WidgetLowQuotaInkTests failed after 0.814 seconds with 24 issues.
+✘ Test run with 4 tests in 1 suite failed after 0.814 seconds with 24 issues.
+Note: Some test targets reported failures:
+  - CodexBarPackageTests (Swift Testing)

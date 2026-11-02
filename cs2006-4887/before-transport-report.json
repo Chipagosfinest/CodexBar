@@ -1,0 +1,72 @@
+{
+ "container": "Y5PE65HELJ.com.steipete.codexbar",
+ "providers": [
+  {
+   "provider": "codex",
+   "primary": {
+    "usedPercent": 92,
+    "windowMinutes": 300,
+    "resetsAt": "2026-11-02T08:03:56Z",
+    "resetDescription": "8:03\u202fAM"
+   },
+   "secondary": {
+    "usedPercent": 40,
+    "windowMinutes": 10080,
+    "resetsAt": "2026-11-06T06:03:56Z",
+    "resetDescription": "Nov 6 at 6:03\u202fAM"
+   },
+   "tertiary": null,
+   "daily_points": 14
+  },
+  {
+   "provider": "claude",
+   "primary": {
+    "usedPercent": 61,
+    "windowMinutes": 300,
+    "resetsAt": "2026-11-02T09:03:56Z",
+    "resetDescription": "Nov 2 at 9:03AM"
+   },
+   "secondary": {
+    "usedPercent": 30,
+    "windowMinutes": 10080,
+    "resetsAt": "2026-11-07T06:03:56Z",
+    "resetDescription": "Nov 7 at 6:03AM"
+   },
+   "tertiary": {
+    "usedPercent": 92,
+    "windowMinutes": 10080,
+    "resetsAt": "2026-11-07T06:03:55Z",
+    "resetDescription": "Nov 7 at 6:03AM"
+   },
+   "daily_points": 14
+  },
+  {
+   "provider": "zai",
+   "primary": {
+    "usedPercent": 70,
+    "windowMinutes": 300,
+    "resetsAt": "2026-11-02T09:03:56Z",
+    "resetDescription": "5-hour"
+   },
+   "secondary": null,
+   "tertiary": null,
+   "daily_points": 0
+  },
+  {
+   "provider": "kimi",
+   "primary": {
+    "usedPercent": 12,
+    "windowMinutes": 10080,
+    "resetsAt": "2026-11-08T06:03:56Z"
+   },
+   "secondary": {
+    "usedPercent": 15,
+    "windowMinutes": 300,
+    "resetsAt": "2026-11-02T10:03:56Z"
+   },
+   "tertiary": null,
+   "daily_points": 0
+  }
+ ],
+ "generatedAt": "2026-11-02T06:03:57Z"
+}

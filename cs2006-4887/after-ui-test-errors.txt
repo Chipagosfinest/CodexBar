@@ -1,0 +1,1 @@
+UITests.swift:276: error: -[WidgetDesktopSmokeUITests.WidgetHostProofTests testInstallAndResize] : XCTAssertEqual failed: ("XCTWaiterResult(rawValue: 2)") is not equal to ("XCTWaiterResult(rawValue: 1)") - Pager did not switch provider

@@ -1,0 +1,80 @@
+Building for debugging...
+[0/17] Write sources
+[1/17] Write swift-version--1AB21518FC5DEDBE.txt
+[3/8] Emitting module CodexBarWidget
+macro expansion @Entry:2:5: warning: 'nonisolated(unsafe)' is unnecessary for a constant with 'Sendable' type 'Bool', consider removing it
+`- /private/tmp/cs2006/run-4887/Sources/CodexBarWidget/WidgetDesignSystem.swift:65:50: note: expanded code originates here
+ 63 | extension EnvironmentValues {
+ 64 |     /// Mirrors the app's "show used instead of remaining" preference into the tiles.
+ 65 |     @Entry var widgetUsageShowsUsed: Bool = false
+    |     `- note: in expansion of macro 'Entry' on property 'widgetUsageShowsUsed' here
+    +--- macro expansion @Entry ----------------------------------------
+    |1 | private struct __Key_widgetUsageShowsUsed: SwiftUI.EnvironmentKey {
+    |2 |     nonisolated(unsafe) static let defaultValue: Bool = unsafeBitCast(
+    |  |     `- warning: 'nonisolated(unsafe)' is unnecessary for a constant with 'Sendable' type 'Bool', consider removing it
+    |3 |         make as @MainActor () -> Bool, to: (() -> Bool).self)()
+    |4 |     @MainActor private static func make() -> Bool {
+    +-------------------------------------------------------------------
+ 66 | 
+ 67 |     /// Snapshot-rendering seam. WidgetKit owns `widgetRenderingMode` and nothing outside a widget
+[4/8] Compiling CodexBarWidget WidgetDesignSystem.swift
+macro expansion @Entry:2:5: warning: 'nonisolated(unsafe)' is unnecessary for a constant with 'Sendable' type 'Bool', consider removing it
+`- /private/tmp/cs2006/run-4887/Sources/CodexBarWidget/WidgetDesignSystem.swift:65:50: note: expanded code originates here
+ 63 | extension EnvironmentValues {
+ 64 |     /// Mirrors the app's "show used instead of remaining" preference into the tiles.
+ 65 |     @Entry var widgetUsageShowsUsed: Bool = false
+    |     `- note: in expansion of macro 'Entry' on property 'widgetUsageShowsUsed' here
+    +--- macro expansion @Entry ----------------------------------------
+    |1 | private struct __Key_widgetUsageShowsUsed: SwiftUI.EnvironmentKey {
+    |2 |     nonisolated(unsafe) static let defaultValue: Bool = unsafeBitCast(
+    |  |     `- warning: 'nonisolated(unsafe)' is unnecessary for a constant with 'Sendable' type 'Bool', consider removing it
+    |3 |         make as @MainActor () -> Bool, to: (() -> Bool).self)()
+    |4 |     @MainActor private static func make() -> Bool {
+    +-------------------------------------------------------------------
+ 66 | 
+ 67 |     /// Snapshot-rendering seam. WidgetKit owns `widgetRenderingMode` and nothing outside a widget
+[5/8] Compiling CodexBarWidget CodexBarWidgetViews.swift
+[5/10] Write Objects.LinkFileList
+[6/10] Linking CodexBarWidget
+[7/10] Applying CodexBarWidget
+[9/11] Emitting module LocalWidgetTests
+[9/11] Write Objects.LinkFileList
+[10/11] Linking CodexBarPackageTests
+Build complete! (4.37s)
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite WidgetLowQuotaInkTests started.
+◇ Test "small usage widget keeps a low model quota out of overflow" started.
+◇ Test "small switcher keeps a low model quota out of overflow" started.
+◇ Test "full colour draws a low bar red and a healthy bar in neutral ink" started.
+◇ Test "masked modes draw a low bar stronger than a healthy one" started.
+◇ Test case passing 1 argument content → 127.0 to "small usage widget keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 132.0 to "small usage widget keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 132.0 to "small switcher keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 127.0 to "small switcher keeps a low model quota out of overflow" started.
+✔ Test "masked modes draw a low bar stronger than a healthy one" passed after 0.039 seconds.
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:89:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure. Pixels need no text recognition, so this
+↳ // holds on hosts without Vision, where the text checks below cannot run.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✘ Test "small usage widget keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:89:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure. Pixels need no text recognition, so this
+↳ // holds on hosts without Vision, where the text checks below cannot run.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 127.0 at WidgetLowQuotaInkTests.swift:89:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure. Pixels need no text recognition, so this
+↳ // holds on hosts without Vision, where the text checks below cannot run.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✘ Test "small switcher keeps a low model quota out of overflow" recorded an issue with 1 argument content → 132.0 at WidgetLowQuotaInkTests.swift:89:9: Expectation failed: try self.redPixelCount(in: image) > 20
+↳ // The only red on this tile is the low Sonnet figure. Pixels need no text recognition, so this
+↳ // holds on hosts without Vision, where the text checks below cannot run.
+↳ try self.redPixelCount(in: image) > 20 → <not evaluated>
+✔ Test "full colour draws a low bar red and a healthy bar in neutral ink" passed after 0.598 seconds.
+✘ Test "small usage widget keeps a low model quota out of overflow" with 2 test cases failed after 0.598 seconds with 2 issues.
+✘ Test "small switcher keeps a low model quota out of overflow" with 2 test cases failed after 0.598 seconds with 2 issues.
+✘ Suite WidgetLowQuotaInkTests failed after 0.598 seconds with 4 issues.
+✘ Test run with 4 tests in 1 suite failed after 0.598 seconds with 4 issues.
+Note: Some test targets reported failures:
+  - CodexBarPackageTests (Swift Testing)

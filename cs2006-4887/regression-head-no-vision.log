@@ -1,0 +1,28 @@
+Building for debugging...
+[0/17] Write sources
+[1/17] Write swift-version--1AB21518FC5DEDBE.txt
+[3/5] Compiling LocalWidgetTests VisionTextRecognitionAvailability.swift
+[4/5] Emitting module LocalWidgetTests
+[5/6] Compiling LocalWidgetTests WidgetLowQuotaInkTests.swift
+[5/7] Write Objects.LinkFileList
+[6/7] Linking CodexBarPackageTests
+Build complete! (2.51s)
+warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite WidgetLowQuotaInkTests started.
+◇ Test "masked modes draw a low bar stronger than a healthy one" started.
+◇ Test "full colour draws a low bar red and a healthy bar in neutral ink" started.
+◇ Test "small usage widget keeps a low model quota out of overflow" started.
+◇ Test "small switcher keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 132.0 to "small usage widget keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 132.0 to "small switcher keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 127.0 to "small usage widget keeps a low model quota out of overflow" started.
+◇ Test case passing 1 argument content → 127.0 to "small switcher keeps a low model quota out of overflow" started.
+✔ Test "masked modes draw a low bar stronger than a healthy one" passed after 0.039 seconds.
+✔ Test "full colour draws a low bar red and a healthy bar in neutral ink" passed after 0.584 seconds.
+✔ Test "small switcher keeps a low model quota out of overflow" with 2 test cases passed after 0.584 seconds.
+✔ Test "small usage widget keeps a low model quota out of overflow" with 2 test cases passed after 0.584 seconds.
+✔ Suite WidgetLowQuotaInkTests passed after 0.584 seconds.
+✔ Test run with 4 tests in 1 suite passed after 0.584 seconds.

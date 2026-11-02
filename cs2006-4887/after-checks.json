@@ -1,0 +1,47 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "c9985e08ac9cf76940abc1df01211e7e417c57689881f50a013cb00fb458a565 vs c9985e08ac9cf76940abc1df01211e7e417c57689881f50a013cb00fb458a565"
+ },
+ {
+  "check": "installed extension equals the packaged extension",
+  "pass": true,
+  "detail": "['0d7fb7a46122073bb8760a3d05d6c3eddf85d5c1dbb68864938e3534cc9df75f', '0d7fb7a46122073bb8760a3d05d6c3eddf85d5c1dbb68864938e3534cc9df75f']"
+ },
+ {
+  "check": "snapshot carries the four enabled providers",
+  "pass": true,
+  "detail": "['codex', 'claude', 'zai', 'kimi']"
+ },
+ {
+  "check": "snapshot Claude session is 39% left (61 used), from the fixture reply",
+  "pass": true,
+  "detail": "{'resetsAt': '2026-11-02T08:59:18Z', 'resetDescription': 'Nov 2 at 8:59AM', 'usedPercent': 61, 'windowMinutes': 300}"
+ },
+ {
+  "check": "snapshot Claude has 14-day local history from transcripts",
+  "pass": true,
+  "detail": "14"
+ },
+ {
+  "check": "snapshot was written by this launch",
+  "pass": true,
+  "detail": "42s old"
+ },
+ {
+  "check": "installed-widget host test passed (gallery install, small/medium/large resize, data present)",
+  "pass": false,
+  "detail": "65"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "6"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]
