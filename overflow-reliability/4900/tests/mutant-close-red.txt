@@ -1,0 +1,9 @@
+✔ Test "rows past the inline limit move to a submenu and the footer stays last" passed after 3.149 seconds.
+✘ Test "closing the overflow submenu without activating a row stays on Overview" recorded an issue at OverviewBoundedMenuTests.swift:145:9: Expectation failed: controller.settings.mergedMenuLastSelectedWasOverview
+✔ Test "selecting an overflow row rebuilds the root menu it opened from" passed after 5.022 seconds.
+✔ Test "an overflow row opens its provider from the parent menu" passed after 5.023 seconds.
+✔ Test "a short roster has no overflow row" passed after 5.024 seconds.
+✘ Test "closing the overflow submenu without activating a row stays on Overview" failed after 5.024 seconds with 1 issue.
+✘ Suite OverviewBoundedMenuTests failed after 5.024 seconds with 1 issue.
+✘ Test run with 5 tests in 1 suite failed after 5.025 seconds with 1 issue.
+exit=1
