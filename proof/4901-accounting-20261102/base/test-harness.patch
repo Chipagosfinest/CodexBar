@@ -1,0 +1,97 @@
+diff --git a/Package.swift b/Package.swift
+index 7fe7c2e..4e808b2 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -241,6 +241,7 @@ let package = Package(
+                 "CodexBarTests/ProviderPluginRuntimeTests.swift",
+                 "CodexBarTests/Sub2APIPluginGoldenTests.swift",
+             ],
++            sources: ["CodexBarTests/OverviewSpendAccountingTests.swift", "CodexBarTests/OverviewSpendChartTests.swift", "CodexBarTests/SpendDashboardModelTests.swift", "CodexBarTests/SpendDashboardPartialCostTests.swift", "CodexBarTests/SpendDashboardLowerBoundPropagationTests.swift", "CodexBarTests/ProviderArchitectureGatekeeperTests.swift", "CodexBarTests/TestStores.swift", "CodexBarTests/ZaiTokenStoreTestSupport.swift", "CodexBarTests/CodexCredentialFixtures.swift"],
+             resources: [
+                 .copy("CodexBarTests/Fixtures"),
+             ],
+diff --git a/Scripts/run_swift_test.py b/Scripts/run_swift_test.py
+index e16af5d..15366be 100755
+--- a/Scripts/run_swift_test.py
++++ b/Scripts/run_swift_test.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ """Run native SwiftPM selection with the shared test-process containment."""
+ 
++import contextlib
+ import os
+ import sys
+ import tempfile
+@@ -23,7 +24,7 @@ def main() -> int:
+         return 2
+     # Like serial groups, the whole invocation, including its build, gets temporary HOME and
+     # CFFIXED_USER_HOME values instead of the caller's.
+-    with tempfile.TemporaryDirectory(prefix="codexbar-native-test-home-") as home:
++    with contextlib.nullcontext(tempfile.mkdtemp(prefix="codexbar-proof-test-home-")) as home:
+         return run_command(["swift", "test", "--no-parallel", *sys.argv[1:]], timeout=timeout,
+                            environment=os.environ | {"HOME": home, "CFFIXED_USER_HOME": home})
+ 
+diff --git a/Tests/CodexBarTests/OverviewSpendChartTests.swift b/Tests/CodexBarTests/OverviewSpendChartTests.swift
+index e8bbb62..9b9bd93 100644
+--- a/Tests/CodexBarTests/OverviewSpendChartTests.swift
++++ b/Tests/CodexBarTests/OverviewSpendChartTests.swift
+@@ -72,17 +72,6 @@ struct OverviewSpendChartTests {
+         #expect(abs(OverviewSpendPalette.anchor(for: .codex).hue - codex.hue) <= 10)
+     }
+ 
+-    @Test
+-    func `color follows the provider and never its rank`() {
+-        let first = OverviewDailySpend.legend(totals: [(.claude, 10), (.codex, 5)])
+-        let second = OverviewDailySpend.legend(totals: [(.codex, 5)])
+-        #expect(first.map(\.provider) == [.claude, .codex])
+-        #expect(second.map(\.provider) == [.codex])
+-        #expect(
+-            OverviewSpendPalette.color(provider: .codex, tier: .high, dark: true)
+-                == OverviewSpendPalette.color(provider: .codex, tier: .high, dark: true))
+-    }
+-
+     @Test
+     func `segments stack by provider then effort and sum to the day`() {
+         let legend = [
+@@ -113,19 +102,19 @@ struct OverviewSpendChartTests {
+         let partial = OverviewDailySpend.segments(
+             rows: [Self.row(.cursor, cost: 5, models: [("cursor-small", 2)])],
+             legend: legend)
+-        #expect(partial == [
+-            .init(provider: .cursor, tier: .standard, cost: 3),
+-            .init(provider: .cursor, tier: .fast, cost: 2),
+-        ])
++        #expect(partial == [.init(provider: .cursor, tier: .standard, cost: 5)])
+     }
+ 
+-    @Test
+-    func `model costs above the provider total never overdraw the day`() {
++    @Test(arguments: [1.0, 4.0])
++    func `inconsistent model totals keep an unclassified provider block`(attributed: Double) {
+         let legend = [OverviewDailySpend.LegendEntry(provider: .codex, name: "Codex", share: 1)]
+         let segments = OverviewDailySpend.segments(
+-            rows: [Self.row(.codex, cost: 2, models: [("gpt-5.1-codex-max", 3), ("gpt-5-codex-mini", 1)])],
++            rows: [Self.row(.codex, cost: 2, models: [
++                ("fixture-max", attributed * 0.75),
++                ("fixture-mini", attributed * 0.25),
++            ])],
+             legend: legend)
+-        #expect(abs(segments.map(\.cost).reduce(0, +) - 2) < 0.000_001)
++        #expect(segments == [.init(provider: .codex, tier: .standard, cost: 2)])
+     }
+ 
+     @Test
+@@ -147,6 +136,13 @@ struct OverviewSpendChartTests {
+         ])
+     }
+ 
++    @Test
++    func `tiny unattributed provider costs remain visible`() {
++        let legend = [OverviewDailySpend.LegendEntry(provider: .codex, name: "Codex", share: 1)]
++        let segments = OverviewDailySpend.segments(rows: [Self.row(.codex, cost: 1e-10)], legend: legend)
++        #expect(segments == [.init(provider: .codex, tier: .standard, cost: 1e-10)])
++    }
++
+     @Test
+     func `an unknown provider cost draws nothing`() {
+         let legend = [OverviewDailySpend.LegendEntry(provider: .codex, name: "Codex", share: 1)]

@@ -1,0 +1,30 @@
+--- a/proofkit/OverviewAccountingProof.swift
++++ b/proofkit/OverviewAccountingProof.swift
+@@ -105,7 +105,7 @@
+         window.makeKeyAndOrderFront(nil)
+         app.activate(ignoringOtherApps: true)
+         Timer.scheduledTimer(withTimeInterval: 15, repeats: false) { _ in
+-            MainActor.assumeIsolated { NSApplication.shared.stop(nil) }
++            MainActor.assumeIsolated { NSApplication.shared.terminate(nil) }
+         }
+         withExtendedLifetime(window) { app.run() }
+         return true
+--- a/.github/workflows/cs2006-proof.yml
++++ b/.github/workflows/cs2006-proof.yml
+@@ -96,6 +96,16 @@
+           pid=$!
+           sleep 5
+           screencapture -x "$PROOF_OUT/screen.png"
++          for attempt in $(seq 1 25); do
++            if ! kill -0 "$pid" 2>/dev/null; then break; fi
++            sleep 1
++          done
++          if kill -0 "$pid" 2>/dev/null; then
++            kill "$pid"
++            wait "$pid" || true
++            echo "Synthetic capture fixture did not terminate" >&2
++            exit 1
++          fi
+           wait "$pid"
+           test -s "$PROOF_OUT/behavior.json"
+           cat "$PROOF_OUT/behavior.json"

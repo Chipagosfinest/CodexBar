@@ -1,0 +1,117 @@
+name: PR 4901 accounting regression proof Xcode 27
+on:
+  push:
+    branches: [proof/cs2006-4901-xcode27]
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: xcode-27
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {phase: base, sha: 1d28182bdb63b6a27edcdb91bebf1189a368efea, red: "1"}
+          - {phase: head, sha: e2d1b1faf970d02bb79bf10366adc51c63594b9d, red: "0"}
+    env:
+      PRODUCT_SHA: ${{ matrix.sha }}
+      EXPECT_RED: ${{ matrix.red }}
+      CODEXBAR_DISABLE_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {path: kit, persist-credentials: false}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ env.PRODUCT_SHA }}
+          path: product
+          persist-credentials: false
+      - name: Select Xcode and inject only the new regression tests
+        run: |
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          mkdir -p "$RUNNER_TEMP/proof"
+          echo "PROOF_OUT=$RUNNER_TEMP/proof" >> "$GITHUB_ENV"
+          cp kit/Tests/CodexBarTests/OverviewSpendAccountingTests.swift product/Tests/CodexBarTests/
+          cp kit/Tests/CodexBarTests/OverviewSpendChartTests.swift product/Tests/CodexBarTests/
+          defaults write NSGlobalDomain AppleLanguages -array en
+          cd product
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          # Reuse the earlier proof harness's bounded source selection; full PR CI keeps its complete inventory.
+          p = Path('Package.swift')
+          text = p.read_text()
+          start = text.index('            name: "CodexBarTests",')
+          end = text.index('            resources:', start)
+          files = ['OverviewSpendAccountingTests.swift', 'OverviewSpendChartTests.swift',
+                   'SpendDashboardModelTests.swift', 'SpendDashboardPartialCostTests.swift',
+                   'SpendDashboardLowerBoundPropagationTests.swift', 'ProviderArchitectureGatekeeperTests.swift', 'TestStores.swift', 'ZaiTokenStoreTestSupport.swift', 'CodexCredentialFixtures.swift']
+          selection = '            sources: [' + ', '.join('"CodexBarTests/' + f + '"' for f in files) + '],\n'
+          p.write_text(text[:end] + selection + text[end:])
+          # Xcode mounts its Metal toolchain below the synthetic home while building. Retain that home
+          # until this disposable runner is destroyed; preserve the standard process containment.
+          p = Path('Scripts/run_swift_test.py')
+          text = p.read_text().replace('import os', 'import contextlib\nimport os', 1)
+          text = text.replace('tempfile.TemporaryDirectory(prefix="codexbar-native-test-home-")',
+                              'contextlib.nullcontext(tempfile.mkdtemp(prefix="codexbar-proof-test-home-"))')
+          p.write_text(text)
+          PYTHON
+          git diff --binary > "$RUNNER_TEMP/proof/test-harness.patch"
+      - name: Focused regression tests against product source
+        working-directory: product
+        run: |
+          set +e
+          ./Scripts/test_fast.sh --filter 'OverviewSpendAccountingTests|OverviewSpendChartTests|SpendDashboardModelTests|SpendDashboardPartialCostTests|SpendDashboardLowerBoundPropagationTests|ProviderArchitectureGatekeeperTests.*cross provider case clusters' > "$PROOF_OUT/tests.log" 2>&1
+          result=$?
+          echo "$result" > "$PROOF_OUT/test-exit.txt"
+          tail -100 "$PROOF_OUT/tests.log"
+          if [ "$EXPECT_RED" = 1 ]; then
+            test "$result" != 0 && grep -q 'Expectation failed' "$PROOF_OUT/tests.log"
+          else
+            test "$result" = 0
+          fi
+      - name: Build actual app with opt-in synthetic entry before account initialization
+        working-directory: product
+        run: |
+          cp ../kit/proofkit/OverviewAccountingProof.swift Sources/CodexBar/
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('Sources/CodexBar/CodexbarApp.swift')
+          s = p.read_text().replace('static func main() {', 'static func main() {\n        if OverviewAccountingProof.runIfRequested() { return }', 1)
+          p.write_text(s)
+          PY
+          git diff --binary > "$PROOF_OUT/fixture.patch"
+          cp Sources/CodexBar/OverviewAccountingProof.swift "$PROOF_OUT/"
+          swift build --product CodexBar > "$PROOF_OUT/app-build.log" 2>&1 || { tail -80 "$PROOF_OUT/app-build.log"; exit 1; }
+          bin=$(swift build --show-bin-path)
+          shasum -a 256 "$bin/CodexBar" > "$PROOF_OUT/binary-sha256.txt"
+          git rev-parse HEAD > "$PROOF_OUT/product-sha.txt"
+          test "$(cat "$PROOF_OUT/product-sha.txt")" = "$PRODUCT_SHA"
+          shasum -a 256 Sources/CodexBar/Menu/OverviewSpendChart.swift Sources/CodexBar/SpendDashboard/SpendDashboardModel+ModelBreakdown.swift Sources/CodexBar/StatusItem/StatusItemController+OverviewChart.swift > "$PROOF_OUT/product-exercised-sha256.txt"
+          { sw_vers; xcodebuild -version; launchctl managername; } > "$PROOF_OUT/environment.txt"
+          git -C ../kit rev-parse HEAD > "$PROOF_OUT/controller-sha.txt"
+          export OVERVIEW_ACCOUNTING_PROOF="$PROOF_OUT" PROOF_SHA="$PRODUCT_SHA"
+          "$bin/CodexBar" > "$PROOF_OUT/app.log" 2>&1 &
+          pid=$!
+          sleep 5
+          screencapture -x "$PROOF_OUT/screen.png"
+          for attempt in $(seq 1 25); do
+            if ! kill -0 "$pid" 2>/dev/null; then break; fi
+            sleep 1
+          done
+          if kill -0 "$pid" 2>/dev/null; then
+            kill "$pid"
+            wait "$pid" || true
+            echo "Synthetic capture fixture did not terminate" >&2
+            exit 1
+          fi
+          wait "$pid"
+          test -s "$PROOF_OUT/behavior.json"
+          cat "$PROOF_OUT/behavior.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: accounting-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/proof
+          retention-days: 14

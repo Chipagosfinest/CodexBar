@@ -1,0 +1,12 @@
+{
+  "base": {
+    "Sources/CodexBar/Menu/OverviewSpendChart.swift": "6aeea70a74a8e60cd9c821d766db9a305f6da9001ad0e02a47c581697652be8c",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel+ModelBreakdown.swift": "a36a1229961c84e4767eed18e7418408749b0c12db3dff01c9689aa1ea9d008b",
+    "Sources/CodexBar/StatusItem/StatusItemController+OverviewChart.swift": "9c0cf6c5291cd1bbba1862346bc71a342b62b64fbcea8f9c5342ebd645834868"
+  },
+  "head": {
+    "Sources/CodexBar/Menu/OverviewSpendChart.swift": "b8e3ea556bca47701b4b5db12e9df8ccdab6eeafbfcaf26dfb9282b3a94e376c",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel+ModelBreakdown.swift": "7042381905cfd7048796330f3d91071ec8bb487bd0a6bfbe83b8aacb5abf7f4a",
+    "Sources/CodexBar/StatusItem/StatusItemController+OverviewChart.swift": "810f1e5eabc3cd7bdafeaa95600b3fb78b0d207c236704d7bc9bdf7f571a6c0c"
+  }
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "accessibility" : "Nov 1: $2.00, Codex $2.00",
+    "hover" : "Nov 1: $2.00",
+    "modelCosts" : [
+      3,
+      1
+    ],
+    "scenario" : "Inconsistent $2 \/ models $3 + $1",
+    "segments" : [
+      {
+        "cost" : 1.5,
+        "tier" : "high"
+      },
+      {
+        "cost" : 0.5,
+        "tier" : "fast"
+      }
+    ]
+  },
+  {
+    "accessibility" : "Nov 1: ~$2.00, Claude $2.00",
+    "hover" : "Nov 1: ~$2.00",
+    "modelCosts" : [
+      2
+    ],
+    "scenario" : "Unpriced request \/ known $2",
+    "segments" : [
+      {
+        "cost" : 2,
+        "tier" : "high"
+      }
+    ]
+  },
+  {
+    "accessibility" : "Nov 1: ~$2.00, Claude $2.00",
+    "hover" : "Nov 1: ~$2.00",
+    "modelCosts" : [
+      2
+    ],
+    "scenario" : "Excluded request \/ known $2",
+    "segments" : [
+      {
+        "cost" : 2,
+        "tier" : "high"
+      }
+    ]
+  },
+  {
+    "accessibility" : "Nov 1: ~$2.00, Codex $2.00",
+    "hover" : "Nov 1: ~$2.00",
+    "modelCosts" : [
+      2
+    ],
+    "scenario" : "Reconciled Codex + routing",
+    "segments" : [
+      {
+        "cost" : 2,
+        "tier" : "high"
+      }
+    ]
+  }
+]

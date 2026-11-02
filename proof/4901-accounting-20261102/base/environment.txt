@@ -1,0 +1,6 @@
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.2
+Build version 27B48
+Aqua

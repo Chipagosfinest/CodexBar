@@ -1,0 +1,33 @@
+diff --git a/Package.swift b/Package.swift
+index 7fe7c2e..4e808b2 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -241,6 +241,7 @@ let package = Package(
+                 "CodexBarTests/ProviderPluginRuntimeTests.swift",
+                 "CodexBarTests/Sub2APIPluginGoldenTests.swift",
+             ],
++            sources: ["CodexBarTests/OverviewSpendAccountingTests.swift", "CodexBarTests/OverviewSpendChartTests.swift", "CodexBarTests/SpendDashboardModelTests.swift", "CodexBarTests/SpendDashboardPartialCostTests.swift", "CodexBarTests/SpendDashboardLowerBoundPropagationTests.swift", "CodexBarTests/ProviderArchitectureGatekeeperTests.swift", "CodexBarTests/TestStores.swift", "CodexBarTests/ZaiTokenStoreTestSupport.swift", "CodexBarTests/CodexCredentialFixtures.swift"],
+             resources: [
+                 .copy("CodexBarTests/Fixtures"),
+             ],
+diff --git a/Scripts/run_swift_test.py b/Scripts/run_swift_test.py
+index e16af5d..15366be 100755
+--- a/Scripts/run_swift_test.py
++++ b/Scripts/run_swift_test.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ """Run native SwiftPM selection with the shared test-process containment."""
+ 
++import contextlib
+ import os
+ import sys
+ import tempfile
+@@ -23,7 +24,7 @@ def main() -> int:
+         return 2
+     # Like serial groups, the whole invocation, including its build, gets temporary HOME and
+     # CFFIXED_USER_HOME values instead of the caller's.
+-    with tempfile.TemporaryDirectory(prefix="codexbar-native-test-home-") as home:
++    with contextlib.nullcontext(tempfile.mkdtemp(prefix="codexbar-proof-test-home-")) as home:
+         return run_command(["swift", "test", "--no-parallel", *sys.argv[1:]], timeout=timeout,
+                            environment=os.environ | {"HOME": home, "CFFIXED_USER_HOME": home})
+ 
