@@ -7,9 +7,9 @@ permissions:
   contents: read
   actions: read
 env:
-  PROOF_PR: "4901"
-  PROOF_SHA: 6283c26c7ca8fefc0a4cba3477ac45ecf3564a45
-  PROOF_SCENARIO: s4901.py
+  PROOF_PR: "4902"
+  PROOF_SHA: c254d8b459b2654be70fbf016c55bf86db2a7815
+  PROOF_SCENARIO: s4902.py
   PACKAGE_RUN: "41364828152"
 jobs:
   package:
