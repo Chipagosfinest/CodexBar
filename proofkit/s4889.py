@@ -108,7 +108,9 @@ for tag, build, cfg in (('priced', case_priced, providers.CONFIG[:2]),
     build()
     kit.write_config(cfg)
     kit.defaults_reset()
-    providers.overview_defaults(tokenCostUsageEnabled=True)
+    # Keep the menu short enough on this 1024x768 display that its Settings row is onscreen; spend scope is unaffected.
+    providers.overview_defaults(tokenCostUsageEnabled=True, mergedOverviewLayout='compact', mergedOverviewSelectedProviders=['claude'],
+                                mergedOverviewSelectionEditedActiveProviders=[p['id'] for p in cfg])
     phase_begin(tag)
     app = App(INSTALLED, HELPER, tag)
     app.wait(lambda: reached(tag, 'api.anthropic.com'), 'launch refresh', 40)
