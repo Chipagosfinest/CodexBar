@@ -1,0 +1,10 @@
+{
+  "pr": 4904,
+  "head": "be184c471370047fd2a57a6a2e121653f2b39871",
+  "executableSHA256": "0cd8f9f6a9c0bb50c95bbf4a0ff4b6cd98863ce9ea7f16e59dd6a357a99b3f9b",
+  "command": "CodexBarCLI usage --provider aiand --source api --json --no-color",
+  "configuration": "isolated synthetic provider enabled, no credentials",
+  "exitCode": 1,
+  "stdout": "[{\"error\":{\"code\":1,\"kind\":\"provider\",\"message\":\"No available fetch strategy for aiand.\"},\"provider\":\"aiand\",\"source\":\"api\"}]",
+  "stderr": ""
+}

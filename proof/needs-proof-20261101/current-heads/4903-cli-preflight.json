@@ -1,0 +1,10 @@
+{
+  "pr": 4903,
+  "head": "14ae7e0e8c4ead511bd7bff6106eb22ac9e10208",
+  "executableSHA256": "84a37b1235261f2bf5efa3926682725949ec3a187d0fc87ffa8edd9d84771651",
+  "command": "CodexBarCLI usage --provider ollama --source api --json --no-color",
+  "configuration": "isolated synthetic provider enabled, no credentials",
+  "exitCode": 1,
+  "stdout": "[{\"provider\":\"ollama\",\"error\":{\"code\":1,\"kind\":\"provider\",\"message\":\"No available fetch strategy for ollama.\"},\"source\":\"api\"}]",
+  "stderr": ""
+}

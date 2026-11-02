@@ -1,0 +1,34 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite AiAndBalancePluginTests started.
+◇ Test "malformed optional wallet is unavailable rather than zero" started.
+◇ Test "overlong optional decimals cannot invalidate the native snapshot" started.
+◇ Test "failed optional balance cannot erase log spend" started.
+◇ Test "settled wallet keeps exact decimal strings currency and negative balances" started.
+◇ Test case passing 1 argument engine → .quickJS to "overlong optional decimals cannot invalidate the native snapshot" started.
+◇ Test case passing 1 argument engine → .quickJS to "malformed optional wallet is unavailable rather than zero" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "malformed optional wallet is unavailable rather than zero" started.
+◇ Test "settled wallet remains distinct when log window has no cost rows" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "settled wallet keeps exact decimal strings currency and negative balances" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "overlong optional decimals cannot invalidate the native snapshot" started.
+◇ Test "wallet is fetched once while logs retain both cursors and all pages" started.
+◇ Test "wallet parsing fixtures wait for an optional response beyond the production collection budget" started.
+◇ Test case passing 1 argument engine → .quickJS to "settled wallet keeps exact decimal strings currency and negative balances" started.
+◇ Test case passing 1 argument engine → .quickJS to "failed optional balance cannot erase log spend" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "failed optional balance cannot erase log spend" started.
+◇ Test case passing 1 argument engine → .quickJS to "wallet is fetched once while logs retain both cursors and all pages" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "wallet is fetched once while logs retain both cursors and all pages" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "settled wallet remains distinct when log window has no cost rows" started.
+◇ Test case passing 1 argument engine → .quickJS to "settled wallet remains distinct when log window has no cost rows" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "wallet parsing fixtures wait for an optional response beyond the production collection budget" started.
+◇ Test case passing 1 argument engine → .quickJS to "wallet parsing fixtures wait for an optional response beyond the production collection budget" started.
+✔ Test "settled wallet remains distinct when log window has no cost rows" with 2 test cases passed after 0.015 seconds.
+✔ Test "wallet is fetched once while logs retain both cursors and all pages" with 2 test cases passed after 0.016 seconds.
+✔ Test "overlong optional decimals cannot invalidate the native snapshot" with 2 test cases passed after 0.018 seconds.
+✔ Test "malformed optional wallet is unavailable rather than zero" with 2 test cases passed after 0.026 seconds.
+✔ Test "failed optional balance cannot erase log spend" with 2 test cases passed after 0.026 seconds.
+✔ Test "settled wallet keeps exact decimal strings currency and negative balances" with 2 test cases passed after 0.028 seconds.
+✔ Test "wallet parsing fixtures wait for an optional response beyond the production collection budget" with 2 test cases passed after 0.330 seconds.
+✔ Suite AiAndBalancePluginTests passed after 0.331 seconds.
+✔ Test run with 7 tests in 1 suite passed after 0.331 seconds.

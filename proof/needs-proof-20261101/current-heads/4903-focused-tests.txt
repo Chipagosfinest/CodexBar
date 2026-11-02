@@ -1,0 +1,31 @@
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Suite OllamaBalancePluginTests started.
+◇ Test "retry after begins when the response arrives" started.
+◇ Test "cooldown caches success rate limits and unavailable reporting by credential" started.
+◇ Test "API first auto mode permits web fallback for reporting failures only when enabled" started.
+◇ Test "legacy remaining percentages become used windows" started.
+◇ Test "missing cookie fallback preserves the API connectivity error" started.
+◇ Test "monthly remaining balance maps usage and zero allowance has no percent" started.
+◇ Test case passing 1 argument engine → .quickJS to "legacy remaining percentages become used windows" started.
+◇ Test "invalid legacy percentages fail safely" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "legacy remaining percentages become used windows" started.
+◇ Test "fallback preserves actionable cookie failures and cancellation" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "invalid legacy percentages fail safely" started.
+◇ Test case passing 1 argument engine → .quickJS to "monthly remaining balance maps usage and zero allowance has no percent" started.
+◇ Test case passing 1 argument engine → .javaScriptCore to "monthly remaining balance maps usage and zero allowance has no percent" started.
+◇ Test case passing 1 argument engine → .quickJS to "invalid legacy percentages fail safely" started.
+◇ Test case passing 1 argument code → Code(rawValue: -1009) to "missing cookie fallback preserves the API connectivity error" started.
+◇ Test case passing 1 argument code → Code(rawValue: -1001) to "missing cookie fallback preserves the API connectivity error" started.
+◇ Test case passing 1 argument code → Code(rawValue: -1004) to "missing cookie fallback preserves the API connectivity error" started.
+✔ Test "fallback preserves actionable cookie failures and cancellation" passed after 0.001 seconds.
+✔ Test "retry after begins when the response arrives" passed after 0.003 seconds.
+✔ Test "cooldown caches success rate limits and unavailable reporting by credential" passed after 0.004 seconds.
+✔ Test "legacy remaining percentages become used windows" with 2 test cases passed after 0.011 seconds.
+✔ Test "missing cookie fallback preserves the API connectivity error" with 3 test cases passed after 0.013 seconds.
+✔ Test "monthly remaining balance maps usage and zero allowance has no percent" with 2 test cases passed after 0.014 seconds.
+✔ Test "API first auto mode permits web fallback for reporting failures only when enabled" passed after 0.016 seconds.
+✔ Test "invalid legacy percentages fail safely" with 2 test cases passed after 0.019 seconds.
+✔ Suite OllamaBalancePluginTests passed after 0.019 seconds.
+✔ Test run with 8 tests in 1 suite passed after 0.019 seconds.
