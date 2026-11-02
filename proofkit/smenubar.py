@@ -55,10 +55,14 @@ def shot(app, name, note='', park=True):
     (OUT / f'{name}-item.json').write_text(json.dumps(app.items()[0] if app.items() else {}))
 
 
-def seed(**prefs):
+def seed(refresh='oneMinute', **prefs):
     kit.defaults_reset()
-    providers.overview_defaults(refreshFrequency='oneMinute', mergedOverviewSelectedProviders=SELECT,
+    providers.overview_defaults(refreshFrequency=refresh, mergedOverviewSelectedProviders=SELECT,
                                 mergedOverviewSelectionEditedActiveProviders=SELECT, **prefs)
+
+
+def saved_source():
+    return subprocess.run(['defaults', 'read', kit.BUNDLE, 'unifiedIconSource'], capture_output=True, text=True).stdout.strip()
 
 
 providers.PERCENTS.update(CALM)
@@ -101,6 +105,62 @@ def storm(label_, app_path, prefs):
     providers.PERCENTS.update(CALM)
     return count
 
+
+# Upgrade and downgrade against the genuine release: saved choices survive and the new value degrades safely.
+phase_begin('upgrade')
+seed(unifiedIconSource='highestUsage')
+app = App(_V083_APP, HELPER, 'upgrade-v083')
+assert app.wait(app.items, 'release status item', 40), 'release app showed no status item'
+time.sleep(12)
+app.quit()
+app = App(INSTALLED, HELPER, 'upgrade-head')
+assert app.wait(app.items, 'head status item', 40), 'head showed no status item'
+time.sleep(12)
+check('upgrade from v0.83.0 keeps a saved Highest usage choice and shows no total',
+      saved_source() == 'highestUsage' and 'average' not in label(app), f'{saved_source()} {label(app)}')
+app.quit()
+phase_begin('downgrade')
+seed(unifiedIconSource='allProviders')
+app = App(_V083_APP, HELPER, 'downgrade-v083')
+ok = app.wait(app.items, 'release status item with the new saved value', 40)
+time.sleep(12)
+check('the v0.83.0 release still runs with the new saved value and shows no total', ok and 'average' not in label(app), label(app))
+shot(app, 'downgrade-v083')
+app.quit()
+app = App(INSTALLED, HELPER, 'downgrade-back-head')
+check('returning to head restores the total from the same saved value',
+      wait_label(app, lambda l: 'average' in l, 'total after downgrade round trip', 90) and saved_source() == 'allProviders', label(app))
+app.quit()
+
+# A Codex weekly limit reaches its reset on manual refresh: the warning must clear from the clock alone.
+phase_begin('reset-clock')
+real_codex = kit.ROUTES[('chatgpt.com', '/backend-api/wham/usage')]
+reset_at = {}
+
+
+def codex_route(h):
+    status, body = real_codex(h)
+    body['rate_limit']['secondary_window'].update(used_percent=100, reset_at=reset_at['t'])
+    return status, body
+
+
+kit.ROUTES[('chatgpt.com', '/backend-api/wham/usage')] = codex_route
+reset_at['t'] = kit.epoch(__import__('datetime').timedelta(seconds=100))
+seed(refresh='manual', unifiedIconSource='allProviders')
+app = App(INSTALLED, HELPER, 'reset-clock')
+check('manual refresh: Codex at 100% weekly warns before its reset',
+      app.wait(lambda: 'Codex near limit, 0% left' in label(app), 'Codex warning', 60), label(app))
+shot(app, 'reset-1-codex-exhausted')
+before = sum(1 for e in state.get('log', []) if e['path'] == '/backend-api/wham/usage')
+end = time.monotonic() + 170
+while time.monotonic() < end and 'near limit' in label(app):
+    time.sleep(5)  # Plain sleeps: this oracle counts requests, so the driver must not provoke any.
+after = sum(1 for e in state.get('log', []) if e['path'] == '/backend-api/wham/usage')
+check('manual refresh: the warning clears at reset from the clock alone, with no new request',
+      'near limit' not in label(app) and after == before, f'requests {before}->{after} {label(app)}')
+shot(app, 'reset-2-cleared-no-fetch')
+app.quit()
+kit.ROUTES[('chatgpt.com', '/backend-api/wham/usage')] = real_codex
 
 for name, dark in (('light', False), ('dark', True)):
     say(f'=== appearance {name}: {subprocess.run([HELPER, "dark", "1" if dark else "0"], capture_output=True, text=True).stdout.strip()}')
