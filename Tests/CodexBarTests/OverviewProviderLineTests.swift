@@ -399,6 +399,71 @@ struct OverviewProviderLineTests {
         #expect(!controller.settings.mergedMenuLastSelectedWasOverview)
     }
 
+    /// AppKit closes the menu on an accessibility press of an item that hosts a view, without sending its action.
+    @Test
+    func `an accessibility press on the attention row selects its provider`() throws {
+        let wasEnabled = StatusItemController.menuCardRenderingEnabled
+        StatusItemController.menuCardRenderingEnabled = true
+        defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
+        let (menu, controller) = self.populatedOverview(providers: [.codex, .kimi], failing: [.kimi])
+        defer { controller.releaseStatusItemsForTesting() }
+        let row = try #require(menu.items.first { ($0.representedObject as? String) == "overviewRow-kimi" })
+
+        #expect(row.accessibilityPerformPress())
+        #expect(controller.selectedMenuProvider == UsageProvider.kimi.instanceID)
+        #expect(!controller.settings.mergedMenuLastSelectedWasOverview)
+    }
+
+    private func returnKey(_ modifiers: NSEvent.ModifierFlags = []) throws -> NSEvent {
+        try #require(NSEvent.keyEvent(
+            with: .keyDown,
+            location: .zero,
+            modifierFlags: modifiers,
+            timestamp: 0,
+            windowNumber: 0,
+            context: nil,
+            characters: "\r",
+            charactersIgnoringModifiers: "\r",
+            isARepeat: false,
+            keyCode: 36))
+    }
+
+    /// `NSMenu` drops Return for a highlighted item that hosts a view, so the tracking monitor has to deliver it.
+    @Test
+    func `return activates the highlighted attention row while the menu tracks`() throws {
+        let wasEnabled = StatusItemController.menuCardRenderingEnabled
+        StatusItemController.menuCardRenderingEnabled = true
+        defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
+        let (menu, controller) = self.populatedOverview(providers: [.codex, .kimi], failing: [.kimi])
+        defer { controller.releaseStatusItemsForTesting() }
+        let row = try #require(menu.items.first { ($0.representedObject as? String) == "overviewRow-kimi" })
+
+        #expect(try !controller.handleMenuTrackingShortcutEvent(self.returnKey(), menu: menu))
+        #expect(controller.settings.mergedMenuLastSelectedWasOverview)
+
+        controller.menu(menu, willHighlight: row, eventType: .keyDown)
+        #expect(try !controller.handleMenuTrackingShortcutEvent(self.returnKey(.command), menu: menu))
+        #expect(controller.settings.mergedMenuLastSelectedWasOverview)
+
+        #expect(try controller.handleMenuTrackingShortcutEvent(self.returnKey(), menu: menu))
+        #expect(controller.selectedMenuProvider == UsageProvider.kimi.instanceID)
+        #expect(!controller.settings.mergedMenuLastSelectedWasOverview)
+    }
+
+    @Test
+    func `return leaves a row with a flyout to the menu`() throws {
+        let wasEnabled = StatusItemController.menuCardRenderingEnabled
+        StatusItemController.menuCardRenderingEnabled = true
+        defer { StatusItemController.menuCardRenderingEnabled = wasEnabled }
+        let (menu, controller) = self.populatedOverview(providers: [.claude, .kimi], failing: [.claude, .kimi])
+        defer { controller.releaseStatusItemsForTesting() }
+        let row = try #require(menu.items.first { ($0.representedObject as? String) == "overviewAttention" })
+
+        controller.menu(menu, willHighlight: row, eventType: .keyDown)
+        #expect(try !controller.handleMenuTrackingShortcutEvent(self.returnKey(), menu: menu))
+        #expect(controller.settings.mergedMenuLastSelectedWasOverview)
+    }
+
     @Test
     func `a provider row is one line however many windows it has`() {
         let wasEnabled = StatusItemController.menuCardRenderingEnabled

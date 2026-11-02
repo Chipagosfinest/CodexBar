@@ -107,6 +107,23 @@ extension StatusItemController {
         return item
     }
 
+    /// `NSMenu` drops Return for a highlighted item that hosts a view, so its native action never fires by itself.
+    func activateHighlightedOverviewRow(_ event: NSEvent, menu: NSMenu) -> Bool {
+        guard event.keyCode == 36 || event.keyCode == 76, // Return, keypad Enter
+              !event.isARepeat,
+              event.modifierFlags.isDisjoint(with: [.command, .option, .control, .shift]),
+              let item = self.highlightedMenuItems[ObjectIdentifier(menu)],
+              item.menu === menu,
+              item.view != nil,
+              item.submenu == nil,
+              item.action == #selector(self.selectOverviewProvider(_:))
+        else {
+            return false
+        }
+        self.selectOverviewProvider(item)
+        return true
+    }
+
     /// Compact can still say something when every selected provider has failed; Detailed keeps its empty state.
     func overviewHasCompactAttention(providers: [ProviderInstanceID]) -> Bool {
         self.settings.mergedOverviewLayout == .compact && !self.overviewErrorOnlyProviders(providers).isEmpty
