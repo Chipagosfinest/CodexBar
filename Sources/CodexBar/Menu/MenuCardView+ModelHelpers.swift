@@ -61,6 +61,7 @@ extension UsageMenuCardView.Model {
         var pacePercent: Double?
         var paceOnTop = true
         var detailIsPaceDerived = false
+        var exhaustionETASeconds: TimeInterval?
     }
 
     static func applyPrimaryQuotaPresentation(
@@ -204,6 +205,7 @@ extension UsageMenuCardView.Model {
         presentation.pacePercent = paceDetail.pacePercent
         presentation.paceOnTop = paceDetail.paceOnTop
         presentation.detailIsPaceDerived = paceDetail.isPaceDerived
+        presentation.exhaustionETASeconds = paceDetail.exhaustionETASeconds
     }
 
     private static func nonEmptyResetDescription(_ window: RateWindow) -> String? {
@@ -257,6 +259,7 @@ extension UsageMenuCardView.Model {
             blocked.detailLeftText = nil
             blocked.detailRightText = nil
             blocked.pacePercent = nil
+            blocked.exhaustionETASeconds = nil
             blocked.sessionEquivalentDetail = nil
             return blocked
         }
@@ -273,6 +276,7 @@ extension UsageMenuCardView.Model {
                 result.detailRightText = nil
             }
             result.pacePercent = nil
+            result.exhaustionETASeconds = nil
             result.sessionEquivalentDetail = nil
             return result
         }

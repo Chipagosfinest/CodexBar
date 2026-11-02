@@ -152,6 +152,42 @@ struct OverviewProviderLineTests {
     }
 
     @Test
+    func `a provider already at zero sorts ahead of one forecast to stop`() {
+        let sorted = OverviewProviderLine.sortedByUrgency([
+            self.line(.codex, 30, eta: 20 * 60),
+            self.line(.gemini, 0),
+        ])
+        #expect(sorted.map(\.provider) == [.gemini, .codex])
+    }
+
+    @Test
+    func `a status only limit keeps its text when no percentage exists`() {
+        let balance = UsageMenuCardView.Model.Metric(
+            id: "mistral-balance",
+            title: "Balance",
+            percent: 0,
+            percentStyle: .left,
+            statusText: "$12.50",
+            resetText: nil,
+            detailText: nil,
+            detailLeftText: nil,
+            detailRightText: nil,
+            pacePercent: nil,
+            paceOnTop: true)
+        let line = OverviewProviderLine(id: "a", model: self.model(.mistral, metrics: [balance]))
+        #expect(line.value == "$12.50")
+        #expect(line.percent == nil)
+        #expect(line.remainingPercent == nil)
+
+        let mixed = OverviewProviderLine(id: "a", model: self.model(.mistral, metrics: [
+            balance,
+            self.metric("Session", percent: 27),
+        ]))
+        #expect(mixed.value == "27%")
+        #expect(mixed.remainingPercent == 27)
+    }
+
+    @Test
     func `a stale row stays in its band instead of jumping ahead of fresh rows`() {
         let stale = OverviewProviderLine(
             id: "stale",
@@ -226,7 +262,7 @@ struct OverviewProviderLineTests {
             account: fetcher.loadAccountInfo(),
             updater: DisabledUpdaterController(),
             preferencesSelection: PreferencesSelection(),
-            statusBar: NSStatusBar())
+            statusBar: testStatusBar())
         return (controller, store)
     }
 

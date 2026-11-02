@@ -45,7 +45,7 @@ struct UsageMenuCardView: View {
             /// True when detailLeftText/detailRightText came from a pace forecast.
             let detailIsPaceDerived: Bool
             /// Seconds until a pace forecast expects this limit to run out before its reset; nil when it lasts.
-            let exhaustionETASeconds: TimeInterval?
+            var exhaustionETASeconds: TimeInterval?
             let paceOnTop: Bool
             let warningMarkerPercents: [Double]
             let workdayMarkerPercents: [Double]
@@ -1374,6 +1374,7 @@ extension UsageMenuCardView.Model {
             detailRightText: presentation.detailRight,
             pacePercent: presentation.pacePercent,
             detailIsPaceDerived: presentation.detailIsPaceDerived,
+            exhaustionETASeconds: presentation.exhaustionETASeconds,
             paceOnTop: presentation.paceOnTop,
             warningMarkerPercents: Self.warningMarkerPercents(
                 thresholds: input.quotaWarningThresholds[

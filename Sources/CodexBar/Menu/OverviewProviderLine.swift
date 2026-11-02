@@ -108,7 +108,9 @@ struct OverviewProviderLine: Equatable, Identifiable {
     }
 
     private static func fallbackValue(_ model: UsageMenuCardView.Model) -> String? {
-        model.creditsText
+        // A balance-only limit has no percentage to compare, but its text is still the row's value.
+        model.metrics.lazy.compactMap(\.statusText).first
+            ?? model.creditsText
             ?? model.providerCost?.spendLine
             ?? model.providerDetails.first?.rows.first?.value
             ?? model.placeholder
@@ -124,14 +126,20 @@ struct OverviewProviderLine: Equatable, Identifiable {
         return remaining <= 50 ? 2 : 3
     }
 
+    /// A limit at zero carries no forecast, but it has already stopped: nothing can stop sooner.
+    private var effectiveETASeconds: TimeInterval {
+        if let remaining = self.remainingPercent, remaining <= 0 { return 0 }
+        return self.exhaustionETASeconds ?? .infinity
+    }
+
     static func sortedByUrgency(_ lines: [OverviewProviderLine]) -> [OverviewProviderLine] {
         lines.enumerated().sorted { lhs, rhs in
             let (left, right) = (lhs.element, rhs.element)
             if left.urgencyBand != right.urgencyBand { return left.urgencyBand < right.urgencyBand }
             if left.urgencyBand == 0 {
-                let leftETA = left.exhaustionETASeconds ?? .infinity
-                let rightETA = right.exhaustionETASeconds ?? .infinity
-                if leftETA != rightETA { return leftETA < rightETA }
+                if left.effectiveETASeconds != right.effectiveETASeconds {
+                    return left.effectiveETASeconds < right.effectiveETASeconds
+                }
                 let (leftLeft, rightLeft) = (left.remainingPercent ?? 100, right.remainingPercent ?? 100)
                 if leftLeft != rightLeft { return leftLeft < rightLeft }
             }
