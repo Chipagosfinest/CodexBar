@@ -1,0 +1,8 @@
+✔ Test "closing the overflow submenu without activating a row stays on Overview" passed after 4.706 seconds.
+✔ Test "a short roster has no overflow row" passed after 4.706 seconds.
+✔ Test "rows past the inline limit move to a submenu and the footer stays last" passed after 4.706 seconds.
+✔ Test "warning: '--build-system native' has been deprecated and will be removed in a future release; please report an issue at https://github.com/swiftlang/swift-package-manager/issues if you are unable to adopt the default build system.
+✔ Test "selecting an overflow row rebuilds the root menu it opened from" passed after 4.726 seconds.
+✔ Suite OverviewBoundedMenuTests passed after 4.727 seconds.
+✔ Test run with 5 tests in 1 suite passed after 4.727 seconds.
+exit=0

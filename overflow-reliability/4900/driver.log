@@ -1,0 +1,200 @@
+    1.29s CHECK PASS head: installed app binary equals package manifest fb42d1bca9def927a409950bf0f00ac3b4932c5dfa5767dca944ca3e5150dcc6 vs fb42d1bca9def927a409950bf0f00ac3b4932c5dfa5767dca944ca3e5150dcc6
+    1.65s banner on display: [{'w': 1024, 'h': 46, 'id': 28, 'name': '', 'x': 0, 'layer': 1000, 'y': 722}]
+    5.25s all 23 hostnames resolve only to loopback after 5s
+    8.11s fixture answers all 23 hostnames over trusted TLS
+    8.11s === lanes on the PR head
+    8.22s phase -> reliability
+    8.23s launched reliability pid=1665
+   43.21s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'x': 0, 'w': 1024, 'y': 0}
+   43.23s click status item at 767,3 size 36x24
+   61.61s preclick display captured; icon drawn colors=16 inside screen={'y': 0, 'w': 1024, 'h': 768, 'x': 0}
+   61.61s click status item at 767,3 size 36x24
+   68.98s TRIAL {"lane": "aimed", "n": 0, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"r": 0, "g": 124, "b": 231}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "kimi", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+   70.50s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'x': 0, 'h': 768, 'w': 1024}
+   70.50s click status item at 767,3 size 36x24
+   88.97s preclick display captured; icon drawn colors=22 inside screen={'w': 1024, 'y': 0, 'x': 0, 'h': 768}
+   88.97s click status item at 767,3 size 36x24
+   95.46s TRIAL {"lane": "aimed", "n": 1, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "r": 0, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+   96.60s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'y': 0, 'w': 1024, 'h': 768}
+   96.60s click status item at 767,3 size 36x24
+  112.52s preclick display captured; icon drawn colors=24 inside screen={'w': 1024, 'h': 768, 'y': 0, 'x': 0}
+  112.52s click status item at 767,3 size 36x24
+  119.05s TRIAL {"lane": "aimed", "n": 2, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "r": 0, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 14, "reopened_on_tab": true}
+  119.88s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'y': 0, 'h': 768, 'x': 0}
+  119.88s click status item at 767,3 size 36x24
+  135.85s preclick display captured; icon drawn colors=16 inside screen={'y': 0, 'x': 0, 'w': 1024, 'h': 768}
+  135.85s click status item at 767,3 size 36x24
+  142.62s TRIAL {"lane": "aimed", "n": 3, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "g": 124, "r": 0}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "kimi", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  143.23s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'x': 0, 'y': 0, 'h': 768}
+  143.23s click status item at 767,3 size 36x24
+  158.52s preclick display captured; icon drawn colors=22 inside screen={'y': 0, 'x': 0, 'w': 1024, 'h': 768}
+  158.52s click status item at 767,3 size 36x24
+  165.08s TRIAL {"lane": "aimed", "n": 4, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"g": 124, "b": 231, "r": 0}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  166.72s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'w': 1024, 'y': 0, 'x': 0}
+  166.72s click status item at 767,3 size 36x24
+  185.31s preclick display captured; icon drawn colors=24 inside screen={'w': 1024, 'h': 768, 'x': 0, 'y': 0}
+  185.31s click status item at 767,3 size 36x24
+  192.35s TRIAL {"lane": "aimed", "n": 5, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "r": 0, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 14, "reopened_on_tab": true}
+  193.22s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'y': 0, 'w': 1024, 'x': 0}
+  193.22s click status item at 767,3 size 36x24
+  208.40s preclick display captured; icon drawn colors=16 inside screen={'x': 0, 'y': 0, 'w': 1024, 'h': 768}
+  208.40s click status item at 767,3 size 36x24
+  216.34s TRIAL {"lane": "aimed", "n": 6, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"g": 124, "b": 231, "r": 0}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "kimi", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  218.05s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'h': 768, 'w': 1024, 'x': 0}
+  218.05s click status item at 767,3 size 36x24
+  233.26s preclick display captured; icon drawn colors=22 inside screen={'x': 0, 'h': 768, 'y': 0, 'w': 1024}
+  233.27s click status item at 767,3 size 36x24
+  239.83s TRIAL {"lane": "aimed", "n": 7, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "g": 124, "r": 0}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  240.41s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'x': 0, 'w': 1024, 'y': 0}
+  240.41s click status item at 767,3 size 36x24
+  255.08s preclick display captured; icon drawn colors=24 inside screen={'w': 1024, 'h': 768, 'x': 0, 'y': 0}
+  255.08s click status item at 767,3 size 36x24
+  261.59s TRIAL {"lane": "aimed", "n": 8, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "r": 0, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  262.48s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'h': 768, 'x': 0, 'w': 1024}
+  262.48s click status item at 767,3 size 36x24
+  277.76s preclick display captured; icon drawn colors=16 inside screen={'x': 0, 'h': 768, 'w': 1024, 'y': 0}
+  277.76s click status item at 767,3 size 36x24
+  284.38s TRIAL {"lane": "aimed", "n": 9, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"r": 0, "b": 231, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "kimi", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  285.20s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'y': 0, 'h': 768, 'x': 0}
+  285.20s click status item at 767,3 size 36x24
+  300.45s preclick display captured; icon drawn colors=22 inside screen={'x': 0, 'y': 0, 'h': 768, 'w': 1024}
+  300.46s click status item at 767,3 size 36x24
+  306.66s TRIAL {"lane": "aimed", "n": 10, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"r": 0, "g": 124, "b": 231}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  307.58s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'w': 1024, 'h': 768, 'x': 0}
+  307.58s click status item at 767,3 size 36x24
+  324.69s preclick display captured; icon drawn colors=24 inside screen={'h': 768, 'y': 0, 'x': 0, 'w': 1024}
+  324.69s click status item at 767,3 size 36x24
+  331.24s TRIAL {"lane": "aimed", "n": 11, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"g": 124, "b": 231, "r": 0}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 14, "reopened_on_tab": true}
+  333.25s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'w': 1024, 'x': 0, 'y': 0}
+  333.25s click status item at 767,3 size 36x24
+  350.92s TRIAL {"lane": "diagonal", "n": 0, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"b": 0, "r": 0, "g": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  352.28s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'h': 768, 'y': 0, 'x': 0}
+  352.28s click status item at 767,3 size 36x24
+  367.39s preclick display captured; icon drawn colors=22 inside screen={'x': 0, 'y': 0, 'w': 1024, 'h': 768}
+  367.40s click status item at 767,3 size 36x24
+  373.45s TRIAL {"lane": "diagonal", "n": 1, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"g": 124, "r": 0, "b": 231}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  374.57s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'w': 1024, 'x': 0, 'h': 768}
+  374.57s click status item at 767,3 size 36x24
+  389.27s preclick display captured; icon drawn colors=24 inside screen={'w': 1024, 'x': 0, 'h': 768, 'y': 0}
+  389.27s click status item at 767,3 size 36x24
+  396.05s TRIAL {"lane": "diagonal", "n": 2, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "r": 0, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 14, "reopened_on_tab": true}
+  397.29s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'x': 0, 'y': 0, 'h': 768}
+  397.29s click status item at 767,3 size 36x24
+  412.24s TRIAL {"lane": "diagonal", "n": 3, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"b": 0, "r": 0, "g": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  413.73s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'y': 0, 'w': 1024, 'h': 768}
+  413.73s click status item at 767,3 size 36x24
+  428.97s preclick display captured; icon drawn colors=22 inside screen={'y': 0, 'w': 1024, 'h': 768, 'x': 0}
+  428.97s click status item at 767,3 size 36x24
+  435.34s TRIAL {"lane": "diagonal", "n": 4, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"g": 124, "b": 231, "r": 0}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 14, "reopened_on_tab": true}
+  436.54s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'w': 1024, 'x': 0, 'h': 768}
+  436.54s click status item at 767,3 size 36x24
+  451.27s preclick display captured; icon drawn colors=24 inside screen={'h': 768, 'y': 0, 'w': 1024, 'x': 0}
+  451.27s click status item at 767,3 size 36x24
+  457.88s TRIAL {"lane": "diagonal", "n": 5, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "r": 0, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  458.55s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'w': 1024, 'x': 0, 'h': 768}
+  458.55s click status item at 767,3 size 36x24
+  471.61s TRIAL {"lane": "diagonal", "n": 6, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"b": 0, "r": 0, "g": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  472.75s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'h': 768, 'y': 0, 'w': 1024}
+  472.75s click status item at 767,3 size 36x24
+  488.15s preclick display captured; icon drawn colors=22 inside screen={'h': 768, 'x': 0, 'y': 0, 'w': 1024}
+  488.15s click status item at 767,3 size 36x24
+  494.73s TRIAL {"lane": "diagonal", "n": 7, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"b": 231, "r": 0, "g": 124}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  495.98s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'x': 0, 'h': 768, 'y': 0}
+  495.98s click status item at 767,3 size 36x24
+  509.57s preclick display captured; icon drawn colors=24 inside screen={'y': 0, 'h': 768, 'w': 1024, 'x': 0}
+  509.57s click status item at 767,3 size 36x24
+  515.86s TRIAL {"lane": "diagonal", "n": 8, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"r": 0, "g": 124, "b": 231}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  516.57s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'h': 768, 'y': 0, 'x': 0}
+  516.57s click status item at 767,3 size 36x24
+  529.86s TRIAL {"lane": "diagonal", "n": 9, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"r": 0, "g": 0, "b": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 14}
+  530.97s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'y': 0, 'h': 768, 'w': 1024}
+  530.97s click status item at 767,3 size 36x24
+  544.82s preclick display captured; icon drawn colors=22 inside screen={'x': 0, 'y': 0, 'w': 1024, 'h': 768}
+  544.82s click status item at 767,3 size 36x24
+  550.98s TRIAL {"lane": "diagonal", "n": 10, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"r": 0, "g": 124, "b": 231}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "zai", "selected": true, "requests_after_click": 16, "reopened_on_tab": true}
+  551.67s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'y': 0, 'w': 1024, 'x': 0}
+  551.67s click status item at 767,3 size 36x24
+  565.13s preclick display captured; icon drawn colors=24 inside screen={'y': 0, 'w': 1024, 'h': 768, 'x': 0}
+  565.13s click status item at 767,3 size 36x24
+  571.64s TRIAL {"lane": "diagonal", "n": 11, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 2, "submenu_open": true, "ax_selected": true, "pixel": {"g": 124, "b": 231, "r": 0}, "highlighted": true, "menu_closed": true, "overview_after": false, "provider_after": "openrouter", "selected": true, "requests_after_click": 14, "reopened_on_tab": true}
+  572.32s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'x': 0, 'w': 1024, 'h': 768}
+  572.32s click status item at 767,3 size 36x24
+  584.97s TRIAL {"lane": "diagonal-top", "n": 0, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"r": 0, "g": 0, "b": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  586.08s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'y': 0, 'h': 768, 'w': 1024}
+  586.08s click status item at 767,3 size 36x24
+  599.24s TRIAL {"lane": "diagonal-top", "n": 3, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"b": 0, "r": 0, "g": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 14}
+  600.58s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'h': 768, 'w': 1024, 'x': 0}
+  600.58s click status item at 767,3 size 36x24
+  614.92s TRIAL {"lane": "diagonal-top", "n": 6, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"g": 0, "r": 0, "b": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  616.18s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'x': 0, 'h': 768, 'y': 0}
+  616.18s click status item at 767,3 size 36x24
+  630.35s TRIAL {"lane": "diagonal-top", "n": 9, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"b": 0, "r": 0, "g": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 14}
+  631.46s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'y': 0, 'w': 1024, 'h': 768}
+  631.46s click status item at 767,3 size 36x24
+  645.29s TRIAL {"lane": "diagonal-top", "n": 12, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"r": 0, "g": 0, "b": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  646.38s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'w': 1024, 'x': 0, 'y': 0}
+  646.38s click status item at 767,3 size 36x24
+  660.22s TRIAL {"lane": "diagonal-top", "n": 15, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"b": 0, "r": 0, "g": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  661.80s preclick display captured; icon drawn colors=28 inside screen={'h': 768, 'x': 0, 'y': 0, 'w': 1024}
+  661.80s click status item at 767,3 size 36x24
+  676.84s TRIAL {"lane": "forced-miss", "n": 0, "target": "Kimi Code \u00b7 Synthetic Account 10", "expected": "kimi", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"g": 0, "b": 0, "r": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 15}
+  678.36s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'w': 1024, 'h': 768, 'y': 0}
+  678.36s click status item at 767,3 size 36x24
+  693.28s TRIAL {"lane": "forced-miss", "n": 1, "target": "z.ai / GLM", "expected": "zai", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"g": 0, "b": 0, "r": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 14}
+  694.72s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'w': 1024, 'x': 0, 'h': 768}
+  694.72s click status item at 767,3 size 36x24
+  709.22s TRIAL {"lane": "forced-miss", "n": 2, "target": "OpenRouter", "expected": "openrouter", "windows_at_mousedown": 1, "submenu_open": false, "ax_selected": false, "pixel": {"g": 0, "b": 0, "r": 0}, "highlighted": false, "menu_closed": true, "overview_after": true, "provider_after": "openrouter", "selected": false, "requests_after_click": 16}
+  710.75s reliability stopped
+  712.25s CHECK PASS aimed: twelve clean trials 12
+  712.25s CHECK PASS aimed: every click had a highlighted row and selected its provider [(0, True, True), (1, True, True), (2, True, True), (3, True, True), (4, True, True), (5, True, True), (6, True, True), (7, True, True), (8, True, True), (9, True, True), (10, True, True), (11, True, True)]
+  712.25s CHECK PASS diagonal: twelve clean trials 12
+  712.25s CHECK PASS no selection failure: every highlighted row selected []
+  712.25s CHECK PASS no phantom selection: nothing selected without a highlighted row []
+  712.25s CHECK PASS forced miss: submenu was closed at mouse-down and the click stayed on Overview [{'lane': 'forced-miss', 'n': 0, 'target': 'Kimi Code · Synthetic Account 10', 'expected': 'kimi', 'windows_at_mousedown': 1, 'submenu_open': False, 'ax_selected': False, 'pixel': {'g': 0, 'b': 0, 'r': 0}, 'highlighted': False, 'menu_closed': True, 'overview_after': True, 'provider_after': 'openrout
+  712.25s SUMMARY aimed selected=12/12 diagonal selected=8/12 diagonal missed=4 top-row selected=0/6 forced-miss selected=0/3 harness_errors=0
+  712.25s === rival cause: refresh completing while the overflow submenu is open
+  712.42s phase -> dwell
+  712.43s launched dwell pid=20912
+  743.61s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'x': 0, 'y': 0, 'h': 768}
+  743.61s click status item at 767,3 size 36x24
+  884.92s SHOT dwell-after-130s menus=[(479, 521, 234, 178), (708, 31, 310, 668)] requests=1460 submenu held open across timer refreshes
+  884.92s dwell samples: [{'t': 0.0, 'windows': 2, 'requests': 0}, {'t': 5.0, 'windows': 2, 'requests': 0}, {'t': 10.1, 'windows': 2, 'requests': 0}, {'t': 15.2, 'windows': 2, 'requests': 0}, {'t': 20.3, 'windows': 2, 'requests': 0}, {'t': 25.4, 'windows': 2, 'requests': 14}, {'t': 30.5, 'windows': 2, 'requests': 14}, {'t': 35.6, 'windows': 2, 'requests': 14}, {'t': 40.6, 'windows': 2, 'requests': 14}, {'t': 45.7, 'windows': 2, 'requests': 14}, {'t': 50.8, 'windows': 2, 'requests': 14}, {'t': 55.9, 'windows': 2, 'requests': 14}, {'t': 61.0, 'windows': 2, 'requests': 14}, {'t': 66.0, 'windows': 2, 'requests': 14}, {'t': 71.1, 'windows': 2, 'requests': 14}, {'t': 76.2, 'windows': 2, 'requests': 14}, {'t': 81.4, 'windows': 2, 'requests': 14}, {'t': 86.5, 'windows': 2, 'requests': 28}, {'t': 91.6, 'windows': 2, 'requests': 28}, {'t': 96.7, 'windows': 2, 'requests': 28}, {'t': 101.7, 'windows': 2, 'requests': 28}, {'t': 106.8, 'windows': 2, 'requests': 28}, {'t': 111.9, 'windows': 2, 'requests': 28}, {'t': 117.0, 'windows': 2, 'requests': 28}, {'t': 122.0, 'windows': 2, 'requests': 28}, {'t': 127.1, 'windows': 2, 'requests': 28}]
+  884.92s FINDING refresh requests during dwell=28 submenu stayed open=True
+  884.92s CHECK PASS a timer refresh ran while the submenu was open {'t': 127.1, 'windows': 2, 'requests': 28}
+  884.92s CHECK PASS the submenu survives a refresh completing behind it []
+  891.18s CHECK PASS a click after the refresh still selects (False, 'kimi')
+  891.25s dwell stopped
+  892.75s === control: plain NSMenu, same geometry, no CodexBar code
+  898.68s CONTROL {"lane": "diagonal", "n": 0, "parent": {"h": 598, "x": 708, "id": 218, "layer": 101, "name": "", "y": 86, "w": 310}, "submenu": {"id": 221, "name": "", "y": 521, "x": 638, "w": 75, "h": 178, "layer": 101}, "submenu_open": false, "picked": ""}
+  905.22s CONTROL {"lane": "diagonal", "n": 1, "parent": {"id": 224, "name": "", "layer": 101, "y": 86, "w": 310, "h": 598, "x": 708}, "submenu": {"name": "", "x": 638, "id": 225, "w": 75, "h": 178, "layer": 101, "y": 521}, "submenu_open": false, "picked": ""}
+  911.45s CONTROL {"lane": "diagonal", "n": 2, "parent": {"x": 708, "w": 310, "name": "", "layer": 101, "y": 86, "h": 598, "id": 228}, "submenu": {"x": 638, "h": 178, "w": 75, "layer": 101, "y": 521, "name": "", "id": 229}, "submenu_open": false, "picked": ""}
+  917.40s CONTROL {"lane": "diagonal", "n": 3, "parent": {"id": 232, "y": 86, "layer": 101, "name": "", "w": 310, "x": 708, "h": 598}, "submenu": {"w": 75, "name": "", "layer": 101, "x": 638, "h": 178, "id": 233, "y": 521}, "submenu_open": false, "picked": ""}
+  923.73s CONTROL {"lane": "diagonal", "n": 4, "parent": {"y": 86, "w": 310, "h": 598, "x": 708, "layer": 101, "name": "", "id": 236}, "submenu": {"name": "", "x": 638, "y": 521, "layer": 101, "id": 237, "h": 178, "w": 75}, "submenu_open": false, "picked": ""}
+  929.86s CONTROL {"lane": "diagonal", "n": 5, "parent": {"h": 598, "y": 86, "w": 310, "id": 240, "layer": 101, "x": 708, "name": ""}, "submenu": {"y": 521, "x": 638, "h": 178, "layer": 101, "id": 241, "w": 75, "name": ""}, "submenu_open": false, "picked": ""}
+  938.13s CONTROL {"lane": "aimed", "n": 0, "parent": {"y": 86, "w": 310, "h": 598, "id": 244, "x": 708, "name": "", "layer": 101}, "submenu": {"x": 638, "y": 521, "w": 75, "id": 245, "name": "", "layer": 101, "h": 178}, "submenu_open": true, "picked": "picked Child 0"}
+  946.73s CONTROL {"lane": "aimed", "n": 1, "parent": {"y": 86, "layer": 101, "x": 708, "id": 247, "name": "", "h": 598, "w": 310}, "submenu": {"y": 521, "w": 75, "layer": 101, "x": 638, "id": 248, "name": "", "h": 178}, "submenu_open": true, "picked": "picked Child 0"}
+  955.16s CONTROL {"lane": "aimed", "n": 2, "parent": {"y": 86, "name": "", "id": 250, "layer": 101, "x": 708, "w": 310, "h": 598}, "submenu": {"id": 251, "name": "", "x": 638, "layer": 101, "y": 521, "w": 75, "h": 178}, "submenu_open": true, "picked": "picked Child 0"}
+  963.86s CONTROL {"lane": "aimed", "n": 3, "parent": {"id": 253, "h": 598, "w": 310, "x": 708, "y": 86, "layer": 101, "name": ""}, "submenu": {"w": 75, "y": 521, "layer": 101, "h": 178, "id": 254, "name": "", "x": 638}, "submenu_open": true, "picked": "picked Child 0"}
+  972.30s CONTROL {"lane": "aimed", "n": 4, "parent": {"x": 708, "y": 86, "name": "", "h": 598, "layer": 101, "id": 256, "w": 310}, "submenu": {"name": "", "x": 638, "w": 75, "h": 178, "id": 257, "layer": 101, "y": 521}, "submenu_open": true, "picked": "picked Child 0"}
+  980.80s CONTROL {"lane": "aimed", "n": 5, "parent": {"h": 598, "id": 259, "y": 86, "w": 310, "x": 708, "layer": 101, "name": ""}, "submenu": {"id": 260, "x": 638, "name": "", "layer": 101, "y": 521, "h": 178, "w": 75}, "submenu_open": true, "picked": "picked Child 0"}
+  981.37s SUMMARY control diagonal picked=0/6 aimed picked=6/6 errors=0
+  981.37s CHECK PASS control lane ran without harness errors 12
+  981.37s CHECK PASS control: every aimed click picked Child 0 ['picked Child 0', 'picked Child 0', 'picked Child 0', 'picked Child 0', 'picked Child 0', 'picked Child 0']
+  981.37s CHECK PASS control: a click with the submenu open picks, and one without it does not [(False, ''), (False, ''), (False, ''), (False, ''), (False, ''), (False, ''), (True, 'picked Child 0'), (True, 'picked Child 0'), (True, 'picked Child 0'), (True, 'picked Child 0'), (True, 'picked Child 0'), (True, 'picked Child 0')]
+  981.37s === before: v0.83.0, where the same roster has no overflow row
+  982.91s phase -> before
+  983.19s launched before pid=27955
+ 1014.15s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'h': 768, 'y': 0, 'x': 0}
+ 1014.15s click status item at 767,3 size 36x24
+ 1018.30s SHOT before-open menus=[(708, 31, 310, 668)] requests=1511 
+ 1018.80s CHECK PASS before: no More (n) row exists [['Refresh', 'Refresh'], ['Settings...'], ['About CodexBar (v0.83.0)'], ['Quit']]
+ 1025.53s SHOT before-scrolled-to-account-14 menus=[(708, 31, 310, 668)] requests=1511 
+ 1025.53s CHECK PASS before: the fourteenth account is an inline row ['Kimi Code', 'Synthetic Account 14', 'Not fetched yet']
+ 1030.51s CHECK PASS before: clicking that inline row selects its provider (False, 'kimi')
+ 1031.23s before stopped
+ 1032.78s provider requests answered 200 by the fixture: 804 of 1488
+ 1032.78s CHECK PASS app reached the fixture 804
+ 1032.79s resolver watch (sampled): 203 checks, 0 escapes
+ 1032.79s CHECK PASS no sampled resolver escape []
+ 1032.79s checks: 18 passed, 0 failed
+ 1032.79s done

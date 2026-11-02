@@ -1,0 +1,88 @@
+name: UI proof
+on:
+  push:
+    branches: [proof/cs2006-4900]
+    paths-ignore: [proofkit/packages.txt, .github/workflows/ui-package.yml]
+permissions:
+  contents: read
+  actions: read
+env:
+  PROOF_PR: "4900"
+  PROOF_SHA: cc44146e1a8d928329cc2e82113bb2bfab1b5dd2
+  PROOF_SCENARIO: s4900r.py
+  PACKAGE_RUN: "41391480081"
+jobs:
+  package:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        if: env.PACKAGE_RUN == ''
+        with:
+          repository: steipete/CodexBar
+          ref: ${{ env.PROOF_SHA }}
+          path: product
+          persist-credentials: false
+      - name: Package the unmodified release app from the exact commit
+        if: env.PACKAGE_RUN == ''
+        working-directory: product
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          command -v xcodegen >/dev/null || brew install xcodegen
+          mkdir -p "$RUNNER_TEMP/pkg"
+          ARCHES=arm64 CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh release > "$RUNNER_TEMP/pkg/package.log" 2>&1 || { tail -60 "$RUNNER_TEMP/pkg/package.log"; exit 1; }
+          git rev-parse HEAD > "$RUNNER_TEMP/pkg/product-sha.txt"
+          git status --porcelain --untracked-files=no > "$RUNNER_TEMP/pkg/tracked-source-changes.txt"
+          shasum -a 256 CodexBar.app/Contents/MacOS/CodexBar > "$RUNNER_TEMP/pkg/binary-sha256.txt"
+          ditto -c -k --sequesterRsrc --keepParent CodexBar.app "$RUNNER_TEMP/pkg/CodexBar.zip"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: env.PACKAGE_RUN == ''
+        with:
+          name: pkg-${{ env.PROOF_PR }}
+          path: ${{ runner.temp }}/pkg
+          retention-days: 7
+  drive:
+    needs: package
+    runs-on: macos-26
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: { persist-credentials: false }
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: pkg-${{ env.PROOF_PR }}
+          path: ${{ runner.temp }}/pkg
+          run-id: ${{ env.PACKAGE_RUN || github.run_id }}
+          github-token: ${{ github.token }}
+      - name: Prepare
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)  # Select Xcode for widget host tests.
+          sudo xcode-select -s "$latest/Contents/Developer"
+          out="$RUNNER_TEMP/proof"; mkdir -p "$out"; echo "PROOF_OUT=$out" >> "$GITHUB_ENV"
+          { sw_vers; launchctl managername; } > "$out/environment.txt" 2>&1
+          cp "$RUNNER_TEMP"/pkg/{product-sha.txt,binary-sha256.txt,tracked-source-changes.txt} "$out/"
+          test "$(cat "$out/product-sha.txt")" = "$PROOF_SHA"
+          test ! -s "$out/tracked-source-changes.txt"
+          git rev-parse HEAD > "$out/kit-sha.txt"
+          ditto -x -k "$RUNNER_TEMP/pkg/CodexBar.zip" "$RUNNER_TEMP/head"
+          test "$(shasum -a 256 "$RUNNER_TEMP/head/CodexBar.app/Contents/MacOS/CodexBar" | cut -d' ' -f1)" = "$(cut -d' ' -f1 "$out/binary-sha256.txt")"  # extracted bytes match the manifest
+          swiftc -O -o "$RUNNER_TEMP/uihelper" proofkit/uihelper.swift
+          curl -fsSL -o "$RUNNER_TEMP/v083.zip" https://github.com/steipete/CodexBar/releases/download/v0.83.0/CodexBar-macos-universal-0.83.0.zip
+          shasum -a 256 "$RUNNER_TEMP/v083.zip" > "$out/v083-zip-sha256.txt"
+          curl -fsSL https://github.com/steipete/CodexBar/releases/download/v0.83.0/CodexBar-macos-universal-0.83.0.zip.sha256 >> "$out/v083-zip-sha256.txt"
+          test "$(awk 'NR==1{print $1}' "$out/v083-zip-sha256.txt")" = "$(awk 'NR==2{print $1}' "$out/v083-zip-sha256.txt")"  # stable checksum matches download
+          ditto -x -k "$RUNNER_TEMP/v083.zip" "$RUNNER_TEMP/v083"
+          codesign -dv "$RUNNER_TEMP/v083/CodexBar.app" > "$out/v083-codesign.txt" 2>&1 || true
+      - name: Drive the installed app
+        run: |
+          export PROOF_HELPER="$RUNNER_TEMP/uihelper"
+          python3 proofkit/$PROOF_SCENARIO "$RUNNER_TEMP/head/CodexBar.app" "$RUNNER_TEMP/v083/CodexBar.app" "$RUNNER_TEMP/uihelper"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: proof-${{ env.PROOF_PR }}-${{ github.run_attempt }}
+          path: ${{ env.PROOF_OUT }}
+          retention-days: 7

@@ -1,0 +1,1 @@
+  593.74s SUMMARY aimed selected=12/12 diagonal selected=8/12 diagonal missed=4 forced-miss selected=0/3 harness_errors=0

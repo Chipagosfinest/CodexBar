@@ -1,0 +1,3 @@
+Tests/OverflowLocal/OverviewBoundedMenuTests.swift:72:91: error: type 'StatusItemController' has no member 'overviewInlineRowLimit'
+    |                                                                                           `- error: type 'StatusItemController' has no member 'overviewInlineRowLimit'
+exit=1

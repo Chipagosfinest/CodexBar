@@ -1,0 +1,72 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "76866e7a01721bc2f3ca60b9d4b01ded2aa7b78ba773aa887a79ff2784331b10 vs 76866e7a01721bc2f3ca60b9d4b01ded2aa7b78ba773aa887a79ff2784331b10"
+ },
+ {
+  "check": "aimed: twelve clean trials",
+  "pass": true,
+  "detail": "12"
+ },
+ {
+  "check": "aimed: every click had a highlighted row and selected its provider",
+  "pass": true,
+  "detail": "[(0, True, True), (1, True, True), (2, True, True), (3, True, True), (4, True, True), (5, True, True), (6, True, True), (7, True, True), (8, True, True), (9, True, True), (10, True, True), (11, True, True)]"
+ },
+ {
+  "check": "diagonal: twelve clean trials",
+  "pass": true,
+  "detail": "12"
+ },
+ {
+  "check": "no selection failure: every highlighted row selected",
+  "pass": true,
+  "detail": "[]"
+ },
+ {
+  "check": "no phantom selection: nothing selected without a highlighted row",
+  "pass": true,
+  "detail": "[]"
+ },
+ {
+  "check": "forced miss: submenu was closed at mouse-down and the click stayed on Overview",
+  "pass": true,
+  "detail": "[{'lane': 'forced-miss', 'n': 0, 'target': 'Kimi Code \u00b7 Synthetic Account 10', 'expected': 'kimi', 'windows_at_mousedown': 1, 'submenu_open': False, 'ax_selected': False, 'pixel': {'g': 0, 'b': 0, 'r': 0}, 'highlighted': False, 'menu_closed': True, 'overview_after': True, 'provider_after': 'openrouter', 'selected': False, 'requests_after_click': 16}, {'lane': 'forced-miss', 'n': 1, 'target': 'z.ai / GLM', 'expected': 'zai', 'windows_at_mousedown': 1, 'submenu_open': False, 'ax_selected': False, 'pixel': {'b': 0, 'r': 0, 'g': 0}, 'highlighted': False, 'menu_closed': True, 'overview_after': True"
+ },
+ {
+  "check": "a timer refresh ran while the submenu was open",
+  "pass": true,
+  "detail": "{'t': 126.9, 'windows': 2, 'requests': 29}"
+ },
+ {
+  "check": "the submenu survives a refresh completing behind it",
+  "pass": true,
+  "detail": "[]"
+ },
+ {
+  "check": "a click after the refresh still selects",
+  "pass": true,
+  "detail": "(False, 'kimi')"
+ },
+ {
+  "check": "before: no More (n) row exists",
+  "pass": true,
+  "detail": "[['Refresh', 'Refresh'], ['Settings...'], ['About CodexBar (v0.83.0)'], ['Quit']]"
+ },
+ {
+  "check": "before: the fourteenth account is an inline row",
+  "pass": true,
+  "detail": "['Kimi Code', 'Synthetic Account 14', 'Not fetched yet']"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "648"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

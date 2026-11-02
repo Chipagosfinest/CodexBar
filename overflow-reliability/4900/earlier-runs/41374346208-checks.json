@@ -1,0 +1,57 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "76866e7a01721bc2f3ca60b9d4b01ded2aa7b78ba773aa887a79ff2784331b10 vs 76866e7a01721bc2f3ca60b9d4b01ded2aa7b78ba773aa887a79ff2784331b10"
+ },
+ {
+  "check": "nine switcher segments",
+  "pass": true,
+  "detail": "['Overview', 'Codex', 'Claude', 'Command Code', 'Kimi Code', 'z.ai / GLM', 'OpenRouter', 'Moonshot / Kimi Open Platform', 'DeepSeek']"
+ },
+ {
+  "check": "logo row keeps every provider name for accessibility and hover",
+  "pass": true,
+  "detail": "[('Overview', 'Overview'), ('Codex', 'Codex'), ('Claude', 'Claude'), ('Command Code', 'Command Code'), ('Kimi Code', 'Kimi Code'), ('z.ai / GLM', 'z.ai / GLM'), ('OpenRouter', 'OpenRouter'), ('Moonshot / Kimi Open Platform', 'Moonshot / Kimi Open Platform'), ('DeepSeek', 'DeepSeek')]"
+ },
+ {
+  "check": "hovering a logo shows its native tooltip window",
+  "pass": true,
+  "detail": "[{'h': 18, 'y': 69, 'x': 797, 'id': 36, 'layer': 103, 'w': 49, 'name': ''}]"
+ },
+ {
+  "check": "About is inside More",
+  "pass": true,
+  "detail": "About CodexBar (v0.83.1)"
+ },
+ {
+  "check": "More > About activates the Settings window",
+  "pass": true,
+  "detail": "[{'y': 31, 'layer': 3, 'h': 674, 'name': '', 'id': 33, 'w': 1024, 'x': 1023}, {'id': 38, 'w': 800, 'y': 52, 'h': 592, 'x': 112, 'name': 'About', 'layer': 0}]"
+ },
+ {
+  "check": "a roster over twelve rows collapses the rest into More (n)",
+  "pass": true,
+  "detail": "['More (7)', 'Kimi Code \u00b7 Synthetic Account 10', 'Kimi Code \u00b7 Synthetic Account 11', 'Kimi Code \u00b7 Synthetic Account 12']"
+ },
+ {
+  "check": "the overflow submenu lists account rows",
+  "pass": true,
+  "detail": "Kimi Code \u00b7 Synthetic Account 10"
+ },
+ {
+  "check": "clicking an overflow row selects that provider",
+  "pass": false,
+  "detail": "Session | Weekly | Usage remaining | Nov 1, 2026 at 11:51\u202fPM to Nov 2, 2026 at 12:21\u202fAM | Nov 2, 2026 at 4:51\u202fAM to Nov 2, 2026 at 5:21\u202fAM | Nov 2, 2026 at 1:51\u202fAM to Nov 2, 2026 at 2:21\u202fAM | 11:51\u202fPM | 4:51\u202fAM | 65% Usage remaining | Showi"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "48"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

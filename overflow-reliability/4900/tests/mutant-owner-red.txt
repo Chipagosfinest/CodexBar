@@ -1,0 +1,11 @@
+✔ Test "rows past the inline limit move to a submenu and the footer stays last" passed after 3.823 seconds.
+✔ Test "an overflow row opens its provider from the parent menu" passed after 3.823 seconds.
+✔ Test "a short roster has no overflow row" passed after 3.837 seconds.
+✔ Test "closing the overflow submenu without activating a row stays on Overview" passed after 4.796 seconds.
+✘ Test "selecting an overflow row rebuilds the root menu it opened from" recorded an issue at OverviewBoundedMenuTests.swift:120:9: Expectation failed: rebuilt.first === menu
+✘ Test "selecting an overflow row rebuilds the root menu it opened from" recorded an issue at OverviewBoundedMenuTests.swift:122:9: Expectation failed: !ids.contains("overviewOverflow")
+✘ Test "selecting an overflow row rebuilds the root menu it opened from" recorded an issue at OverviewBoundedMenuTests.swift:123:9: Expectation failed: !ids.contains { $0.hasPrefix("overviewRow-") }
+✘ Test "selecting an overflow row rebuilds the root menu it opened from" failed after 6.412 seconds with 3 issues.
+✘ Suite OverviewBoundedMenuTests failed after 6.412 seconds with 3 issues.
+✘ Test run with 5 tests in 1 suite failed after 6.413 seconds with 3 issues.
+exit=1
