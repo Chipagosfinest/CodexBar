@@ -56,7 +56,9 @@ for name, dark in (('light', False), ('dark', True)):
     say(f'pasteboard after Copy Image: {json.dumps(pasted)}')
     check(f'{name}: Copy Image put a 1200x630 image on the pasteboard', pasted.get('png') and (pasted.get('w'), pasted.get('h')) in ((1200, 630), (2400, 1260)), pasted)
     labels = [r['label'] for r in app.win_rows() if r['w'] and r['label']]
-    check(f'{name}: the button reports the copy', any('Copied' in l for l in labels), [l for l in labels if 'Cop' in l])
+    check(f'{name}: the preview reports the copy', 'Image copied' in labels, [l for l in labels if 'opie' in l or 'Cop' in l])
+    text = ' | '.join(labels)
+    check(f'{name}: the card names both providers from transcripts', 'Claude' in text and 'Codex' in text, text[:400])
     results[name] = {'clicked': hit, 'pasteboard': pasted, 'texts': app.texts()}
     say(f'recording exit={rec.wait(timeout=50)}')
     app.quit()

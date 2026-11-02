@@ -196,8 +196,13 @@ serve(socket.AF_INET, "127.0.0.1")
         time.sleep(3)
     say(f'all {len(HOSTS)} hostnames resolve only to loopback after {time.monotonic() - T0:.0f}s')
     for h in HOSTS:
-        check = subprocess.run(['curl', '-sS', '-m', '10', f'https://{h}/__proof_fixture'], capture_output=True, text=True)
-        assert MARKER in check.stdout, f'{h} is not answered by the fixture: {check.stdout[:80]} {check.stderr.strip()}'
+        # The privileged forwarder can take a few seconds to bind on a cold runner.
+        for attempt in range(15):
+            probe = subprocess.run(['curl', '-sS', '-m', '10', f'https://{h}/__proof_fixture'], capture_output=True, text=True)
+            if MARKER in probe.stdout:
+                break
+            time.sleep(2)
+        assert MARKER in probe.stdout, f'{h} is not answered by the fixture: {probe.stdout[:80]} {probe.stderr.strip()}'
     say(f'fixture answers all {len(HOSTS)} hostnames over trusted TLS')
     threading.Thread(target=resolver_watch, daemon=True).start()
 
@@ -287,7 +292,8 @@ def write_claude(when, model, inp, out, cread=0, ccreate=0, session='s', idx=0, 
            'message': {'id': f'msg-{model}-{when.date()}-{idx}', 'model': model, 'stop_reason': stop, 'usage': {
                'input_tokens': inp, 'output_tokens': out, 'cache_read_input_tokens': cread, 'cache_creation_input_tokens': ccreate}}}
     with open(d / f'{session}.jsonl', 'a') as f:
-        f.write(json.dumps(rec) + '\n')
+        # Compact, as Claude Code writes it: the scanner prefilters raw bytes before decoding.
+        f.write(json.dumps(rec, separators=(',', ':')) + '\n')
 
 
 def write_codex(when, model, inp, out, cached=0):
@@ -297,10 +303,11 @@ def write_codex(when, model, inp, out, cached=0):
     p = d / f"rollout-{when.strftime('%Y-%m-%dT%H-%M-%S')}-{zlib.crc32(model.encode()):08x}.jsonl"
     usage = {'input_tokens': inp, 'cached_input_tokens': cached, 'output_tokens': out, 'total_tokens': inp + out}
     with open(p, 'a') as f:
-        f.write(json.dumps({'type': 'session_meta', 'timestamp': ts, 'payload': {'id': p.stem}}) + '\n')
-        f.write(json.dumps({'type': 'turn_context', 'timestamp': ts, 'payload': {'model': model}}) + '\n')
-        f.write(json.dumps({'type': 'event_msg', 'timestamp': ts, 'payload': {'type': 'token_count', 'info': {
-            'model': model, 'total_token_usage': usage, 'last_token_usage': usage}}}) + '\n')
+        for rec in ({'type': 'session_meta', 'timestamp': ts, 'payload': {'id': p.stem}},
+                    {'type': 'turn_context', 'timestamp': ts, 'payload': {'model': model}},
+                    {'type': 'event_msg', 'timestamp': ts, 'payload': {'type': 'token_count', 'info': {
+                        'model': model, 'total_token_usage': usage, 'last_token_usage': usage}}}):
+            f.write(json.dumps(rec, separators=(',', ':')) + '\n')
 
 
 def defaults_write(key, value):

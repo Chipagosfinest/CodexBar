@@ -123,10 +123,11 @@ assert ov, 'no Overview tab after activation'
 app.ui('click', ov[0]['x'] + ov[0]['w'] / 2, ov[0]['y'] + ov[0]['h'] / 2)
 time.sleep(2.5)
 app.shot('i4-back-on-overview')
+# Usage only rises within one reset window, as in reality; plan history keeps the window's high mark.
 providers.PERCENTS['claude'] = (97, 60)
-providers.PERCENTS['codex'] = (20, 10)
+providers.PERCENTS['zai'] = (75, 5)
 phase_begin('refreshed')
-say('fixture changed: claude 3% left, codex 80% left; clicking Refresh')
+say('fixture changed: claude 3% left, z.ai 25% left; clicking Refresh')
 r = app.row('Refresh')
 assert r, 'no Refresh row'
 app.click_row(r)
@@ -140,9 +141,11 @@ app.open_menu()
 app.shot('i6-reopened-after-normal-refresh', 'resorted from fresh values')
 i6 = app.menu_items()
 (OUT / 'i6-rows.json').write_text(json.dumps(i6, indent=1))
-c3, c80 = app.row('3% Usage remaining'), app.row('80% Usage remaining')
-check('refresh rendered new values: Claude 3% left sorts above Codex 80% left', c3 and c80 and c3['y'] < c80['y'], f'{c3 and c3["y"]} {c80 and c80["y"]}')
-z = app.row('z.ai / GLM, 5-hour')
+c3, c8 = app.row('3% Usage remaining'), app.row('8% Usage remaining')
+check('refresh re-sorted: Claude, now 3% left, moved above Codex at 8% left', c3 and c8 and c3['y'] < c8['y'], f'{c3 and c3["y"]} {c8 and c8["y"]}')
+z25 = next((r for r in i6 if any(l.startswith('z.ai / GLM,') and '25%' in l for l in r['labels'])), None)
+check('refresh rendered the new z.ai value, 25% left', z25, z25 and z25['labels'][:1])
+z = app.row('z.ai / GLM,')
 assert z, 'no z.ai row'
 app.hover(z)
 time.sleep(1)
@@ -176,7 +179,7 @@ def cold(name, config, wait=25):
 
 say('=== exactly one provider failing, cold launch')
 providers.PERCENTS['claude'] = (35, 22)
-providers.PERCENTS['codex'] = (92, 40)
+providers.PERCENTS['zai'] = (70, 5)
 state['kimi_expired'] = True
 phase_begin('kimi-expired')
 app = cold('attention', providers.CONFIG)

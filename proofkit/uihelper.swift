@@ -56,14 +56,14 @@ func describe(_ el: AXUIElement, _ depth: Int, _ limit: Int) -> [String: Any] {
     return o
 }
 switch args[1] {
-case "banner": // Real on-display provenance. A separate nonactivating panel, drawn over the Dock so it covers no app UI.
+case "banner": // Real on-display provenance. A separate nonactivating panel, drawn over the Dock, which no scenario uses, so it covers no app UI.
     let app = NSApplication.shared
     app.setActivationPolicy(.accessory)
     let screen = NSScreen.main!.frame
     let panel = NSPanel(contentRect: NSRect(x: screen.minX, y: screen.minY, width: screen.width, height: 46),
                         styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-    panel.level = .statusBar
-    panel.isFloatingPanel = true
+    panel.isFloatingPanel = true  // Setting this resets the level, so the level comes after.
+    panel.level = .screenSaver  // The Dock draws above ordinary floating and status-bar levels.
     panel.hidesOnDeactivate = false
     panel.ignoresMouseEvents = true
     panel.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
