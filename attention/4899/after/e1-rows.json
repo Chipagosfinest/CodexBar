@@ -1,0 +1,93 @@
+[
+ {
+  "y": 36,
+  "h": 76,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Overview",
+   "Codex",
+   "Claude",
+   "Command Code",
+   "Kimi Code",
+   "z.ai / GLM",
+   "OpenRouter",
+   "Moonshot / Kimi Open Platform"
+  ],
+  "action": null
+ },
+ {
+  "y": 112,
+  "h": 11,
+  "x": 708,
+  "w": 310,
+  "labels": [],
+  "action": null
+ },
+ {
+  "y": 123,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Codex: Codex OAuth token expired or invalid. Run `codex login` to re-authenticate.",
+   "Claude: Claude OAuth request unauthorized. Run `claude` to re-authenticate.",
+   "Command Code: Command Code API key is invalid or expired. Replace it in Settings or update COMMAND_CODE_API_KEY.",
+   "Kimi Code: Kimi Code API key is invalid or expired. Please refresh your API key.",
+   "z.ai / GLM: Provider plugin script failed: z.ai quota API error: HTTP 401",
+   "OpenRouter: OpenRouter API error: Request returned HTTP 401",
+   "Moonshot / Kimi Open Platform: Moonshot API error: HTTP 401"
+  ],
+  "action": "menuCardNoOp:"
+ },
+ {
+  "y": 147,
+  "h": 11,
+  "x": 708,
+  "w": 310,
+  "labels": [],
+  "action": null
+ },
+ {
+  "y": 158,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Refresh",
+   "Refresh",
+   "\u2318 R"
+  ],
+  "action": null
+ },
+ {
+  "y": 182,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Settings..."
+  ],
+  "action": "showSettingsGeneral"
+ },
+ {
+  "y": 206,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "About CodexBar (v0.83.1)"
+  ],
+  "action": "showSettingsAbout"
+ },
+ {
+  "y": 230,
+  "h": 24,
+  "x": 708,
+  "w": 310,
+  "labels": [
+   "Quit"
+  ],
+  "action": "quit"
+ }
+]

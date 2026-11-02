@@ -1,0 +1,24 @@
+✔ Test "stale numbers never read as critical" passed after 7.541 seconds.
+✔ Test "a single attention row selects its provider through the native menu action" passed after 7.541 seconds.
+✔ Test "a provider row is one line however many windows it has" passed after 7.541 seconds.
+✔ Test "detailed keeps its empty state when every provider has failed" passed after 7.541 seconds.
+✔ Test "the worst case roster still leaves the footer on a laptop screen" passed after 7.541 seconds.
+✔ Test "compact names every provider when all of them have failed" passed after 7.541 seconds.
+✔ Test "return leaves a row with a flyout to the menu" passed after 7.541 seconds.
+✔ Test "return activates the highlighted attention row while the menu tracks" passed after 7.541 seconds.
+✔ Test "the value drops the suffix because the column head carries it" passed after 7.541 seconds.
+✔ Test "a status only limit keeps its text when no percentage exists" passed after 7.541 seconds.
+✔ Test "an exhausted limit outranks a forecast on another window" passed after 7.542 seconds.
+✔ Test "urgent rows sort by when they stop and healthy rows keep their order inside a band" passed after 7.542 seconds.
+✔ Test "a stale row stays in its band instead of jumping ahead of fresh rows" passed after 7.542 seconds.
+✔ Test "a provider already at zero sorts ahead of one forecast to stop" passed after 7.542 seconds.
+✔ Test "eight providers all appear and the menu stays under a laptop screen" passed after 7.542 seconds.
+✔ Test "an accessibility press on the attention row selects its provider" passed after 7.542 seconds.
+✔ Test "an imminent forecast beats a lower percentage and takes the caption, not the reset column" passed after 7.542 seconds.
+✔ Test "the row shows the tightest window in either percent style" passed after 8.362 seconds.
+✔ Test "the overview defaults to the provider limit when nothing is selected" passed after 8.362 seconds.
+✔ Test "an account row keeps its account when stale or close to running out" passed after 8.362 seconds.
+✔ Test "compact shows the row when the only selected provider has failed" passed after 8.362 seconds.
+✔ Test "a distant forecast does not raise an alarm" passed after 8.362 seconds.
+✔ Test "small percentage moves do not reorder healthy rows" passed after 8.362 seconds.
+✔ Test run with 23 tests in 1 suite passed after 8.363 seconds.

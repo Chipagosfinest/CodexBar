@@ -1,0 +1,26 @@
+READY
+menuDidClose
+menuDidClose
+--- AXPress on AXMenuItem: plain view item
+menuDidClose
+menuDidClose
+--- Return with hover: plain view item
+menuDidClose
+--- AXPress on AXMenuItem: item with override
+ITEM accessibilityPerformPress 2
+ACTION tag=2 menu=true
+menuDidClose
+--- Return with hover: item with override
+menuDidClose
+--- AXPress on AXMenuItem: standard item
+menuDidClose
+MENU performActionForItem 2
+ACTION tag=3 menu=true
+menuDidClose
+--- Return with hover: standard item
+menuDidClose
+MENU performActionForItem 2
+ACTION tag=3 menu=true
+menuDidClose
+--- AXPress on child of plain view item
+menuDidClose

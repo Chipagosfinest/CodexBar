@@ -1,0 +1,1 @@
+c752f3887338363c9b681696485b011f97fd7c78bf372f7c1268c73f7b97c867  CodexBar.app/Contents/MacOS/CodexBar

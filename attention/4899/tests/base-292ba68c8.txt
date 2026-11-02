@@ -1,0 +1,32 @@
+✘ Test "a single attention row selects its provider through the native menu action" recorded an issue at OverviewProviderLineTests.swift:390:23: Expectation failed: menu.items.first { ($0.representedObject as? String) == "overviewRow-kimi" }
+✘ Test "return activates the highlighted attention row while the menu tracks" recorded an issue at OverviewProviderLineTests.swift:439:23: Expectation failed: menu.items.first { ($0.representedObject as? String) == "overviewRow-kimi" }
+✘ Test "a single attention row selects its provider through the native menu action" failed after 1.767 seconds with 1 issue.
+✔ Test "an imminent forecast beats a lower percentage and takes the caption, not the reset column" passed after 1.767 seconds.
+✔ Test "small percentage moves do not reorder healthy rows" passed after 1.767 seconds.
+✔ Test "stale numbers never read as critical" passed after 1.767 seconds.
+✘ Test "return activates the highlighted attention row while the menu tracks" failed after 1.767 seconds with 1 issue.
+✔ Test "a provider already at zero sorts ahead of one forecast to stop" passed after 1.767 seconds.
+✘ Test "return leaves a row with a flyout to the menu" recorded an issue at OverviewProviderLineTests.swift:460:23: Expectation failed: menu.items.first { ($0.representedObject as? String) == "overviewAttention" }
+✔ Test "an exhausted limit outranks a forecast on another window" passed after 3.367 seconds.
+✔ Test "the overview defaults to the provider limit when nothing is selected" passed after 3.367 seconds.
+✘ Test "an accessibility press on the attention row selects its provider" recorded an issue at OverviewProviderLineTests.swift:410:23: Expectation failed: menu.items.first { ($0.representedObject as? String) == "overviewRow-kimi" }
+✘ Test "compact names every provider when all of them have failed" recorded an issue at OverviewProviderLineTests.swift:346:9: Expectation failed: !menu.items.contains { $0.title == L("No overview data available.") }
+✘ Test "compact names every provider when all of them have failed" recorded an issue at OverviewProviderLineTests.swift:347:29: Expectation failed: menu.items.first { ($0.representedObject as? String) == "overviewAttention" }
+✘ Test "compact shows the row when the only selected provider has failed" recorded an issue at OverviewProviderLineTests.swift:363:9: Expectation failed: !menu.items.contains { $0.title == L("No overview data available.") }
+✘ Test "compact shows the row when the only selected provider has failed" recorded an issue at OverviewProviderLineTests.swift:364:9: Expectation failed: menu.items.contains { ($0.representedObject as? String) == "overviewRow-kimi" }
+✔ Test "an account row keeps its account when stale or close to running out" passed after 8.201 seconds.
+✘ Test "return leaves a row with a flyout to the menu" failed after 8.201 seconds with 1 issue.
+✔ Test "detailed keeps its empty state when every provider has failed" passed after 8.202 seconds.
+✔ Test "a distant forecast does not raise an alarm" passed after 8.202 seconds.
+✔ Test "the value drops the suffix because the column head carries it" passed after 8.202 seconds.
+✔ Test "eight providers all appear and the menu stays under a laptop screen" passed after 8.202 seconds.
+✘ Test "an accessibility press on the attention row selects its provider" failed after 8.202 seconds with 1 issue.
+✔ Test "urgent rows sort by when they stop and healthy rows keep their order inside a band" passed after 8.202 seconds.
+✔ Test "the worst case roster still leaves the footer on a laptop screen" passed after 8.202 seconds.
+✔ Test "a status only limit keeps its text when no percentage exists" passed after 8.202 seconds.
+✔ Test "a stale row stays in its band instead of jumping ahead of fresh rows" passed after 8.202 seconds.
+✔ Test "the row shows the tightest window in either percent style" passed after 8.202 seconds.
+✔ Test "a provider row is one line however many windows it has" passed after 8.202 seconds.
+✘ Test "compact names every provider when all of them have failed" failed after 8.202 seconds with 2 issues.
+✘ Test "compact shows the row when the only selected provider has failed" failed after 8.202 seconds with 2 issues.
+✘ Test run with 23 tests in 1 suite failed after 8.203 seconds with 8 issues.

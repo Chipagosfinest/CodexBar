@@ -1,0 +1,87 @@
+[
+ {
+  "check": "after: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "c752f3887338363c9b681696485b011f97fd7c78bf372f7c1268c73f7b97c867 vs c752f3887338363c9b681696485b011f97fd7c78bf372f7c1268c73f7b97c867"
+ },
+ {
+  "check": "all-failed launch asked the fixture and was refused",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "Detailed keeps \"No overview data available.\"",
+  "pass": true,
+  "detail": "No overview data available. | Refresh | Refresh | \u2318 R | Settings... | About CodexBar (v0.83.1) | Quit"
+ },
+ {
+  "check": "compact all-failed launch asked the fixture and was refused",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "all failed: Compact names the failed providers instead of the empty state",
+  "pass": true,
+  "detail": "Codex: Codex OAuth token expired or invalid. Run `codex login` to re-authenticate. | Claude: Claude OAuth request unauthorized. Run `claude` to re-authenticate. | Command Code: Command Code API key is invalid or expired. Replace it in Settings or update COMMAND_CODE_API_KEY. | Kimi Code: Kimi Code A"
+ },
+ {
+  "check": "all failed: the attention row opens a flyout naming each provider",
+  "pass": true,
+  "detail": "[{'y': 118, 'id': 47, 'name': '', 'x': 99, 'h': 178, 'layer': 101, 'w': 614}, {'w': 310, 'h': 228, 'id': 44, 'layer': 101, 'y': 31, 'name': '', 'x': 708}]"
+ },
+ {
+  "check": "all failed: a flyout row selects its provider",
+  "pass": true,
+  "detail": "{'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'codex'}"
+ },
+ {
+  "check": "the only selected provider failing shows its row, not the empty state",
+  "pass": true,
+  "detail": "Kimi Code, Kimi Code API key is invalid or expired. Please refresh your API key. | Refresh | Refresh | \u2318 R | Settings... | About CodexBar (v0.83.1) | Quit"
+ },
+ {
+  "check": "one failing provider renders one attention row",
+  "pass": true,
+  "detail": "{'y': 186, 'h': 24, 'x': 708, 'w': 310, 'labels': ['Kimi Code, Kimi Code API key is invalid or expired. Please refresh your API key.'], 'action': 'selectOverviewProvider:'}"
+ },
+ {
+  "check": "Return on the single attention row selects Kimi Code",
+  "pass": true,
+  "detail": "{'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'kimi'} Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | \u2318 R | Settings... | About CodexBar (v0.83.1) | Quit"
+ },
+ {
+  "check": "accessibility press on the single attention row selects Kimi Code",
+  "pass": true,
+  "detail": "0 {'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'kimi'} Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | \u2318 R | Settings... | About CodexBar (v0.83.1) | Quit"
+ },
+ {
+  "check": "pointer click on the single attention row still selects Kimi Code",
+  "pass": true,
+  "detail": "{'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'kimi'} Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | \u2318 R | Settings... | About CodexBar (v0.83.1) | Quit"
+ },
+ {
+  "check": "a plain row with no flyout is on screen for the keyboard check",
+  "pass": true,
+  "detail": "{'y': 306, 'h': 24, 'x': 708, 'w': 310, 'labels': ['DeepSeek'], 'action': 'selectOverviewProvider:'}"
+ },
+ {
+  "check": "Return on a plain row with no flyout selects its provider",
+  "pass": true,
+  "detail": "{'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'deepseek'}"
+ },
+ {
+  "check": "harness control: Return activates a standard highlighted menu item",
+  "pass": true,
+  "detail": "[{'x': 1023, 'name': '', 'y': 31, 'layer': 3, 'w': 1024, 'h': 677, 'id': 89}, {'w': 800, 'h': 592, 'y': 52, 'layer': 0, 'name': 'General', 'id': 82, 'x': 112}]"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "49"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

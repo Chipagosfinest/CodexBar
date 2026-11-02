@@ -1,0 +1,68 @@
+    0.64s banner on display: [{'layer': 1000, 'y': 722, 'name': '', 'w': 1024, 'h': 46, 'id': 30, 'x': 0}]
+    4.38s all 23 hostnames resolve only to loopback after 4s
+    7.33s fixture answers all 23 hostnames over trusted TLS
+    8.86s CHECK PASS after: installed app binary equals package manifest c752f3887338363c9b681696485b011f97fd7c78bf372f7c1268c73f7b97c867 vs c752f3887338363c9b681696485b011f97fd7c78bf372f7c1268c73f7b97c867
+    8.89s role=after trusted(ax,screen,post)=true true true
+    8.89s === Detailed, every selected provider failed: the empty state must not change
+    8.89s phase -> detailed-all-fail
+    9.08s launched detailed pid=1706
+   34.09s CHECK PASS all-failed launch asked the fixture and was refused 
+   34.90s preclick display captured; icon drawn colors=16 inside screen={'y': 0, 'h': 768, 'x': 0, 'w': 1024}
+   34.90s click status item at 767,3 size 36x24
+   40.66s SHOT d1-detailed-all-failed menus=[(708, 31, 310, 228)] requests=53 Detailed layout, nothing cached
+   40.77s CHECK PASS Detailed keeps "No overview data available." No overview data available. | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+   41.63s detailed stopped
+   43.13s === Compact, every selected provider failed
+   43.13s phase -> compact-all-fail
+   43.26s launched allfail pid=2118
+   68.29s CHECK PASS compact all-failed launch asked the fixture and was refused 
+   69.09s preclick display captured; icon drawn colors=16 inside screen={'w': 1024, 'y': 0, 'h': 768, 'x': 0}
+   69.09s click status item at 767,3 size 36x24
+   72.51s SHOT e1-compact-all-failed menus=[(708, 31, 310, 228)] requests=90 Compact layout, nothing cached
+   72.74s CHECK PASS all failed: Compact names the failed providers instead of the empty state Codex: Codex OAuth token expired or invalid. Run `codex login` to re-authenticate. | Claude: Claude OAuth request unauthorized. Run `claude` to re-authenticate. | Command Code: Command Code API key is invalid or expired. Replace it in Settings or update COMMAND_CODE_API_KEY. | Kimi Code: Kimi Code A
+   78.13s SHOT e2-all-failed-flyout menus=[(99, 118, 614, 178), (708, 31, 310, 228)] requests=90 pointer resting on the attention row
+   78.17s CHECK PASS all failed: the attention row opens a flyout naming each provider [{'y': 118, 'id': 47, 'name': '', 'x': 99, 'h': 178, 'layer': 101, 'w': 614}, {'w': 310, 'h': 228, 'id': 44, 'layer': 101, 'y': 31, 'name': '', 'x': 708}]
+   83.08s preclick display captured; icon drawn colors=16 inside screen={'w': 1024, 'y': 0, 'h': 768, 'x': 0}
+   83.08s click status item at 767,3 size 36x24
+   86.22s SHOT e3-after-flyout-child-click menus=[(708, 31, 310, 428)] requests=109 clicked the first flyout row closed=True
+   86.25s defaults e3-after-flyout-child: {"mergedMenuLastSelectedWasOverview": false, "selectedMenuProvider": "codex"}
+   86.25s CHECK PASS all failed: a flyout row selects its provider {'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'codex'}
+   87.23s allfail stopped
+   88.82s === Compact, the one selected provider failed, another healthy provider is not selected
+   88.82s phase -> only-selected-failed
+   89.04s launched onlyselected pid=3105
+  115.17s preclick display captured; icon drawn colors=16 inside screen={'x': 0, 'y': 0, 'h': 768, 'w': 1024}
+  115.17s click status item at 767,3 size 36x24
+  119.62s SHOT s1-only-selected-failed menus=[(708, 31, 310, 228)] requests=145 selection is Kimi only
+  119.78s CHECK PASS the only selected provider failing shows its row, not the empty state Kimi Code, Kimi Code API key is invalid or expired. Please refresh your API key. | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+  120.80s onlyselected stopped
+  122.33s === Compact, exactly one provider failing among healthy rows
+  122.33s phase -> kimi-expired
+  122.70s launched attention pid=3877
+  149.11s preclick display captured; icon drawn colors=28 inside screen={'w': 1024, 'h': 768, 'x': 0, 'y': 0}
+  149.11s click status item at 767,3 size 36x24
+  154.67s SHOT a1-single-attention-row menus=[(708, 31, 310, 411)] requests=179 expired Kimi key
+  155.09s CHECK PASS one failing provider renders one attention row {'y': 186, 'h': 24, 'x': 708, 'w': 310, 'labels': ['Kimi Code, Kimi Code API key is invalid or expired. Please refresh your API key.'], 'action': 'selectOverviewProvider:'}
+  159.97s SHOT a2-attention-keyboard-selected menus=[(708, 31, 310, 411)] requests=179 highlight moved by arrow keys; no click
+  163.60s SHOT a3-after-return-on-attention menus=[(708, 31, 310, 308)] requests=179 Return closed=False
+  163.63s defaults a3-after-return-on-attention: {"mergedMenuLastSelectedWasOverview": false, "selectedMenuProvider": "kimi"}
+  163.73s CHECK PASS Return on the single attention row selects Kimi Code {'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'kimi'} Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+  169.80s SHOT a4-after-axpress-on-attention menus=[(708, 31, 310, 308)] requests=179 AXPress result=0 closed=False
+  169.82s defaults a4-after-axpress-on-attention: {"mergedMenuLastSelectedWasOverview": false, "selectedMenuProvider": "kimi"}
+  169.89s CHECK PASS accessibility press on the single attention row selects Kimi Code 0 {'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'kimi'} Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+  179.20s SHOT a5-pointer-click-attention-row menus=[(708, 31, 310, 308)] requests=179 pointer closed=False
+  179.26s defaults a5-pointer-click-attention-row: {"mergedMenuLastSelectedWasOverview": false, "selectedMenuProvider": "kimi"}
+  179.34s CHECK PASS pointer click on the single attention row still selects Kimi Code {'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'kimi'} Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+  182.46s CHECK PASS a plain row with no flyout is on screen for the keyboard check {'y': 306, 'h': 24, 'x': 708, 'w': 310, 'labels': ['DeepSeek'], 'action': 'selectOverviewProvider:'}
+  187.57s defaults a5b-after-return-on-plain-row: {"mergedMenuLastSelectedWasOverview": false, "selectedMenuProvider": "deepseek"}
+  188.41s SHOT a5b-after-return-on-plain-row menus=[(708, 31, 310, 354)] requests=179 Return on the DeepSeek row
+  188.41s CHECK PASS Return on a plain row with no flyout selects its provider {'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'deepseek'}
+  199.10s SHOT a6-control-return-on-settings menus=[] requests=194 control opened Settings=True
+  199.14s CHECK PASS harness control: Return activates a standard highlighted menu item [{'x': 1023, 'name': '', 'y': 31, 'layer': 3, 'w': 1024, 'h': 677, 'id': 89}, {'w': 800, 'h': 592, 'y': 52, 'layer': 0, 'name': 'General', 'id': 82, 'x': 112}]
+  199.35s attention stopped
+  200.91s provider requests answered 200 by the fixture: 49 of 171
+  200.91s CHECK PASS app reached the fixture 49
+  200.92s resolver watch (sampled): 39 checks, 0 escapes
+  200.92s CHECK PASS no sampled resolver escape []
+  200.92s checks: 17 passed, 0 failed
+  200.92s done

@@ -1,0 +1,63 @@
+    0.52s banner on display: [{'name': '', 'w': 1024, 'id': 29, 'y': 722, 'h': 46, 'x': 0, 'layer': 1000}]
+    5.51s all 23 hostnames resolve only to loopback after 6s
+    8.30s fixture answers all 23 hostnames over trusted TLS
+    9.67s CHECK PASS before: installed app binary equals package manifest 3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a vs 3b4781d0a9e29937dec6d2d859edfc42182f483fd29158f8a788da9c7e411e6a
+    9.71s role=before trusted(ax,screen,post)=true true true
+    9.71s === Detailed, every selected provider failed: the empty state must not change
+    9.71s phase -> detailed-all-fail
+    9.85s launched detailed pid=12579
+   34.86s CHECK PASS all-failed launch asked the fixture and was refused 
+   35.66s preclick display captured; icon drawn colors=16 inside screen={'x': 0, 'w': 1024, 'y': 0, 'h': 768}
+   35.66s click status item at 767,3 size 36x24
+   39.11s SHOT d1-detailed-all-failed menus=[(708, 31, 310, 228)] requests=54 Detailed layout, nothing cached
+   39.41s CHECK PASS Detailed keeps "No overview data available." No overview data available. | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+   40.34s detailed stopped
+   41.91s === Compact, every selected provider failed
+   41.91s phase -> compact-all-fail
+   42.02s launched allfail pid=13504
+   67.02s CHECK PASS compact all-failed launch asked the fixture and was refused 
+   67.96s preclick display captured; icon drawn colors=16 inside screen={'h': 768, 'x': 0, 'y': 0, 'w': 1024}
+   67.96s click status item at 767,3 size 36x24
+   71.77s SHOT e1-compact-all-failed menus=[(708, 31, 310, 228)] requests=88 Compact layout, nothing cached
+   71.91s FINDING DEFECT all failed: Compact names the failed providers instead of the empty state No overview data available. | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+   72.91s allfail stopped
+   74.48s === Compact, the one selected provider failed, another healthy provider is not selected
+   74.48s phase -> only-selected-failed
+   74.64s launched onlyselected pid=14411
+  100.24s preclick display captured; icon drawn colors=16 inside screen={'y': 0, 'w': 1024, 'h': 768, 'x': 0}
+  100.24s click status item at 767,3 size 36x24
+  102.79s SHOT s1-only-selected-failed menus=[(708, 31, 310, 228)] requests=126 selection is Kimi only
+  102.83s FINDING DEFECT the only selected provider failing shows its row, not the empty state No overview data available. | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+  103.56s onlyselected stopped
+  105.14s === Compact, exactly one provider failing among healthy rows
+  105.14s phase -> kimi-expired
+  105.25s launched attention pid=15038
+  131.81s preclick display captured; icon drawn colors=28 inside screen={'x': 0, 'y': 0, 'h': 768, 'w': 1024}
+  131.81s click status item at 767,3 size 36x24
+  136.30s SHOT a1-single-attention-row menus=[(708, 31, 310, 411)] requests=157 expired Kimi key
+  136.63s CHECK PASS one failing provider renders one attention row {'y': 186, 'h': 24, 'x': 708, 'w': 310, 'labels': ['Kimi Code, Kimi Code API key is invalid or expired. Please refresh your API key.'], 'action': None}
+  141.29s SHOT a2-attention-keyboard-selected menus=[(708, 31, 310, 411)] requests=157 highlight moved by arrow keys; no click
+  145.21s SHOT a3-after-return-on-attention menus=[(708, 31, 310, 411)] requests=157 Return closed=False
+  145.23s defaults a3-after-return-on-attention: {"mergedMenuLastSelectedWasOverview": true}
+  145.48s FINDING DEFECT Return on the single attention row selects Kimi Code {'mergedMenuLastSelectedWasOverview': True} Usage | Left | Resets | Session | Weekly | Usage remaining | Nov 2, 2026 at 3:11 AM to Nov 2, 2026 at 3:41 AM | Nov 2, 2026 at 8:11 AM to Nov 2, 2026 at 8:41 AM | Nov 2, 2026 at 6:11 AM to Nov 2, 2026
+  151.51s preclick display captured; icon drawn colors=28 inside screen={'y': 0, 'w': 1024, 'x': 0, 'h': 768}
+  151.51s click status item at 767,3 size 36x24
+  154.47s SHOT a4-after-axpress-on-attention menus=[(708, 31, 310, 411)] requests=186 AXPress result=0 closed=True
+  154.49s defaults a4-after-axpress-on-attention: {"mergedMenuLastSelectedWasOverview": true}
+  154.61s FINDING DEFECT accessibility press on the single attention row selects Kimi Code 0 {'mergedMenuLastSelectedWasOverview': True} Usage | Left | Resets | Session | Weekly | Usage remaining | Nov 2, 2026 at 3:12 AM to Nov 2, 2026 at 3:42 AM | Nov 2, 2026 at 8:12 AM to Nov 2, 2026 at 8:42 AM | Nov 2, 2026 at 6:12 AM to Nov 2, 2026
+  163.16s SHOT a5-pointer-click-attention-row menus=[(708, 31, 310, 308)] requests=186 pointer closed=False
+  163.19s defaults a5-pointer-click-attention-row: {"mergedMenuLastSelectedWasOverview": false, "selectedMenuProvider": "kimi"}
+  163.28s CHECK PASS pointer click on the single attention row still selects Kimi Code {'mergedMenuLastSelectedWasOverview': False, 'selectedMenuProvider': 'kimi'} Kimi Code | Kimi Code API key is invalid or expired. Please refresh your API key. | Copy error | Usage Dashboard | Refresh | Refresh | ⌘ R | Settings... | About CodexBar (v0.83.1) | Quit
+  166.22s CHECK PASS a plain row with no flyout is on screen for the keyboard check {'y': 306, 'h': 24, 'x': 708, 'w': 310, 'labels': ['DeepSeek'], 'action': 'selectOverviewProvider:'}
+  171.21s defaults a5b-after-return-on-plain-row: {"mergedMenuLastSelectedWasOverview": true, "selectedMenuProvider": "kimi"}
+  172.11s SHOT a5b-after-return-on-plain-row menus=[(708, 31, 310, 411)] requests=186 Return on the DeepSeek row
+  172.11s FINDING DEFECT Return on a plain row with no flyout selects its provider {'mergedMenuLastSelectedWasOverview': True, 'selectedMenuProvider': 'kimi'}
+  180.66s SHOT a6-control-return-on-settings menus=[] requests=200 control opened Settings=True
+  180.68s CHECK PASS harness control: Return activates a standard highlighted menu item [{'x': 1023, 'h': 677, 'w': 1024, 'layer': 3, 'id': 81, 'name': '', 'y': 31}, {'layer': 0, 'h': 592, 'x': 112, 'y': 52, 'name': 'General', 'w': 800, 'id': 74}]
+  180.89s attention stopped
+  182.39s provider requests answered 200 by the fixture: 65 of 177
+  182.39s CHECK PASS app reached the fixture 65
+  182.39s resolver watch (sampled): 35 checks, 0 escapes
+  182.39s CHECK PASS no sampled resolver escape []
+  182.39s checks: 10 passed, 0 failed
+  182.39s done
