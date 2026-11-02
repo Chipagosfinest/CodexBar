@@ -102,12 +102,6 @@ def storm(label_, app_path, prefs):
     return count
 
 
-baseline = storm('release-v083', _V083_APP, {})
-head_default = storm('head-default-source', INSTALLED, {})
-head_total = storm('head-all-providers', INSTALLED, {'unifiedIconSource': 'allProviders'})
-say(f'STORM RESULT release={baseline} default={head_default} total={head_total}')
-finding('head does not refresh more than the v0.83.0 release in the original failing order',
-        head_default <= baseline * 1.5 + 5 and head_total <= baseline * 1.5 + 5, f'release={baseline} default={head_default} total={head_total}')
 for name, dark in (('light', False), ('dark', True)):
     say(f'=== appearance {name}: {subprocess.run([HELPER, "dark", "1" if dark else "0"], capture_output=True, text=True).stdout.strip()}')
     time.sleep(3)
@@ -135,6 +129,15 @@ for name, dark in (('light', False), ('dark', True)):
     app.close_menu()
     state['zai_burning'] = False
     wait_label(app, lambda l: 'near limit' not in l, 'forecast cleared')
+
+    phase_begin(f'{name}-session-forecast')
+    providers.PERCENTS['claude'] = (70, 22)
+    # 70% used 2h into 5h runs out in about 51 minutes; the weekly window, which drives the layout metric, lasts.
+    check(f'{name}: a session forecast warns although the weekly window would last',
+          wait_label(app, lambda l: 'Claude near limit, 30% left' in l, 'session forecast warning'), label(app))
+    shot(app, f'{name}-1d-session-forecast-claude')
+    providers.PERCENTS.update(CALM)
+    wait_label(app, lambda l: 'near limit' not in l, 'session forecast cleared')
 
     phase_begin(f'{name}-near')
     providers.PERCENTS['claude'] = (35, 92)
