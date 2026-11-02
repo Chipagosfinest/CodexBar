@@ -1,0 +1,54 @@
+◇ Test run started.
+◇ Suite OverviewProviderFlyoutTests started.
+◇ Suite StatusMenuHostedSubmenuRefreshTests started.
+◇ Suite StatusMenuCodexCostHistoryRefreshTests started.
+◇ Test "show details in the flyout opens the provider tab from the parent menu" started.
+◇ Test "synthetic open storage flyout proof" started.
+◇ Test "the row flyout carries the detail and leaves the parent menu alone" started.
+◇ Test "a reopened flyout rebuilds only when its provider's data changed" started.
+◇ Test "show details still selects its provider when a rebuild detached the clicked item" started.
+◇ Test "claude swap completion changes open menu readiness" started.
+◇ Test "an open flyout refreshes when only storage presentation changes" started.
+◇ Test "clicking show details after the chart closed selects the provider through the menu lifecycle" started.
+◇ Test "codex cost history preserves identity when hidden project nested data changes" started.
+◇ Test "the detailed layout keeps its existing chart submenu" started.
+✔ Test "show details in the flyout opens the provider tab from the parent menu" passed after 1.756 seconds.
+✔ Test "synthetic open storage flyout proof" passed after 1.756 seconds.
+✔ Test "show details still selects its provider when a rebuild detached the clicked item" passed after 6.800 seconds.
+✔ Test "the row flyout carries the detail and leaves the parent menu alone" passed after 6.800 seconds.
+✔ Test "claude swap completion changes open menu readiness" passed after 6.800 seconds.
+◇ Test "status components change open menu readiness" started.
+✔ Test "codex cost history preserves identity when hidden project nested data changes" passed after 6.800 seconds.
+◇ Test "codex cost history preserves identity when visible project nested data changes" started.
+✔ Test "a reopened flyout rebuilds only when its provider's data changed" passed after 6.825 seconds.
+✔ Test "an open flyout refreshes when only storage presentation changes" passed after 6.825 seconds.
+✔ Test "the detailed layout keeps its existing chart submenu" passed after 6.825 seconds.
+✔ Test "status components change open menu readiness" passed after 0.931 seconds.
+◇ Test "project source changes open menu readiness" started.
+✔ Test "codex cost history preserves identity when visible project nested data changes" passed after 0.931 seconds.
+◇ Test "codex cost history rebuilds when daily cost changes" started.
+✔ Test "project source changes open menu readiness" passed after 1.698 seconds.
+◇ Test "status submenu link stays scoped to its provider" started.
+✔ Test "codex cost history rebuilds when daily cost changes" passed after 1.725 seconds.
+◇ Test "hydrated codex cost history stores the same fingerprint as refresh" started.
+✔ Test "status submenu link stays scoped to its provider" passed after 0.136 seconds.
+◇ Test "storage native row preserves its plain menu title" started.
+✔ Test "clicking show details after the chart closed selects the provider through the menu lifecycle" passed after 10.417 seconds.
+✔ Suite OverviewProviderFlyoutTests passed after 10.417 seconds.
+✔ Test "hydrated codex cost history stores the same fingerprint as refresh" passed after 0.960 seconds.
+✔ Suite StatusMenuCodexCostHistoryRefreshTests passed after 10.419 seconds.
+✔ Test "storage native row preserves its plain menu title" passed after 0.904 seconds.
+◇ Test "open parent menu defers data rebuild until parent tracking ends" started.
+✔ Test "open parent menu defers data rebuild until parent tracking ends" passed after 0.852 seconds.
+◇ Test "open hosted submenu rebuilds from unavailable placeholder when data arrives" started.
+✔ Test "open hosted submenu rebuilds from unavailable placeholder when data arrives" passed after 0.792 seconds.
+◇ Test "open hydrated provider submenu preserves identity across refresh" started.
+✔ Test "open hydrated provider submenu preserves identity across refresh" passed after 3.206 seconds.
+◇ Test "hosted chart items size to the displayed view without a throwaway controller" started.
+✔ Test "hosted chart items size to the displayed view without a throwaway controller" passed after 2.408 seconds.
+◇ Test "utilization chart invalidates when active account changes" started.
+✔ Test "utilization chart invalidates when active account changes" passed after 0.848 seconds.
+◇ Test "active saved quota keeps utilization history accessible through submenu refresh" started.
+✔ Test "active saved quota keeps utilization history accessible through submenu refresh" passed after 0.809 seconds.
+✔ Suite StatusMenuHostedSubmenuRefreshTests passed after 19.391 seconds.
+✔ Test run with 23 tests in 3 suites passed after 19.391 seconds.

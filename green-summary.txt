@@ -1,0 +1,20 @@
+◇ Test run started.
+◇ Suite OverviewProviderFlyoutTests started.
+◇ Test "show details in the flyout opens the provider tab from the parent menu" started.
+◇ Test "the row flyout carries the detail and leaves the parent menu alone" started.
+◇ Test "an open flyout refreshes when only storage presentation changes" started.
+◇ Test "synthetic open storage flyout proof" started.
+◇ Test "a reopened flyout rebuilds only when its provider's data changed" started.
+◇ Test "the detailed layout keeps its existing chart submenu" started.
+◇ Test "show details still selects its provider when a rebuild detached the clicked item" started.
+◇ Test "clicking show details after the chart closed selects the provider through the menu lifecycle" started.
+✔ Test "the row flyout carries the detail and leaves the parent menu alone" passed after 2.507 seconds.
+✔ Test "show details in the flyout opens the provider tab from the parent menu" passed after 2.507 seconds.
+✔ Test "a reopened flyout rebuilds only when its provider's data changed" passed after 5.699 seconds.
+✔ Test "an open flyout refreshes when only storage presentation changes" passed after 5.699 seconds.
+✔ Test "the detailed layout keeps its existing chart submenu" passed after 5.699 seconds.
+✔ Test "show details still selects its provider when a rebuild detached the clicked item" passed after 5.724 seconds.
+✔ Test "synthetic open storage flyout proof" passed after 5.724 seconds.
+✔ Test "clicking show details after the chart closed selects the provider through the menu lifecycle" passed after 5.955 seconds.
+✔ Suite OverviewProviderFlyoutTests passed after 5.955 seconds.
+✔ Test run with 8 tests in 1 suite passed after 5.956 seconds.

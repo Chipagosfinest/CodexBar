@@ -1,0 +1,23 @@
+◇ Test run started.
+◇ Suite OverviewProviderFlyoutTests started.
+◇ Test "synthetic open storage flyout proof" started.
+◇ Test "an open flyout refreshes when only storage presentation changes" started.
+◇ Test "clicking show details after the chart closed selects the provider through the menu lifecycle" started.
+◇ Test "the row flyout carries the detail and leaves the parent menu alone" started.
+◇ Test "show details still selects its provider when a rebuild detached the clicked item" started.
+◇ Test "the detailed layout keeps its existing chart submenu" started.
+◇ Test "show details in the flyout opens the provider tab from the parent menu" started.
+◇ Test "a reopened flyout rebuilds only when its provider's data changed" started.
+✘ Test "an open flyout refreshes when only storage presentation changes" recorded an issue at OverviewProviderFlyoutTests.swift:148:13: Expectation failed: refreshed !== previous
+✘ Test "an open flyout refreshes when only storage presentation changes" recorded an issue at OverviewProviderFlyoutTests.swift:148:13: Expectation failed: refreshed !== previous
+✘ Test "an open flyout refreshes when only storage presentation changes" recorded an issue at OverviewProviderFlyoutTests.swift:148:13: Expectation failed: refreshed !== previous
+✔ Test "a reopened flyout rebuilds only when its provider's data changed" passed after 6.126 seconds.
+✔ Test "show details in the flyout opens the provider tab from the parent menu" passed after 6.126 seconds.
+✔ Test "synthetic open storage flyout proof" passed after 6.126 seconds.
+✔ Test "the detailed layout keeps its existing chart submenu" passed after 6.126 seconds.
+✔ Test "show details still selects its provider when a rebuild detached the clicked item" passed after 6.126 seconds.
+✔ Test "the row flyout carries the detail and leaves the parent menu alone" passed after 6.126 seconds.
+✘ Test "an open flyout refreshes when only storage presentation changes" failed after 6.126 seconds with 3 issues.
+✔ Test "clicking show details after the chart closed selects the provider through the menu lifecycle" passed after 6.354 seconds.
+✘ Suite OverviewProviderFlyoutTests failed after 6.354 seconds with 3 issues.
+✘ Test run with 8 tests in 1 suite failed after 6.354 seconds with 3 issues.
