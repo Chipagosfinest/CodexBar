@@ -218,6 +218,13 @@ final class WidgetHostProofTests: XCTestCase {
             XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 90), .completed, "Widget never showed the 39% headline")
         }
         waitForData()
+        // Best effort: these first-run system banners overlap the widget's right edge.
+        for banner in notificationCenter.groups.matching(identifier: "AXNotificationListItems").firstMatch.groups.allElementsBoundByIndex {
+            banner.hover()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+            let close = banner.buttons.firstMatch
+            if close.exists, close.isHittable { close.click() }
+        }
         self.attach("installed-small", app: notificationCenter)
         for (family, sizeCheck) in [
             ("Medium", { (f: CGRect) in (320...380).contains(f.width) && (140...200).contains(f.height) }),
@@ -241,6 +248,17 @@ final class WidgetHostProofTests: XCTestCase {
             RunLoop.current.run(until: Date().addingTimeInterval(3))
             self.attach("installed-\(family.lowercased())", app: notificationCenter)
         }
+        // A real click on the widget's own intent button shows a second provider's bundled mark.
+        let previous = installed.buttons["Switch to z.ai / GLM"]
+        XCTAssertTrue(previous.waitForExistence(timeout: 5), "Large widget lacks its provider pager")
+        previous.click()
+        let switched = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            installed.debugDescription.contains("z.ai / GLM, selected")
+                || installed.debugDescription.contains("value: z.ai / GLM")
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [switched], timeout: 30), .completed, "Pager did not switch provider")
+        RunLoop.current.run(until: Date().addingTimeInterval(2))
+        self.attach("installed-large-second-provider", app: notificationCenter)
     }
 
     private func waitForNotificationCenterIdentifier() -> String? {

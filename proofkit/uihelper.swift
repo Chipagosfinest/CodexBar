@@ -98,6 +98,28 @@ case "tree":  // pid, optional attribute (AXExtrasMenuBar or AXWindows)
     } else if let bar = attr(app, "AXExtrasMenuBar") {
         print(json(describe(bar as! AXUIElement, 0, limit)))
     } else { print("{}") }
+case "axpress": // pid y: AXPress on the root-menu item at this y, the accessibility activation path.
+    guard let bar = attr(AXUIElementCreateApplication(pid_t(args[2])!), "AXExtrasMenuBar") else { print("nobar"); exit(0) }
+    func items(_ el: AXUIElement) -> [AXUIElement] {
+        var out: [AXUIElement] = []
+        for k in attr(el, "AXChildren") as? [AXUIElement] ?? [] {
+            if (attr(k, "AXRole") as? String) == "AXMenuItem" { out.append(k) }
+            else { out += items(k) }
+        }
+        return out
+    }
+    let want = Double(args[3])!
+    for it in items(bar as! AXUIElement) {
+        var p = CGPoint.zero
+        if let v = attr(it, "AXPosition") { AXValueGetValue(v as! AXValue, .cgPoint, &p) }
+        if abs(Double(p.y) - want) < 1 {
+            print(AXUIElementPerformAction(it, "AXPress" as CFString).rawValue)
+            exit(0)
+        }
+    }
+    print("noitem")
+case "scroll": // Lines; negative moves the content up, as a real wheel does.
+    CGEvent(scrollWheelEvent2Source: nil, units: .line, wheelCount: 1, wheel1: Int32(args[2])!, wheel2: 0, wheel3: 0)?.post(tap: .cghidEventTap)
 case "click": click(Double(args[2])!, Double(args[3])!)
 case "move": glide(Double(args[2])!, Double(args[3])!, args.count > 4 ? Int(args[4])! : 20)
 case "cmd-r": key(15, .maskCommand)

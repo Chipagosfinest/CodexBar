@@ -448,6 +448,19 @@ class App:
         time.sleep(0.4)
         self.ui('click', cx, cy)
 
+    def scroll_to(self, pred, what):
+        """Real wheel events over the menu until the wanted row's centre is onscreen. Fails rather than clicking off-display."""
+        menu = self.menus()[-1]
+        self.ui('move', menu['x'] + menu['w'] / 2, menu['y'] + menu['h'] / 2, 10)
+        s = self.screen()
+        for _ in range(60):
+            row = next((r for r in self.menu_items() if r['w'] and pred(r)), None)
+            if row and 30 < row['y'] + row['h'] / 2 < min(s['h'] - 90, menu['y'] + menu['h'] - 24):
+                return row
+            self.ui('scroll', -5)
+            time.sleep(0.15)
+        raise AssertionError(f'could not scroll {what} onscreen')
+
     def win_rows(self):
         """Every node in the app's ordinary windows, flattened, with frames, for Settings and the share preview."""
         out = []

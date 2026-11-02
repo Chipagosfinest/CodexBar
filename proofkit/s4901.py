@@ -33,7 +33,7 @@ if not pts:
 
 
 def texts():
-    return [r['label'] for r in app.rows() if r['role'] == 'AXStaticText' and r['w']]
+    return [r['label'] for r in app.rows() if r['w'] and (r['role'] == 'AXStaticText' or (r['role'] == 'AXUnknown' and r['label'].endswith('%')))]
 
 
 rest = texts()
@@ -59,8 +59,10 @@ app.shot('c5-pointer-left-chart', 'selection clears on exit')
 steps['c5-pointer-left-chart'] = {'texts': texts()}
 check('leaving the chart clears the selection', texts() == rest or any(t.startswith('Today') for t in texts()), texts()[:8])
 if len(steps) >= 3:
-    legends = [tuple(t for t in steps[k]['texts'] if '%' in t) for k in steps if k != 'c5-pointer-left-chart']
-    check('legend shares update between hovered days', len(set(legends)) > 1 or tuple(t for t in rest if '%' in t) not in legends, legends)
+    legends = [tuple(t for t in steps[k]['texts'] if t.endswith('%')) for k in steps if k != 'c5-pointer-left-chart']
+    resting = tuple(t for t in rest if t.endswith('%'))
+    check('legend shares update to the hovered day', all(legends) and (len(set(legends)) > 1 or resting not in legends), {'rest': resting, 'hovered': legends})
+    check('the legend returns to range shares on exit', tuple(t for t in texts() if t.endswith('%')) == resting, resting)
 (OUT / 'hover-readouts.json').write_text(json.dumps(steps, indent=1))
 say(f'recording exit={rec.wait(timeout=80)}')
 app.quit()

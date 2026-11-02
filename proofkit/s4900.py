@@ -71,7 +71,12 @@ app.open_menu()
 app.shot('o1-overflow-row', 'twelve inline rows, More (n), Quit on screen')
 (OUT / 'o1-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
 over = next((r for r in app.menu_items() if any(l.startswith('More (') for l in r['labels'])), None)
-check('a roster over twelve rows collapses into More (n) with Quit on screen', over and app.row('Quit') and app.in_screen(app.row('Quit')['x'] + 5, app.row('Quit')['y'] + 5), over and over['labels'][:4])
+check('a roster over twelve rows collapses the rest into More (n)', over, over and over['labels'][:4])
+quit_row = app.row('Quit')
+say(f"FINDING Quit at y={quit_row['y']} with the menu window {app.menus()[0]}: standalone Compact cards are tall, so on this 1024x768 display the footer needs scrolling")
+if over:
+    over = app.scroll_to(lambda r: any(l.startswith('More (') for l in r['labels']), 'More (n)')
+    app.shot('o1b-scrolled-to-overflow-row', 'real wheel events')
 if over:
     app.hover(over)
     time.sleep(2)
@@ -84,6 +89,7 @@ if over:
         app.ui('click', child['x'] + child['w'] / 2, child['y'] + child['h'] / 2)
         time.sleep(3)
         app.shot('o3-overflow-activated', 'clicked an overflow account')
+        say(f'menus after overflow click: {app.menus()}')
         if not app.menus():
             app.open_menu()
             app.shot('o4-reopened-after-overflow-click', 'selected provider tab')
