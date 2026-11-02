@@ -518,25 +518,27 @@ struct TileHeader: View {
     var size: WidgetTileSize = .medium
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            HStack(spacing: 7) {
-                if let provider = self.provider.firstPartyProvider {
-                    ProviderMark(
-                        provider: provider,
-                        isSelected: true,
-                        size: self.size == .small ? WidgetLayout.markSizeSmall : WidgetLayout.markSizeRegular)
-                }
+        HStack(spacing: 7) {
+            if let provider = self.provider.firstPartyProvider {
+                ProviderMark(
+                    provider: provider,
+                    isSelected: true,
+                    size: self.size == .small ? WidgetLayout.markSizeSmall : WidgetLayout.markSizeRegular)
+            }
+            // Small tiles stack freshness under the name, beside the mark, which leaves room for the
+            // quota lanes below the headline.
+            VStack(alignment: .leading, spacing: 0) {
                 Text(self.displayName)
                     .font(.subheadline.weight(.semibold))
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.85)
-                    .layoutPriority(1)
-                Spacer(minLength: 0)
-                if self.size != .small {
+                    .lineLimit(self.size == .small ? 1 : 2)
+                    .minimumScaleFactor(self.size == .small ? 0.7 : 0.85)
+                if self.size == .small {
                     FreshnessLabel(updatedAt: self.updatedAt)
                 }
             }
-            if self.size == .small {
+            .layoutPriority(1)
+            Spacer(minLength: 0)
+            if self.size != .small {
                 FreshnessLabel(updatedAt: self.updatedAt)
             }
         }
