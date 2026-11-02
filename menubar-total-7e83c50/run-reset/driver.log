@@ -1,0 +1,18 @@
+    0.69s banner on display: [{'w': 1024, 'id': 28, 'name': '', 'y': 722, 'h': 46, 'x': 0, 'layer': 1000}]
+    4.75s all 23 hostnames resolve only to loopback after 5s
+    8.21s fixture answers all 23 hostnames over trusted TLS
+    8.21s phase -> reset
+    8.50s launched reset pid=2244
+   11.97s SERVED codex {"primary_window": {"used_percent": 30, "reset_at": 1793622674, "limit_window_seconds": 18000}, "secondary_window": {"used_percent": 100, "reset_at": 1793615545, "limit_window_seconds": 604800}}
+   12.80s SERVED codex {"primary_window": {"used_percent": 30, "reset_at": 1793622675, "limit_window_seconds": 18000}, "secondary_window": {"used_percent": 100, "reset_at": 1793615545, "limit_window_seconds": 604800}}
+   33.26s CHECK PASS manual refresh: Codex at 100% weekly warns before its reset Codex near limit, 0% left, All providers, average 45% left
+   34.97s SHOT reset-1-warning menus=[] requests=34 
+  153.32s CHECK PASS manual refresh: the warning clears after the reset from the clock alone, with no new request requests 2->2 'Codex near limit, 0% left, All providers, average 45% left' -> 'All providers, average 62% left'
+  154.79s SHOT reset-2-cleared menus=[] requests=34 
+  154.88s reset stopped
+  156.43s provider requests answered 200 by the fixture: 6 of 11
+  156.43s CHECK PASS app reached the fixture 6
+  156.43s resolver watch (sampled): 30 checks, 0 escapes
+  156.43s CHECK PASS no sampled resolver escape []
+  156.43s checks: 4 passed, 0 failed
+  156.43s done

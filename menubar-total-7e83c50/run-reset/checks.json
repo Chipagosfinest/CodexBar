@@ -1,0 +1,22 @@
+[
+ {
+  "check": "manual refresh: Codex at 100% weekly warns before its reset",
+  "pass": true,
+  "detail": "Codex near limit, 0% left, All providers, average 45% left"
+ },
+ {
+  "check": "manual refresh: the warning clears after the reset from the clock alone, with no new request",
+  "pass": true,
+  "detail": "requests 2->2 'Codex near limit, 0% left, All providers, average 45% left' -> 'All providers, average 62% left'"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "6"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

@@ -1,0 +1,132 @@
+[
+ {
+  "check": "head: installed app binary equals package manifest",
+  "pass": true,
+  "detail": "6020e30bf89d4177a847c1a0ee7f16009b8284fb68e8b3d7d653e3007c995403 vs 6020e30bf89d4177a847c1a0ee7f16009b8284fb68e8b3d7d653e3007c995403"
+ },
+ {
+  "check": "an existing install is unchanged: no total without opting in",
+  "pass": true,
+  "detail": "CodexBar"
+ },
+ {
+  "check": "upgrade from v0.83.0 keeps a saved Highest usage choice and shows no total",
+  "pass": true,
+  "detail": "highestUsage CodexBar"
+ },
+ {
+  "check": "the v0.83.0 release still runs with the new saved value and shows no total",
+  "pass": true,
+  "detail": "CodexBar"
+ },
+ {
+  "check": "returning to head restores the total from the same saved value",
+  "pass": true,
+  "detail": "All providers, average 62% left"
+ },
+ {
+  "check": "manual refresh: Codex at 100% weekly warns before its reset",
+  "pass": false,
+  "detail": "All providers, average 62% left"
+ },
+ {
+  "check": "manual refresh: the warning clears at reset from the clock alone, with no new request",
+  "pass": true,
+  "detail": "requests 12->12 All providers, average 62% left"
+ },
+ {
+  "check": "light: calm total averages the four quota providers and skips balance-only DeepSeek",
+  "pass": true,
+  "detail": "All providers, average 62% left"
+ },
+ {
+  "check": "light: every quota provider reached the fixture",
+  "pass": true,
+  "detail": "[{'phase': 'light-calm', 'host': 'api.z.ai', 'path': '/api/monitor/usage/model-usage', 'status': 404}, {'phase': 'light-calm', 'host': 'api.z.ai', 'path': '/api/monitor/usage/model-usage', 'status': 404}, {'phase': 'light-calm', 'host': 'api.anthropic.com', 'path': '/api/oauth/profile', 'status': 200}, {'phase': 'light-calm', 'host': 'api.anthropic.com', 'path': '/api/oauth/usage', 'status': 200}, {'phase': 'light-calm', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'light-calm', 'host': 'chatgpt.com', 'path': '/backend-api/wham/rate-limit-reset-credits', "
+ },
+ {
+  "check": "light: a run-out forecast within the hour warns even with plenty left",
+  "pass": true,
+  "detail": "z.ai / GLM near limit, 28% left, All providers, average 62% left"
+ },
+ {
+  "check": "light: a session forecast warns although the weekly window would last",
+  "pass": true,
+  "detail": "Claude near limit, 30% left, All providers, average 53% left"
+ },
+ {
+  "check": "light: a live quota change raises the warning naming Claude with the total kept",
+  "pass": true,
+  "detail": "Claude near limit, 8% left, All providers, average 48% left"
+ },
+ {
+  "check": "light: the tighter of two near-limit providers leads, and both are announced",
+  "pass": true,
+  "detail": "z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left"
+ },
+ {
+  "check": "light: tightest provider is announced first",
+  "pass": true,
+  "detail": "z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left"
+ },
+ {
+  "check": "light: recovery returns to the calm total",
+  "pass": true,
+  "detail": "All providers, average 62% left"
+ },
+ {
+  "check": "Settings shows All providers (average) in the Combined icon source row itself",
+  "pass": true,
+  "detail": "['Codex \u2014 Provider service status: Operational/Codex \u2014 Provider service status: Operational', '/None', '/None', 'Claude \u2014 Provider service status: Operational/Claude \u2014 Provider service status: Operational', 'Combined icon source/Combined icon source', \"Shows the average of each provider's tightest limit, and warns with the provider's logo when one is close to its limit./Shows the average of each provider's tightest limit, and warns with the provider's logo when one is close to its limit.\", 'All providers (average)/None']"
+ },
+ {
+  "check": "dark: calm total averages the four quota providers and skips balance-only DeepSeek",
+  "pass": true,
+  "detail": "All providers, average 62% left"
+ },
+ {
+  "check": "dark: every quota provider reached the fixture",
+  "pass": true,
+  "detail": "[{'phase': 'dark-calm', 'host': 'api.z.ai', 'path': '/api/monitor/usage/model-usage', 'status': 404}, {'phase': 'dark-calm', 'host': 'chatgpt.com', 'path': '/backend-api/wham/rate-limit-reset-credits', 'status': 404}, {'phase': 'dark-calm', 'host': 'api.anthropic.com', 'path': '/api/oauth/profile', 'status': 200}, {'phase': 'dark-calm', 'host': 'api.anthropic.com', 'path': '/api/oauth/usage', 'status': 200}, {'phase': 'dark-calm', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'dark-calm', 'host': 'chatgpt.com', 'path': '/backend-api/wham/rate-limit-reset-c"
+ },
+ {
+  "check": "dark: a run-out forecast within the hour warns even with plenty left",
+  "pass": true,
+  "detail": "z.ai / GLM near limit, 28% left, All providers, average 62% left"
+ },
+ {
+  "check": "dark: a session forecast warns although the weekly window would last",
+  "pass": true,
+  "detail": "Claude near limit, 30% left, All providers, average 53% left"
+ },
+ {
+  "check": "dark: a live quota change raises the warning naming Claude with the total kept",
+  "pass": true,
+  "detail": "Claude near limit, 8% left, All providers, average 48% left"
+ },
+ {
+  "check": "dark: the tighter of two near-limit providers leads, and both are announced",
+  "pass": true,
+  "detail": "z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left"
+ },
+ {
+  "check": "dark: tightest provider is announced first",
+  "pass": true,
+  "detail": "z.ai / GLM near limit, 3% left, Claude near limit, 8% left, All providers, average 42% left"
+ },
+ {
+  "check": "dark: recovery returns to the calm total",
+  "pass": true,
+  "detail": "All providers, average 62% left"
+ },
+ {
+  "check": "app reached the fixture",
+  "pass": true,
+  "detail": "144"
+ },
+ {
+  "check": "no sampled resolver escape",
+  "pass": true,
+  "detail": "[]"
+ }
+]

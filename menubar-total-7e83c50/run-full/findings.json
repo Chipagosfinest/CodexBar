@@ -1,0 +1,7 @@
+[
+ {
+  "finding": "Claude server failures stop its warning",
+  "as_expected": true,
+  "detail": "z.ai / GLM near limit, 3% left, All providers, average 53% left"
+ }
+]
