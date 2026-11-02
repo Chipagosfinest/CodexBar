@@ -1,16 +1,16 @@
 name: UI proof
 on:
   push:
-    branches: [proof/ui-lane]
+    branches: [proof/menubar-total]
     paths-ignore: [proofkit/packages.txt, .github/workflows/ui-package.yml]
 permissions:
   contents: read
   actions: read
 env:
-  PROOF_PR: "4889"
-  PROOF_SHA: 2e2b001f0da8a1ca606db141f53b4e8188a98359
-  PROOF_SCENARIO: s4889.py
-  PACKAGE_RUN: "41364828152"
+  PROOF_PR: "menubar-total"
+  PROOF_SHA: 5ab16b0706600f0900ac1bcd84cee639b5cbd094
+  PROOF_SCENARIO: smenubar.py
+  PACKAGE_RUN: ""
 jobs:
   package:
     runs-on: macos-26
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         if: env.PACKAGE_RUN == ''
         with:
-          repository: steipete/CodexBar
+          repository: Chipagosfinest/CodexBar
           ref: ${{ env.PROOF_SHA }}
           path: product
           persist-credentials: false
@@ -46,7 +46,7 @@ jobs:
   drive:
     needs: package
     runs-on: macos-26
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with: { persist-credentials: false }
