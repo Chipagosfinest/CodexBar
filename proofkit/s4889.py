@@ -56,7 +56,8 @@ def open_pane(app):
     app.open_menu()
     opened = False
     for attempt in range(2):
-        target = next(r for r in app.menu_items() if any(l.startswith('Settings') for l in r['labels']) and r['y'] > 100)
+        # A one-provider menu can run past the display, so its footer is scrolled into the menu's visible part.
+        target = app.scroll_to(lambda r: any(l.startswith('Settings') for l in r['labels']) and r['y'] > 30, 'Settings row')
         app.click_row(target)
         opened = app.wait(lambda: any(w['layer'] == 0 and w['w'] > 300 for w in app.windows()), 'Settings window', 12)
         if opened:
