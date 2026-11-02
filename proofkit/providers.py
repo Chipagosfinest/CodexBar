@@ -3,6 +3,7 @@ from datetime import timedelta
 import kit
 from kit import ROUTES, epoch, iso, state
 
+EXTRA_CLAUDE = {}
 PERCENTS = {'codex': (92, 40), 'claude': (35, 22), 'commandcode': (55, 30), 'kimi': (15, 12), 'zai': (70, 5), 'openrouter': 60}
 
 
@@ -16,7 +17,7 @@ def codex(_):
 def claude(_):
     five, week = PERCENTS['claude']
     return 200, {'five_hour': {'utilization': five, 'resets_at': iso(timedelta(hours=3))},
-                 'seven_day': {'utilization': week, 'resets_at': iso(timedelta(days=5))}}
+                 'seven_day': {'utilization': week, 'resets_at': iso(timedelta(days=5))}, **EXTRA_CLAUDE}
 
 
 def claude_profile(_):

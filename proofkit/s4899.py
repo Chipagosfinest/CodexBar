@@ -80,7 +80,7 @@ def labels_now():
     return [r['labels'][:4] for r in app.menu_items() if r['labels']]
 
 
-rec = record('interaction', 110)
+rec = record('interaction', 70)
 time.sleep(2)
 app.open_menu()
 app.shot('i1-compact-rows', 'urgency sorted, default never changed')
@@ -118,44 +118,80 @@ time.sleep(1)
 app.open_menu()
 app.shot('i6-reopened-after-normal-refresh', 'resorted; kimi moved to attention row')
 (OUT / 'i6-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
-att = app.row('Kimi Code')
-kimi_rows = [x for x in app.menu_items() if any('Kimi Code' in l and 'Moonshot' not in l for l in x['labels'])]
-say(f'Kimi row: {kimi_rows[:1]}')
-if kimi_rows:
-    # Reach the row with the keyboard, as the review asks, then press Return with no pointer on it.
-    app.hover(kimi_rows[0])
-    time.sleep(1.2)
-    app.shot('i7-hover-single-attention-row')
-    app.ui('return')
-    time.sleep(2.5)
-    app.shot('i8-return-on-single-attention-row', 'keyboard activation of the single attention row')
-    say('menus after Return: ' + str(app.menus()))
-    (OUT / 'i8-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
-    app.close_menu()
-    time.sleep(1)
+z = app.row('z.ai / GLM, 5-hour')
+assert z, 'no z.ai row'
+app.hover(z)
+time.sleep(1)
+app.shot('i7-zai-row-highlighted', 'pointer only moved; no click')
+app.ui('return')
+time.sleep(2.5)
+app.shot('i8-return-on-compact-row', 'keyboard activation of a plain Compact row')
+if not app.menus():
     app.open_menu()
-    app.shot('i9-reopen-after-return', 'which tab does the app show after Return')
-    (OUT / 'i9-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
-    ov = find(app.rows(), 'Overview', 'AXButton')
-    app.ui('click', ov[0]['x'] + ov[0]['w'] / 2, ov[0]['y'] + ov[0]['h'] / 2)
-    time.sleep(2)
-    rows = [x for x in app.menu_items() if any('Kimi Code' in l and 'Moonshot' not in l for l in x['labels'])]
-    if rows:
-        app.click_row(rows[0])
-        time.sleep(2.5)
-        app.shot('i10-pointer-click-attention-row')
-        (OUT / 'i10-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+app.shot('i9-provider-tab-after-return')
+(OUT / 'i9-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
 say(f'recording exit={rec.wait(timeout=130)}')
 app.quit()
 kit.defaults_snapshot('interact-after-quit')
 
-say('=== all selected providers failing on a fresh launch')
+
+def cold(name, config, wait=25):
+    """A fresh launch with no retained usage, so an error is not gated behind a cached snapshot."""
+    subprocess.run(['rm', '-rf', str(kit.HOME / 'Library/Caches/CodexBar'), str(kit.HOME / 'Library/Application Support/CodexBar'),
+                    str(kit.HOME / 'Library/Application Support/com.steipete.codexbar')])
+    kit.write_config(config)
+    kit.defaults_reset()
+    providers.overview_defaults()
+    a = App(INSTALLED, HELPER, name)
+    time.sleep(wait)
+    return a
+
+
+say('=== exactly one provider failing, cold launch')
+providers.PERCENTS['claude'] = (35, 22)
+providers.PERCENTS['codex'] = (92, 40)
+state['kimi_expired'] = True
+state['phase'] = 'kimi-expired'
+app = cold('attention', providers.CONFIG)
+rec = record('single-attention-row', 45)
+time.sleep(2)
+app.open_menu()
+app.shot('a1-single-attention-row', 'expired Kimi key')
+rows = app.menu_items()
+(OUT / 'a1-rows.json').write_text(json.dumps(rows, indent=1))
+att = next((r for r in rows if r['y'] > 123 and any('Kimi Code' in l for l in r['labels'])), None)
+say(f'attention row: {att}')
+if att:
+    app.hover(att)
+    time.sleep(1.2)
+    app.shot('a2-attention-highlighted', 'pointer on the row, no click')
+    app.ui('return')
+    time.sleep(2.5)
+    app.shot('a3-after-return', 'keyboard activation')
+    say('menus after Return: ' + json.dumps(app.menus()))
+    if not app.menus():
+        app.open_menu()
+        app.shot('a4-reopened-after-return', 'which tab did Return select?')
+    tabs = find(app.rows(), 'Overview', 'AXButton')
+    (OUT / 'a4-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+    app.ui('click', tabs[0]['x'] + tabs[0]['w'] / 2, tabs[0]['y'] + tabs[0]['h'] / 2)
+    time.sleep(2)
+    rows = app.menu_items()
+    att = next((r for r in rows if r['y'] > 123 and any('Kimi Code' in l for l in r['labels'])), None)
+    if att:
+        app.click_row(att)
+        time.sleep(2.5)
+        app.shot('a5-pointer-click-attention-row', 'pointer activation')
+        (OUT / 'a5-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
+say(f'recording exit={rec.wait(timeout=60)}')
+app.quit()
+
+say('=== every selected provider failing, cold launch')
 state['all_fail'] = True
-subprocess.run(['rm', '-rf', str(kit.HOME / 'Library/Caches/CodexBar'), str(kit.HOME / 'Library/Application Support/CodexBar')])
-app = App(INSTALLED, HELPER, 'allfail')
-time.sleep(25)
+state['phase'] = 'all-fail'
+app = cold('allfail', [p for p in providers.CONFIG if p['id'] != 'deepseek'])
 app.open_menu()
 app.shot('e1-all-providers-failed', 'advertised attention rows when nothing has cached usage')
-(OUT / 'e1-labels.json').write_text(json.dumps([r['label'] for r in app.rows() if r['label']], indent=1))
+(OUT / 'e1-rows.json').write_text(json.dumps(app.menu_items(), indent=1))
 app.quit()
 kit.finish()
