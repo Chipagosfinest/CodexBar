@@ -1023,6 +1023,7 @@
 "Usage history (%d days)" = "Usage history (%d days)";
 "%d percent remaining" = "%d percent remaining";
 "Unknown" = "Unknown";
+"empty ~%@" = "empty ~%@";
 "stale data" = "stale data";
 "No credits history data." = "No credits history data.";
 "No credits history data available." = "No credits history data available.";

@@ -62,7 +62,9 @@ extension StatusItemController {
             Self.usageHistoryChartID,
             Self.storageBreakdownID,
             Self.statusComponentsID,
+            Self.overviewProviderDetailID,
         ]
+        if menu is OverviewProviderDetailMenu { return true }
         return menu.items.contains { item in
             guard let id = item.representedObject as? String else { return false }
             return ids.contains(id)
@@ -145,6 +147,10 @@ extension StatusItemController {
             } else {
                 false
             }
+        case Self.overviewProviderDetailID:
+            identity.provider.map {
+                self.appendOverviewProviderDetail(to: menu, provider: $0, width: width)
+            } ?? false
         default:
             false
         }
@@ -226,6 +232,8 @@ extension StatusItemController {
 
     private func hostedSubviewIdentity(for menu: NSMenu)
     -> HostedSubviewIdentity? {
+        // Its rows are built with the flyout, and "Show details" carries a row ID rather than a chart ID.
+        if menu is OverviewProviderDetailMenu, menu.items.first?.view != nil { return nil }
         for item in menu.items {
             guard let chartID = item.representedObject as? String else { continue }
             let providerRawValue = self.hostedSubviewProviderRawValue(for: item)

@@ -880,6 +880,7 @@
 "Usage history (%d days)" = "Historial de uso (%d días)";
 "%d percent remaining" = "%d por cento restante";
 "Unknown" = "Descoñecido";
+"empty ~%@" = "baleiro ~%@";
 "stale data" = "datos obsoletos";
 "No credits history data available." = "Non hai datos dispoñibles do historial de créditos.";
 "Credits history chart" = "Gráfica do historial de créditos";

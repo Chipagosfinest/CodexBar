@@ -1028,6 +1028,7 @@
 "Usage history (%d days)" = "使用履歴（%d日間）";
 "%d percent remaining" = "残り %d パーセント";
 "Unknown" = "不明";
+"empty ~%@" = "枯渇 ~%@";
 "stale data" = "古いデータ";
 "No credits history data." = "クレジット履歴データがありません。";
 "No credits history data available." = "利用可能なクレジット履歴データがありません。";

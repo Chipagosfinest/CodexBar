@@ -995,6 +995,7 @@
 "Usage history (%d days)" = "用量记录（%d 天）";
 "%d percent remaining" = "剩余 %d%%";
 "Unknown" = "未知";
+"empty ~%@" = "用尽 ~%@";
 "stale data" = "数据过旧";
 "No credits history data available." = "暂无可用额度记录数据。";
 "Credits history chart" = "额度记录图表";

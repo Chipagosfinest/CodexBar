@@ -44,6 +44,8 @@ struct UsageMenuCardView: View {
             var pacePercent: Double?
             /// True when detailLeftText/detailRightText came from a pace forecast.
             let detailIsPaceDerived: Bool
+            /// Seconds until a pace forecast expects this limit to run out before its reset; nil when it lasts.
+            let exhaustionETASeconds: TimeInterval?
             let paceOnTop: Bool
             let warningMarkerPercents: [Double]
             let workdayMarkerPercents: [Double]
@@ -65,6 +67,7 @@ struct UsageMenuCardView: View {
                 detailRightText: String?,
                 pacePercent: Double?,
                 detailIsPaceDerived: Bool = false,
+                exhaustionETASeconds: TimeInterval? = nil,
                 paceOnTop: Bool,
                 warningMarkerPercents: [Double] = [],
                 workdayMarkerPercents: [Double] = [],
@@ -84,6 +87,7 @@ struct UsageMenuCardView: View {
                 self.detailRightText = detailRightText
                 self.pacePercent = pacePercent
                 self.detailIsPaceDerived = detailIsPaceDerived
+                self.exhaustionETASeconds = exhaustionETASeconds
                 self.paceOnTop = paceOnTop
                 self.warningMarkerPercents = warningMarkerPercents
                 self.workdayMarkerPercents = workdayMarkerPercents
@@ -207,6 +211,8 @@ struct UsageMenuCardView: View {
     var layoutModel: Model?
     let width: CGFloat
     var planAction: (() -> Void)?
+    /// The Overview flyout has no scroll to spare, so a section that only repeats another one is left out.
+    var omitsRepeatedDetails = false
     @Environment(\.menuItemHighlighted) private var isHighlighted
     @Environment(\.menuCardRefreshMonitor) private var refreshMonitor
 
@@ -261,8 +267,12 @@ struct UsageMenuCardView: View {
             } else {
                 let hasUsage = liveModel.hasUsageContent
                 let hasCredits = liveModel.creditsText != nil
-                let hasProviderCost = liveModel.providerCost != nil
-                let hasCost = liveModel.tokenUsage != nil || hasProviderCost
+                let providerCost = self.omitsRepeatedDetails && liveModel.providerCostRepeatsCredits
+                    ? nil : liveModel.providerCost
+                let tokenUsage = self.omitsRepeatedDetails && liveModel.tokenUsageRepeatsDashboard
+                    ? nil : liveModel.tokenUsage
+                let hasProviderCost = providerCost != nil
+                let hasCost = tokenUsage != nil || hasProviderCost
 
                 VStack(alignment: .leading, spacing: 12) {
                     if hasUsage, !liveModel.creditsOnlyInlineUsageDashboard {
@@ -290,15 +300,15 @@ struct UsageMenuCardView: View {
                     if hasCredits, hasCost {
                         Divider()
                     }
-                    if let providerCost = liveModel.providerCost {
+                    if let providerCost {
                         ProviderCostContent(
                             section: providerCost,
                             progressColor: liveModel.progressColor)
                     }
-                    if hasProviderCost, liveModel.tokenUsage != nil {
+                    if hasProviderCost, tokenUsage != nil {
                         Divider()
                     }
-                    if let tokenUsage = liveModel.tokenUsage {
+                    if let tokenUsage {
                         TokenUsageSectionContent(
                             provider: liveModel.provider,
                             tokenUsage: tokenUsage,
@@ -1307,6 +1317,7 @@ extension UsageMenuCardView.Model {
                 detailRightText: tertiaryPaceDetail?.rightLabel,
                 pacePercent: tertiaryPaceDetail?.pacePercent,
                 detailIsPaceDerived: tertiaryPaceDetail?.isPaceDerived ?? false,
+                exhaustionETASeconds: tertiaryPaceDetail?.exhaustionETASeconds,
                 paceOnTop: tertiaryPaceDetail?.paceOnTop ?? true,
                 warningMarkerPercents: Self.warningMarkerPercents(
                     thresholds: input.quotaWarningThresholds[.weekly],
@@ -1522,6 +1533,7 @@ extension UsageMenuCardView.Model {
             detailRightText: paceDetail?.rightLabel,
             pacePercent: paceDetail?.pacePercent,
             detailIsPaceDerived: paceDetail?.isPaceDerived ?? false,
+            exhaustionETASeconds: paceDetail?.exhaustionETASeconds,
             paceOnTop: paceDetail?.paceOnTop ?? true,
             warningMarkerPercents: Self.warningMarkerPercents(
                 thresholds: input.quotaWarningThresholds[.weekly],

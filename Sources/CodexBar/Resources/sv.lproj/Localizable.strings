@@ -1277,6 +1277,7 @@
 "CodexBar will ask macOS Keychain for the Claude Code OAuth token so it can fetch your Claude usage. Click OK to continue." = "CodexBar kommer att be macOS Nyckelring om OAuth-token för Claude Code så att din Claude-användning kan hämtas. Klicka på OK för att fortsätta.";
 "Base URL for the LLM-API-Key-Proxy instance." = "Bas-URL för LLM-API-Key-Proxy-instansen.";
 "Paste a Cookie or Authorization header from %@." = "Klistra in en Cookie- eller Authorization-header från %@.";
+"empty ~%@" = "tomt ~%@";
 "stale data" = "inaktuella data";
 "Quota" = "Kvot";
 "Daily quota" = "Daglig kvot";

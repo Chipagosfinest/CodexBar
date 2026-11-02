@@ -1038,6 +1038,7 @@
 "Usage history (%d days)" = "تاریخچه استفاده (%d روز)";
 "%d percent remaining" = "%d درصد باقی مانده";
 "Unknown" = "نامشخص";
+"empty ~%@" = "خالی ~%@";
 "stale data" = "داده های کهنه";
 "No credits history data." = "هیچ داده ای درباره سابقه اعتباری وجود ندارد.";
 "No credits history data available." = "هیچ داده ای درباره تاریخچه اعتبارها در دسترس نیست.";

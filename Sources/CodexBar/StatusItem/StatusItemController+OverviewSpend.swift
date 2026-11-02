@@ -95,13 +95,15 @@ struct OverviewSpendSummaryCardView: View {
     let summary: OverviewSpendSummary
     let days: Int
     var topModels: [InlineUsageDashboardModel.TopModel] = []
+    var daily: OverviewDailySpend?
     let width: CGFloat
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: self.daily == nil ? 8 : 3) {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
+                // The share card's voice: the one figure on this surface allowed to be big.
                 Text(self.summary.primarySpendText)
-                    .font(.title3.weight(.semibold))
+                    .font(.system(.title, design: .rounded, weight: .semibold))
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -118,11 +120,14 @@ struct OverviewSpendSummaryCardView: View {
                         .lineLimit(1)
                 }
             }
-            if self.summary.isPartial {
+            if self.summary.isPartial, self.daily == nil {
                 Text(self.summary.providerCoverageText)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
+            }
+            if let daily {
+                OverviewDailySpendStrip(daily: daily)
             }
             if !self.topModels.isEmpty {
                 TopModelsContent(models: self.topModels, title: L("TOP MODELS"))
@@ -165,7 +170,10 @@ extension StatusItemController {
     }
 
     /// Top models across every provider, in the dashboard's own ranking. Empty when its history is incomplete.
-    func overviewTopModels(model: SpendDashboardModel) -> [InlineUsageDashboardModel.TopModel] {
+    func overviewTopModels(
+        model: SpendDashboardModel,
+        limit: Int = 3) -> [InlineUsageDashboardModel.TopModel]
+    {
         guard model.groups.count == 1, let group = model.groups.first,
               group.modelHistoryCompleteness == .complete
         else { return [] }
@@ -177,7 +185,7 @@ extension StatusItemController {
         guard total > 0 else { return [] }
         return rows
             .sorted { ($0.totalCost ?? 0, $0.totalTokens ?? 0) > ($1.totalCost ?? 0, $1.totalTokens ?? 0) }
-            .prefix(3)
+            .prefix(limit)
             .map { row in
                 InlineUsageDashboardModel.TopModel(
                     id: row.id,

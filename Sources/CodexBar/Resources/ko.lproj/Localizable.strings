@@ -1000,6 +1000,7 @@
 "Usage history (%d days)" = "사용 기록(%d일)";
 "%d percent remaining" = "%d퍼센트 남음";
 "Unknown" = "알 수 없음";
+"empty ~%@" = "소진 ~%@";
 "stale data" = "오래된 데이터";
 "No credits history data." = "크레딧 기록 데이터가 없습니다.";
 "No credits history data available." = "크레딧 기록 데이터가 없습니다.";

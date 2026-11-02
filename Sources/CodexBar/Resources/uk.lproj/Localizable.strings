@@ -1031,6 +1031,7 @@
 "Usage history (%d days)" = "Історія використання (%d днів)";
 "%d percent remaining" = "Залишилося %d відсотків";
 "Unknown" = "Невідомо";
+"empty ~%@" = "кінець ~%@";
 "stale data" = "застарілі дані";
 "No credits history data." = "Немає даних про кредитну історію.";
 "No credits history data available." = "Немає даних про кредитну історію.";

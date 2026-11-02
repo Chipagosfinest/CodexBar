@@ -899,6 +899,7 @@
 "Usage history (%d days)" = "使用量記錄（%d 天）";
 "%d percent remaining" = "剩餘 %d%%";
 "Unknown" = "未知";
+"empty ~%@" = "用盡 ~%@";
 "stale data" = "資料過舊";
 "No credits history data available." = "尚無可用的額度記錄資料。";
 "Credits history chart" = "額度記錄圖表";

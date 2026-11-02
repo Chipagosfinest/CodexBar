@@ -1033,6 +1033,7 @@
 "Usage history (%d days)" = "История использования (%d дней)";
 "%d percent remaining" = "Осталось %d процентов";
 "Unknown" = "Неизвестно";
+"empty ~%@" = "конец ~%@";
 "stale data" = "устаревшие данные";
 "No credits history data." = "Нет истории кредитов.";
 "No credits history data available." = "История кредитов недоступна.";

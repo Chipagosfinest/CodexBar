@@ -888,7 +888,8 @@ struct InlineUsageDashboardContent: View {
                 .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
                 MenuUsageBarStrip(
                     points: self.model.points.map(\.menuUsageBarPoint),
-                    baseColor: Color.primary.opacity(0.5),
+                    baseColor: Color.primary.opacity(0.32),
+                    emphasizedPointID: self.model.points.last?.id,
                     selection: self.injectedSelection ?? self.$selectedPointID)
             }
         }

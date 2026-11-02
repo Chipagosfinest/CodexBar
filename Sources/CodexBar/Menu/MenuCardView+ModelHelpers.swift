@@ -33,19 +33,22 @@ extension UsageMenuCardView.Model {
         /// True only for text produced by a pace calculation. Defaults to false
         /// so provider-owned text sharing the detail slot is preserved.
         let isPaceDerived: Bool
+        let exhaustionETASeconds: TimeInterval?
 
         init(
             leftLabel: String,
             rightLabel: String?,
             pacePercent: Double?,
             paceOnTop: Bool,
-            isPaceDerived: Bool = false)
+            isPaceDerived: Bool = false,
+            exhaustionETASeconds: TimeInterval? = nil)
         {
             self.leftLabel = leftLabel
             self.rightLabel = rightLabel
             self.pacePercent = pacePercent
             self.paceOnTop = paceOnTop
             self.isPaceDerived = isPaceDerived
+            self.exhaustionETASeconds = exhaustionETASeconds
         }
     }
 
@@ -846,7 +849,8 @@ extension UsageMenuCardView.Model {
             rightLabel: detail.rightLabel,
             pacePercent: detail.stage == .onTrack ? nil : expectedPercent,
             paceOnTop: window.usedPercent <= detail.expectedUsedPercent,
-            isPaceDerived: true)
+            isPaceDerived: true,
+            exhaustionETASeconds: detail.exhaustionETASeconds)
     }
 
     static func standardWeeklyPace(input: Input, window: RateWindow) -> UsagePace? {
@@ -1040,6 +1044,7 @@ extension UsageMenuCardView.Model {
                 detailRightText: usageKnown ? paceDetail?.rightLabel : nil,
                 pacePercent: usageKnown ? paceDetail?.pacePercent : nil,
                 detailIsPaceDerived: paceDetail?.isPaceDerived ?? false,
+                exhaustionETASeconds: paceDetail?.exhaustionETASeconds,
                 paceOnTop: paceDetail?.paceOnTop ?? true,
                 sessionEquivalentDetail: usageKnown
                     ? Self.sessionEquivalentDetail(
@@ -1209,6 +1214,7 @@ extension UsageMenuCardView.Model {
             detailRightText: paceDetail?.rightLabel,
             pacePercent: paceDetail?.pacePercent,
             detailIsPaceDerived: paceDetail?.isPaceDerived ?? false,
+            exhaustionETASeconds: paceDetail?.exhaustionETASeconds,
             paceOnTop: paceDetail?.paceOnTop ?? true)
     }
 
@@ -1283,5 +1289,25 @@ extension UsageMenuCardView.Model {
             pacePercent: nil,
             paceOnTop: true,
             isPaceDerived: true))
+    }
+}
+
+extension UsageMenuCardView.Model {
+    /// A bare balance line whose figure the credits row above already shows.
+    var providerCostRepeatsCredits: Bool {
+        guard let providerCost, providerCost.percentUsed == nil, let creditsText,
+              let figure = providerCost.spendLine.split(separator: ":").last?
+                  .trimmingCharacters(in: .whitespaces),
+                  let first = creditsText.split(separator: " ").first
+        else { return false }
+        return figure == first
+    }
+
+    /// Today and 30-day lines the dashboard's figures already show. Anything it does not show keeps the section.
+    var tokenUsageRepeatsDashboard: Bool {
+        guard let tokenUsage, self.inlineUsageDashboard != nil else { return false }
+        let hasOnlyTotals = (tokenUsage.meteredLine ?? "").isEmpty && tokenUsage.comparisonLines.isEmpty
+        let hasHint = self.provider != .codex && !(tokenUsage.hintLine ?? "").isEmpty
+        return hasOnlyTotals && !hasHint && !tokenUsage.isRefreshing
     }
 }

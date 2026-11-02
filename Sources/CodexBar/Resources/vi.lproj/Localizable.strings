@@ -1027,6 +1027,7 @@
 "Usage history (%d days)" = "Mức sử dụng lịch sử ( %d ngày)";
 "%d percent remaining" = "%d phần trăm còn lại";
 "Unknown" = "Không xác định";
+"empty ~%@" = "hết ~%@";
 "stale data" = "dữ liệu cũ";
 "No credits history data." = "Không có dữ liệu lịch sử tín dụng.";
 "No credits history data available." = "Không có dữ liệu lịch sử tín dụng.";

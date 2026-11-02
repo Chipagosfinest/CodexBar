@@ -1040,6 +1040,7 @@
 "Usage history (%d days)" = "Riwayat penggunaan (%d hari)";
 "%d percent remaining" = "%d persen tersisa";
 "Unknown" = "Tidak diketahui";
+"empty ~%@" = "habis ~%@";
 "stale data" = "data kedaluwarsa";
 "No credits history data." = "Tidak ada data riwayat kredit.";
 "No credits history data available." = "Tidak ada data riwayat kredit tersedia.";

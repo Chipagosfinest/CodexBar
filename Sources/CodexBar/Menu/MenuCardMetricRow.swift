@@ -31,7 +31,7 @@ struct MetricRow: View {
             if let warning = self.metric.denseWarningText {
                 Text(warning)
                     .font(.caption2)
-                    .foregroundStyle(self.metric.detailIsPaceDerived
+                    .foregroundStyle(self.metric.isUrgent
                         ? MenuHighlightStyle.error(self.isHighlighted)
                         : MenuHighlightStyle.secondary(self.isHighlighted))
                     .lineLimit(1)

@@ -121,7 +121,7 @@ struct MenuDensityTests {
     }
 
     @Test
-    func `about and update checks live under more while quit stays on top`() throws {
+    func `about and update checks live under more while quit stays on top`() {
         let section = MenuDescriptor.metaSection(updateReady: false, canCheckForUpdates: true, versionText: "1.2.3")
         var more: [MenuDescriptor.SubmenuItem] = []
         var topLevel: [String] = []
@@ -185,8 +185,8 @@ struct MenuDensityTests {
     @Test
     func `more holds the selected provider's status page and overview omits it`() throws {
         let suite = "MenuDensityTests-\(UUID().uuidString)"
-        let settings = SettingsStore(
-            userDefaults: UserDefaults(suiteName: suite)!,
+        let settings = try SettingsStore(
+            userDefaults: #require(UserDefaults(suiteName: suite)),
             configStore: testConfigStore(suiteName: suite),
             zaiTokenStore: NoopZaiTokenStore(),
             syntheticTokenStore: NoopSyntheticTokenStore())

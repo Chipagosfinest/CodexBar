@@ -76,6 +76,8 @@ struct MenuUsageBarStrip: View {
     let points: [MenuUsageBarPoint]
     let baseColor: Color
     var roundedHeadroom = false
+    /// The one bar that stands for now. The rest recede behind it.
+    var emphasizedPointID: String?
     var selection: Binding<String?>?
     @Environment(\.menuItemHighlighted) private var isHighlighted
     @Environment(\.layoutDirection) private var layoutDirection
@@ -146,6 +148,7 @@ struct MenuUsageBarStrip: View {
     }
 
     private func fill(_ point: MenuUsageBarPoint, scale: UsageChartScale) -> Color {
+        if point.id == self.emphasizedPointID { return MenuHighlightStyle.primary(self.isHighlighted) }
         let opacity = MenuUsageBarMetrics.opacity(
             value: point.value,
             isPending: point.isPending,

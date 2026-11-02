@@ -8,6 +8,7 @@
 - Menu bar: pace shows a small red dot only when usage runs ahead of pace; reserve and even pace stay plain text, and stale data never raises it.
 - Menu bar: Color by provider tints only the provider logo; figures keep the neutral menu bar text color. Layout figures use tabular digits by default so live values do not shift neighboring items.
 - Menu bar: new Icon + Progress bars layout draws one thin bar per quota window at a fixed width, with red only for a window near its limit.
+- Dropdown: Overview is now one line per provider (logo, tightest limit, bar, percent, reset), most urgent first, with the provider's full card in a flyout and a click opening its tab. Its height no longer depends on quota windows or errors, so the footer stays on screen; a signed-out provider gets one red row instead of disappearing. Up to 12 providers appear by default, and more than 5 tabs become a single row of logos.
 - Dropdown: much denser menu. Limits are single lines with neutral bars and red only near a limit; a favorable pace forecast moves to the tooltip while an unfavorable one stays visible. Today, window and 30-day figures share one row, top models with share and spend sit above a smaller daily chart, and recent windows move into the Cost submenu.
 - Dropdown: Overview defaults to the compact layout with a one-line spend total and top models across providers (Detailed stays in Settings). Status Page, Changelog, About and Check for Updates move under More.
 

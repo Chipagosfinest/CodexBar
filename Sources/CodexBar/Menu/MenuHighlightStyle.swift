@@ -21,8 +21,15 @@ enum MenuHighlightStyle {
         highlighted ? self.selectionText : self.normalSecondaryText
     }
 
+    /// System red has the same luminance as a light menu's glass over a dark desktop, so light gets a deep red.
+    static let criticalNSColor = NSColor(name: nil) { appearance in
+        appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua
+            ? .systemRed
+            : NSColor(srgbRed: 0.5, green: 0, blue: 0.05, alpha: 1)
+    }
+
     static func error(_ highlighted: Bool) -> Color {
-        highlighted ? self.selectionText : Color(nsColor: .systemRed)
+        highlighted ? self.selectionText : Color(nsColor: self.criticalNSColor)
     }
 
     /// Emphasis for a card's status label (for example the active account).

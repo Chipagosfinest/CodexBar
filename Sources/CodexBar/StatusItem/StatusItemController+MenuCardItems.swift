@@ -38,6 +38,7 @@ extension StatusItemController {
         submenu: NSMenu? = nil,
         submenuIndicatorAlignment: Alignment = .topTrailing,
         submenuIndicatorTopPadding: CGFloat = 8,
+        showsSubmenuIndicator: Bool = true,
         containsInteractiveControls: Bool = false,
         usesGPUSelection: Bool = false,
         onClick: (() -> Void)? = nil) -> NSMenuItem
@@ -72,7 +73,7 @@ extension StatusItemController {
             content: AnyView(view
                 .environment(\.providerMenuChartSettings, self.settings)
                 .environment(\.providerCardAction, cardAction)),
-            showsSubmenuIndicator: submenu != nil,
+            showsSubmenuIndicator: showsSubmenuIndicator && submenu != nil,
             submenuIndicatorAlignment: submenuIndicatorAlignment,
             submenuIndicatorTopPadding: submenuIndicatorTopPadding,
             allowsMenuHighlight: allowsMenuHighlight,

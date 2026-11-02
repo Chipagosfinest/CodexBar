@@ -560,6 +560,8 @@ extension StatusItemController {
         let t0 = CACurrentMediaTime()
         defer { self.logChartRenderDurationIfSlow("addOverviewRows(\(rows.count))", startedAt: t0) }
 
+        if self.addOverviewLinesIfCompact(rows, menu, providerScopes, menuWidth, interactionMenu) { return true }
+
         let spendProviders = providerScopes.spend
         let spendModel = self.overviewSpendDashboardModel(providers: spendProviders)
         let spendProviderCount = self.overviewSpendSubscriptionCount(providers: spendProviders)
@@ -831,7 +833,7 @@ extension StatusItemController {
                 menuWidth: context.menuWidth,
                 captureMenu: captureMenu)
             {
-                menu.addItem(.separator())
+                self.addOverviewRowsFooter(to: menu, enabledProviders: enabledProviders)
             } else {
                 self.addOverviewEmptyState(to: menu, enabledProviders: enabledProviders)
                 menu.addItem(.separator())

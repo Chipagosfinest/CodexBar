@@ -281,6 +281,7 @@ struct SpendProviderIcon: View {
     var sourceKind: SpendDashboardModel.SourceKind = .native
     var style: ProviderBrandIcon.Style = .brand
     var size: CGFloat = 20
+    var foreground: Color = .primary
 
     var body: some View {
         Group {
@@ -300,16 +301,20 @@ struct SpendProviderIcon: View {
                     .resizable().scaledToFit()
             }
         }
-        .foregroundStyle(.primary)
+        .foregroundStyle(self.foreground)
         .frame(width: self.size, height: self.size)
         .accessibilityHidden(true)
     }
 
     private func artworkScale(for icon: NSImage) -> CGFloat {
         // Provider-specific by design: normalize each bundled mark's transparent padding in the shared icon slot.
+        // Measured from renders so marks sit near 0.9 of the slot; a solid or heavy mark sits a little under.
         switch self.provider {
-        case .cursor: 1.25
-        case .codex: icon.isTemplate ? 1.24 : 1.17
+        case .cursor: 1.12
+        case .codex: icon.isTemplate ? 1.24 : 1.02
+        case .claude, .gemini: 1.12
+        case .factory: 1.05
+        case .kimi: 0.88
         case .antigravity: icon.isTemplate ? 1.14 : 1.38
         case .bedrock: icon.isTemplate ? 1 : 0.84
         case .muse, .vertexai: icon.isTemplate ? 1 : 1.08

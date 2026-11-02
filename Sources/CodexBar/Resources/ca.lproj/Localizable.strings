@@ -895,6 +895,7 @@
 "Usage history (%d days)" = "Historial d'ús (%d dies)";
 "%d percent remaining" = "%d%% restant";
 "Unknown" = "Desconegut";
+"empty ~%@" = "buit ~%@";
 "stale data" = "dades obsoletes";
 "No credits history data available." = "No hi ha dades d'historial de crèdits disponibles.";
 "Credits history chart" = "Gràfic d'historial de crèdits";

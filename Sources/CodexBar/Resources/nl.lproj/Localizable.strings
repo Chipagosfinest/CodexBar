@@ -1031,6 +1031,7 @@
 "Usage history (%d days)" = "Gebruiksgeschiedenis (%d dagen)";
 "%d percent remaining" = "%d procent resterend";
 "Unknown" = "Onbekend";
+"empty ~%@" = "leeg ~%@";
 "stale data" = "verouderde gegevens";
 "No credits history data." = "Geen kredietgeschiedenisgegevens.";
 "No credits history data available." = "Er zijn geen kredietgeschiedenisgegevens beschikbaar.";

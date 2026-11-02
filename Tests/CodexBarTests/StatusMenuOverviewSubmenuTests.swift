@@ -4,6 +4,23 @@ import Testing
 @testable import CodexBar
 
 extension StatusMenuTests {
+    /// Rows open a flyout whose nested row holds the chart, so the first level stays one card.
+    private func flyoutChartID(of row: NSMenuItem, controller: StatusItemController) throws -> String? {
+        let flyout = try #require(row.submenu)
+        _ = controller.hydrateHostedSubviewMenuIfNeeded(flyout, width: 310)
+        return flyout.items.lazy
+            .compactMap { $0.submenu?.items.first?.representedObject as? String }
+            .first
+    }
+
+    private func flyoutShowDetailsItem(of row: NSMenuItem, controller: StatusItemController) throws -> NSMenuItem {
+        let flyout = try #require(row.submenu)
+        _ = controller.hydrateHostedSubviewMenuIfNeeded(flyout, width: 310)
+        return try #require(flyout.items.first {
+            $0.action == #selector(StatusItemController.selectOverviewProvider(_:))
+        })
+    }
+
     @Test
     func `overview rows expose provider detail submenus`() throws {
         self.disableMenuCardsForTesting()
@@ -54,9 +71,8 @@ extension StatusMenuTests {
         let openAIRow = try #require(menu.items.first {
             ($0.representedObject as? String) == "overviewRow-openai"
         })
-        #expect(openAIRow.submenu?.items.contains {
-            ($0.representedObject as? String) == StatusItemController.costHistoryChartID
-        } == true)
+        #expect(
+            try self.flyoutChartID(of: openAIRow, controller: controller) == StatusItemController.costHistoryChartID)
     }
 
     @Test
@@ -115,12 +131,8 @@ extension StatusMenuTests {
         let opencodegoRow = try #require(menu.items.first {
             ($0.representedObject as? String) == "overviewRow-opencodego"
         })
-        #expect(opencodegoRow.submenu?.items.contains {
-            ($0.representedObject as? String) == StatusItemController.usageHistoryChartID
-        } == true)
-        #expect(opencodegoRow.submenu?.items.contains {
-            ($0.representedObject as? String) == StatusItemController.costHistoryChartID
-        } == false)
+        #expect(try self.flyoutChartID(of: opencodegoRow, controller: controller)
+            == StatusItemController.usageHistoryChartID)
     }
 
     @Test
@@ -173,7 +185,7 @@ extension StatusMenuTests {
         let zaiRow = try #require(menu.items.first {
             ($0.representedObject as? String) == "overviewRow-zai"
         })
-        #expect(zaiRow.submenu == nil)
+        #expect(try self.flyoutChartID(of: zaiRow, controller: controller) == nil)
         let details = try #require(store.snapshot(for: .zai)?.details.first)
         #expect(details.title == "Quota details")
         #expect(details.rows.contains { $0.label == "MCP quota" && $0.value == "50% used" })
@@ -230,9 +242,10 @@ extension StatusMenuTests {
         }
         defer { controller._test_openMenuRebuildObserver = nil }
 
-        let action = try #require(cursorRow.action)
-        let target = try #require(cursorRow.target as? StatusItemController)
-        _ = target.perform(action, with: cursorRow)
+        let showDetails = try self.flyoutShowDetailsItem(of: cursorRow, controller: controller)
+        let action = try #require(showDetails.action)
+        let target = try #require(showDetails.target as? StatusItemController)
+        _ = target.perform(action, with: showDetails)
 
         #expect(settings.mergedMenuLastSelectedWasOverview == false)
         #expect(settings.selectedMenuProvider == .cursor)
@@ -298,9 +311,10 @@ extension StatusMenuTests {
         }
         defer { controller._test_openMenuRebuildObserver = nil }
 
-        let action = try #require(cursorRow.action)
-        let target = try #require(cursorRow.target as? StatusItemController)
-        _ = target.perform(action, with: cursorRow)
+        let showDetails = try self.flyoutShowDetailsItem(of: cursorRow, controller: controller)
+        let action = try #require(showDetails.action)
+        let target = try #require(showDetails.target as? StatusItemController)
+        _ = target.perform(action, with: showDetails)
         controller.menuDidClose(menu)
 
         await Task.yield()

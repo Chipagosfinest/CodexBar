@@ -1038,6 +1038,7 @@
 "Usage history (%d days)" = "ประวัติการใช้งาน (%d วัน)";
 "%d percent remaining" = "เหลือ %d เปอร์เซ็นต์";
 "Unknown" = "ไม่ทราบ";
+"empty ~%@" = "หมด ~%@";
 "stale data" = "ข้อมูลเก่า";
 "No credits history data." = "ไม่มีข้อมูลประวัติเครดิต";
 "No credits history data available." = "ไม่มีข้อมูลประวัติเครดิต";

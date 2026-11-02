@@ -6,8 +6,22 @@ extension UsageMenuCardView.Model.Metric {
     static let nearLimitRemainingPercent: Double = 10
 
     var isNearLimit: Bool {
-        let remaining = self.percentStyle == .left ? self.percent : 100 - self.percent
-        return remaining <= Self.nearLimitRemainingPercent
+        self.remainingPercent <= Self.nearLimitRemainingPercent
+    }
+
+    /// A forecast this close changes what to do right now. A limit that runs out in days does not.
+    static let imminentExhaustionSeconds: TimeInterval = 3600
+
+    var remainingPercent: Double {
+        self.percentStyle == .left ? self.percent : 100 - self.percent
+    }
+
+    var isExhaustionImminent: Bool {
+        self.exhaustionETASeconds.map { $0 <= Self.imminentExhaustionSeconds } ?? false
+    }
+
+    var isUrgent: Bool {
+        self.isNearLimit || self.isExhaustionImminent
     }
 
     /// The only note that keeps a visible line: an unfavorable pace forecast, or provider text that is not a forecast.
@@ -27,14 +41,14 @@ extension UsageMenuCardView.Model.Metric {
             self.dailyTargetText,
             self.helpText,
         ]
-        .compactMap(\.self)
-        .joined(separator: "\n")
+            .compactMap(\.self)
+            .joined(separator: "\n")
     }
 }
 
 /// Title, thin bar, value, reset on a single line. Neutral fill: colour only signals a limit that is close.
 struct DenseMeterRow: View {
-    static let criticalColor = Color(nsColor: .systemRed)
+    static let criticalColor = Color(nsColor: MenuHighlightStyle.criticalNSColor)
 
     let title: String
     let percent: Double?
@@ -56,7 +70,7 @@ struct DenseMeterRow: View {
             if let percent {
                 UsageProgressBar(
                     percent: percent,
-                    tint: self.isCritical ? Self.criticalColor : Color.primary.opacity(0.62),
+                    tint: self.isCritical ? Self.criticalColor : Color.primary.opacity(0.42),
                     accessibilityLabel: self.accessibilityLabel)
                     .frame(minWidth: 36)
             } else {
@@ -94,7 +108,7 @@ struct DenseMeterRow: View {
     }
 
     /// "Resets in 2h 18m" reads as "2h 18m" next to a meter; the localized template supplies what to strip.
-    static func shortReset(_ text: String) -> String {
+    nonisolated static func shortReset(_ text: String) -> String {
         for template in [L("Resets in %@"), L("Resets %@")] {
             let parts = template.components(separatedBy: "%@")
             guard parts.count == 2,
@@ -120,12 +134,13 @@ struct TopModelsContent: View {
             Text(self.title)
                 .font(.caption2)
                 .foregroundStyle(MenuHighlightStyle.secondary(self.isHighlighted))
-            ForEach(self.models) { model in
+            let names = OverviewModelMixRowView.displayNames(self.models.map(\.name))
+            ForEach(Array(self.models.enumerated()), id: \.element.id) { index, model in
                 HStack(spacing: 6) {
                     Circle()
                         .fill(self.color(for: model))
                         .frame(width: 6, height: 6)
-                    Text(model.name)
+                    Text(names[index])
                         .font(.footnote)
                         .foregroundStyle(MenuHighlightStyle.primary(self.isHighlighted))
                         .lineLimit(1)

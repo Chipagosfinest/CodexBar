@@ -1038,6 +1038,7 @@
 "Usage history (%d days)" = "تاريخ الاستخدام (%d أيام)";
 "%d percent remaining" = "%d بالمئة المتبقية";
 "Unknown" = "غير معروف";
+"empty ~%@" = "ينفد ~%@";
 "stale data" = "بيانات قديمة";
 "No credits history data." = "لا توجد بيانات عن تاريخ الاعتمادات.";
 "No credits history data available." = "لا توجد بيانات تاريخ الاعتمادات المتاحة.";

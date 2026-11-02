@@ -1034,6 +1034,7 @@
 "Usage history (%d days)" = "Kullanım geçmişi (%d gün)";
 "%d percent remaining" = "%%%d kaldı";
 "Unknown" = "Bilinmiyor";
+"empty ~%@" = "boş ~%@";
 "stale data" = "eski veri";
 "No credits history data." = "Kredi geçmişi verisi yok.";
 "No credits history data available." = "Kullanılabilir kredi geçmişi verisi yok.";

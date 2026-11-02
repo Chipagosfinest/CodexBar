@@ -173,7 +173,7 @@ struct CostHistoryChartMenuView: View {
                             yStart: .value(L("Cap start"), capStart),
                             yEnd: .value(L("Cap end"), peak.value),
                             width: .ratio(ChartBarHoverSelection.barWidthRatio))
-                            .foregroundStyle(Color(nsColor: .systemYellow))
+                            .foregroundStyle(Color.primary)
                     }
                 }
                 .chartYAxis {
@@ -671,7 +671,7 @@ struct CostHistoryChartMenuView: View {
             return [first, last]
         }()
 
-        let barColor = Self.barColor(for: provider)
+        let barColor = Self.barColor
         return Model(
             points: points,
             pointsByDateKey: pointsByKey,
@@ -686,10 +686,8 @@ struct CostHistoryChartMenuView: View {
             detailRowHeight: detailLayout.rowHeight)
     }
 
-    private static func barColor(for provider: UsageProvider) -> Color {
-        let color = ProviderAccentPalette.color(for: provider)
-        return Color(red: color.red, green: color.green, blue: color.blue)
-    }
+    /// Neutral: colour in the menu means a logo or a limit, and this chart shows neither.
+    private static let barColor = Color.primary.opacity(0.55)
 
     private static func dateFromDayKey(
         _ key: String,

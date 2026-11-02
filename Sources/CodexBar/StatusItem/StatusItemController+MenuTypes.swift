@@ -41,12 +41,14 @@ struct OverviewMenuCardRowView: View {
     var layout: MergedOverviewLayout = .compact
     /// Per-account overview rows need the identity; a provider row repeats what its tab already shows.
     var showsAccount = false
+    /// The Overview row's flyout: the provider's whole card, since the list row above it is only a summary.
+    var showsFullCard = false
     @Environment(\.menuItemHighlighted) private var isHighlighted
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if self.usesFullCard {
-                UsageMenuCardView(model: self.model, width: self.width)
+                UsageMenuCardView(model: self.model, width: self.width, omitsRepeatedDetails: self.showsFullCard)
             } else {
                 UsageMenuCardHeaderSectionView(
                     model: self.model,
@@ -86,7 +88,7 @@ struct OverviewMenuCardRowView: View {
     }
 
     var usesFullCard: Bool {
-        self.layout == .compact && self.model.metrics.isEmpty
+        self.showsFullCard || (self.layout == .compact && self.model.metrics.isEmpty)
     }
 }
 

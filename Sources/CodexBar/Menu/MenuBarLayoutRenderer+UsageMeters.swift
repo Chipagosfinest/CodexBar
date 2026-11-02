@@ -14,7 +14,7 @@ extension MenuBarLayoutRenderer {
         // A model-scoped weekly limit takes the weekly bar once it is the tighter of the two, so it can still warn.
         let weeklyWindow: PercentWindow = if let scoped = self.window(.scopedWeekly, data: data),
                                              scoped.remainingPercent < self.window(.weekly, data: data)?
-                                             .remainingPercent ?? .infinity
+                                                 .remainingPercent ?? .infinity
         {
             .scopedWeekly
         } else {

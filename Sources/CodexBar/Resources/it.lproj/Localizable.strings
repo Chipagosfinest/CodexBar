@@ -1040,6 +1040,7 @@
 "Usage history (%d days)" = "Cronologia utilizzo (%d giorni)";
 "%d percent remaining" = "%d percento rimanente";
 "Unknown" = "Sconosciuto";
+"empty ~%@" = "vuoto ~%@";
 "stale data" = "dati obsoleti";
 "No credits history data." = "Nessun dato storico crediti.";
 "No credits history data available." = "Nessun dato storico crediti disponibile.";

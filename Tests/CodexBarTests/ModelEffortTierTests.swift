@@ -45,5 +45,4 @@ struct ModelEffortTierTests {
         #expect(light == light.sorted())
         #expect(dark == dark.sorted(by: >))
     }
-
 }
