@@ -13,7 +13,7 @@ from pathlib import Path
 HOSTS = ['chatgpt.com', 'api.anthropic.com', 'platform.claude.com', 'claude.ai', 'api.commandcode.ai', 'api.kimi.com',
          'www.kimi.com', 'api.kimi.ai', 'www.kimi.ai', 'api.moonshot.ai', 'api.z.ai', 'openrouter.ai', 'api.deepseek.com', 'platform.deepseek.com',
          'api.minimax.io', 'api.groq.com', 'console.groq.com', 'admin.mistral.ai', 'console.mistral.ai', 'api.github.com',
-         'api.openai.com', 'auth.openai.com', 'console.anthropic.com']
+         'api.openai.com', 'auth.openai.com', 'console.anthropic.com', 'cursor.com']
 HOME = Path.home()
 OUT = Path(os.environ['PROOF_OUT'])
 T0 = time.monotonic()

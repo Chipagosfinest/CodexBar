@@ -9,7 +9,7 @@ permissions:
 env:
   PROOF_PR: "menubar-total"
   PROOF_SHA: 7e83c50cd1d4d28b2dbc604f361ca06082bf862e
-  PROOF_SCENARIO: sreset.py
+  PROOF_SCENARIO: scursor.py
   PACKAGE_RUN: "41419842044"
 jobs:
   package:

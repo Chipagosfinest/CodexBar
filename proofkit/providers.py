@@ -69,7 +69,16 @@ def deepseek(_):
     return 200, {'is_available': True, 'balance_infos': [{'currency': 'USD', 'total_balance': '18.40', 'granted_balance': '0.00', 'topped_up_balance': '18.40'}]}
 
 
+def cursor(_):
+    return 200, {'billingCycleStart': iso(timedelta(days=-10)), 'billingCycleEnd': iso(timedelta(days=20)),
+                 'membershipType': 'pro', 'individualUsage': {'plan': {
+                     'enabled': True, 'used': 9500, 'limit': 10000, 'remaining': 500,
+                     'totalPercentUsed': 95, 'autoPercentUsed': 30, 'apiPercentUsed': 70}}}
+
+
 def install():
+    ROUTES[('cursor.com', '/api/usage-summary')] = cursor
+    ROUTES[('cursor.com', '/api/auth/me')] = lambda _: (200, {'email': 'cursor@example.test'})
     ROUTES[('chatgpt.com', '/backend-api/wham/usage')] = codex
     ROUTES[('chatgpt.com', '/backend-api/accounts')] = lambda _: (200, {'items': []})
     ROUTES[('api.anthropic.com', '/api/oauth/usage')] = claude
@@ -86,6 +95,8 @@ def install():
 
 
 CONFIG = [
+    {'id': 'cursor', 'enabled': True, 'source': 'web', 'cookieSource': 'manual',
+     'cookieHeader': 'WorkosCursorSessionToken=synthetic-fixture'},
     {'id': 'codex', 'enabled': True, 'source': 'oauth'},
     {'id': 'claude', 'enabled': True, 'source': 'oauth'},
     {'id': 'commandcode', 'enabled': True, 'source': 'api', 'apiKey': 'synthetic-commandcode'},
