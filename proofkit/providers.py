@@ -4,7 +4,8 @@ import kit
 from kit import ROUTES, epoch, iso, state
 
 EXTRA_CLAUDE = {}
-PERCENTS = {'codex': (92, 40), 'claude': (35, 22), 'commandcode': (55, 30), 'kimi': (15, 12), 'zai': (70, 5), 'openrouter': 60}
+PERCENTS = {'codex': (92, 40), 'claude': (35, 22), 'commandcode': (55, 30), 'kimi': (15, 12), 'zai': (70, 5), 'openrouter': 60,
+            'cursor': (95, 30, 70)}  # used: Total, Auto, API
 
 
 def codex(_):
@@ -70,10 +71,11 @@ def deepseek(_):
 
 
 def cursor(_):
+    total, auto, api = PERCENTS['cursor']
     return 200, {'billingCycleStart': iso(timedelta(days=-10)), 'billingCycleEnd': iso(timedelta(days=20)),
                  'membershipType': 'pro', 'individualUsage': {'plan': {
-                     'enabled': True, 'used': 9500, 'limit': 10000, 'remaining': 500,
-                     'totalPercentUsed': 95, 'autoPercentUsed': 30, 'apiPercentUsed': 70}}}
+                     'enabled': True, 'used': total * 100, 'limit': 10000, 'remaining': (100 - total) * 100,
+                     'totalPercentUsed': total, 'autoPercentUsed': auto, 'apiPercentUsed': api}}}
 
 
 def install():
@@ -95,8 +97,6 @@ def install():
 
 
 CONFIG = [
-    {'id': 'cursor', 'enabled': True, 'source': 'web', 'cookieSource': 'manual',
-     'cookieHeader': 'WorkosCursorSessionToken=synthetic-fixture'},
     {'id': 'codex', 'enabled': True, 'source': 'oauth'},
     {'id': 'claude', 'enabled': True, 'source': 'oauth'},
     {'id': 'commandcode', 'enabled': True, 'source': 'api', 'apiKey': 'synthetic-commandcode'},
@@ -108,6 +108,9 @@ CONFIG = [
 ]
 
 OVERVIEW_IDS = [p['id'] for p in CONFIG]
+# Outside CONFIG: earlier scenarios slice CONFIG by position and treat it as their whole provider set.
+CURSOR_CONFIG = {'id': 'cursor', 'enabled': True, 'source': 'web', 'cookieSource': 'manual',
+                 'cookieHeader': 'WorkosCursorSessionToken=synthetic-fixture'}
 
 
 def overview_defaults(**extra):
