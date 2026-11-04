@@ -1,0 +1,2 @@
+GET chatgpt.com/backend-api/wham/rate-limit-reset-credits
+POST cursor.com/api/dashboard/get-sand-usage-status

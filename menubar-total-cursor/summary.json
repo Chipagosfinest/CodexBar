@@ -1,0 +1,97 @@
+{
+  "scenario": "Cursor Total outside semantic lanes",
+  "product_sha": "7e83c50cd1d4d28b2dbc604f361ca06082bf862e",
+  "fixture_used_percent": {
+    "control": {
+      "total": 40,
+      "auto": 30,
+      "api": 70
+    },
+    "proof": {
+      "total": 95,
+      "auto": 30,
+      "api": 70
+    }
+  },
+  "other_provider": {
+    "id": "codex",
+    "used_percent": [
+      30,
+      20
+    ]
+  },
+  "combined_icon_source": "allProviders",
+  "overview_layout": "detailed",
+  "checks": [
+    {
+      "check": "head: installed app binary equals package manifest",
+      "pass": true,
+      "detail": "6020e30bf89d4177a847c1a0ee7f16009b8284fb68e8b3d7d653e3007c995403 vs 6020e30bf89d4177a847c1a0ee7f16009b8284fb68e8b3d7d653e3007c995403"
+    },
+    {
+      "check": "control: Total 40% used with the same lanes raises no warning",
+      "pass": true,
+      "detail": "All providers, average 50% left"
+    },
+    {
+      "check": "control: Cursor and Codex reached the fixture",
+      "pass": true,
+      "detail": "[{'phase': 'control', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'control', 'host': 'cursor.com', 'path': '/api/usage-summary', 'status': 200}, {'phase': 'control', 'host': 'chatgpt.com', 'path': '/backend-api/wham/rate-limit-reset-credits', 'status': 404}, {'phase': 'control', 'host': 'cursor.com', 'path': '/api/auth/me', 'status': 200}, {'phase': 'control', 'host': 'cursor.com', 'path': '/api/dashboard/get-sand-usage-status', 'status': 404}, {'phase': 'control', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'contr"
+    },
+    {
+      "check": "control: dropdown shows Total 60% left and the unchanged lanes",
+      "pass": true,
+      "detail": "['All providers, average 50% left', 'Overview', 'Cursor', 'Codex', 'Cursor', 'cursor@example.test', 'Updated just now', 'Cursor Pro', 'Total 60% left', 'Resets in 20d', 'Usage remaining', '7% in deficit \u00b7 Runs out in 15d 1m', '\u2248 2.86% / day to last until reset', 'Cursor 70% left', 'Resets in 20d', 'Usage remaining', '3% in reserve \u00b7 Lasts until reset', '\u2248 3.33% / day to last until reset', 'Third Party 30% left', 'Resets in 20d', 'Usage remaining', '37% in deficit \u00b7 Runs out in 4d 6h', '\u2248 1.43% / day to last until reset', 'Session', 'Weekly', 'Usage remaining', 'Nov 4, 2026 at 4:38\\u202fPM to N"
+    },
+    {
+      "check": "light: Cursor Total raises the combined warning at 5% left, average 38%",
+      "pass": true,
+      "detail": "Cursor near limit, 5% left, All providers, average 38% left"
+    },
+    {
+      "check": "light: Cursor and Codex reached the fixture",
+      "pass": true,
+      "detail": "[{'phase': 'light', 'host': 'cursor.com', 'path': '/api/auth/me', 'status': 200}, {'phase': 'light', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'light', 'host': 'cursor.com', 'path': '/api/dashboard/get-sand-usage-status', 'status': 404}, {'phase': 'light', 'host': 'cursor.com', 'path': '/api/usage-summary', 'status': 200}, {'phase': 'light', 'host': 'chatgpt.com', 'path': '/backend-api/wham/rate-limit-reset-credits', 'status': 404}, {'phase': 'light', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'light', 'host': '"
+    },
+    {
+      "check": "light: dropdown shows Cursor Total 5% left",
+      "pass": true,
+      "detail": "['Cursor near limit, 5% left, All providers, average 38% left', 'Overview', 'Cursor', 'Codex', 'Cursor', 'cursor@example.test', 'Updated just now', 'Cursor Pro', 'Total 5% left', 'Resets in 20d', 'Usage remaining', '62% in deficit \u00b7 Runs out in 12h 38m', '\u2248 0.24% / day to last until reset', 'Cursor 70% left', 'Resets in 20d', 'Usage remaining', '3% in reserve \u00b7 Lasts until reset', '\u2248 3.33% / day to last until reset', 'Third Party 30% left', 'Resets in 20d', 'Usage remaining', '37% in deficit \u00b7 Runs out in 4d 6h', '\u2248 1.43% / day to last until reset', 'Session', 'Weekly', 'Usage remaining', 'Nov"
+    },
+    {
+      "check": "light: dropdown shows the lanes above the warning line",
+      "pass": true,
+      "detail": "['Cursor near limit, 5% left, All providers, average 38% left', 'Overview', 'Cursor', 'Codex', 'Cursor', 'cursor@example.test', 'Updated just now', 'Cursor Pro', 'Total 5% left', 'Resets in 20d', 'Usage remaining', '62% in deficit \u00b7 Runs out in 12h 38m', '\u2248 0.24% / day to last until reset', 'Cursor 70% left', 'Resets in 20d', 'Usage remaining', '3% in reserve \u00b7 Lasts until reset', '\u2248 3.33% / day to last until reset', 'Third Party 30% left', 'Resets in 20d', 'Usage remaining', '37% in deficit \u00b7 Runs out in 4d 6h', '\u2248 1.43% / day to last until reset', 'Session', 'Weekly', 'Usage remaining', 'Nov"
+    },
+    {
+      "check": "dark: Cursor Total raises the combined warning at 5% left, average 38%",
+      "pass": true,
+      "detail": "Cursor near limit, 5% left, All providers, average 38% left"
+    },
+    {
+      "check": "dark: Cursor and Codex reached the fixture",
+      "pass": true,
+      "detail": "[{'phase': 'dark', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'dark', 'host': 'cursor.com', 'path': '/api/usage-summary', 'status': 200}, {'phase': 'dark', 'host': 'cursor.com', 'path': '/api/auth/me', 'status': 200}, {'phase': 'dark', 'host': 'chatgpt.com', 'path': '/backend-api/wham/rate-limit-reset-credits', 'status': 404}, {'phase': 'dark', 'host': 'cursor.com', 'path': '/api/dashboard/get-sand-usage-status', 'status': 404}, {'phase': 'dark', 'host': 'chatgpt.com', 'path': '/backend-api/wham/usage', 'status': 200}, {'phase': 'dark', 'host': 'chatgpt"
+    },
+    {
+      "check": "dark: dropdown shows Cursor Total 5% left",
+      "pass": true,
+      "detail": "['Cursor near limit, 5% left, All providers, average 38% left', 'Overview', 'Cursor', 'Codex', 'Cursor', 'cursor@example.test', 'Updated just now', 'Cursor Pro', 'Total 5% left', 'Resets in 20d', 'Usage remaining', '62% in deficit \u00b7 Runs out in 12h 38m', '\u2248 0.24% / day to last until reset', 'Cursor 70% left', 'Resets in 20d', 'Usage remaining', '3% in reserve \u00b7 Lasts until reset', '\u2248 3.33% / day to last until reset', 'Third Party 30% left', 'Resets in 20d', 'Usage remaining', '37% in deficit \u00b7 Runs out in 4d 6h', '\u2248 1.43% / day to last until reset', 'Session', 'Weekly', 'Usage remaining', 'Nov"
+    },
+    {
+      "check": "dark: dropdown shows the lanes above the warning line",
+      "pass": true,
+      "detail": "['Cursor near limit, 5% left, All providers, average 38% left', 'Overview', 'Cursor', 'Codex', 'Cursor', 'cursor@example.test', 'Updated just now', 'Cursor Pro', 'Total 5% left', 'Resets in 20d', 'Usage remaining', '62% in deficit \u00b7 Runs out in 12h 38m', '\u2248 0.24% / day to last until reset', 'Cursor 70% left', 'Resets in 20d', 'Usage remaining', '3% in reserve \u00b7 Lasts until reset', '\u2248 3.33% / day to last until reset', 'Third Party 30% left', 'Resets in 20d', 'Usage remaining', '37% in deficit \u00b7 Runs out in 4d 6h', '\u2248 1.43% / day to last until reset', 'Session', 'Weekly', 'Usage remaining', 'Nov"
+    },
+    {
+      "check": "app reached the fixture",
+      "pass": true,
+      "detail": "12"
+    },
+    {
+      "check": "no sampled resolver escape",
+      "pass": true,
+      "detail": "[]"
+    }
+  ]
+}
