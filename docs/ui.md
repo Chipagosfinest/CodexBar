@@ -76,6 +76,8 @@ Stacked rows with leading window labels align their values and meters after the 
   a valid previous position. Valid new positions remain untouched; unrelated defaults are never repaired by this path.
 - When Overview has selected providers, the switcher includes an Overview tab that renders up to 12 provider rows.
 - Overview compact rows are one line per provider, most urgent first (limits about to stop, then coarse bands that keep provider order so rows hold still); selecting a row jumps to that provider detail card. A provider whose only state is an error gets one red row.
+- Detailed Overview rows retain provider order.
+- Overview rows past 12 move to a More submenu. More than 5 tabs become a single row of logos, with the name in the tooltip. Status Page, Changelog, About and Check for Updates live under More; compact Overview keeps Share Usage Snapshot in the footer.
 - Overview uses native vertical scrolling when its menu exceeds the visible height. Fitted menus retain coarse-wheel provider highlighting; precise input and row submenus keep their native scrolling behavior. Scrolling after Command-R still prevents a pending refresh from resetting the viewport.
 - Menu → Overview layout offers Compact (default) and Detailed. Compact shows each provider's tightest limit on one line and retains detail-only providers. Select a provider for its full card. Visibility choices and the shared Usage & Spend summary continue to apply.
 - Menu-card wrappers use standard non-vibrant view behavior so white GPU-tinted Overview content remains visible on macOS 15. Overview selection stays outside the SwiftUI graph, with native submenu click and drag tracking retained.

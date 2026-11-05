@@ -42,7 +42,7 @@ extension StatusItemController {
             menuWidth: menuWidth,
             interactionMenu: interactionMenu)
         var attentionAdded = attention == nil
-        for line in sorted {
+        for line in sorted.prefix(Self.overviewInlineRowLimit) {
             guard let row = entries[line.id] else { continue }
             // A signed-out provider is stopped now, so it follows only the limits about to stop.
             if !attentionAdded, line.status != .critical, let attention {
@@ -56,7 +56,8 @@ extension StatusItemController {
                 interactionMenu: interactionMenu))
         }
         if !attentionAdded, let attention { menu.addItem(attention) }
-        for row in pluginRows {
+        let inlinePluginCount = max(0, Self.overviewInlineRowLimit - sorted.count)
+        for row in pluginRows.prefix(inlinePluginCount) {
             guard let plugin = UserProviderPluginRegistry.plugin(for: row.provider) else { continue }
             let instanceID = row.provider
             let item = self.makeUserPluginMenuCardItem(
@@ -72,6 +73,11 @@ extension StatusItemController {
                 item.action = #selector(self.selectOverviewProvider(_:))
             }
             menu.addItem(item)
+        }
+        let hiddenRows = sorted.dropFirst(Self.overviewInlineRowLimit).compactMap { entries[$0.id] }
+            + Array(pluginRows.dropFirst(inlinePluginCount))
+        if !hiddenRows.isEmpty {
+            menu.addItem(self.makeOverviewOverflowItem(hiddenRows, menuWidth: menuWidth))
         }
         return true
     }
