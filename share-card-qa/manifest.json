@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-05",
+  "pr": 4888,
+  "productCommit": "faed79c392ff940698587950a1809589e04ed394",
+  "evidence": "production ShareStatsRenderer, offscreen synthetic fixture exports",
+  "size": [
+    1200,
+    630
+  ],
+  "files": [
+    {
+      "file": "many-providers-dark.png",
+      "sha256": "4a5dd8be21231659057d6d6f60dd818c9756544e5548e12524b2891ae9d2d508"
+    },
+    {
+      "file": "many-providers-light.png",
+      "sha256": "88ace8bdbc13a0be73e04cf525019c93c0f0aa05ac1bc32f08e88cf4cd2d26dd"
+    },
+    {
+      "file": "multi-currency-dark.png",
+      "sha256": "10a3330672019c9c0604dd6647ea146bb3cd5258c70531d6de2bcaaacbf9f84c"
+    },
+    {
+      "file": "multi-currency-light.png",
+      "sha256": "50ede004509ac297df801b1bd2a282fa75634e1f53864aad503242a3ce72e779"
+    },
+    {
+      "file": "no-models-dark.png",
+      "sha256": "63772ed080cd5732737fcc98e043af4eec9e949bd47b12a3f9ce44756348e6f5"
+    },
+    {
+      "file": "no-models-light.png",
+      "sha256": "a707b4c1780b7a8d931735991e87bcb0f69d0f7b5732636c40188beeff25dfed"
+    },
+    {
+      "file": "no-totals-dark.png",
+      "sha256": "c039b3a4c3a1b3f04e939be34385e553a286d8fa53ca5acd50138be4370c45d1"
+    },
+    {
+      "file": "no-totals-light.png",
+      "sha256": "78c0951beb80e4692e6ed8572c8378bed0804f83a24e87b3f2a16aa1b0439c2a"
+    },
+    {
+      "file": "partial-dark.png",
+      "sha256": "20140a1c058b55f83d23a70ec4c8a9fe6ba15deb11954fb66f6a95dcc0da8689"
+    },
+    {
+      "file": "partial-light.png",
+      "sha256": "30ac94afae08e03d08b6a9f16ef0439bf8ca220bb5684c1a8763029af8b0a37f"
+    },
+    {
+      "file": "priced-dark.png",
+      "sha256": "cfda750e95643ab9b049cff27f4c868fca77bf3cf08493cdb0f250cad03d610b"
+    },
+    {
+      "file": "priced-light.png",
+      "sha256": "9117ba9fdaba57f714d3fafefedff71580d1c1a3ed6a57d2bb980844ec493acf"
+    },
+    {
+      "file": "unpriced-dark.png",
+      "sha256": "932a24de9b4c74794e65bfe162482e2e4eb1bef70b35398562631230aaa45b7f"
+    },
+    {
+      "file": "unpriced-light.png",
+      "sha256": "49b507b3612b317868e557c05378884f6424e2553630a84da2119457a99062cb"
+    },
+    {
+      "file": "share-stats.png",
+      "sha256": "336c3de782ef1797878cbc15cfa696c645f19a4dce24170c86f54ed03f3eeb6d"
+    },
+    {
+      "file": "share-stats-de.png",
+      "sha256": "3ca75e34295f656068b05199a3ed087c53e3f3b500f102ef528734c51e184d7f"
+    },
+    {
+      "file": "share-stats-es.png",
+      "sha256": "afe7feea8088d58901f092f2bb20fb960d168edc9dc8a1ce072263527ae60e2e"
+    },
+    {
+      "file": "share-stats-fr.png",
+      "sha256": "285f3f39625dc5324bb7bb11db7f6e18140b93457b7f7d53c0d9ff6d4d85fa41"
+    },
+    {
+      "file": "share-stats-zh-Hans.png",
+      "sha256": "d5a57daac516b7814b7e4dc07012f7f60ecb066fd1de6a8b584af3fdb988d33a"
+    },
+    {
+      "file": "share-stats-ja.png",
+      "sha256": "82d7f19121ece64bfd638b0675b68805e335c64e85e873faed83a39261fce1bb"
+    },
+    {
+      "file": "share-stats-ar.png",
+      "sha256": "0616846df40ca049bab3b0d4e8d91b1430f6c4e7c82006ae6f300beae44215f3"
+    }
+  ]
+}
