@@ -1,0 +1,26 @@
+{
+  "fixtureTurns": 10000,
+  "benchmarkSourceSha256": "47d2aa4e89f83b174e95b3e49027aef57eadfb1387351f5eabf7aa868ebabaf8",
+  "oracleUnchanged": true,
+  "red": {
+    "session": 86187,
+    "exitCode": 1,
+    "scanSeconds": 2.862214833,
+    "referenceSeconds": 0.042322209,
+    "onlyIssue": "scan exceeds ten cached parsing passes"
+  },
+  "green": {
+    "session": 56540,
+    "exitCode": 0,
+    "scanSeconds": 0.103854583,
+    "referenceSeconds": 0.035933042,
+    "result": "same 70000 tokens and one session, throughput budget passed"
+  },
+  "scope": "one host-local synthetic scan comparison, not a cross-host guarantee or permanent CI time deadline",
+  "temporaryTest": "removed after exact-byte comparison; archived outside repo",
+  "next": "normal Grok and timestamp tests plus make check before push/reply/resolve",
+  "verifiedSourceCommit": "e3e61ea819180f50c9d3ac44452dbb7654f6c20a",
+  "parent": "7ac9f12d01f93da378a0755e2737a9895d392f0e",
+  "functionalVerification": "248 tests in32 suites passed, including maintainer out-of-window regression",
+  "makeCheck": "exit0,0violations in3165 files"
+}
