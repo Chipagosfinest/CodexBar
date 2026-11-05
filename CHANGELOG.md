@@ -5,6 +5,8 @@
 ### Changed
 
 - Dropdown: Overview's compact layout is now the default: one line per provider (logo, tightest limit, bar, percent, reset), most urgent first, and a click opens its tab. Row height no longer depends on quota windows or errors, a signed-out provider gets one red row instead of disappearing, and up to 12 providers appear. Detailed stays in Settings.
+- Menu: use tabular digits for usage and cost values to reduce movement when equal-length numbers change (#4884). Thanks @Chipagosfinest!
+
 - Settings: use native popup selectors while keeping imported custom choices visible (#4895). Thanks @elijahfriedman!
 ### Added
 
