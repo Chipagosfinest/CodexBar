@@ -5,6 +5,8 @@
 ### Changed
 
 - Dropdown: a shorter, reachable footer. More than 5 tabs become a single row of logos, Share Usage Snapshot moves to the compact Overview's footer, Status Page, Changelog, About and Check for Updates move under More, and Overview rows past 12 go into a More submenu.
+- Menu: use tabular digits for usage and cost values to reduce movement when equal-length numbers change (#4884). Thanks @Chipagosfinest!
+
 - Settings: use native popup selectors while keeping imported custom choices visible (#4895). Thanks @elijahfriedman!
 ### Added
 
