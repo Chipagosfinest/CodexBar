@@ -12,3 +12,7 @@ Fresh PNGs from the production `ShareStatsRenderer`, with synthetic payloads. Th
 Files and hashes: [manifest](share-card-qa/manifest.json). Fixture source: [harness](share-card-qa/ShareStatsVisualProofTests.swift).
 
 Remaining: normal preview-to-export fidelity; Copy Image/Stats and Save/cancel through actual controls; focus, keyboard, dismissal and appearance changes in the running app. No interactive or whole-PR sign-off is claimed.
+
+## Widget pair
+
+[Combined #4887 + #4890 evidence](widget-pair-qa/README.md): tested integration recipe, controlled red/green comparison and current localized/account-overflow renders. Explicit installed-host and interaction gaps remain.

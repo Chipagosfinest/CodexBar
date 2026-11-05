@@ -1,0 +1,119 @@
+{
+  "productCommit": "d150480f436ae023a98753e734a97f6cf49b184c",
+  "parents": [
+    "1b3e19e0d1a83cf65acd5b77d9a339912a0951a8",
+    "47ba951f7661d62421001e44c5594343f591dd00"
+  ],
+  "evidence": "offscreen production SwiftUI widget components, synthetic data",
+  "red": "4 cases, 8 intended missing-model-name/share issues; quota assertions passed",
+  "green": "same 4-case oracle passed",
+  "impacted": "81 tests in 8 suites passed",
+  "quality": "make check exit 0; 0 violations in 3169 files",
+  "limits": [
+    "Combined integration candidate, not standalone PR execution",
+    "Not installed WidgetKit compositor or live provider data",
+    "Pager/pointer/keyboard/live refresh proof still separate"
+  ],
+  "files": [
+    {
+      "file": "after-combined-large-dense-dark.png",
+      "sha256": "5926815030b8cf4d34f5d5871e90ecdf3c773ea684a6ef38df7ece0baf454959"
+    },
+    {
+      "file": "after-combined-large-dense-light.png",
+      "sha256": "e391844037597071b89fc4a38e2fc217ed039f881342621f7e7bab0cc118d9db"
+    },
+    {
+      "file": "after-combined-large-sparse-dark.png",
+      "sha256": "53154fa9d8765bd5aee9d3709a97911c54dfb907b7996aeb422486a6b197dbfb"
+    },
+    {
+      "file": "after-combined-large-sparse-light.png",
+      "sha256": "c2d2416ab168c623fd4381cb8f63fdba2086add73f8f97f6001363d0ca6396c3"
+    },
+    {
+      "file": "controlled-before-combined-large-dense-dark.png",
+      "sha256": "db0b4e27bfd9e664a092d442bfc88c8b59bc2c1710786c805a0c23349083bf7d"
+    },
+    {
+      "file": "controlled-before-combined-large-dense-light.png",
+      "sha256": "a0e95e742348f1217e69ed7fb9d3fa37e5b78197e33cd03e356c793c2d737add"
+    },
+    {
+      "file": "controlled-before-combined-large-sparse-dark.png",
+      "sha256": "962d000d76f9ff791debafa75bbd46e40bdb79f2cf45140a759e22525082d44f"
+    },
+    {
+      "file": "controlled-before-combined-large-sparse-light.png",
+      "sha256": "5537555ee68fd9e7ba0ddfcd3ae2d37be29df0da506b1fabe58734e9ef5f75cb"
+    },
+    {
+      "file": "accounts-systemLarge-dark-10.png",
+      "sha256": "c760de425fcf06bd4f9ac7ad8870d3b67323b67b3ddfc0bdea57197c07f9a98b"
+    },
+    {
+      "file": "accounts-systemLarge-dark-6.png",
+      "sha256": "fdc5b323d693e69394efed5623e3b347d394cbda3edd5ae8cd1561a137c03209"
+    },
+    {
+      "file": "accounts-systemLarge-light-10.png",
+      "sha256": "e917e13c2613e97e447254193c1d5a12167bdf3ab5ad9bad63ab49e3e63ba5bf"
+    },
+    {
+      "file": "accounts-systemLarge-light-6.png",
+      "sha256": "e79e080c39b499fa99ee1f860550f07184d3ad1211e1fdbb18ebf2e85f82d5ec"
+    },
+    {
+      "file": "accounts-systemMedium-dark-10.png",
+      "sha256": "44958bc882ad7f3a9e4a75b0f283ab6da94290662ff078cd1b37accdab22ec63"
+    },
+    {
+      "file": "accounts-systemMedium-dark-6.png",
+      "sha256": "7bcd76ea276619b5d0276ebb6c3a1a56dd4a15e534d225cfe0c0f211026c720c"
+    },
+    {
+      "file": "accounts-systemMedium-light-10.png",
+      "sha256": "24606536c933c1d601f31d686955201c589e582b71f19c85476ff7b9ca4ec219"
+    },
+    {
+      "file": "accounts-systemMedium-light-6.png",
+      "sha256": "3f6757f0422069a7637daac9b152bc320f2324640425569f50f3a7fd37b254c7"
+    },
+    {
+      "file": "ar-large.png",
+      "sha256": "838d5c506c64bb763f0e4a27e6f64c02558a4c8f7937849c2d9b47c6f9d6cd83"
+    },
+    {
+      "file": "ar-medium.png",
+      "sha256": "ed4ad7bb3d9a0d64d7bd4718e46b762e0450c05ee0d9505b5b7fe41f28c69ed8"
+    },
+    {
+      "file": "ar-small.png",
+      "sha256": "dd8486fda978cc5c84165bebc4d720fc43f963ad34c53fba475ce8397bc78923"
+    },
+    {
+      "file": "de-large.png",
+      "sha256": "27fb25fbcf68e6e1b3173787006cf138be33f7a90310a36b613278293a1a22cc"
+    },
+    {
+      "file": "de-medium.png",
+      "sha256": "a50959260ad71a04d2b839b54eb13e891343ed74ed724c1fe9bcbe88897cebd9"
+    },
+    {
+      "file": "de-small.png",
+      "sha256": "0007c18d6af1996e43f90572d8def95d06f827e083cc0d8b7780eae28efafefa"
+    },
+    {
+      "file": "en-large.png",
+      "sha256": "b1edae5220f5547993a4071bcd730b9aadae82b9a7f41cdeec504a5da4bb1027"
+    },
+    {
+      "file": "en-medium.png",
+      "sha256": "c4bc87f55a1200f1d7b61949fdbc262b1a01ac7d35524b19a72a1c5beaab188e"
+    },
+    {
+      "file": "en-small.png",
+      "sha256": "3826543a196c5b3ab2bf8900bf0c9380a3b4bb2187433dca5bfce39a82527748"
+    }
+  ]
+}
