@@ -5,6 +5,8 @@
 ### Changed
 
 - Widgets: lead every usage tile with one headline figure, show the provider's real logo, draw bars in neutral ink with red reserved for a low window (kept visible in tinted and clear widgets), and keep medium cost lines whenever they fit (#4887).
+- Menu: use tabular digits for usage and cost values to reduce movement when equal-length numbers change (#4884). Thanks @Chipagosfinest!
+
 - Settings: use native popup selectors while keeping imported custom choices visible (#4895). Thanks @elijahfriedman!
 ### Added
 
