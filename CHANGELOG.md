@@ -5,6 +5,7 @@
 ### Changed
 
 - Dropdown: a shorter, reachable footer. More than 5 tabs become a single row of logos, Share Usage Snapshot moves to the compact Overview's footer, Status Page, Changelog, About and Check for Updates move under More, and Overview rows past 12 go into a More submenu.
+- Menu: dim retained quota and Code Review bars after their own refresh failures, while keeping successful fallback readings and separate credit/cost sections in their normal colors (#4883). Thanks @Chipagosfinest!
 - Menu: use tabular digits for usage and cost values to reduce movement when equal-length numbers change (#4884). Thanks @Chipagosfinest!
 
 - Settings: use native popup selectors while keeping imported custom choices visible (#4895). Thanks @elijahfriedman!
