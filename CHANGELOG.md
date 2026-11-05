@@ -2,14 +2,12 @@
 
 ## 0.83.1 — Unreleased
 
-### Added
-
-- Widgets: large usage tiles list the provider's top three models with their share of its local history when that history has a complete model split (#4890).
 ### Changed
 
 - Settings: use native popup selectors while keeping imported custom choices visible (#4895). Thanks @elijahfriedman!
 ### Added
 
+- Widgets: large usage tiles list the provider's top three models with their share of its local history when that history has a complete model split (#4890).
 - Settings: find panes by title alongside provider names in sidebar search, with an empty state covering both (#4875). Thanks @elijahfriedman!
 ### Fixed
 
