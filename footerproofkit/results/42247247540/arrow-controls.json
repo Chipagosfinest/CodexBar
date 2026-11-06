@@ -1,0 +1,41 @@
+{
+  "controlsPassed": true,
+  "cases": [
+    {
+      "scale": 1,
+      "direction": "down",
+      "expectedAccepted": true,
+      "actualAccepted": true
+    },
+    {
+      "scale": 1,
+      "direction": "up",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "scale": 1,
+      "direction": "blank",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "scale": 2,
+      "direction": "down",
+      "expectedAccepted": true,
+      "actualAccepted": true
+    },
+    {
+      "scale": 2,
+      "direction": "up",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "scale": 2,
+      "direction": "blank",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    }
+  ]
+}

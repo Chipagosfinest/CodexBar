@@ -1,0 +1,32 @@
+{
+  "runID": 42247247540,
+  "controllerSHA": "48507b40216fefa2f49bf205553d5652c7aa4b8e",
+  "artifactID": 13519232009,
+  "baselineTrackedInputsVerified": 4404,
+  "symlinksDereferencedLikeInstaller": 7,
+  "baselineMismatches": [],
+  "artifactFilesVerified": 110,
+  "binarySHA256": "cdcb62d6e2e6601b8322c2714cac5730c16bc9eb7d07d0b1d6ea7556c38b4c12",
+  "newAppCompilation": false,
+  "actualRootWindowID": 115,
+  "actualMoreWindowID": 116,
+  "ownedRebuildScope": [
+    "baseline-more"
+  ],
+  "allFinalOracleChecksPassed": true,
+  "recorderPID": 12295,
+  "recorderExit": 0,
+  "recorderWallSeconds": 68.53990822600008,
+  "movieDuration": 40,
+  "movieDimensions": [
+    1920,
+    1080
+  ],
+  "movieDecodedFrames": 42,
+  "lastChangedFramePTS": 13.901667,
+  "agentOriginalScreensInspected": true,
+  "agentOriginalDecodedBeforeAfterFinalFramesInspected": true,
+  "rootManualAcceptancePending": true,
+  "moreNotificationCounterLimitation": "More counters0/0; no positive child-tracking notification claim. Same native CGwindow visibility checks and original movie support observed continuity.",
+  "sparseMovieNote": "Last changed frame held through native40s container; no invented/interpolated frame at39s."
+}

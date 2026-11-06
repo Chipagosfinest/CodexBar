@@ -1,0 +1,29 @@
+{
+  "automated_ui_state_checks_passed": true,
+  "manual_original_media_inspection_required": true,
+  "productSHA": "e8a0cca51036fa8f30362a0710754d812ace34a3",
+  "productionCandidatePatchSHA256": "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961",
+  "productionCandidateSourceSHA256": "9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524",
+  "overlaySHA256": "1a536ed3bb26ac096b69a9b624c18de283171816069906a1aae79fbfd1db4ae0",
+  "failure": null,
+  "boundary": "Instrumented packaged DEBUG app; synthetic test-safety startup, no ordinary startup/auth claim",
+  "rootWindow": {
+    "h": 953,
+    "id": 115,
+    "layer": 101,
+    "ownerPID": 12196,
+    "w": 310,
+    "x": 1604,
+    "y": 31
+  },
+  "moreWindow": {
+    "h": 211,
+    "id": 116,
+    "layer": 101,
+    "ownerPID": 12196,
+    "w": 310,
+    "x": 1299,
+    "y": 773
+  },
+  "eventCount": 44
+}

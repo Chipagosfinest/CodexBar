@@ -1,0 +1,1260 @@
+[
+  {
+    "depth": 0,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 0
+    },
+    "role": "AXApplication",
+    "title": "CodexBar"
+  },
+  {
+    "depth": 1,
+    "frame": {
+      "h": 24,
+      "w": 55,
+      "x": 1655,
+      "y": 3
+    },
+    "role": "AXMenuBar"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 24,
+      "w": 55,
+      "x": 1655,
+      "y": 3
+    },
+    "identifier": "codexbar-packaged-footer-proof",
+    "role": "AXMenuBarItem",
+    "title": "CodexBar Debug"
+  },
+  {
+    "depth": 3,
+    "frame": {
+      "h": 953,
+      "w": 310,
+      "x": 1604,
+      "y": 31
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 30,
+      "w": 310,
+      "x": 1604,
+      "y": -262
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "description": "Overview",
+    "frame": {
+      "h": 32,
+      "w": 82,
+      "x": -1,
+      "y": 1049
+    },
+    "role": "AXButton",
+    "title": ""
+  },
+  {
+    "depth": 5,
+    "description": "Claude",
+    "frame": {
+      "h": 32,
+      "w": 82,
+      "x": -1,
+      "y": 1049
+    },
+    "role": "AXButton",
+    "title": ""
+  },
+  {
+    "depth": 5,
+    "description": "Codex",
+    "frame": {
+      "h": 32,
+      "w": 82,
+      "x": -1,
+      "y": 1049
+    },
+    "role": "AXButton",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": -232
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": -221
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 0,
+      "y": 1001
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 0"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": -142
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": -131
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 0,
+      "y": 1001
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 1"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": -52
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": -41
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 0,
+      "y": 1001
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 2"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 38
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 49
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 49
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 58.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 106,
+      "x": 1788,
+      "y": 60.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 3"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 78.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 104.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 128
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 139
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 139
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 148.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 106,
+      "x": 1788,
+      "y": 150.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 4"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 168.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 194.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 218
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 229
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 229
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 238.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 105,
+      "x": 1789,
+      "y": 240.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 5"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 258.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 284.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 308
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 319
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 319
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 328.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 106,
+      "x": 1788,
+      "y": 330.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 6"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 348.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 374.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 398
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 409
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 409
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 418.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 105,
+      "x": 1789,
+      "y": 420.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 7"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 438.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 464.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 488
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 499
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 499
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 508.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 106,
+      "x": 1788,
+      "y": 510.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 8"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 528.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 554.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 578
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 589
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 589
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 598.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 106,
+      "x": 1788,
+      "y": 600.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 9"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 618.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 644.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 668
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 679
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 679
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 688.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 111,
+      "x": 1783,
+      "y": 690.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 10"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 708.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 734.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 758
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 769
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 79,
+      "w": 310,
+      "x": 1604,
+      "y": 769
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 45,
+      "x": 1624,
+      "y": 778.5
+    },
+    "role": "AXStaticText",
+    "value": "Claude"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 109,
+      "x": 1785,
+      "y": 780.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic account 11"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 75,
+      "x": 1624,
+      "y": 798.5
+    },
+    "role": "AXStaticText",
+    "value": "Not fetched yet"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 69,
+      "x": 1624,
+      "y": 824.5
+    },
+    "role": "AXStaticText",
+    "value": "No usage yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1604,
+      "y": 848
+    },
+    "role": "AXMenuItem",
+    "title": "More (4)"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 167,
+      "w": 310,
+      "x": 1299,
+      "y": 817
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1299,
+      "y": 822
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem",
+    "title": "Claude \u00b7 Synthetic account 12"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1299,
+      "y": 846
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem",
+    "title": "Claude \u00b7 Synthetic account 13"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1299,
+      "y": 870
+    },
+    "identifier": "selectOverviewProvider:",
+    "role": "AXMenuItem",
+    "title": "Codex"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 85,
+      "w": 310,
+      "x": 1299,
+      "y": 894
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 7,
+    "frame": {
+      "h": 85,
+      "w": 310,
+      "x": 1299,
+      "y": 894
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 8,
+    "frame": {
+      "h": 13,
+      "w": 7,
+      "x": 1328.5,
+      "y": 914
+    },
+    "role": "AXStaticText",
+    "value": "S"
+  },
+  {
+    "depth": 8,
+    "frame": {
+      "h": 16,
+      "w": 166,
+      "x": 1353,
+      "y": 905.5
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic Overflow Meter"
+  },
+  {
+    "depth": 8,
+    "description": "Refresh",
+    "frame": {
+      "h": 14,
+      "w": 12,
+      "x": 1576,
+      "y": 914
+    },
+    "help": "Refresh",
+    "identifier": "arrow.clockwise",
+    "role": "AXButton"
+  },
+  {
+    "depth": 8,
+    "frame": {
+      "h": 13,
+      "w": 73,
+      "x": 1353,
+      "y": 922.5
+    },
+    "role": "AXStaticText",
+    "value": "fixed-fixture.js"
+  },
+  {
+    "depth": 8,
+    "frame": {
+      "h": 13,
+      "w": 37,
+      "x": 1319,
+      "y": 944.5
+    },
+    "role": "AXStaticText",
+    "value": "Primary"
+  },
+  {
+    "depth": 8,
+    "frame": {
+      "h": 13,
+      "w": 49,
+      "x": 1540,
+      "y": 944.5
+    },
+    "role": "AXStaticText",
+    "value": "42% used"
+  },
+  {
+    "depth": 8,
+    "description": "Primary",
+    "frame": {
+      "h": 6,
+      "w": 270,
+      "x": 1319,
+      "y": 962
+    },
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1604,
+      "y": 872
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1604,
+      "y": 883
+    },
+    "role": "AXMenuItem",
+    "title": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 243.6328125,
+      "x": 1620,
+      "y": 886
+    },
+    "role": "AXStaticText",
+    "value": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 42,
+      "x": 1873.6328125,
+      "y": 886
+    },
+    "role": "AXStaticText",
+    "value": "\u2318 R"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1604,
+      "y": 907
+    },
+    "identifier": "showSettingsGeneral",
+    "role": "AXMenuItem",
+    "title": "Settings..."
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1604,
+      "y": 931
+    },
+    "role": "AXMenuItem",
+    "title": "More"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 1080
+    },
+    "identifier": "showSettingsAbout",
+    "role": "AXMenuItem",
+    "title": "About CodexBar (v0.83.1)"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1604,
+      "y": 955
+    },
+    "identifier": "quit",
+    "role": "AXMenuItem",
+    "title": "Quit"
+  }
+]

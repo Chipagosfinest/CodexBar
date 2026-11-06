@@ -1,0 +1,133 @@
+{
+  "baselineActuallyOpen" : {
+    "cardIdentity" : "ObjectIdentifier(0x0000600001593480)",
+    "fingerprint" : "en|815673290.239349|0||||Synthetic prior refresh failure|Showing last-known usage captured just now.|||",
+    "moreBegins" : 0,
+    "moreEnds" : 0,
+    "moreMenuIdentity" : "ObjectIdentifier(0x000060000311e780)",
+    "moreWindowID" : 116,
+    "rootBegins" : 1,
+    "rootEnds" : 0,
+    "rootMenuIdentity" : "ObjectIdentifier(0x0000600000f9c230)",
+    "rootWindowID" : 115,
+    "viewIdentity" : "ObjectIdentifier(0x00007ff43a04c2c0)"
+  },
+  "blockedHTTPRequests" : 0,
+  "cardAndViewReplacedInOpenRoot" : true,
+  "events" : [
+    {
+      "at" : "2026-11-06T15:54:50Z",
+      "event" : "ready-initial",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 0,
+      "rootBegins" : 0,
+      "rootEnds" : 0
+    },
+    {
+      "at" : "2026-11-06T15:54:53Z",
+      "event" : "root-tracking-began",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 0,
+      "rootBegins" : 1,
+      "rootEnds" : 0
+    },
+    {
+      "at" : "2026-11-06T15:55:01Z",
+      "event" : "baseline-bound-in-actually-open-menus",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 0,
+      "rootBegins" : 1,
+      "rootEnds" : 0
+    },
+    {
+      "at" : "2026-11-06T15:55:01Z",
+      "event" : "explicit-plugin-refresh-started",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 0,
+      "rootBegins" : 1,
+      "rootEnds" : 0
+    },
+    {
+      "at" : "2026-11-06T15:55:01Z",
+      "event" : "oracle-waiting:owned-completion-and-rebuild-pending",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 0,
+      "rootBegins" : 1,
+      "rootEnds" : 0
+    },
+    {
+      "at" : "2026-11-06T15:55:01Z",
+      "event" : "production-baseline-more-rebuild-observed",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 1,
+      "rootBegins" : 1,
+      "rootEnds" : 0
+    },
+    {
+      "at" : "2026-11-06T15:55:01Z",
+      "event" : "explicit-plugin-refresh-completed",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 1,
+      "rootBegins" : 1,
+      "rootEnds" : 0
+    },
+    {
+      "at" : "2026-11-06T15:55:01Z",
+      "event" : "captured-card-and-view-replaced",
+      "moreBegins" : 0,
+      "moreEnds" : 0,
+      "postCompletionRebuilds" : 1,
+      "rootBegins" : 1,
+      "rootEnds" : 0
+    }
+  ],
+  "finalErrorExpectedNil" : true,
+  "forbiddenFirstPartyRefreshes" : 0,
+  "freshFingerprint" : "en|815673301.324706|0||||||||",
+  "initialError" : "Synthetic prior refresh failure",
+  "initialUsedPercent" : 5,
+  "lastOracleObservation" : {
+    "baselineBoundInOpenMenus" : true,
+    "bothOriginalMenuWindowsVisible" : true,
+    "correctNestedScope" : true,
+    "currentCardReplaced" : true,
+    "currentViewInOriginalMoreWindow" : true,
+    "currentViewReplaced" : true,
+    "deadlineExpired" : false,
+    "freshFingerprintPresent" : true,
+    "ownedCompletionFinished" : true,
+    "postCompletionRebuildObserved" : true,
+    "rootTracked" : true,
+    "sameMoreEpoch" : true,
+    "sameRootEpoch" : true,
+    "storeHas42AndNoError" : true
+  },
+  "lastOracleReason" : "accepted-after-owned-completion-and-rebuild",
+  "moreBegins" : 0,
+  "moreEnds" : 0,
+  "nativeCaptureRequired" : true,
+  "nonce" : "236B6E97-7148-49D5-86C0-D6999FE966BA",
+  "observedRebuildScopes" : [
+    "baseline-more"
+  ],
+  "ordinaryAppStartup" : false,
+  "ownedCompletionFinished" : true,
+  "phase" : "replaced-in-open-root-native-capture-required",
+  "pluginTransportRequests" : 0,
+  "postCompletionRebuilds" : 1,
+  "productionCandidatePatchSHA256" : "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961",
+  "productionCandidateSourceSHA256" : "9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524",
+  "productSHA" : "e8a0cca51036fa8f30362a0710754d812ace34a3",
+  "proofOnlyEarlyStartup" : true,
+  "rootBegins" : 1,
+  "rootEnds" : 0,
+  "successfulUsedPercent" : 42,
+  "synthetic" : true
+}

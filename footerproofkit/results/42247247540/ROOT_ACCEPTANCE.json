@@ -1,0 +1,20 @@
+{
+  "run_id": 42247247540,
+  "controller": "48507b40216fefa2f49bf205553d5652c7aa4b8e",
+  "accepted": true,
+  "reviewer": "root",
+  "basis": "Independent original full-screen inspection and all decoded movie frames 31 through 42 covering child opening, owned refresh, and held-open result; previous-turn inspection retained.",
+  "observed": [
+    "More opens with 5 percent and prior synthetic error",
+    "Owned refresh replaces visible child with 42 percent and cleared error",
+    "Parent and More remain visibly open throughout observed transition",
+    "Original recording container spans 40 seconds; last changed decoded frame at 13.901667 seconds is held"
+  ],
+  "limits": [
+    "More tracking notifications 0/0 were unobserved and do not prove positive child lifecycle coverage",
+    "Synthetic DEBUG early entry on hosted Intel only; no live auth, normal startup, ARM or upgrade claim"
+  ],
+  "production_candidate": "596da7694d01b9c403b4c9c5f9fcaaba6426610c",
+  "production_patch_sha256": "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961",
+  "binary_sha256": "cdcb62d6e2e6601b8322c2714cac5730c16bc9eb7d07d0b1d6ea7556c38b4c12"
+}

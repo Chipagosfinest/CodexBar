@@ -1,0 +1,7 @@
+{
+  "productionCandidate": "596da7694d01b9c403b4c9c5f9fcaaba6426610c",
+  "candidateSourceFileCount": 1778,
+  "exactCandidateSourceMatchesE8PlusFrozenPatch": true,
+  "mismatches": [],
+  "rootAcceptanceSeparateOriginalPreserved": true
+}

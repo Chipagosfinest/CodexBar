@@ -1,0 +1,24 @@
+{
+  "root-screen.png": {
+    "sha256": "d8d1efd9571be0b9aa3b6dc5b1ecbc6c23140600bf2ec8d92087d034131ae610",
+    "originalName": "light-1-range-screen.png",
+    "sourceRun": 42222113762
+  },
+  "root-native.png": {
+    "sha256": "e46fd0ac60dca30327b65aea245920594ac7ceb331a58ab632ac70644606daf7",
+    "originalName": "light-1-range-menu.png",
+    "sourceRun": 42222113762
+  },
+  "rootOwnerPID": 4445,
+  "group-screen.png": {
+    "sha256": "f666ca9ec46ccf200c04d50a534f22ff67a484ca313b5a05d49f2fb2918ec6df",
+    "originalName": "1-before-screen.png",
+    "sourceRun": 42224431572
+  },
+  "group-native.png": {
+    "sha256": "2e3c910ee6b6e7a7eb6460a434237ea0a5af84cd228271125126b294aeecbe7a",
+    "originalName": "1-before-root.png",
+    "sourceRun": 42224431572
+  },
+  "groupOwnerPID": 2186
+}

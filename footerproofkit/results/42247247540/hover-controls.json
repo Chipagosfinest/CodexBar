@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "cases": [
+    "actual930-to906-reacquires918-not-stale942",
+    "same-center-never-reposts",
+    "fourth-hover-rejected",
+    "wrong-root-ownerPID",
+    "wrong-root-id",
+    "wrong-root-layer",
+    "root-reopened",
+    "root-closed",
+    "refresh-is-not-more",
+    "wrong-live-parent",
+    "offscreen-row",
+    "more-identity-changed",
+    "ambiguous-more",
+    "nonfinite-row"
+  ],
+  "actualRecordedFrames": {
+    "beforeY": 930,
+    "afterY": 906
+  },
+  "noUIExecution": true
+}

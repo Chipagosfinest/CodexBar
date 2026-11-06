@@ -1,0 +1,44 @@
+{"event": "setup", "elapsed": 4.006, "app_pid": 12196, "binary_sha256": "cdcb62d6e2e6601b8322c2714cac5730c16bc9eb7d07d0b1d6ea7556c38b4c12", "identity": {"bundle": "/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app", "executable": "/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/MacOS/CodexBar", "pid": 12196}, "sandbox": "(version 1)(allow default)(deny network*)"}
+{"event": "recorder-start", "elapsed": 4.885, "pid": 12295, "requested_duration_seconds": 40, "fixed_wall_budget_seconds": 85}
+{"event": "native-down-arrow-dwell", "elapsed": 6.895, "step": 0, "arrow": {"bounds": {"h": 5, "w": 9, "x": 1754, "y": 970}, "downChevronObserved": true, "pixelCount": 16, "scale": 1, "x": 1758, "y": 972}, "root": {"h": 953, "id": 115, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1604, "y": 31}}
+{"event": "more-visible-after-native-scroll", "elapsed": 8.157, "step": 1, "frame": {"h": 24, "w": 310, "x": 1604, "y": 930}, "root": {"h": 953, "id": 115, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1604, "y": 31}}
+{"event": "fresh-more-hover", "elapsed": 10.116, "move": 1, "actualMore": {"point": [1759.0, 860.0], "identity": [115, 3, 3, 92, 4, "AXMenuItem", "More (4)"], "frame": {"h": 24, "w": 310, "x": 1604, "y": 848}}, "root": {"h": 953, "id": 115, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1604, "y": 31}, "screen": {"contrast": 0.9999999602635702, "height": 1080, "width": 1920}}
+{"event": "initial-child-accepted", "elapsed": 11.638, "hover_moves": 1, "actualMore": {"point": [1759.0, 860.0], "identity": [115, 3, 3, 92, 4, "AXMenuItem", "More (4)"], "frame": {"h": 24, "w": 310, "x": 1604, "y": 848}}, "root": {"h": 953, "id": 115, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1604, "y": 31}, "child": {"h": 211, "id": 116, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1299, "y": 773}}
+{"event": "window-capture", "elapsed": 13.341, "label": "1-before", "kind": "root", "window": {"h": 953, "id": 115, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1604, "y": 31}, "actualExtent": {"kind": "observed-menu-group", "rectangle": {"x": 1299, "y": 31, "w": 615, "h": 953}, "scale": 1.0, "observedMenuIDs": [115, 116], "targetMenuID": 115, "ownerPID": 12196}, "similarity": {"meanRGBError": 3.017241034412656e-05, "menuHeight": 953, "menuWidth": 615, "samples": 936, "screenHeight": 1080, "screenWidth": 1920}}
+{"event": "window-capture", "elapsed": 13.88, "label": "1-before", "kind": "more", "window": {"h": 211, "id": 116, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1299, "y": 773}, "actualExtent": {"kind": "observed-menu-group", "rectangle": {"x": 1299, "y": 31, "w": 615, "h": 953}, "scale": 1.0, "observedMenuIDs": [115, 116], "targetMenuID": 116, "ownerPID": 12196}, "similarity": {"meanRGBError": 3.017241034412656e-05, "menuHeight": 953, "menuWidth": 615, "samples": 936, "screenHeight": 1080, "screenWidth": 1920}}
+{"event": "capture", "elapsed": 13.919, "label": "1-before", "percent": 5, "error_present": true, "actual_screen": {"contrast": 0.9999999602635702, "height": 1080, "width": 1920}}
+{"event": "controlled-production-refresh-triggered", "elapsed": 13.96, "nonce": "236B6E97-7148-49D5-86C0-D6999FE966BA"}
+{"event": "window-capture", "elapsed": 15.826, "label": "2-after", "kind": "root", "window": {"h": 953, "id": 115, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1604, "y": 31}, "actualExtent": {"kind": "observed-menu-group", "rectangle": {"x": 1299, "y": 31, "w": 615, "h": 953}, "scale": 1.0, "observedMenuIDs": [115, 116], "targetMenuID": 115, "ownerPID": 12196}, "similarity": {"meanRGBError": 3.712467233679573e-05, "menuHeight": 953, "menuWidth": 615, "samples": 936, "screenHeight": 1080, "screenWidth": 1920}}
+{"event": "window-capture", "elapsed": 16.294, "label": "2-after", "kind": "more", "window": {"h": 211, "id": 116, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1299, "y": 773}, "actualExtent": {"kind": "observed-menu-group", "rectangle": {"x": 1299, "y": 31, "w": 615, "h": 953}, "scale": 1.0, "observedMenuIDs": [115, 116], "targetMenuID": 116, "ownerPID": 12196}, "similarity": {"meanRGBError": 3.712467233679573e-05, "menuHeight": 953, "menuWidth": 615, "samples": 936, "screenHeight": 1080, "screenWidth": 1920}}
+{"event": "capture", "elapsed": 16.328, "label": "2-after", "percent": 42, "error_present": false, "actual_screen": {"contrast": 0.9999999602635702, "height": 1080, "width": 1920}}
+{"event": "window-capture", "elapsed": 18.955, "label": "3-still-open", "kind": "root", "window": {"h": 953, "id": 115, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1604, "y": 31}, "actualExtent": {"kind": "observed-menu-group", "rectangle": {"x": 1299, "y": 31, "w": 615, "h": 953}, "scale": 1.0, "observedMenuIDs": [115, 116], "targetMenuID": 115, "ownerPID": 12196}, "similarity": {"meanRGBError": 3.712467233679573e-05, "menuHeight": 953, "menuWidth": 615, "samples": 936, "screenHeight": 1080, "screenWidth": 1920}}
+{"event": "window-capture", "elapsed": 19.489, "label": "3-still-open", "kind": "more", "window": {"h": 211, "id": 116, "layer": 101, "ownerPID": 12196, "w": 310, "x": 1299, "y": 773}, "actualExtent": {"kind": "observed-menu-group", "rectangle": {"x": 1299, "y": 31, "w": 615, "h": 953}, "scale": 1.0, "observedMenuIDs": [115, 116], "targetMenuID": 116, "ownerPID": 12196}, "similarity": {"meanRGBError": 3.712467233679573e-05, "menuHeight": 953, "menuWidth": 615, "samples": 936, "screenHeight": 1080, "screenWidth": 1920}}
+{"event": "capture", "elapsed": 19.527, "label": "3-still-open", "percent": 42, "error_present": false, "actual_screen": {"contrast": 0.9999999602635702, "height": 1080, "width": 1920}}
+{"event": "menus-tracking-during-recording", "elapsed": 19.584, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 21.797, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 23.838, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 25.888, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 28.195, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 30.322, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 32.457, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 34.534, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 36.667, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 38.887, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 40.957, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 43.069, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 45.168, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 47.259, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 49.392, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 51.56, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 53.688, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 55.821, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 57.919, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 60.084, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 62.353, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 64.401, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 66.532, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 68.62, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 70.759, "pid": 12295, "root": 115, "more": 116}
+{"event": "menus-tracking-during-recording", "elapsed": 73.159, "pid": 12295, "root": 115, "more": 116}
+{"event": "recorder-exit", "elapsed": 73.424, "pid": 12295, "exit_code": 0, "seconds_since_launch": 68.53990822600008}
+{"event": "continuous-recording", "elapsed": 73.525, "media": {"duration": 40, "height": 1080, "width": 1920}, "last_state_elapsed": 14.664685426999995}

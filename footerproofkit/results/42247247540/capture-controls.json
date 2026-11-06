@@ -1,0 +1,98 @@
+{
+  "controlsPassed": true,
+  "cases": [
+    {
+      "case": "root-original-positive",
+      "extent": {
+        "kind": "individual-menu",
+        "rectangle": {
+          "x": 708,
+          "y": 31,
+          "w": 310,
+          "h": 668
+        },
+        "scale": 1.0,
+        "observedMenuIDs": [
+          40
+        ],
+        "targetMenuID": 40,
+        "ownerPID": 4445
+      },
+      "similarity": {
+        "meanRGBError": 7.1682226963532276e-06,
+        "menuHeight": 668,
+        "menuWidth": 310,
+        "samples": 936,
+        "screenHeight": 768,
+        "screenWidth": 1024
+      }
+    },
+    {
+      "case": "root-wrong-dimensions",
+      "rejected": true
+    },
+    {
+      "case": "root-unowned-window",
+      "rejected": true
+    },
+    {
+      "case": "root-wrong-rectangle",
+      "rejected": true,
+      "similarity": {
+        "meanRGBError": 0.8929180906411501,
+        "menuHeight": 668,
+        "menuWidth": 310,
+        "samples": 936,
+        "screenHeight": 768,
+        "screenWidth": 1024
+      }
+    },
+    {
+      "case": "group-original-positive",
+      "extent": {
+        "kind": "observed-menu-group",
+        "rectangle": {
+          "x": 403,
+          "y": 31,
+          "w": 615,
+          "h": 668
+        },
+        "scale": 1.0,
+        "observedMenuIDs": [
+          39,
+          40
+        ],
+        "targetMenuID": 39,
+        "ownerPID": 2186
+      },
+      "similarity": {
+        "meanRGBError": 2.139182681711311e-05,
+        "menuHeight": 668,
+        "menuWidth": 615,
+        "samples": 936,
+        "screenHeight": 768,
+        "screenWidth": 1024
+      }
+    },
+    {
+      "case": "group-wrong-dimensions",
+      "rejected": true
+    },
+    {
+      "case": "group-unowned-window",
+      "rejected": true
+    },
+    {
+      "case": "group-wrong-rectangle",
+      "rejected": true,
+      "similarity": {
+        "meanRGBError": 0.5234370145660217,
+        "menuHeight": 668,
+        "menuWidth": 615,
+        "samples": 936,
+        "screenHeight": 768,
+        "screenWidth": 1024
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.logging: path=/Users/runner/work/_temp/footer-runtime/Library/Logs/CodexBar/CodexBar.log [CodexBarCore] File logging disabled
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.settings: enabled=0 [CodexBarCore] Claude web extras updated
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.settings: enabled=0 [CodexBarCore] Provider storage footprints updated
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.settings: enabled=0 [CodexBarCore] OpenAI web access updated
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=1 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=2 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=3 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=4 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=5 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=6 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=7 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:49+0000 info com.steipete.codexbar.token-accounts: count=8 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.token-accounts: count=9 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.token-accounts: count=10 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.token-accounts: count=11 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.token-accounts: count=12 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.token-accounts: count=13 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.token-accounts: count=14 provider=claude [CodexBarCore] Token account added
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.providers: enabled=claude,codex states=abacus=0,abliteration=0,aerostack=0,aiand=0,aixy=0,alibaba=0,alibabatokenplan=0,amp=0,antigravity=0,atlascloud=0,augment=0,azureopenai=0,bedrock=0,bifrost=0,chatbox=0,chutes=0,claude=1,claudeplatform=0,clawrouter=0,clinepass=0,codebuff=0,coderabbit=0,codex=1,commandcode=0,copilot=0,cosmic=0,cursor=0,deepgram=0,deepinfra=0,deepseek=0,devin=0,devpass=0,doubao=0,elevenlabs=0,exa=0,factory=0,fal=0,fireworks=0,flora=0,futureagi=0,gemini=0,gitkraken=0,grok=0,groq=0,helmcode=0,huggingface=0,hyper=0,ibmbob=0,jetbrains=0,kilo=0,kimi=0,kiro=0,langdock=0,linkup=0,litellm=0,lithosai=0,llmman=0,llmproxy=0,longcat=0,manus=0,mimo=0,minimax=0,mistral=0,moonshot=0,munito=0,muse=0,museai=0,neuralwatt=0,notion=0,nous=0,ollama=0,openai=0,opencode=0,opencodego=0,opendesign=0,openrouter=0,parallel=0,perplexity=0,pi=0,poe=0,qoder=0,qwencloud=0,raycast=0,replicate=0,sailresearch=0,sakana=0,sofya=0,soniox=0,stepfun=0,sub2api=0,synthetic=0,t3chat=0,tavily=0,tinyapi=0,traecn=0,typesafe=0,v0=0,venice=0,vercel=0,vertexai=0,warp=0,wayfinder=0,windsurf=0,workbuddy=0,xai=0,xapi=0,xkiro=0,zai=0,zed=0,zenmux=0,zoommate=0 [CodexBarCore] Provider enablement at startup
+2026-11-06T15:54:50+0000 info com.steipete.codexbar.providers: ampCookieSource=manual augmentCookieSource=manual backgroundWorkLowPowerMode=0 claudeCookieSource=manual claudeUsageSource=auto claudeWebExtras=0 codexCookieSource=off codexUsageSource=auto cursorCookieSource=manual effectiveOpenAIWebBatterySaver=0 factoryCookieSource=manual kiloExtras=0 kiloUsageSource=auto kimiCookieSource=manual minimaxCookieSource=manual museCookieSource=off ollamaCookieSource=manual openAIWebAccess=0 openAIWebBatterySaver=0 opencodeCookieSource=manual opencodegoCookieSource=manual t3ChatCookieSource=manual [CodexBarCore] Provider mode snapshot
+2026-11-06T15:54:50+0000 warning com.steipete.codexbar.app: durationMs=142.5 section=addOverviewRows(16) [CodexBarCore] slow chart render
+2026-11-06T15:54:50+0000 warning com.steipete.codexbar.app: durationMs=306.8 items=31 openMenus=0 operation=populateMenu provider=nil storeRefreshing=0 [CodexBarCore] slow menu operation

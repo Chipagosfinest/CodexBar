@@ -1,0 +1,19 @@
+{
+  "controlsPassed": true,
+  "cases": [
+    {
+      "case": "real-child-exit",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "case": "real-child-exit",
+      "expected": 3,
+      "observed": 3
+    },
+    {
+      "case": "live-child-times-out",
+      "verified": true
+    }
+  ]
+}
