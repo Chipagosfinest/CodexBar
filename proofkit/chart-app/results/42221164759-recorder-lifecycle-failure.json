@@ -1,0 +1,29 @@
+{
+  "runID": 42221164759,
+  "controllerSHA": "5bd48c40b0e13b704aab2604a886c0545440d0c4",
+  "artifactID": 13504370444,
+  "classification": "partial-light-journey-real-recorder-lifecycle-timeout",
+  "overallRunStatus": "failure",
+  "fullUIAcceptance": false,
+  "reusedExactBundle": true,
+  "lightStatesPassed": 3,
+  "darkAppearanceExecuted": false,
+  "realProcessControlsPassed": true,
+  "recorderPID": 2055,
+  "primaryFailure": "bounded actual process.poll loop reached45seconds with child still alive",
+  "previousHypothesisRejected": "Switching from event-basedwait to directpoll did not resolve the issue. Current evidence does not support a Python kqueue defect.",
+  "movie": {
+    "durationSeconds": 25.0,
+    "width": 1024,
+    "height": 768
+  },
+  "observedOrderingDifference": "Working native preflight sends no Escape until capture process exit; failed chart driver sends Escape after final state while recorder is active. This remains a hypothesis until observed.",
+  "fileSHA256": {
+    "driver.log": "1b6f734fde7d5a74278a63e92e66c946e43d15e90a940ae29cab2dbf8b4a6c30",
+    "driver-controls.json": "4a2da8e6a0d47e0e0e36823d57507ded29e8132a97a4601a26db8550697c68e6",
+    "events.json": "e8e1a020a9f3c19da9a4595191194f39b0e080f79fa25ceaf1fafd2e9befb1fb",
+    "ui-verdict.json": "de9fe05d56dd92550afda52cc969964a04483a84ac797b61f05c7938dc83c6f1",
+    "light-screen.mov": "8d43b46c1921df8bce3263def60e97c3e79d58c72d1f3e8b2faffc8f8666fe04",
+    "reuse-receipt.json": "bb53c135c340452c1a9f9f87c76d166e3d1ec2c4426c120021e06d92f6501a41"
+  }
+}

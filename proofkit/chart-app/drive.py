@@ -216,7 +216,7 @@ try:
         capture(theme + "-3-exit", ("unknown", "unknown"))
         last_state = time.monotonic() - video_start
         assert last_state < 24, "Video could miss final state; retain screenshots but reject recording coverage"
-        ui("esc")
+        # Keep native menu tracking until capture finalizes, matching successful preflight order.
         recording_exit = observed_exit(recording, 45)
         log("recorder_exit", pid=recording.pid, exit_code=recording_exit, seconds_since_launch=time.monotonic() - video_start)
         assert recording_exit == 0
@@ -224,6 +224,7 @@ try:
         media = json.loads(ui("media", out / (theme + "-screen.mov")))
         assert media["duration"] >= last_state and media["width"] > 0
         log("recording", theme=theme, last_state_elapsed=last_state, media=media)
+        ui("esc")
     receipt()
     assert process.poll() is None
     passed = True
