@@ -1,0 +1,22 @@
+{
+  "correctedBehavioralRed": true,
+  "originalVerdictUnchanged": true,
+  "originalVerdictSHA256": "bc08b889c8e39e590668d58f97843725c3db96c20d16ce6790f7ab59f9128cf7",
+  "rawLogSHA256": "a31f5b49c65b31f8838d99b6a91138ac9e5e042b4185a6907ded943d86cff9e2",
+  "priorRun": 42237102523,
+  "priorController": "2b593a0865d851605f98d93bd447df98c56cec65",
+  "archiveSHA256": "53cb100d6fd0d596521bafb7a865a81cc91afcbe0f01aa05af448b0fc5ff1e74",
+  "exactThreeFailures": [
+    "\u2718 Test \"native highlighted More refreshes its captured plugin card without replacing navigation\" recorded an issue at OverviewOverflowPluginRefreshTests.swift:195:9: Expectation failed: rebuilt.contains { $0 === overflow }",
+    "\u2718 Test \"native highlighted More refreshes its captured plugin card without replacing navigation\" recorded an issue at OverviewOverflowPluginRefreshTests.swift:212:9: Expectation failed: (freshCard \u2192 <CodexBar.MenuCardMenuItem: 0x600001088be0, view: <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>>) !== (oldCard \u2192 <CodexBar.MenuCardMenuItem: 0x600001088be0, view: <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>>)",
+    "\u2718 Test \"native highlighted More refreshes its captured plugin card without replacing navigation\" recorded an issue at OverviewOverflowPluginRefreshTests.swift:213:9: Expectation failed: (freshView \u2192 <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>) !== (oldView \u2192 <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>)"
+  ],
+  "summary": [
+    [
+      "2",
+      "1",
+      "failed"
+    ]
+  ],
+  "explanation": "Original classifier over-required fresh-cache fingerprint failure. Cache may warm while captured card/view remain stale. Actual test assertions unchanged."
+}

@@ -1,0 +1,24 @@
+{
+  "classification": "blocked-on-external-state-hosted-runner-capacity",
+  "runID": 42234411509,
+  "jobID": 127948221152,
+  "controllerSHA": "8460a0e366da98e74b30e3311719b1e9cd45cf2d",
+  "workflowStatus": "failure",
+  "jobStatus": "cancelled",
+  "runnerID": 0,
+  "executedSteps": 0,
+  "productTestsExecuted": false,
+  "behavioralRed": false,
+  "candidateGreen": false,
+  "annotationMessages": [
+    "The job was not acquired by Runner of type hosted even after multiple attempts",
+    "Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.",
+    "Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.",
+    "Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times."
+  ],
+  "rawSHA256": {
+    "run.json": "d88bc3f61047192615430778413ed4afafd466869db5e003d726e6b9f34e4c31",
+    "job.json": "f6e6b66a29281952d2ab4cf93c2512ae952b1c3fad3188b266350ea5c3c0b149",
+    "annotations.json": "3355d9029fe204c7480f8b5a8f529bfd2541a655c6ebaf29b65160bafcf6cc61"
+  }
+}

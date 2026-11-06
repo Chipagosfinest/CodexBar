@@ -1,0 +1,31 @@
+{
+  "both_named_tests_started": true,
+  "original_control_passed": true,
+  "new_regression_failed": false,
+  "new_regression_passed": true,
+  "exact_two_test_one_suite_summary": true,
+  "summaries": [
+    [
+      "2",
+      "1",
+      "passed"
+    ]
+  ],
+  "expected_runtime_witnesses": {
+    "nested_callback": false,
+    "captured_card": false,
+    "captured_view": false,
+    "fresh_fingerprint": false
+  },
+  "expected_failures_only": true,
+  "expectation_failure_lines": [],
+  "infrastructure_error": false,
+  "exit_code": 0,
+  "behavioral_red": false,
+  "candidate_green": true,
+  "unexpected_untracked_inputs": [],
+  "no_untracked_inputs": true,
+  "all_tracked_inputs_match": true,
+  "frozen_test_sha256_matches": true,
+  "log_sha256": "0d73b236903dc0cbb897480bce9bfb4d4562efda394ed0bd8ba75372dd180eeb"
+}

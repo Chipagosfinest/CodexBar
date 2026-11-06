@@ -1,0 +1,27 @@
+{
+  "case": "footer",
+  "expectation": "green",
+  "product_sha": "e8a0cca51036fa8f30362a0710754d812ace34a3",
+  "controller_sha": "1f0de2e8003e58452eb912616870a9a36af994cf",
+  "filter": "UserProviderPluginTests",
+  "expected_test": "native highlighted More refreshes its captured plugin card without replacing navigation",
+  "selected_sources": [
+    "Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift",
+    "Tests/CodexBarTests/UserProviderPluginProofSuite.swift",
+    "Tests/CodexBarTests/UserProviderPluginTestSupport.swift",
+    "Tests/CodexBarTests/TestStores.swift",
+    "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift",
+    "Tests/CodexBarTests/CodexCredentialFixtures.swift"
+  ],
+  "selected_source_sha256": {
+    "Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift": "65125fe154fe846983ae550a6beff83d58860d0c7e90558f00c6b79631243281",
+    "Tests/CodexBarTests/UserProviderPluginProofSuite.swift": "04c708a93cce0ee3838256d172c30722b966160d04269923d782e29cab60b8fa",
+    "Tests/CodexBarTests/UserProviderPluginTestSupport.swift": "5c805895a2b4e671c0b329fcd77cd1c0409f9657b3470220a7985dc17e8dae9f",
+    "Tests/CodexBarTests/TestStores.swift": "a6dc497095b3909e622bb2d8f7a74e761486de51a9aac95796fe18e384dd5d98",
+    "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift": "7ab8e18e5ccb6d01b21bbc0c34fa1e35b888e69e634f63f073eb261a3e230a8d",
+    "Tests/CodexBarTests/CodexCredentialFixtures.swift": "437ba400266c7311c7705358834687462ca50eeb2c68fc9c09f7c52a28742f82"
+  },
+  "harness_patch_sha256": "dd70396cfe612958a3244508a98a0c566c9697d30e83e73183fe752e7d64ef06",
+  "candidate_production_patch_sha256": "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961",
+  "boundary": "Synthetic bounded tests; immutable base plus explicit candidate delta; no UI journey claim"
+}

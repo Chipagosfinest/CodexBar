@@ -1,0 +1,35 @@
+{
+  "both_named_tests_started": true,
+  "original_control_passed": true,
+  "new_regression_failed": true,
+  "new_regression_passed": false,
+  "exact_two_test_one_suite_summary": true,
+  "summaries": [
+    [
+      "2",
+      "1",
+      "failed"
+    ]
+  ],
+  "expected_runtime_witnesses": {
+    "nested_callback": true,
+    "captured_card": true,
+    "captured_view": true,
+    "fresh_fingerprint": false
+  },
+  "expected_failures_only": true,
+  "expectation_failure_lines": [
+    "\u2718 Test \"native highlighted More refreshes its captured plugin card without replacing navigation\" recorded an issue at OverviewOverflowPluginRefreshTests.swift:195:9: Expectation failed: rebuilt.contains { $0 === overflow }",
+    "\u2718 Test \"native highlighted More refreshes its captured plugin card without replacing navigation\" recorded an issue at OverviewOverflowPluginRefreshTests.swift:212:9: Expectation failed: (freshCard \u2192 <CodexBar.MenuCardMenuItem: 0x600001088be0, view: <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>>) !== (oldCard \u2192 <CodexBar.MenuCardMenuItem: 0x600001088be0, view: <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>>)",
+    "\u2718 Test \"native highlighted More refreshes its captured plugin card without replacing navigation\" recorded an issue at OverviewOverflowPluginRefreshTests.swift:213:9: Expectation failed: (freshView \u2192 <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>) !== (oldView \u2192 <CodexBar.MenuRowContainerView: 0x7fab5b22d3f0>)"
+  ],
+  "infrastructure_error": false,
+  "exit_code": 1,
+  "behavioral_red": false,
+  "candidate_green": false,
+  "unexpected_untracked_inputs": [],
+  "no_untracked_inputs": true,
+  "all_tracked_inputs_match": true,
+  "frozen_test_sha256_matches": true,
+  "log_sha256": "a31f5b49c65b31f8838d99b6a91138ac9e5e042b4185a6907ded943d86cff9e2"
+}

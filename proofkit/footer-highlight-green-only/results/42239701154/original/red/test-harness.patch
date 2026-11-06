@@ -1,0 +1,210 @@
+diff --git a/Package.swift b/Package.swift
+index 7fe7c2e..c5e9d32 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -241,6 +241,7 @@ let package = Package(
+                 "CodexBarTests/ProviderPluginRuntimeTests.swift",
+                 "CodexBarTests/Sub2APIPluginGoldenTests.swift",
+             ],
++            sources: ["CodexBarTests/OverviewOverflowPluginRefreshTests.swift", "CodexBarTests/UserProviderPluginProofSuite.swift", "CodexBarTests/UserProviderPluginTestSupport.swift", "CodexBarTests/TestStores.swift", "CodexBarTests/ZaiTokenStoreTestSupport.swift", "CodexBarTests/CodexCredentialFixtures.swift"],
+             resources: [
+                 .copy("CodexBarTests/Fixtures"),
+             ],
+diff --git a/Scripts/run_swift_test.py b/Scripts/run_swift_test.py
+index e16af5d..15366be 100755
+--- a/Scripts/run_swift_test.py
++++ b/Scripts/run_swift_test.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ """Run native SwiftPM selection with the shared test-process containment."""
+ 
++import contextlib
+ import os
+ import sys
+ import tempfile
+@@ -23,7 +24,7 @@ def main() -> int:
+         return 2
+     # Like serial groups, the whole invocation, including its build, gets temporary HOME and
+     # CFFIXED_USER_HOME values instead of the caller's.
+-    with tempfile.TemporaryDirectory(prefix="codexbar-native-test-home-") as home:
++    with contextlib.nullcontext(tempfile.mkdtemp(prefix="codexbar-proof-test-home-")) as home:
+         return run_command(["swift", "test", "--no-parallel", *sys.argv[1:]], timeout=timeout,
+                            environment=os.environ | {"HOME": home, "CFFIXED_USER_HOME": home})
+ 
+diff --git a/Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift b/Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift
+index 76e6fba..39f5114 100644
+--- a/Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift
++++ b/Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift
+@@ -6,8 +6,8 @@ import Testing
+ @testable import CodexBar
+ 
+ /// Stay in the existing serialized plugin suite because its fixtures own the shared plugin registry.
++@MainActor
+ extension UserProviderPluginTests {
+-    @MainActor
+     @Test
+     func `successful refresh replaces a captured overflow plugin card without reopening Overview`() async throws {
+         let previousRendering = StatusItemController.menuCardRenderingEnabled
+@@ -80,7 +80,7 @@ extension UserProviderPluginTests {
+         #expect(freshFingerprint != oldFingerprint)
+ 
+         controller.refreshOpenMenusAfterUserPluginRefresh(plugin.manifest.id)
+-        for _ in 0..<100 where rebuilt.isEmpty {
++        for _ in 0..<100 where !rebuilt.contains(where: { $0 === menu }) {
+             await Task.yield()
+             try? await Task.sleep(for: .milliseconds(10))
+         }
+@@ -101,7 +101,138 @@ extension UserProviderPluginTests {
+         })
+     }
+ 
+-    @MainActor
++    @Test
++    func `native highlighted More refreshes its captured plugin card without replacing navigation`() async throws {
++        let previousRendering = StatusItemController.menuCardRenderingEnabled
++        StatusItemController.menuCardRenderingEnabled = true
++        defer { StatusItemController.menuCardRenderingEnabled = previousRendering }
++        let fixture = try Fixture()
++        defer { fixture.remove() }
++        _ = try fixture.write(name: "highlighted-overflow-refresh.js", source: """
++        defineProvider({
++          id: "highlighted-overflow-refresh-meter",
++          name: "Highlighted Overflow Refresh Meter",
++          topLevel: false,
++          endpoints: ["https://overflow-refresh.example.test"],
++          settings: [],
++          fetchUsage() { return { primary: { usedPercent: 42 } }; },
++        });
++        """)
++        let transport = RecordingTransport(responseJSON: "{}")
++        let plugin = try #require(UserProviderPluginRegistry.refresh(
++            loader: fixture.loader(transport: transport)).first?.plugin)
++        try fixture.approvals.record(plugin.approvalBinding(settings: [:]))
++        let (controller, store, settings) = Self.overflowPluginRefreshController(
++            plugin: plugin, approvalStore: fixture.approvals)
++        defer {
++            controller._test_openMenuRebuildObserver = nil
++            controller.openMenus.removeAll()
++            controller.releaseStatusItemsForTesting()
++        }
++        controller.menuRefreshEnabledOverrideForTesting = true
++        let oldSnapshot = UsageSnapshot(
++            primary: RateWindow(usedPercent: 5, windowMinutes: nil, resetsAt: nil, resetDescription: nil),
++            secondary: nil,
++            updatedAt: .distantPast)
++        let oldError = "Synthetic previous plugin refresh failure"
++        store.snapshots[plugin.manifest.id] = oldSnapshot
++        store.errors[plugin.manifest.id] = oldError
++        let menu = controller.makeMenu()
++        controller.mergedMenu = menu
++        controller.populateMenu(menu, provider: nil)
++        let rootKey = ObjectIdentifier(menu)
++        controller.openMenus[rootKey] = menu
++        let parent = try #require(menu.items.first { ($0.representedObject as? String) == "overviewOverflow" })
++        let overflow = try #require(parent.submenu)
++        let cardID = "pluginCard:\(plugin.manifest.id.rawValue)"
++        let cardIndex = try #require(overflow.items.firstIndex { ($0.representedObject as? String) == cardID })
++        let oldCard = overflow.items[cardIndex]
++        let oldView = try #require(oldCard.view as? MenuRowContainerView)
++        let rootItems = menu.items
++        let overflowItems = overflow.items
++        let rootNavigation = Self.overflowNavigationSignatures(rootItems)
++        let otherNavigation = Self.overflowNavigationSignatures(
++            overflowItems.enumerated().filter { $0.offset != cardIndex }.map(\.element))
++        let oldFingerprint = UserPluginMenuCardView.fingerprint(
++            snapshot: oldSnapshot, error: oldError, resetStyle: settings.resetTimeDisplayStyle)
++        #expect(parent.view == nil)
++        #expect(parent.isEnabled)
++        #expect(overflow.supermenu === menu)
++        #expect(controller.openMenus[ObjectIdentifier(overflow)] == nil)
++        #expect(controller.menuCardHeightCache.keys.contains { $0.id == cardID && $0.fingerprint == oldFingerprint })
++
++        // Deliver the real delegate event for a native submenu parent. Do not override highlightedItem,
++        // disable the interaction guard, unhighlight, or close/reopen the menus to permit a root rebuild.
++        controller.menu(menu, willHighlight: parent, eventType: .mouseMoved)
++        #expect(controller.isNativeMenuItemHighlighted(in: menu))
++        #expect(controller.highlightedMenuItems[rootKey] === parent)
++        var rebuilt: [NSMenu] = []
++        controller._test_openMenuRebuildObserver = { rebuilt.append($0) }
++        await store.refreshUserPlugin(plugin.manifest.id)
++        let freshSnapshot = try #require(store.snapshots[plugin.manifest.id])
++        #expect(freshSnapshot.primary?.usedPercent == 42)
++        #expect(store.errors[plugin.manifest.id] == nil)
++        #expect(transport.requestCount == 0)
++        #expect(controller.isNativeMenuItemHighlighted(in: menu))
++        #expect(controller.highlightedMenuItems[rootKey] === parent)
++        let freshFingerprint = UserPluginMenuCardView.fingerprint(
++            snapshot: freshSnapshot, error: nil, resetStyle: settings.resetTimeDisplayStyle)
++        #expect(freshFingerprint != oldFingerprint)
++        controller.refreshOpenMenusAfterUserPluginRefresh(plugin.manifest.id)
++        for _ in 0..<100 {
++            #expect(controller.isNativeMenuItemHighlighted(in: menu))
++            #expect(controller.highlightedMenuItems[rootKey] === parent)
++            if rebuilt.contains(where: { $0 === overflow }),
++               controller.nativeHighlightDeferredMenuRebuilds[rootKey] != nil
++            {
++                break
++            }
++            await Task.yield()
++            try await Task.sleep(for: .milliseconds(10))
++        }
++
++        // The root remains blocked by native navigation while only the captured nested payload refreshes.
++        #expect(rebuilt.contains { $0 === overflow })
++        #expect(!rebuilt.contains { $0 === menu })
++        #expect(controller.nativeHighlightDeferredMenuRebuilds[rootKey] != nil)
++        #expect(controller.openMenus.count == 1)
++        #expect(controller.openMenus[rootKey] === menu)
++        #expect(controller.highlightedMenuItems[rootKey] === parent)
++        #expect(controller.isNativeMenuItemHighlighted(in: menu))
++        #expect(settings.mergedMenuLastSelectedWasOverview)
++        #expect(parent.submenu === overflow)
++        #expect(overflow.supermenu === menu)
++        #expect(menu.items.map(ObjectIdentifier.init) == rootItems.map(ObjectIdentifier.init))
++        #expect(Self.overflowNavigationSignatures(menu.items) == rootNavigation)
++        let freshItems = overflow.items
++        #expect(freshItems.count == overflowItems.count)
++        let freshCard = try #require(freshItems.first { ($0.representedObject as? String) == cardID })
++        let freshView = try #require(freshCard.view as? MenuRowContainerView)
++        #expect(freshItems.firstIndex { $0 === freshCard } == cardIndex)
++        #expect(freshCard !== oldCard)
++        #expect(freshView !== oldView)
++        let otherItems = freshItems.enumerated().filter { $0.offset != cardIndex }.map(\.element)
++        #expect(otherItems.map(ObjectIdentifier.init) == overflowItems.enumerated()
++            .filter { $0.offset != cardIndex }.map { ObjectIdentifier($0.element) })
++        #expect(Self.overflowNavigationSignatures(otherItems) == otherNavigation)
++        #expect(controller.menuCardHeightCache.keys.contains { $0.id == cardID && $0.fingerprint == freshFingerprint })
++    }
++
++    private static func overflowNavigationSignatures(_ items: [NSMenuItem]) -> [String] {
++        items.map { item in
++            [
++                item.title,
++                item.keyEquivalent,
++                String(item.keyEquivalentModifierMask.rawValue),
++                String(item.state.rawValue),
++                String(item.isEnabled),
++                item.action.map { NSStringFromSelector($0) } ?? "none",
++                item.target.map { String(describing: ObjectIdentifier($0)) } ?? "none",
++                item.submenu.map { String(describing: ObjectIdentifier($0)) } ?? "none",
++            ].joined(separator: "|")
++        }
++    }
++
+     private static func overflowPluginRefreshController(
+         plugin: UserProviderPlugin,
+         approvalStore: ProviderPluginApprovalStore) -> (StatusItemController, UsageStore, SettingsStore)
+diff --git a/Tests/CodexBarTests/UserProviderPluginProofSuite.swift b/Tests/CodexBarTests/UserProviderPluginProofSuite.swift
+new file mode 100644
+index 0000000..b4cdba8
+--- /dev/null
++++ b/Tests/CodexBarTests/UserProviderPluginProofSuite.swift
+@@ -0,0 +1,8 @@
++#if canImport(JavaScriptCore)
++import Testing
++
++// Proof-only namespace shell: preserve the product suite's serialization while
++// excluding unrelated test methods and their screenshot-only dependencies.
++@Suite(.serialized)
++struct UserProviderPluginTests {}
++#endif

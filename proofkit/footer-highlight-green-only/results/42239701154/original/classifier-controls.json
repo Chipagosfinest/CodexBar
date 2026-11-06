@@ -1,0 +1,51 @@
+{
+  "syntheticClassifierControlsOnly": true,
+  "controlsPassed": true,
+  "cases": [
+    {
+      "case": "synthetic-valid-red",
+      "expectedAccepted": true,
+      "actualAccepted": true
+    },
+    {
+      "case": "synthetic-valid-green",
+      "expectedAccepted": true,
+      "actualAccepted": true
+    },
+    {
+      "case": "compiler-failure-no-tests",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "case": "missing-test-start",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "case": "wrong-test-count",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "case": "wrong-failure",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "case": "old-control-failed",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "case": "compiler-error-plus-fake-summary",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    },
+    {
+      "case": "unexpected-green-issue",
+      "expectedAccepted": false,
+      "actualAccepted": false
+    }
+  ]
+}
