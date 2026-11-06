@@ -1,0 +1,81 @@
+name: Cursor private CLI cache - behavioral red and green
+
+on:
+  push:
+    branches: [proof/20261106-review-regressions]
+    paths: [proofkit/cli-cache/**, .github/workflows/cli-cache-proof.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  cache-proof:
+    runs-on: macos-26
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        expect: [red, green]
+    env:
+      PROOF_EXPECT: ${{ matrix.expect }}
+      PRODUCT_SHA: ec61c49dd71c3aa6efe33162762ef2164ecfaea1
+      CODEXBAR_DISABLE_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_TEST_NATIVE_TIMEOUT: "2400"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {path: kit, persist-credentials: false}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.PRODUCT_SHA }}
+          path: product
+          persist-credentials: false
+      - name: Select installed Xcode and containment-capable Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          echo "DEVELOPER_DIR=$latest/Contents/Developer" >> "$GITHUB_ENV"
+          proof_python=""
+          for candidate in "$(command -v python3)" /opt/homebrew/bin/python3.14 /opt/homebrew/opt/python@3.14/bin/python3.14; do
+            if [[ -x "$candidate" ]] && "$candidate" -c 'import os; assert all(hasattr(os, n) for n in ("waitid", "P_PID", "WEXITED", "WNOHANG", "WNOWAIT"))'; then
+              proof_python="$candidate"
+              break
+            fi
+          done
+          if [[ -z "$proof_python" ]]; then
+            brew install python@3.14
+            proof_python="$(brew --prefix python@3.14)/bin/python3.14"
+          fi
+          "$proof_python" -c 'import os; assert all(hasattr(os, n) for n in ("waitid", "P_PID", "WEXITED", "WNOHANG", "WNOWAIT"))'
+          mkdir -p "$RUNNER_TEMP/proof-python" "$RUNNER_TEMP/review-regression-proof"
+          ln -s "$proof_python" "$RUNNER_TEMP/proof-python/python3"
+          echo "$RUNNER_TEMP/proof-python" >> "$GITHUB_PATH"
+          echo "PROOF_OUT=$RUNNER_TEMP/review-regression-proof" >> "$GITHUB_ENV"
+          { sw_vers; xcodebuild -version; "$proof_python" --version; launchctl managername; } > "$RUNNER_TEMP/review-regression-proof/environment.txt"
+      - name: Prepare bounded synthetic tests with intact product modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 kit/proofkit/cli-cache/prove.py prepare --expect "$PROOF_EXPECT" --product product --output "$PROOF_OUT" > "$PROOF_OUT/filter.txt"
+          cat "$PROOF_OUT/provenance.json"
+      - name: Require declared Core and CLI runtime result
+        working-directory: product
+        shell: bash
+        run: |
+          set -euo pipefail
+          filter=$(cat "$PROOF_OUT/filter.txt")
+          set +e
+          ./Scripts/test_fast.sh --jobs 2 --filter "$filter" > "$PROOF_OUT/tests.log" 2>&1
+          result=$?
+          set -e
+          printf '%s\n' "$result" > "$PROOF_OUT/test-exit.txt"
+          tail -100 "$PROOF_OUT/tests.log"
+          python3 ../kit/proofkit/cli-cache/prove.py verify --expect "$PROOF_EXPECT" --product . --output "$PROOF_OUT" --exit-code "$result"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: cli-cache-${{ matrix.expect }}-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/review-regression-proof
+          retention-days: 14
