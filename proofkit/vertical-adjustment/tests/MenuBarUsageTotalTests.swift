@@ -547,6 +547,99 @@ extension MenuBarUsageTotalTests {
         }
     }
 
+    @Test(arguments: [false, true], [false, true])
+    func `native warning capsule pixels follow the saved vertical adjustment`(
+        highContrast: Bool, dark: Bool) throws
+    {
+        for scale in [1, 2] {
+            let before = try Self.nativeWarningCapsuleCentroid(
+                highContrast: highContrast, dark: dark, adjustment: 0, scale: scale)
+            let calibration = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 0), scale: scale)
+            for adjustment in [-3, 3] {
+                let expectedDelta = try Self.leadingAlphaCentroid(
+                    Self.calibrationImage(shift: adjustment), scale: scale) - calibration
+                #expect(abs(abs(expectedDelta) - CGFloat(abs(adjustment))) < 0.01)
+                let after = try Self.nativeWarningCapsuleCentroid(
+                    highContrast: highContrast, dark: dark, adjustment: adjustment, scale: scale)
+                #expect(abs((after - before) - expectedDelta) < 0.25)
+            }
+        }
+    }
+
+    private static func nativeWarningCapsuleCentroid(
+        highContrast: Bool, dark: Bool, adjustment: Int, scale: Int) throws -> CGFloat
+    {
+        _ = NSApplication.shared
+        let appearanceName = dark ? NSAppearance.Name.darkAqua : .aqua
+        let appearance = try #require(NSAppearance(named: appearanceName))
+        let total = try #require(MenuBarUsageTotal(entries: [
+            Entry(provider: .claude, remainingPercent: 8, isStale: false),
+        ]))
+        let logo = try #require(ProviderBrandIcon.image(for: .claude))
+        let options = MenuBarLayoutRenderOptions(
+            size: .regular,
+            highContrast: highContrast,
+            showUsed: false,
+            conditionals: [],
+            appearanceName: appearanceName.rawValue,
+            isDebugApp: false,
+            now: Date(timeIntervalSince1970: 1_793_000_000),
+            verticalAdjustment: adjustment)
+        let rendered = MenuBarLayoutRenderer.renderUsageTotal(total, logo: logo, options: options)
+        let width = rendered.statusItemWidth(gap: .regular)
+        let bounds = NSRect(x: 0, y: 0, width: width, height: 22)
+        let canvas = NSView(frame: bounds)
+        canvas.appearance = appearance
+        let button = NSButton(frame: bounds)
+        button.isBordered = false
+        button.imagePosition = .imageLeading
+        button.imageScaling = .scaleNone
+        button.alignment = .center
+        button.appearance = appearance
+        button.attributedTitle = rendered.attributedTitle
+        button.image = rendered.leadingIcon.map {
+            MenuBarLayoutRenderer.attachmentImage($0, tint: .labelColor)
+        }
+        button.setAccessibilityLabel(rendered.accessibilityLabel)
+        canvas.addSubview(button)
+        let window = NSWindow(contentRect: bounds, styleMask: [.borderless], backing: .buffered, defer: false)
+        window.appearance = appearance
+        window.contentView = canvas
+        window.orderFront(nil)
+        defer { window.orderOut(nil) }
+        canvas.layoutSubtreeIfNeeded()
+        let bitmap = try #require(NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(ceil(width)) * scale,
+            pixelsHigh: 22 * scale,
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .deviceRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0))
+        bitmap.size = bounds.size
+        appearance.performAsCurrentDrawingAppearance {
+            button.cacheDisplay(in: button.bounds, to: bitmap)
+        }
+        var mass: CGFloat = 0
+        var weightedY: CGFloat = 0
+        for y in 0..<bitmap.pixelsHigh {
+            for x in 0..<bitmap.pixelsWide {
+                guard let color = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB),
+                      color.redComponent > 0.6, color.greenComponent < 0.3, color.blueComponent < 0.3
+                else { continue }
+                // Claude's orange logo has green above this mask; only the production red capsule qualifies.
+                let weight = color.alphaComponent
+                mass += weight
+                weightedY += (CGFloat(y) + 0.5) * weight
+            }
+        }
+        try #require(mass > 20)
+        return weightedY / mass / CGFloat(scale)
+    }
+
     private static func calibrationImage(shift: Int) -> NSImage {
         NSImage(size: NSSize(width: 12, height: 22), flipped: false) { _ in
             NSColor.black.setFill()

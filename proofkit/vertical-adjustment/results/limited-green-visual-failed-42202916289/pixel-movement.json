@@ -1,0 +1,194 @@
+[
+  {
+    "theme": "light",
+    "row": "normal calm",
+    "foreground_centroid_px": [
+      11.101532567049809,
+      14.101532567049809,
+      8.101532567049809
+    ],
+    "foreground_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ],
+    "red_capsule_centroid_px": [
+      null,
+      null,
+      null
+    ],
+    "red_capsule_delta_px": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "theme": "light",
+    "row": "normal warning",
+    "foreground_centroid_px": [
+      11.228373702422145,
+      12.982698961937716,
+      8.85121107266436
+    ],
+    "foreground_delta_px": [
+      0.0,
+      1.7543252595155714,
+      -2.3771626297577857
+    ],
+    "red_capsule_centroid_px": [
+      11.468421052631578,
+      12.468421052631578,
+      9.468421052631578
+    ],
+    "red_capsule_delta_px": [
+      0.0,
+      1.0,
+      -2.0
+    ]
+  },
+  {
+    "theme": "light",
+    "row": "HC calm",
+    "foreground_centroid_px": [
+      11.121262458471762,
+      14.121262458471762,
+      8.121262458471762
+    ],
+    "foreground_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ],
+    "red_capsule_centroid_px": [
+      null,
+      null,
+      null
+    ],
+    "red_capsule_delta_px": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "theme": "light",
+    "row": "HC warning",
+    "foreground_centroid_px": [
+      11.183860232945092,
+      14.183860232945092,
+      8.183860232945092
+    ],
+    "foreground_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ],
+    "red_capsule_centroid_px": [
+      11.468421052631578,
+      14.468421052631578,
+      8.468421052631578
+    ],
+    "red_capsule_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ]
+  },
+  {
+    "theme": "dark",
+    "row": "normal calm",
+    "foreground_centroid_px": [
+      11.112403100775193,
+      14.112403100775193,
+      8.112403100775193
+    ],
+    "foreground_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ],
+    "red_capsule_centroid_px": [
+      null,
+      null,
+      null
+    ],
+    "red_capsule_delta_px": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "theme": "dark",
+    "row": "normal warning",
+    "foreground_centroid_px": [
+      11.271653543307087,
+      12.95511811023622,
+      8.92992125984252
+    ],
+    "foreground_delta_px": [
+      0.0,
+      1.6834645669291337,
+      -2.3417322834645677
+    ],
+    "red_capsule_centroid_px": [
+      11.468421052631578,
+      12.468421052631578,
+      9.468421052631578
+    ],
+    "red_capsule_delta_px": [
+      0.0,
+      1.0,
+      -2.0
+    ]
+  },
+  {
+    "theme": "dark",
+    "row": "HC calm",
+    "foreground_centroid_px": [
+      11.14983164983165,
+      14.14983164983165,
+      8.14983164983165
+    ],
+    "foreground_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ],
+    "red_capsule_centroid_px": [
+      null,
+      null,
+      null
+    ],
+    "red_capsule_delta_px": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "theme": "dark",
+    "row": "HC warning",
+    "foreground_centroid_px": [
+      11.21841704718417,
+      14.21841704718417,
+      8.21841704718417
+    ],
+    "foreground_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ],
+    "red_capsule_centroid_px": [
+      11.468421052631578,
+      14.468421052631578,
+      8.468421052631578
+    ],
+    "red_capsule_delta_px": [
+      0.0,
+      3.0,
+      -3.0
+    ]
+  }
+]

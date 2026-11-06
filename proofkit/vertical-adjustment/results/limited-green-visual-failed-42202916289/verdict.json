@@ -1,0 +1,44 @@
+{
+  "product_sha": "5614c2736caf037cd5205151194dd036f205f792",
+  "exit_code": 0,
+  "suites_passed": {
+    "MenuBarUsageTotalTests": true
+  },
+  "test_counts": [
+    "20"
+  ],
+  "production_source_matches_declared_input": true,
+  "selected_tests_unchanged": true,
+  "unexpected_failure": false,
+  "baseline_controls_passed": {
+    "total averages each provider and keeps no reading without quotas": true,
+    "near limit starts at ten percent left with the tightest provider first": true,
+    "a forecast within the hour warns like the dropdown does": true,
+    "stale data never raises the warning but still counts toward the total": true,
+    "a provider reads as its tightest limit": true,
+    "a measured quota outside the semantic lanes can still be the tightest": true,
+    "balance backed lanes are not quotas": true,
+    "calm total is one template image so AppKit tints it for any menu bar": true,
+    "warning names the provider with its logo and a capsule that ignores the wallpaper": true,
+    "warning without a logo still names the provider": true,
+    "show used follows the setting everywhere": true,
+    "no quota reading renders a placeholder rather than an empty item": true,
+    "all providers source drives the merged status item and leaves other sources alone": true,
+    "a session forecast warns even when the weekly window would last": true,
+    "a limit whose reset has passed no longer warns": true,
+    "the warning follows the clock on manual refresh in every menu bar style": true,
+    "all providers choice is opt in and persists": true,
+    "high contrast tints the neutral part instead of using a template": true
+  },
+  "regression_tests_failed": {
+    "saved vertical adjustment moves every total attachment equally": false,
+    "saved vertical adjustment moves the actual normal contrast leading pixels": false
+  },
+  "behavioral_red": false,
+  "expectation": "green",
+  "regression_tests_passed": {
+    "saved vertical adjustment moves every total attachment equally": true,
+    "saved vertical adjustment moves the actual normal contrast leading pixels": true
+  },
+  "verified_green": true
+}

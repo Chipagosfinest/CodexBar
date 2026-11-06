@@ -1,9 +1,9 @@
-name: Menubar attachment adjustment - candidate green and native fixture
+name: Menubar native capsule - sequential physical red and green
 
 on:
   push:
     branches: [proof/20261106-review-regressions]
-    paths: [proofkit/vertical-adjustment/prove.py, proofkit/vertical-adjustment/tests/**, proofkit/vertical-adjustment/candidate.patch, proofkit/vertical-adjustment/Render.swift.fragment, proofkit/vertical-adjustment/render_verdict.py, .github/workflows/vertical-adjustment-proof.yml]
+    paths: [proofkit/vertical-adjustment/physical_proof.py, proofkit/vertical-adjustment/prephysical-ee6b.patch, proofkit/vertical-adjustment/tests/**, proofkit/vertical-adjustment/candidate.patch, proofkit/vertical-adjustment/Render.swift.fragment, proofkit/vertical-adjustment/render_verdict.py, .github/workflows/vertical-adjustment-proof.yml]
 
 permissions:
   contents: read
@@ -49,31 +49,53 @@ jobs:
           echo "$RUNNER_TEMP/proof-python" >> "$GITHUB_PATH"
           echo "PROOF_OUT=$RUNNER_TEMP/review-regression-proof" >> "$GITHUB_ENV"
           { sw_vers; xcodebuild -version; "$proof_python" --version; launchctl managername; } > "$RUNNER_TEMP/review-regression-proof/environment.txt"
-      - name: Prepare bounded synthetic tests with intact product modules
+      - name: Prepare actual intermediate source and frozen physical oracle
         shell: bash
         run: |
           set -euo pipefail
-          python3 kit/proofkit/vertical-adjustment/prove.py prepare --expect green --product product --output "$PROOF_OUT" > "$PROOF_OUT/filter.txt"
-          cat "$PROOF_OUT/provenance.json"
-      - name: Require all original and frozen attachment/pixel regressions to pass
+          mkdir -p "$PROOF_OUT/red"
+          python3 kit/proofkit/vertical-adjustment/physical_proof.py prepare --expect red --product product --output "$PROOF_OUT/red" > "$PROOF_OUT/red/filter.txt"
+          cat "$PROOF_OUT/red/provenance.json"
+      - name: Require new native capsule RED and all previous twenty controls passing
         working-directory: product
         shell: bash
         run: |
           set -euo pipefail
-          filter=$(cat "$PROOF_OUT/filter.txt")
+          filter=$(cat "$PROOF_OUT/red/filter.txt")
           set +e
-          ./Scripts/test_fast.sh --jobs 2 --filter "$filter" > "$PROOF_OUT/tests.log" 2>&1
+          ./Scripts/test_fast.sh --jobs 2 --filter "$filter" > "$PROOF_OUT/red/tests.log" 2>&1
           result=$?
           set -e
-          printf '%s\n' "$result" > "$PROOF_OUT/test-exit.txt"
-          tail -100 "$PROOF_OUT/tests.log"
-          python3 ../kit/proofkit/vertical-adjustment/prove.py verify --expect green --product . --output "$PROOF_OUT" --exit-code "$result"
+          printf '%s\n' "$result" > "$PROOF_OUT/red/test-exit.txt"
+          tail -100 "$PROOF_OUT/red/tests.log"
+          python3 ../kit/proofkit/vertical-adjustment/physical_proof.py verify --expect red --product . --output "$PROOF_OUT/red" --exit-code "$result"
+      - name: Apply final production delta while preserving physical oracle bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$PROOF_OUT/green"
+          python3 kit/proofkit/vertical-adjustment/physical_proof.py transition --expect green --product product --prior "$PROOF_OUT/red" --output "$PROOF_OUT/green" > "$PROOF_OUT/green/filter.txt"
+          cat "$PROOF_OUT/green/provenance.json"
+      - name: Require all twenty-one tests GREEN with the same physical oracle
+        working-directory: product
+        shell: bash
+        run: |
+          set -euo pipefail
+          filter=$(cat "$PROOF_OUT/green/filter.txt")
+          set +e
+          ./Scripts/test_fast.sh --jobs 2 --filter "$filter" > "$PROOF_OUT/green/tests.log" 2>&1
+          result=$?
+          set -e
+          printf '%s\n' "$result" > "$PROOF_OUT/green/test-exit.txt"
+          tail -100 "$PROOF_OUT/green/tests.log"
+          python3 ../kit/proofkit/vertical-adjustment/physical_proof.py verify --expect green --product . --output "$PROOF_OUT/green" --exit-code "$result"
       - name: Capture optional synthetic component fixture after deterministic green
         continue-on-error: true
         working-directory: product
         shell: bash
         run: |
           set -euo pipefail
+          export PROOF_OUT="$PROOF_OUT/green"
           mkdir -p "$PROOF_OUT/rendered"
           export VERTICAL_PROOF_OUTPUT="$PROOF_OUT/rendered"
           export PROOF_PRODUCT_SHA="$PRODUCT_SHA"
@@ -93,6 +115,6 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: vertical-adjustment-green-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
+          name: vertical-physical-red-green-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/review-regression-proof
           retention-days: 14
