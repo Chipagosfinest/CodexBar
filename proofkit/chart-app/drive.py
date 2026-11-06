@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import subprocess
 import time
+from wait_process import observed_exit
 
 PIN = "c16893bbe515695c74a5c7d594b083ce641c3d20"
 SANDBOX = "(version 1)(allow default)(deny network*)"
@@ -175,6 +176,7 @@ try:
                                      stdout=recording_log, stderr=subprocess.STDOUT)
         video_start = time.monotonic()
         recordings.append((recording, recording_log))
+        log("recorder_start", pid=recording.pid, requested_duration_seconds=25, theme=theme)
         time.sleep(1)
         ui("click", item["x"] + item["w"] / 2, item["y"] + item["h"] / 2)
         wait(menu_window, "menu opened by actual pointer click")
@@ -215,7 +217,9 @@ try:
         last_state = time.monotonic() - video_start
         assert last_state < 24, "Video could miss final state; retain screenshots but reject recording coverage"
         ui("esc")
-        assert recording.wait(timeout=45) == 0
+        recording_exit = observed_exit(recording, 45)
+        log("recorder_exit", pid=recording.pid, exit_code=recording_exit, seconds_since_launch=time.monotonic() - video_start)
+        assert recording_exit == 0
         recording_log.close()
         media = json.loads(ui("media", out / (theme + "-screen.mov")))
         assert media["duration"] >= last_state and media["width"] > 0
@@ -262,7 +266,7 @@ finally:
         for recording, handle in recordings:
             if recording.poll() is None:
                 try:
-                    recording.wait(timeout=45)
+                    observed_exit(recording, 45)
                 except subprocess.TimeoutExpired:
                     recording.terminate()
                     recording.wait(timeout=5)

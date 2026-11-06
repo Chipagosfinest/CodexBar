@@ -1,0 +1,34 @@
+{
+  "runID": 42220041490,
+  "controllerSHA": "c0ddf3882a293006461b60946847463dc8bdd242",
+  "artifactID": 13502609076,
+  "classification": "partial-light-journey-observed-platform-process-wait-timeout",
+  "overallRunStatus": "failure",
+  "fullUIAcceptance": false,
+  "reusedExactBundle": true,
+  "lightStatesPassed": 3,
+  "darkAppearanceExecuted": false,
+  "primaryFailure": "recording.wait(timeout=45) raised TimeoutExpired through hosted Python3.15 _wait_kqueue",
+  "secondaryOffscreenCleanupFailureResolved": true,
+  "movie": {
+    "durationSeconds": 25.0,
+    "width": 1024,
+    "height": 768
+  },
+  "interpretation": "The artifact contains a valid bounded movie despite process.wait timeout. This does not establish a CPython defect or UI pass. The next controller observes the exact child exit via bounded poll and requires exit0, with separate real exit0/exit3/live-timeout controls.",
+  "fileSHA256": {
+    "driver.log": "d5b4fe14f451340655af3e34231eb8a4b2f4382665bb33bbe3f563ed86e1b618",
+    "events.json": "264f4f9240d9f9b5d488a14c36f88e56ec02df4581acf66f6bb05da484fee485",
+    "ui-verdict.json": "28f23705121700bb7d0a152ab51d8c07b401ad1b60743fb249624232217a8fb0",
+    "light-screen.mov": "f12d33e5ded4bbfd50bcff60fc900bbd275d4e10ac91e53804a54cb20480b453",
+    "reuse-receipt.json": "bb53c135c340452c1a9f9f87c76d166e3d1ec2c4426c120021e06d92f6501a41"
+  },
+  "unnecessaryWorkflowRun": {
+    "runID": 42220041372,
+    "verifiedOwnControllerSHA": "c0ddf3882a293006461b60946847463dc8bdd242",
+    "workflow": "Review regressions - bounded behavioral red",
+    "terminalStatus": "cancelled",
+    "allFourMatrixJobs": "cancelled",
+    "cause": "New UI workflow filename omitted from existing paths-ignore; now corrected."
+  }
+}
