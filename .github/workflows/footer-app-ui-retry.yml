@@ -1,9 +1,7 @@
 name: Packaged synthetic Overview footer - UI-only exact bundle retry
 
 on:
-  push:
-    branches: [proof/footer-runtime-20261106]
-    paths: [footerproofkit/**, .github/workflows/footer-app-ui-retry.yml]
+  workflow_dispatch:
 
 permissions:
   contents: read

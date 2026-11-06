@@ -1,7 +1,50 @@
 #if DEBUG && canImport(JavaScriptCore)
 import AppKit
 import CodexBarCore
+import CoreGraphics
 import Foundation
+
+/// BEGIN PURE FOOTER ORACLE
+struct FooterOracleObservation {
+    var baselineBoundInOpenMenus = true
+    var correctNestedScope = true
+    var rootTracked = true
+    var sameRootEpoch = true
+    var sameMoreEpoch = true
+    var bothOriginalMenuWindowsVisible = true
+    var deadlineExpired = false
+    var ownedCompletionFinished = false
+    var postCompletionRebuildObserved = false
+    var storeHas42AndNoError = false
+    var currentCardReplaced = false
+    var currentViewReplaced = false
+    var freshFingerprintPresent = false
+    var currentViewInOriginalMoreWindow = false
+}
+
+enum FooterOracleDecision: Equatable {
+    case waiting(String)
+    case accepted
+    case failed(String)
+}
+
+func footerOracleDecision(_ state: FooterOracleObservation) -> FooterOracleDecision {
+    guard state.baselineBoundInOpenMenus, state.correctNestedScope else { return .failed("wrong-scope-or-baseline") }
+    guard state.rootTracked, state.sameRootEpoch, state.sameMoreEpoch,
+          state.bothOriginalMenuWindowsVisible else { return .failed("menu-closed-or-reopened") }
+    guard !state.deadlineExpired else { return .failed("replacement-deadline-expired") }
+    guard state.ownedCompletionFinished, state.postCompletionRebuildObserved else {
+        return .waiting("owned-completion-and-rebuild-pending")
+    }
+    guard state.storeHas42AndNoError, state.currentCardReplaced, state.currentViewReplaced,
+          state.freshFingerprintPresent, state.currentViewInOriginalMoreWindow
+    else {
+        return .waiting("interim-render-awaiting-complete-fresh-payload")
+    }
+    return .accepted
+}
+
+// END PURE FOOTER ORACLE
 
 /// Proof-only early app startup. Never included in the product branch.
 @MainActor
@@ -48,6 +91,19 @@ enum PackagedFooterProof {
         var oldCard: NSMenuItem?
         var oldView: NSView?
         var freshFingerprint: String?
+        var baselineFingerprint: String?
+        var baselineMore: NSMenu?
+        var baselineRootWindowID = 0
+        var baselineMoreWindowID = 0
+        var moreBegins = 0
+        var moreEnds = 0
+        var moreBeginsAtTrigger = 0
+        var moreEndsAtTrigger = 0
+        var ownedCompletionFinished = false
+        var postCompletionRebuilds = 0
+        var lastOracleReason = "not-started"
+        var baselineReceipt: [String: Any] = [:]
+        var lastOracleObservation: [String: Bool] = [:]
         var timer: Timer?
         var phase = "starting"
         var events: [[String: Any]] = []
@@ -167,8 +223,8 @@ enum PackagedFooterProof {
             let card = try self.require(overflow.items.first {
                 ($0.representedObject as? String) == "pluginCard:\(plugin.manifest.id.rawValue)"
             })
-            self.oldCard = card
-            self.oldView = try self.require(card.view)
+            _ = try self.require(card.view)
+            // Baseline identity is bound only after the native menus are actually open at the nonce trigger.
             precondition(!menu.items
                 .contains { ($0.representedObject as? String) == "pluginCard:\(plugin.manifest.id.rawValue)" })
             controller.statusItem.button?.setAccessibilityIdentifier("codexbar-packaged-footer-proof")
@@ -268,7 +324,13 @@ enum PackagedFooterProof {
             if menu === self.rootMenu {
                 if began { self.rootBegins += 1 } else { self.rootEnds += 1 }
                 self.record(began ? "root-tracking-began" : "root-tracking-ended")
-            } else if menu.supermenu === self.rootMenu {
+            } else if menu === self.baselineMore || menu.supermenu === self.rootMenu {
+                let currentOverflow = self.rootMenu?.items.first {
+                    ($0.representedObject as? String) == "overviewOverflow"
+                }?.submenu
+                if menu === self.baselineMore || menu === currentOverflow {
+                    if began { self.moreBegins += 1 } else { self.moreEnds += 1 }
+                }
                 self.record(began ? "child-tracking-began" : "child-tracking-ended")
             }
         }
@@ -282,58 +344,167 @@ enum PackagedFooterProof {
                     precondition(command["nonce"] == self.nonce.uuidString)
                     precondition(command["action"] == "refresh-fixed-fixture")
                     try FileManager.default.removeItem(at: trigger)
-                    self.beginRefresh()
+                    self.beginRefresh(command: command)
                 }
                 self.checkReplacement()
                 try self.writeReceipt()
             } catch { preconditionFailure("Footer proof control failed: \(error)") }
         }
 
-        private func beginRefresh() {
-            guard let controller, let menu = self.rootMenu, let store, let plugin else { preconditionFailure() }
-            precondition(controller.openMenus[ObjectIdentifier(menu)] === menu)
-            precondition(self.rootBegins > self.rootEnds)
+        private func visibleOwnedMenuWindowIDs() -> Set<Int> {
+            let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID)
+                as? [[String: Any]] ?? []
+            return Set(windows.compactMap { window in
+                guard (window[kCGWindowOwnerPID as String] as? Int) == Int(ProcessInfo.processInfo.processIdentifier),
+                      (window[kCGWindowLayer as String] as? Int) == 101 else { return nil }
+                return window[kCGWindowNumber as String] as? Int
+            })
+        }
+
+        private func failProof(_ reason: String) {
+            guard !self.phase.hasPrefix("failed:") else { return }
+            self.phase = "failed:" + reason
+            self.lastOracleReason = reason
+            self.record("oracle-failed:" + reason)
+            // Preserve the real menu and diagnostic state for native capture; no assertion abort.
+        }
+
+        private func beginRefresh(command: [String: String]) {
+            guard let controller, let menu = self.rootMenu, let store, let plugin,
+                  let rootID = command["rootWindowID"].flatMap(Int.init),
+                  let moreID = command["moreWindowID"].flatMap(Int.init), rootID != moreID,
+                  controller.openMenus[ObjectIdentifier(menu)] === menu,
+                  self.rootBegins > self.rootEnds,
+                  store.snapshots[plugin.manifest.id]?.primary?.usedPercent == 5,
+                  store.errors[plugin.manifest.id] == "Synthetic prior refresh failure",
+                  let overflow = menu.items.first(where: {
+                      ($0.representedObject as? String) == "overviewOverflow"
+                  })?.submenu, overflow.supermenu === menu,
+                  let card = overflow.items.first(where: {
+                      ($0.representedObject as? String) == "pluginCard:\(plugin.manifest.id.rawValue)"
+                  }), let view = card.view,
+                  let rootWindow = menu.items.compactMap({ $0.view?.window }).first,
+                  let moreWindow = view.window,
+                  rootWindow.isVisible, moreWindow.isVisible,
+                  rootWindow.windowNumber == rootID, moreWindow.windowNumber == moreID,
+                  self.visibleOwnedMenuWindowIDs().isSuperset(of: [rootID, moreID])
+            else {
+                self.failProof("nonce-baseline-not-bound-to-actually-open-owned-menus")
+                return
+            }
+            self.oldCard = card
+            self.oldView = view
+            self.baselineMore = overflow
+            self.baselineRootWindowID = rootID
+            self.baselineMoreWindowID = moreID
+            self.baselineFingerprint = UserPluginMenuCardView.fingerprint(
+                snapshot: store.snapshots[plugin.manifest.id],
+                error: store.errors[plugin.manifest.id],
+                resetStyle: controller.settings.resetTimeDisplayStyle)
             self.beginsAtTrigger = self.rootBegins
             self.endsAtTrigger = self.rootEnds
+            self.moreBeginsAtTrigger = self.moreBegins
+            self.moreEndsAtTrigger = self.moreEnds
+            self.baselineReceipt = [
+                "rootWindowID": rootID, "moreWindowID": moreID,
+                "rootMenuIdentity": String(describing: ObjectIdentifier(menu)),
+                "moreMenuIdentity": String(describing: ObjectIdentifier(overflow)),
+                "cardIdentity": String(describing: ObjectIdentifier(card)),
+                "viewIdentity": String(describing: ObjectIdentifier(view)),
+                "fingerprint": self.baselineFingerprint ?? "",
+                "rootBegins": self.rootBegins, "rootEnds": self.rootEnds,
+                "moreBegins": self.moreBegins, "moreEnds": self.moreEnds,
+            ]
             self.phase = "refreshing-fixed-plugin"
             self.phaseStarted = Date()
+            // Same real guarded rebuild observer seam and completion ordering used by the production regression.
+            controller._test_openMenuRebuildObserver = { [weak self, weak menu] rebuilt in
+                guard let self, let menu, rebuilt === menu else { return }
+                if self.ownedCompletionFinished { self.postCompletionRebuilds += 1 }
+                self.record("production-root-rebuild-observed")
+            }
+            self.record("baseline-bound-in-actually-open-menus")
             self.record("explicit-plugin-refresh-started")
             Task { @MainActor in
                 await store.refreshUserPlugin(plugin.manifest.id)
-                precondition(store.snapshots[plugin.manifest.id]?.primary?.usedPercent == 42)
-                precondition(store.errors[plugin.manifest.id] == nil)
-                precondition(self.transport.requestCount == 0)
+                guard !self.phase.hasPrefix("failed:") else { return }
                 self.freshFingerprint = UserPluginMenuCardView.fingerprint(
                     snapshot: store.snapshots[plugin.manifest.id],
-                    error: nil,
+                    error: store.errors[plugin.manifest.id],
                     resetStyle: controller.settings.resetTimeDisplayStyle)
-                controller.refreshOpenMenusAfterUserPluginRefresh(plugin.manifest.id)
+                self.ownedCompletionFinished = true
                 self.phase = "awaiting-guarded-rebuild"
+                controller.refreshOpenMenusAfterUserPluginRefresh(plugin.manifest.id)
                 self.record("explicit-plugin-refresh-completed")
             }
         }
 
         private func checkReplacement() {
-            guard self.phase == "awaiting-guarded-rebuild", let controller,
-                  let menu = self.rootMenu, let plugin, let settings, let fingerprint = self.freshFingerprint
+            guard self.phase == "refreshing-fixed-plugin" || self.phase == "awaiting-guarded-rebuild",
+                  let controller, let menu = self.rootMenu, let plugin, let store,
+                  let oldCard = self.oldCard, let oldView = self.oldView
             else { return }
-            precondition(self.rootBegins == self.beginsAtTrigger && self.rootEnds == self.endsAtTrigger)
-            precondition(controller.openMenus[ObjectIdentifier(menu)] === menu)
             let overflow = menu.items.first { ($0.representedObject as? String) == "overviewOverflow" }?.submenu
             let card = overflow?.items
                 .first { ($0.representedObject as? String) == "pluginCard:\(plugin.manifest.id.rawValue)" }
-            if let card, let view = card.view, card !== self.oldCard, view !== self.oldView {
-                precondition(settings.mergedMenuLastSelectedWasOverview)
-                precondition(controller.menuCardHeightCache.keys.contains {
+            let view = card?.view
+            let fingerprintPresent = self.freshFingerprint.map { fingerprint in
+                controller.menuCardHeightCache.keys.contains {
                     $0.id == "pluginCard:\(plugin.manifest.id.rawValue)" && $0.fingerprint == fingerprint
-                })
+                }
+            } ?? false
+            let windows = self.visibleOwnedMenuWindowIDs()
+            let observation = FooterOracleObservation(
+                baselineBoundInOpenMenus: !self.baselineReceipt.isEmpty,
+                // Temporary absence is an interim render; a present card under a wrong parent fails.
+                // Missing card/view still cannot satisfy replacement or original-window attachment.
+                correctNestedScope: (overflow.map { $0.supermenu === menu } ?? true) &&
+                    (card.map { $0.menu === overflow } ?? true),
+                rootTracked: controller.openMenus[ObjectIdentifier(menu)] === menu,
+                sameRootEpoch: self.rootBegins == self.beginsAtTrigger && self.rootEnds == self.endsAtTrigger,
+                sameMoreEpoch: self.moreBegins == self.moreBeginsAtTrigger && self.moreEnds == self.moreEndsAtTrigger,
+                bothOriginalMenuWindowsVisible: windows.isSuperset(of: [
+                    self.baselineRootWindowID,
+                    self.baselineMoreWindowID,
+                ]),
+                deadlineExpired: Date().timeIntervalSince(self.phaseStarted) >= 15,
+                ownedCompletionFinished: self.ownedCompletionFinished,
+                postCompletionRebuildObserved: self.postCompletionRebuilds > 0,
+                storeHas42AndNoError: store.snapshots[plugin.manifest.id]?.primary?.usedPercent == 42 &&
+                    store.errors[plugin.manifest.id] == nil,
+                currentCardReplaced: card.map { $0 !== oldCard } ?? false,
+                currentViewReplaced: view.map { $0 !== oldView } ?? false,
+                freshFingerprintPresent: fingerprintPresent,
+                currentViewInOriginalMoreWindow: view?.window?.windowNumber == self.baselineMoreWindowID)
+            self.lastOracleObservation = [
+                "baselineBoundInOpenMenus": observation.baselineBoundInOpenMenus,
+                "correctNestedScope": observation.correctNestedScope,
+                "sameRootEpoch": observation.sameRootEpoch,
+                "sameMoreEpoch": observation.sameMoreEpoch,
+                "deadlineExpired": observation.deadlineExpired,
+                "ownedCompletionFinished": observation.ownedCompletionFinished,
+                "postCompletionRebuildObserved": observation.postCompletionRebuildObserved,
+                "storeHas42AndNoError": observation.storeHas42AndNoError,
+                "currentCardReplaced": observation.currentCardReplaced,
+                "currentViewReplaced": observation.currentViewReplaced,
+                "freshFingerprintPresent": observation.freshFingerprintPresent,
+                "currentViewInOriginalMoreWindow": observation.currentViewInOriginalMoreWindow,
+                "rootTracked": observation.rootTracked,
+                "bothOriginalMenuWindowsVisible": observation.bothOriginalMenuWindowsVisible,
+            ]
+            switch footerOracleDecision(observation) {
+            case let .waiting(reason):
+                if self.lastOracleReason != reason {
+                    self.lastOracleReason = reason
+                    self.record("oracle-waiting:" + reason)
+                }
+            case .accepted:
                 self.resultInPlace = true
                 self.phase = "replaced-in-open-root-native-capture-required"
+                self.lastOracleReason = "accepted-after-owned-completion-and-rebuild"
                 self.record("captured-card-and-view-replaced")
-            } else {
-                precondition(
-                    Date().timeIntervalSince(self.phaseStarted) < 15,
-                    "Guarded menu replacement did not complete")
+            case let .failed(reason):
+                self.failProof(reason)
             }
         }
 
@@ -343,6 +514,9 @@ enum PackagedFooterProof {
                 "at": ISO8601DateFormatter().string(from: Date()),
                 "rootBegins": self.rootBegins,
                 "rootEnds": self.rootEnds,
+                "moreBegins": self.moreBegins,
+                "moreEnds": self.moreEnds,
+                "postCompletionRebuilds": self.postCompletionRebuilds,
             ])
         }
 
@@ -351,6 +525,7 @@ enum PackagedFooterProof {
                 "synthetic": true, "proofOnlyEarlyStartup": true, "ordinaryAppStartup": false,
                 "productSHA": "e8a0cca51036fa8f30362a0710754d812ace34a3", "nonce": self.nonce.uuidString,
                 "phase": self.phase, "events": self.events, "rootBegins": self.rootBegins, "rootEnds": self.rootEnds,
+                "moreBegins": self.moreBegins, "moreEnds": self.moreEnds,
                 "initialUsedPercent": 5, "successfulUsedPercent": 42,
                 "initialError": "Synthetic prior refresh failure", "finalErrorExpectedNil": true,
                 "cardAndViewReplacedInOpenRoot": self.resultInPlace,
@@ -358,6 +533,12 @@ enum PackagedFooterProof {
                 "pluginTransportRequests": self.transport.requestCount,
                 "blockedHTTPRequests": FooterProofRejectHTTP.requestCount,
                 "nativeCaptureRequired": true,
+                "baselineActuallyOpen": self.baselineReceipt,
+                "freshFingerprint": self.freshFingerprint ?? "not-yet-completed",
+                "ownedCompletionFinished": self.ownedCompletionFinished,
+                "postCompletionRebuilds": self.postCompletionRebuilds,
+                "lastOracleReason": self.lastOracleReason,
+                "lastOracleObservation": self.lastOracleObservation,
             ]
             try JSONSerialization.data(withJSONObject: receipt, options: [.sortedKeys, .prettyPrinted])
                 .write(to: self.output.appendingPathComponent("runtime-receipt.json"), options: .atomic)
@@ -372,6 +553,7 @@ enum PackagedFooterProof {
             self.timer?.invalidate()
             self.settings?.configFileWatcher?.stop()
             self.store?.stopSharedSpendDashboardPublication()
+            self.controller?._test_openMenuRebuildObserver = nil
             self.controller?.releaseStatusItemsForTesting()
             StatusItemController.resetMenuOpenRefreshDelayForTesting()
             URLProtocol.unregisterClass(FooterProofRejectHTTP.self)

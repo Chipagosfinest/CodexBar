@@ -152,6 +152,7 @@ def receipt():
     assert value["productSHA"] == PIN and value["nonce"] == nonce and value["synthetic"]
     assert value["forbiddenFirstPartyRefreshes"] == value["pluginTransportRequests"] == value["blockedHTTPRequests"] == 0
     assert value["ordinaryAppStartup"] is False and value["proofOnlyEarlyStartup"]
+    assert not value["phase"].startswith("failed:"), "Proof oracle failed without abort: " + value["phase"]
     return value
 
 
@@ -169,6 +170,9 @@ def stable_open_windows():
     assert child_window["id"] in observed, "More submenu closed/replaced; do not reopen"
     value = receipt()
     assert value["rootBegins"] == 1 and value["rootEnds"] == 0, "Root tracking ended/reopened"
+    baseline = value.get("baselineActuallyOpen", {})
+    if baseline:
+        assert value["moreBegins"] == baseline["moreBegins"] and value["moreEnds"] == baseline["moreEnds"], "More tracking ended/reopened"
     return value
 
 
@@ -241,7 +245,8 @@ try:
     assert receipt()["rootBegins"] == 1
     trigger = out / "runtime/trigger-refresh.json"
     temporary = trigger.with_suffix(".tmp")
-    temporary.write_text(json.dumps({"nonce": nonce, "action": "refresh-fixed-fixture"}))
+    temporary.write_text(json.dumps({"nonce": nonce, "action": "refresh-fixed-fixture",
+                                     "rootWindowID": str(root_window["id"]), "moreWindowID": str(child_window["id"])}))
     temporary.replace(trigger)
     log("controlled-production-refresh-triggered", nonce=nonce)
 
@@ -251,6 +256,11 @@ try:
 
     final = wait(fresh, "same open root/More painted 42% with error cleared", 18)
     assert final["cardAndViewReplacedInOpenRoot"]
+    assert final["baselineActuallyOpen"]["rootWindowID"] == root_window["id"]
+    assert final["baselineActuallyOpen"]["moreWindowID"] == child_window["id"]
+    assert final["ownedCompletionFinished"] and final["postCompletionRebuilds"] > 0
+    assert final["lastOracleObservation"]["deadlineExpired"] is False
+    assert all(value for key, value in final["lastOracleObservation"].items() if key != "deadlineExpired")
     capture("2-after", 42, False)
     time.sleep(1)
     stable_open_windows()

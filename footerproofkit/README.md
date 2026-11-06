@@ -207,3 +207,35 @@ accept both positive cases and reject wrong dimensions, unowned menu geometry an
 rectangles. The live driver always uses actual current CG display bounds. Two failed runs and
 all raw original artifacts remain separate. No app, source adapter, navigation, recording budget
 or refresh oracle changed for this evidence-specific correction.
+
+## New declared adapter build after third-run oracle abort
+
+Third run42225984906 reached the nonce refresh after passing actual root+More5%/error captures.
+The app then aborted at proof-adapter327, the immediate fresh-cache assertion. Root-tracking and
+store42%/nilerror checks had passed; this was not evidence of a product menu-closure defect.
+The old baseline was captured before actual menu opening, and any later identity difference
+could prematurely enter the assertion. Its raw app log, screenshots and classifications remain retained.
+
+The corrected adapter is a NEW declared build against the same exact e8a product. It cannot reuse
+the old binary. At nonce arrival it binds the current nested card/view/More to actual NSView.window
+numbers and PID-owned visible native windows observed by the driver, records identities, fingerprints
+and root/More epochs, then invokes the unchanged real refresh owner. It installs the existing DEBUG
+production root-rebuild observer seam in the same order as OverviewOverflowPluginRefreshTests and
+requires a post-owned-completion rebuild before considering replacement. That observer is declared
+instrumentation: it also makes usesTaskSchedulerForTesting true; the explicit plugin-completion path
+already requests the task scheduler (duringTracking defaultsfalse). This is an instrumented owner-path
+proof, not an ordinary uninstrumented startup claim.
+
+All eventual store42%/nilerror, scoped current card+view replacement, fresh fingerprint, view attached
+to the same original More native window, root/More epochs/visible windows and15second deadline
+requirements remain. Interim/loading views wait with diagnostics. Failure states write receipts and
+preserve the native app for capture instead of aborting. The independent driver still requires visible
+AX42%/clearederror, same root/More windows and original continuous media;85seconds from recorder
+launch remains fixed. No source/product behavior, palette, real login or provider access is introduced.
+
+`run_oracle_controls.py` compiles the verbatim pure decision block from the actual adapter. Thirteen
+cheap deterministic cases reject stale preopen baselines, wait on interim or detached renders,
+accept only complete post-rebuild state, and fail wrong scope, closed/reopened menus and timeouts.
+The new build workflow runs those controls, process controls, arrow controls and original PNG capture
+controls before the cold App build. Both older build/UI workflows are manual-only; one new push
+handler performs the declared build plus native journey. No retry dispatch exists.
