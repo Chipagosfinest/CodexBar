@@ -1,0 +1,88 @@
+name: Packaged synthetic Overview chart - actual screen journey
+
+on:
+  push:
+    branches: [proof/20261106-review-regressions]
+    paths: [proofkit/chart-app/**, .github/workflows/chart-app-proof.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  chart-app-proof:
+    runs-on: macos-26
+    timeout-minutes: 50
+    env:
+      PRODUCT_SHA: c16893bbe515695c74a5c7d594b083ce641c3d20
+      CODEXBAR_DISABLE_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_TEST_NATIVE_TIMEOUT: "2400"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {path: kit, persist-credentials: false}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.PRODUCT_SHA }}
+          path: product
+          persist-credentials: false
+      - name: Select Xcode and require actual-screen GUI capability before building app
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          echo "DEVELOPER_DIR=$latest/Contents/Developer" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/chart-app-proof/preflight"
+          echo "PROOF_OUT=$RUNNER_TEMP/chart-app-proof" >> "$GITHUB_ENV"
+          { sw_vers; xcodebuild -version; swift --version; launchctl managername; } > "$RUNNER_TEMP/chart-app-proof/environment.txt"
+          test "$(launchctl managername)" = Aqua
+          swiftc -parse-as-library kit/proofkit/chart-app/ui.swift -o "$RUNNER_TEMP/chart-ui" > "$RUNNER_TEMP/chart-app-proof/helper-build.log" 2>&1
+          python3 - <<'PY_PREFLIGHT'
+          import json, os, pathlib, subprocess
+          out=pathlib.Path(os.environ['RUNNER_TEMP'])/'chart-app-proof/preflight'
+          helper=str(pathlib.Path(os.environ['RUNNER_TEMP'])/'chart-ui')
+          assert len(json.loads(subprocess.check_output([helper,'displays'])))==1
+          subprocess.run(['sandbox-exec','-p','(version 1)(allow default)(deny network*)',helper,'preflight',str(out)],check=True,timeout=35)
+          value=json.loads((out/'preflight.json').read_text())
+          assert value['preflightPassed'] and value['actualCGEventOpenedNativeMenu']
+          assert value['axTrusted'] and value['screenCaptureAllowed'] and value['postEventAllowed']
+          media=json.loads(subprocess.check_output([helper,'media',str(out/'preflight-screen.mov')]))
+          assert media['duration']>1.5 and media['width']>0
+          (out/'media.json').write_text(json.dumps(media,indent=2)+'\n')
+          PY_PREFLIGHT
+      - name: Apply only declared synthetic early-entry overlay
+        shell: bash
+        run: |
+          set -euo pipefail
+          defaults write NSGlobalDomain AppleLanguages -array en
+          python3 kit/proofkit/chart-app/prepare_overlay.py --apply-to-disposable-copy "$PWD/product" --manifest-output "$PROOF_OUT/overlay-manifest.json"
+          git -C product add --intent-to-add Sources/CodexBar/PackagedMenuProof.swift
+          git -C product diff --binary HEAD > "$PROOF_OUT/overlay.patch"
+          git -C kit rev-parse HEAD > "$PROOF_OUT/controller-sha.txt"
+          shasum -a 256 kit/proofkit/chart-app/{PackagedMenuProof.swift,prepare_overlay.py,ui.swift,drive.py,verify_inputs.py} > "$PROOF_OUT/controller-input-sha256.txt"
+          cp kit/proofkit/chart-app/PackagedMenuProof.swift "$PROOF_OUT/"
+          printf '%s\n' '(version 1)(allow default)(deny network*)' > "$PROOF_OUT/runtime-network-deny.sb"
+      - name: Build and package actual DEBUG app with upstream adhoc recipe
+        working-directory: product
+        shell: bash
+        run: |
+          set -euo pipefail
+          CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh debug > "$PROOF_OUT/package.log" 2>&1 || { tail -120 "$PROOF_OUT/package.log"; exit 1; }
+          python3 ../kit/proofkit/chart-app/verify_inputs.py . "$PROOF_OUT"
+          codesign --verify --deep --strict --verbose=2 CodexBar.app > "$PROOF_OUT/signature-verification.txt" 2>&1
+          cp CodexBar.app/Contents/Info.plist "$PROOF_OUT/bundle-Info.plist"
+          ditto -c -k --sequesterRsrc --keepParent CodexBar.app "$PROOF_OUT/proof-built-CodexBar.app.zip"
+      - name: Drive real root menu hover and exit in both appearances
+        shell: bash
+        run: |
+          set -euo pipefail
+          overlay_sha=$(shasum -a 256 "$PROOF_OUT/overlay.patch" | awk '{print $1}')
+          python3 kit/proofkit/chart-app/drive.py --app "$PWD/product/CodexBar.app" --helper "$RUNNER_TEMP/chart-ui" --output "$PROOF_OUT" --runtime-root "$RUNNER_TEMP/chart-runtime" --overlay-sha "$overlay_sha" > "$PROOF_OUT/driver.log" 2>&1 || { tail -100 "$PROOF_OUT/driver.log"; exit 1; }
+          python3 kit/proofkit/chart-app/verify_inputs.py product "$PROOF_OUT"
+          cat "$PROOF_OUT/ui-verdict.json"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: packaged-chart-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/chart-app-proof
+          retention-days: 14

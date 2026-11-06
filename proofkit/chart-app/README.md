@@ -1,0 +1,24 @@
+# Synthetic packaged Overview chart journey
+
+This opt-in hosted proof targets exact product `c16893bbe515695c74a5c7d594b083ce641c3d20` (#4901). It builds a real DEBUG CodexBar.app with the normal upstream adhoc packaging recipe. The declared overlay changes only the existing DEBUG early-entry hook and adds the synthetic adapter. No product worktree is modified.
+
+The adapter publishes synthetic daily cost snapshots through actual UsageStore owners: yesterday Claude unknown/Codex0; today Claude2/Codex3. The real StatusItemController builds the actual merged Overview and production chart. Independent setup assertions establish the model's $5 day, 40%/60% daily shares and unavailable range shares. The GUI driver must separately open the actual status item, hover today's real bar and move off it, observing Unknown→40/60→Unknown through accessibility and original actual-screen captures in both system appearances.
+
+## Safety and identity
+
+- Before any app initialization: minimal child environment, SWIFT_TESTING/static test safety, keychain denial, in-memory defaults, empty credential/account stores, testing startup, disabled provider/cost loaders and menu refresh. Original adapter instructions and limits are retained in [SCAFFOLD.md](SCAFFOLD.md).
+- The actual app executable runs under `sandbox-exec` with `(version 1)(allow default)(deny network*)`. This is the OS direct-network boundary. URLProtocol counts are diagnostics, not universal denial: Apple documents limits to [registered URLProtocols](https://developer.apple.com/documentation/foundation/urlprotocol/registerclass(_:)) and [protocolClasses for background sessions](https://developer.apple.com/documentation/foundation/urlsessionconfiguration/protocolclasses). Existing provider/cost traps remain independently active.
+- Exact HEAD, pristine checkout, all tracked build inputs and all source bytes are recorded before/after overlay and checked again after packaging/runtime. Only the entry hook and adapter are allowed. Normal upstream package-script dependency patches are preserved separately. Binary/bundle hashes, Info.plist, adhoc signature verification, complete overlay and controller inputs are retained.
+- Actual launched PID/executable identity must match the newly built bundle. No existing CodexBar process is killed or reused. The bundle is never installed over another application.
+
+## Fail-closed GUI gates
+
+Before the cold app build, a tiny native preflight must establish Aqua, AX/screen/post permissions, a menu opened by an actual CGEvent, a real display PNG, and a bounded movie. Every pointer post rejects nonfinite/offscreen coordinates and nil CGEvent creation. The actual status target is captured before clicking and must have visible pixel contrast. Chart pointer targets must remain inside the observed actual menu.
+
+AX assertions alone do not establish visible UI. Each state retains a full actual display PNG, a menu-window PNG, AX tree and live receipt. Dimensions/contrast and screen-versus-window-region similarity are checked to reject blank/hidden window-only evidence. Real cursor events and media timestamps are logged; recorded duration must include the final state. An on-screen synthetic banner carries exact product and overlay identities.
+
+The UI verdict explicitly requires subsequent original-screen/video inspection. Success is not published from screenshot exit status, receipt counters or accessibility text alone. Overlay/build/compiler/GUI setup failures are retained as such; none is behavioral RED or UI acceptance.
+
+This proves a **synthetic built-App status-item/root-menu journey with a declared early-startup overlay**. It does not prove ordinary shipping startup, live account/provider retrieval, installation/upgrade, widget hosting or cloud sync. Menu refresh is disabled, so its production openMenus registration remains empty; actual windows, pointer behavior and visible captures establish menu tracking.
+
+Adapter SHA256: `3808b76d7dc34dfdf9a6d1d0441994f17db8f0c0591149dd556e7c360c4b4444`. Installer SHA256: `74d26cf553bae4fca89b65aaddc9f5c68d3297be4477e92b6a39875a1b6a063b`. These prepared scaffold files are unchanged. Native helper API typechecking, Python parse, workflow YAML parse and independent read-only review precede the first hosted run; they do not claim runtime acceptance.
