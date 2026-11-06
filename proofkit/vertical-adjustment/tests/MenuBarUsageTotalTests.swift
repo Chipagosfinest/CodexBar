@@ -21,8 +21,8 @@ struct MenuBarUsageTotalTests {
             appearanceName: NSAppearance.Name.darkAqua.rawValue,
             isDebugApp: false,
             isStale: false,
-            verticalAdjustment: verticalAdjustment,
-            now: Date())
+            now: Date(),
+            verticalAdjustment: verticalAdjustment)
     }
 
     private static func window(used: Double) -> RateWindow {
@@ -514,5 +514,75 @@ struct MenuBarUsageTotalTests {
         let rendered = MenuBarLayoutRenderer.renderUsageTotal(total, logo: nil, options: options)
         #expect(rendered.leadingIcon == nil)
         #expect(rendered.attributedTitle.length > 0)
+    }
+}
+
+extension MenuBarUsageTotalTests {
+    @Test(arguments: [false, true])
+    func `saved vertical adjustment moves the actual normal contrast leading pixels`(warning: Bool) throws {
+        let total = try #require(MenuBarUsageTotal(entries: [
+            Entry(provider: .claude, remainingPercent: warning ? 8 : 62, isStale: false),
+        ]))
+        let logo = try #require(ProviderBrandIcon.image(for: .claude))
+        let original = MenuBarLayoutRenderer.renderUsageTotal(total, logo: logo, options: Self.options())
+        let originalImage = try #require(original.leadingIcon)
+        for scale in [1, 2] {
+            let before = try Self.leadingAlphaCentroid(originalImage, scale: scale)
+            let calibration = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 0), scale: scale)
+            for adjustment in [-3, 3] {
+                let calibrated = try Self.leadingAlphaCentroid(
+                    Self.calibrationImage(shift: adjustment), scale: scale)
+                let expectedDelta = calibrated - calibration
+                // This independent drawing calibrates bitmap y orientation and pixel-to-point conversion.
+                #expect(abs(abs(expectedDelta) - CGFloat(abs(adjustment))) < 0.01)
+                let shifted = MenuBarLayoutRenderer.renderUsageTotal(
+                    total, logo: logo, options: Self.options(verticalAdjustment: adjustment))
+                let shiftedImage = try #require(shifted.leadingIcon)
+                let after = try Self.leadingAlphaCentroid(shiftedImage, scale: scale)
+                #expect(abs((after - before) - expectedDelta) < 0.25)
+                #expect(shiftedImage.isTemplate == originalImage.isTemplate)
+                #expect(shifted.statusItemWidth(gap: .regular) == original.statusItemWidth(gap: .regular))
+                #expect(shifted.accessibilityLabel == original.accessibilityLabel)
+            }
+        }
+    }
+
+    private static func calibrationImage(shift: Int) -> NSImage {
+        NSImage(size: NSSize(width: 12, height: 22), flipped: false) { _ in
+            NSColor.black.setFill()
+            NSRect(x: 2, y: CGFloat(8 + shift), width: 8, height: 4).fill()
+            return true
+        }
+    }
+
+    private static func leadingAlphaCentroid(_ image: NSImage, scale: Int) throws -> CGFloat {
+        let canvas = NSSize(width: ceil(image.size.width), height: 22)
+        let context = try #require(CGContext(
+            data: nil,
+            width: Int(canvas.width) * scale,
+            height: Int(canvas.height) * scale,
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        NSGraphicsContext.saveGraphicsState()
+        defer { NSGraphicsContext.restoreGraphicsState() }
+        NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: false)
+        context.scaleBy(x: CGFloat(scale), y: CGFloat(scale))
+        // Match the status button's image centering without using the production offset helper.
+        let origin = NSPoint(x: 0, y: (canvas.height - image.size.height) / 2)
+        image.draw(in: NSRect(origin: origin, size: image.size))
+        let bitmap = try NSBitmapImageRep(cgImage: #require(context.makeImage()))
+        var mass: CGFloat = 0
+        var weightedY: CGFloat = 0
+        for y in 0..<bitmap.pixelsHigh {
+            for x in 0..<bitmap.pixelsWide {
+                let alpha = bitmap.colorAt(x: x, y: y)?.alphaComponent ?? 0
+                mass += alpha
+                weightedY += (CGFloat(y) + 0.5) * alpha
+            }
+        }
+        try #require(mass > 1)
+        return weightedY / mass / CGFloat(scale)
     }
 }

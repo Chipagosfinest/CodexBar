@@ -1,0 +1,14 @@
+{
+  "classification": "compiler-only failure; no behavioral RED",
+  "run": 42199396599,
+  "artifact": 13493033693,
+  "original_runtime_log_sha256": "a1c4276d3da8cead062da0b65e6350b0df80f27cc95633af4ca1c905bb6e21e2",
+  "errors": [
+    "/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuBarUsageTotalTests.swift:25:13: error: argument 'now' must precede argument 'verticalAdjustment'",
+    "    |             `- error: argument 'now' must precede argument 'verticalAdjustment'",
+    "/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuBarUsageTotalTests.swift:25:13: error: argument 'now' must precede argument 'verticalAdjustment'",
+    "    |             `- error: argument 'now' must precede argument 'verticalAdjustment'",
+    "/Users/runner/work/CodexBar/CodexBar/product/Tests/CodexBarTests/MenuBarUsageTotalTests.swift:25:13: error: argument 'now' must precede argument 'verticalAdjustment'",
+    "    |             `- error: argument 'now' must precede argument 'verticalAdjustment'"
+  ]
+}
