@@ -1,0 +1,38 @@
+{
+  "product_sha": "20ada8abf0e4e2267aaa8c7cc9cf891cdf866838",
+  "controller_sha": "503d80bab8ff39f81268a753e6a70cba73305dcb",
+  "selected_sources": [
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshEpochTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshMCPProfileTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshRecoveryTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshUnreadableResultTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshCoordinatorTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthDirectKeychainReadConsentTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthFetchStrategyAvailabilityTests.swift",
+    "Tests/CodexBarTests/ClaudeOAuthFetchStrategyProfileRoutingTests.swift",
+    "Tests/CodexBarTests/TestStores.swift",
+    "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift",
+    "Tests/CodexBarTests/CodexCredentialFixtures.swift",
+    "Tests/CodexBarTests/ClaudeUsageDetailNoteTests.swift"
+  ],
+  "selected_source_sha256": {
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshEpochTests.swift": "98e2d744ce375c7f18439e7cde653bb51b09226a948a2ffac4d6bdf6e3bda9f2",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshMCPProfileTests.swift": "4d4109d564f1b7893e54cc008626f41757c533842f3525ced2940bcce38911d5",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift": "4b81f274ed2641e8f3ebb47766f6a3810e87faa9b84626cab68a09a713bca357",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshRecoveryTests.swift": "95debadc66a1d4a38ecfb2701d539846b39af8b4433bbcbc059e2249deaa6ba2",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshUnreadableResultTests.swift": "ca010fc45f3ab85c9b58fab98a58b6f069a35449cfdd3e04fb925140af5ab35c",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshCoordinatorTests.swift": "08f523d735393eba13be2175a5e18226ead45f1fe8e5dda3911ac3ec747b63c2",
+    "Tests/CodexBarTests/ClaudeOAuthDirectKeychainReadConsentTests.swift": "03e63ba4060c809191052078acf189bdbbd620ecca89eb7e92e8f569fb9fac91",
+    "Tests/CodexBarTests/ClaudeOAuthFetchStrategyAvailabilityTests.swift": "5f4c7973d738ff5623a246e592d30e8216a6dd2047e58719727a293271cc01c4",
+    "Tests/CodexBarTests/ClaudeOAuthFetchStrategyProfileRoutingTests.swift": "2c0d41e02e330db35831755fb95e34df79b3e3c8d55b5058845960850e50c3f3",
+    "Tests/CodexBarTests/TestStores.swift": "41f10e7dcd10da0f8aeb1b1bf39eeb1bebb184bc30af21cefa46c769b80e18de",
+    "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift": "7ab8e18e5ccb6d01b21bbc0c34fa1e35b888e69e634f63f073eb261a3e230a8d",
+    "Tests/CodexBarTests/CodexCredentialFixtures.swift": "437ba400266c7311c7705358834687462ca50eeb2c68fc9c09f7c52a28742f82",
+    "Tests/CodexBarTests/ClaudeUsageDetailNoteTests.swift": "a66bf498f22f762c2c8fbe78fc9462318274b3f8c706a04a5c06c700a21277ac"
+  },
+  "harness_patch_sha256": "e492f41b5e7282fb6b2e28f270000db3585810f75aa6d8b88bb7befd33850062",
+  "filter": "ClaudeOAuthDelegatedRefreshEpochTests|ClaudeOAuthDelegatedRefreshMCPProfileTests|ClaudeOAuthDelegatedRefreshProfileIsolationTests|ClaudeOAuthDelegatedRefreshRecoveryTests|ClaudeOAuthDelegatedRefreshUnreadableResultTests|ClaudeOAuthDelegatedRefreshCoordinatorTests|ClaudeOAuthDirectKeychainReadConsentTests|ClaudeOAuthFetchStrategyAvailabilityTests|ClaudeOAuthFetchStrategyProfileRoutingTests",
+  "candidate_patch_sha256": "df23345819454907d9eb78526e7808d24757e44c53644a83e89d478c0eab16f3",
+  "boundary": "Synthetic tests compile intact App/Core modules at immutable baseline plus declared two-file cooldown/test delta. No account/keychain or installed-app claim."
+}

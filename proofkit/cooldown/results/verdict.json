@@ -1,0 +1,22 @@
+{
+  "product_sha": "20ada8abf0e4e2267aaa8c7cc9cf891cdf866838",
+  "exit_code": 0,
+  "suites_passed": {
+    "ClaudeOAuthDelegatedRefreshEpochTests": true,
+    "ClaudeOAuthDelegatedRefreshMCPProfileTests": true,
+    "ClaudeOAuthDelegatedRefreshProfileIsolationTests": true,
+    "ClaudeOAuthDelegatedRefreshRecoveryTests": true,
+    "ClaudeOAuthDelegatedRefreshUnreadableResultTests": true,
+    "ClaudeOAuthDelegatedRefreshCoordinatorTests": true,
+    "ClaudeOAuthDirectKeychainReadConsentTests": true,
+    "ClaudeOAuthFetchStrategyAvailabilityTests": true,
+    "ClaudeOAuthFetchStrategyProfileRoutingTests": true
+  },
+  "test_counts": [
+    "59"
+  ],
+  "production_source_matches_declared_candidate": true,
+  "selected_tests_unchanged": true,
+  "unexpected_failure": false,
+  "verified_green": true
+}

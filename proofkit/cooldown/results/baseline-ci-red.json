@@ -1,0 +1,17 @@
+{
+  "run_id": 42178719099,
+  "job_id": 127763212192,
+  "run_head": "05c210e8df4b7b036cca58672fde9581f7b03dca",
+  "candidate_base": "20ada8abf0e4e2267aaa8c7cc9cf891cdf866838",
+  "relevant_files_unchanged_between_run_and_base": [
+    "Sources/CodexBarCore/Providers/Claude/ClaudeOAuth/ClaudeOAuthDelegatedRefreshCoordinator.swift",
+    "Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift"
+  ],
+  "behavioral_failure_excerpts": [
+    "swift-test-macos\tSwift Test\t2026-11-06T09:14:21.8332370Z \u2718 Test \"legacy cooldown migrates only to the default credentials profile\" recorded an issue at ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift:32:13: Expectation failed: defaults.object(forKey: scopedTimestampKey) as? Double == now.timeIntervalSince1970",
+    "swift-test-macos\tSwift Test\t2026-11-06T09:14:21.8335050Z \u2718 Test \"legacy cooldown migrates only to the default credentials profile\" recorded an issue at ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift:33:13: Expectation failed: defaults.object(forKey: scopedIntervalKey) as? Double == 300.0"
+  ],
+  "summary": [
+    "swift-test-macos\tSwift Test\t2026-11-06T09:14:21.8421660Z \u2718 Test run with 44 tests in 8 suites failed after 6.599 seconds with 2 issues."
+  ]
+}
