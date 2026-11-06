@@ -9,12 +9,18 @@ from pathlib import Path
 import re
 import subprocess
 import time
+from wait_process import observed_exit
 
 PIN = "e8a0cca51036fa8f30362a0710754d812ace34a3"
 SANDBOX = "(version 1)(allow default)(deny network*)"
+RECORDING_SECONDS = 40
+# Prior hosted chart42222113762 observed49.503s launch-to-exit for a valid25s clip.
+# Reserve the observed near2x wall time plus5s before this run; never extend on failure.
+RECORDING_WALL_BUDGET = 85
 parser = argparse.ArgumentParser()
 parser.add_argument("--app", required=True, type=Path)
 parser.add_argument("--helper", required=True, type=Path)
+parser.add_argument("--arrow-helper", required=True, type=Path)
 parser.add_argument("--output", required=True, type=Path)
 parser.add_argument("--runtime-root", required=True, type=Path)
 parser.add_argument("--overlay-sha", required=True)
@@ -26,6 +32,7 @@ root = args.runtime_root.resolve()
 assert not root.exists(), "Require fresh disposable runtime root"
 (root / "tmp").mkdir(parents=True)
 helper = str(args.helper.resolve())
+arrow_helper = str(args.arrow_helper.resolve())
 binary = args.app.resolve() / "Contents/MacOS/CodexBar"
 nonce = str(__import__("uuid").uuid4()).upper()
 events = []
@@ -90,6 +97,49 @@ def visible_rows():
 
 def menu_windows():
     return [w for w in json.loads(ui("windows", process.pid)) if w["w"] > 180 and w["h"] > 65]
+
+
+def current_root():
+    window = next((w for w in menu_windows() if w["id"] == root_window["id"]), None)
+    assert window is not None, "Root closed while scrolling; no reopen"
+    value = receipt()
+    assert value["rootBegins"] == 1 and value["rootEnds"] == 0
+    return window
+
+
+def visible_more(frame, window):
+    x, y = frame["x"] + frame["w"] / 2, frame["y"] + frame["h"] / 2
+    # Exclude the native scrolling-arrow strips, even when an offscreen AX item overlaps them.
+    return (math.isfinite(x) and math.isfinite(y) and any(inside(x, y, d) for d in displays)
+            and inside(x, y, window) and window["y"] + 22 < y < window["y"] + window["h"] - 22)
+
+
+def reveal_more():
+    deadline = time.monotonic() + 12
+    for step in range(12):
+        window = current_root()
+        rows = nodes()
+        (out / f"scroll-{step:02d}-ax.json").write_text(json.dumps(rows, indent=2) + "\n")
+        more = next((row["frame"] for row in rows if row.get("role") == "AXMenuItem"
+                     and text(row).strip().startswith("More (") and visible_more(row["frame"], window)), None)
+        assert time.monotonic() < deadline, "Native arrow action budget expired after fresh AX; no reopen"
+        if more is not None:
+            log("more-visible-after-native-scroll", step=step, frame=more, root=window)
+            return more
+        assert time.monotonic() < deadline, "Bounded native arrow navigation expired; no reopen"
+        screen = out / f"scroll-{step:02d}-screen.png"
+        subprocess.run(["screencapture", "-x", str(screen)], check=True, timeout=15)
+        d = displays[0]
+        arrow = json.loads(subprocess.check_output(
+            [arrow_helper, str(screen), *[str(window[k]) for k in ["x", "y", "w", "h"]],
+             *[str(d[k]) for k in ["x", "y", "w", "h"]]], text=True, timeout=10))
+        assert arrow["downChevronObserved"] and inside(arrow["x"], arrow["y"], window)
+        center({"x": arrow["x"], "y": arrow["y"], "w": 0, "h": 0})
+        log("native-down-arrow-dwell", step=step, arrow=arrow, root=window)
+        assert time.monotonic() < deadline, "Native arrow action budget expired after pixels; no pointer post"
+        ui("move", arrow["x"], arrow["y"])
+        time.sleep(0.35)
+    raise RuntimeError("More never became visible after12 native down-arrow dwells; no reopen")
 
 
 def receipt():
@@ -168,12 +218,13 @@ try:
     subprocess.run(["screencapture", "-x", "-R" + rectangle, str(crop)], check=True, timeout=15)
     status = json.loads(ui("image-info", crop))
     assert status["width"] > 2 and status["height"] > 2 and status["contrast"] > 0.08
-    recording = subprocess.Popen(["screencapture", "-v", "-V", "40", "-x", str(out / "continuous-screen.mov")], stdout=handles[2], stderr=subprocess.STDOUT)
+    recording = subprocess.Popen(["screencapture", "-v", "-V", str(RECORDING_SECONDS), "-x", str(out / "continuous-screen.mov")], stdout=handles[2], stderr=subprocess.STDOUT)
     video_start = time.monotonic()
+    log("recorder-start", pid=recording.pid, requested_duration_seconds=RECORDING_SECONDS, fixed_wall_budget_seconds=RECORDING_WALL_BUDGET)
     time.sleep(1)
     ui("click", x, y)
     root_window = wait(lambda: max(menu_windows(), key=lambda w: w["h"], default=None), "actual root opened by pointer")
-    more = wait(lambda: next((row["frame"] for row in visible_rows() if row.get("role") == "AXMenuItem" and text(row).strip().startswith("More (") and inside(*center(row["frame"]), root_window)), None), "actual More item")
+    more = reveal_more()
     x, y = center(more)
     ui("move", x, y)
     wait(lambda: card_state(5, True), "visible overflow 5% with error")
@@ -199,13 +250,27 @@ try:
     stable_open_windows()
     capture("3-still-open", 42, False)
     last_state = time.monotonic() - video_start
-    assert last_state < 37, "Continuous recording may not cover final state"
-    ui("esc")
-    ui("esc")
-    assert recording.wait(timeout=45) == 0
+    assert last_state < RECORDING_SECONDS - 3, "Continuous recording may not cover final state"
+    # The actual root and More remain tracking until the recorder itself has exited and media is valid.
+    # A previous chart driver closed the root before finalization; do not repeat that lifecycle.
+    deadline = video_start + RECORDING_WALL_BUDGET
+    last_tracking_log = 0.0
+    while recording.poll() is None:
+        stable_open_windows()
+        assert time.monotonic() < deadline, "Recorder still live at predeclared85sec from start; no timeout extension"
+        if time.monotonic() - last_tracking_log > 2:
+            log("menus-tracking-during-recording", pid=recording.pid, root=root_window["id"], more=child_window["id"])
+            last_tracking_log = time.monotonic()
+        time.sleep(0.2)
+    recording_exit = observed_exit(recording, 0)
+    log("recorder-exit", pid=recording.pid, exit_code=recording_exit, seconds_since_launch=time.monotonic() - video_start)
+    assert recording_exit == 0
+    stable_open_windows()
     media = json.loads(ui("media", out / "continuous-screen.mov"))
     assert media["duration"] >= last_state and media["width"] > 0
     log("continuous-recording", media=media, last_state_elapsed=last_state)
+    ui("esc")
+    ui("esc")
     passed = True
 except Exception as error:
     failure = str(error)
@@ -218,17 +283,29 @@ except Exception as error:
 finally:
     if recording is not None and recording.poll() is None:
         try:
-            recording.wait(timeout=45)
+            observed_exit(recording, max(0, video_start + RECORDING_WALL_BUDGET - time.monotonic()))
         except subprocess.TimeoutExpired:
+            log("recording-cleanup-timeout", pid=recording.pid, original_failure=failure)
             recording.terminate()
-            recording.wait(timeout=5)
-    if process is not None and process.poll() is None:
-        process.terminate()
-        process.wait(timeout=5)
-    if banner is not None and banner.poll() is None:
-        banner.terminate()
-        banner.wait(timeout=5)
-    subprocess.run(["osascript", "-e", 'tell application "System Events" to tell appearance preferences to set dark mode to ' + ("true" if original_dark else "false")], check=True, timeout=15)
+            try:
+                observed_exit(recording, 5)
+            except subprocess.TimeoutExpired:
+                log("recording-termination-timeout", pid=recording.pid, original_failure=failure)
+    for owned, label in [(process, "app"), (banner, "banner")]:
+        if owned is not None and owned.poll() is None:
+            try:
+                owned.terminate()
+                observed_exit(owned, 5)
+            except Exception as error:
+                passed = False
+                failure = failure or "Owned process cleanup failed: " + str(error)
+                log("owned-process-cleanup-failure", label=label, original_failure=failure, error=str(error))
+    try:
+        subprocess.run(["osascript", "-e", 'tell application "System Events" to tell appearance preferences to set dark mode to ' + ("true" if original_dark else "false")], check=True, timeout=15)
+    except Exception as error:
+        passed = False
+        failure = failure or "Appearance cleanup failed: " + str(error)
+        log("appearance-cleanup-failure", original_failure=failure, error=str(error))
     for handle in handles:
         handle.close()
     verdict = {"automated_ui_state_checks_passed": passed, "manual_original_media_inspection_required": True,

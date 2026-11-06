@@ -162,3 +162,26 @@ Original full-screen PNGs, root/More crops, AX snapshots, timestamps/receipts,
 a continuous40second MOV, actual built app zip and all bundle/source hashes are
 retained. Automated guards never mark original media accepted; human/agent
 inspection of the actual original screenshots and movie is a separate gate.
+
+## UI-only retry after first native viewport failure
+
+Run42218270832 packaged the actual e8a/cfa app successfully. Its driver rejected the offscreen
+More item before any refresh. The root was taller than the display; original screen/AX/receipts
+are retained in that immutable artifact. No behavior acceptance was claimed.
+
+The UI-only controller reuses that exact ZIP, source-overlay maps, all bundle-file hashes and
+binary9f434d0d9f35adaa9421456f8e03f2ee90e6931aadcee414cedd10a497c4a9ff; no app rebuild or adapter change.
+Navigation observes native down-chevron pixels in each current root screenshot, bounds-checks
+the target against the actual window/display, and dwells at most12steps/12seconds while fetching
+fresh AX. More must become visible inside the actual root (excluding arrow strips). Same open
+root/More identities and rootBegin1/end0 remain required after the nonce refresh trigger.
+
+A predeclared40second original clip starts before root click. The fixed finalization deadline is
+85seconds from recorder launch. Before this first UI retry, prior actual chart run42222113762
+observed49.503seconds launch-to-exit for a valid25second clip;85seconds reserves the observed near2x
+wall time for40seconds plus5seconds margin. This is a predeclared bound, not a timeout increase after
+failure, and does not establish a recording implementation cause. Both menus stay open until actual poll-observed exit0 and valid
+media duration; Escape/app cleanup comes afterward. Real exit0/exit3/live-timeout controls run
+on host. Pixel controls accept down-chevrons and reject blank/up-chevrons at1x/2x. These are guard
+controls, not UI proof. Final acceptance still requires original continuous-media inspection.
+The prior cold-build workflow is manual-only, so one proof-branch push launches only the UI retry.

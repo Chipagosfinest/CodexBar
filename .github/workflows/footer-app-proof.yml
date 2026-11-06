@@ -1,9 +1,7 @@
 name: Packaged synthetic Overview footer - actual open-menu refresh
 
 on:
-  push:
-    branches: [proof/footer-runtime-20261106]
-    paths: [footerproofkit/**, .github/workflows/footer-app-proof.yml]
+  workflow_dispatch:
 
 permissions:
   contents: read
