@@ -1,0 +1,15 @@
+{
+  "inputOnlySmoke": true,
+  "productTestsOrAppExecuted": false,
+  "fabricatedRuntimeVerdict": false,
+  "preparePassed": true,
+  "transitionPatchAndSameOracleGuardsPassed": true,
+  "untrackedSourceInjectionRejected": true,
+  "trackedInputsAfterHarness": 4405,
+  "onlyTransitionChangedPath": [
+    "Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift"
+  ],
+  "frozenTestSHA256": "65125fe154fe846983ae550a6beff83d58860d0c7e90558f00c6b79631243281",
+  "candidatePatchSHA256": "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961",
+  "candidateSourceSHA256": "9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524"
+}

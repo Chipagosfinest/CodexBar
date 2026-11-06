@@ -1,0 +1,100 @@
+name: Footer native-highlight - actual App Core RED then GREEN
+
+on:
+  push:
+    branches: [proof/20261106-review-regressions]
+    paths:
+      - proofkit/footer-highlight/prove.py
+      - proofkit/footer-highlight/classifier_controls.py
+      - proofkit/footer-highlight/patches/footer.patch
+      - proofkit/footer-highlight/tests/footer/OverviewOverflowPluginRefreshTests.swift
+      - proofkit/footer-highlight/tests/footer/UserProviderPluginProofSuite.swift
+      - .github/workflows/footer-highlight-regression.yml
+
+permissions:
+  contents: read
+
+jobs:
+  footer-highlight:
+    runs-on: macos-26
+    timeout-minutes: 50
+    env:
+      PRODUCT_SHA: e8a0cca51036fa8f30362a0710754d812ace34a3
+      CODEXBAR_DISABLE_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_TEST_CODEX_FILE_ISOLATION: "1"
+      CODEXBAR_TEST_SESSION_FILE_ISOLATION: "1"
+      CODEXBAR_TEST_NATIVE_TIMEOUT: "2400"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {path: kit, persist-credentials: false}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.PRODUCT_SHA }}
+          path: product
+          persist-credentials: false
+      - name: Select installed Xcode and containment-capable Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          echo "DEVELOPER_DIR=$latest/Contents/Developer" >> "$GITHUB_ENV"
+          proof_python=""
+          for candidate in "$(command -v python3)" /opt/homebrew/bin/python3.14 /opt/homebrew/opt/python@3.14/bin/python3.14; do
+            if [[ -x "$candidate" ]] && "$candidate" -c 'import os; assert all(hasattr(os, n) for n in ("waitid", "P_PID", "WEXITED", "WNOHANG", "WNOWAIT"))'; then
+              proof_python="$candidate"
+              break
+            fi
+          done
+          if [[ -z "$proof_python" ]]; then
+            brew install python@3.14
+            proof_python="$(brew --prefix python@3.14)/bin/python3.14"
+          fi
+          "$proof_python" -c 'import os; assert all(hasattr(os, n) for n in ("waitid", "P_PID", "WEXITED", "WNOHANG", "WNOWAIT"))'
+          mkdir -p "$RUNNER_TEMP/proof-python" "$RUNNER_TEMP/footer-highlight-regression"
+          ln -s "$proof_python" "$RUNNER_TEMP/proof-python/python3"
+          echo "$RUNNER_TEMP/proof-python" >> "$GITHUB_PATH"
+          echo "PROOF_OUT=$RUNNER_TEMP/footer-highlight-regression" >> "$GITHUB_ENV"
+          { sw_vers; xcodebuild -version; "$proof_python" --version; launchctl managername; } > "$RUNNER_TEMP/footer-highlight-regression/environment.txt"
+      - name: Check strict classifier controls and prepare exact baseline oracle
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 kit/proofkit/footer-highlight/classifier_controls.py > "$PROOF_OUT/classifier-controls.json"
+          python3 kit/proofkit/footer-highlight/prove.py prepare --product product --output "$PROOF_OUT/red" > "$PROOF_OUT/red-filter.txt"
+      - name: Require actual native-highlight behavioral RED with original regression passing
+        working-directory: product
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          ./Scripts/test_fast.sh --jobs 2 --filter UserProviderPluginTests > "$PROOF_OUT/red/tests.log" 2>&1
+          result=$?
+          set -e
+          printf '%s\n' "$result" > "$PROOF_OUT/red/test-exit.txt"
+          tail -100 "$PROOF_OUT/red/tests.log"
+          python3 ../kit/proofkit/footer-highlight/prove.py verify --product . --output "$PROOF_OUT/red" --expect red --exit-code "$result"
+      - name: Apply only frozen production delta after verified behavioral RED
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 kit/proofkit/footer-highlight/prove.py transition --product product --output "$PROOF_OUT/green" --prior "$PROOF_OUT/red"
+      - name: Require same two oracles GREEN reusing the same build tree
+        working-directory: product
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          ./Scripts/test_fast.sh --jobs 2 --filter UserProviderPluginTests > "$PROOF_OUT/green/tests.log" 2>&1
+          result=$?
+          set -e
+          printf '%s\n' "$result" > "$PROOF_OUT/green/test-exit.txt"
+          tail -100 "$PROOF_OUT/green/tests.log"
+          python3 ../kit/proofkit/footer-highlight/prove.py verify --product . --output "$PROOF_OUT/green" --expect green --exit-code "$result"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: footer-highlight-red-green-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/footer-highlight-regression
+          retention-days: 14
