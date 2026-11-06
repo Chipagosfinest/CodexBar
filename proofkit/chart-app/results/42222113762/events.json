@@ -1,0 +1,324 @@
+[
+  {
+    "event": "setup",
+    "elapsed": 2.09,
+    "app_pid": 4445,
+    "banner_pid": 4440,
+    "runtime": {
+      "actualMergedMenu": true,
+      "actualStatusItemController": true,
+      "blockedHTTPRequests": 0,
+      "claudeDayUSD": 2,
+      "claudeHoveredShare": 0.4,
+      "codexDayUSD": 3,
+      "codexHoveredShare": 0.6,
+      "forbiddenProviderRefreshes": 0,
+      "knownDay": "2026-11-06",
+      "knownDayPointID": "1793923200.0",
+      "knownDayUSD": 5,
+      "menuRefreshDisabled": true,
+      "openMenuCount": 0,
+      "openMenuCountExpectedZeroBecauseRefreshDisabled": true,
+      "ordinaryAppStartup": false,
+      "overviewSelected": true,
+      "productSHA": "c16893bbe515695c74a5c7d594b083ce641c3d20",
+      "proofOnlyEarlyStartup": true,
+      "providerTransportAllowed": false,
+      "rangeSharesUnknown": true,
+      "synthetic": true,
+      "updatedAt": "2026-11-06T13:02:08Z"
+    },
+    "binary_sha256": "087701df63fb5d58922565bd158b91b21223e050d97b3011e7a074c8563ad15b",
+    "sandbox_profile": "(version 1)(allow default)(deny network*)",
+    "application_identity": {
+      "bundle": "/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app",
+      "executable": "/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/MacOS/CodexBar",
+      "pid": 4445
+    },
+    "observed_displays": [
+      {
+        "h": 768,
+        "w": 1024,
+        "x": 0,
+        "y": 0
+      }
+    ]
+  },
+  {
+    "event": "status_visible",
+    "elapsed": 4.411,
+    "theme": "light",
+    "frame": {
+      "h": 24,
+      "w": 55,
+      "x": 759,
+      "y": 3
+    },
+    "pixels": {
+      "contrast": 0.7155332167943319,
+      "height": 24,
+      "width": 55
+    },
+    "manual_original_screen_inspection_required": true
+  },
+  {
+    "event": "recorder_start",
+    "elapsed": 4.417,
+    "pid": 4551,
+    "requested_duration_seconds": 25,
+    "theme": "light"
+  },
+  {
+    "event": "capture",
+    "elapsed": 7.422,
+    "name": "light-1-range",
+    "expected_legend": [
+      "unknown",
+      "unknown"
+    ],
+    "menu": {
+      "h": 668,
+      "id": 40,
+      "layer": 101,
+      "w": 310,
+      "x": 708,
+      "y": 31
+    },
+    "actual_screen_image": {
+      "contrast": 0.999999980131785,
+      "height": 768,
+      "width": 1024
+    },
+    "screen_menu_similarity": {
+      "meanRGBError": 7.168233309715902e-06,
+      "menuHeight": 668,
+      "menuWidth": 310,
+      "samples": 936,
+      "screenHeight": 768,
+      "screenWidth": 1024
+    }
+  },
+  {
+    "event": "pointer_move",
+    "elapsed": 7.496,
+    "theme": "light",
+    "target": [
+      931.0,
+      148.0
+    ],
+    "source": "observed chart accessibility geometry"
+  },
+  {
+    "event": "capture",
+    "elapsed": 8.471,
+    "name": "light-2-hover",
+    "expected_legend": [
+      "40%",
+      "60%"
+    ],
+    "menu": {
+      "h": 668,
+      "id": 40,
+      "layer": 101,
+      "w": 310,
+      "x": 708,
+      "y": 31
+    },
+    "actual_screen_image": {
+      "contrast": 0.999999980131785,
+      "height": 768,
+      "width": 1024
+    },
+    "screen_menu_similarity": {
+      "meanRGBError": 7.168233309715902e-06,
+      "menuHeight": 668,
+      "menuWidth": 310,
+      "samples": 936,
+      "screenHeight": 768,
+      "screenWidth": 1024
+    }
+  },
+  {
+    "event": "capture",
+    "elapsed": 9.378,
+    "name": "light-3-exit",
+    "expected_legend": [
+      "unknown",
+      "unknown"
+    ],
+    "menu": {
+      "h": 668,
+      "id": 40,
+      "layer": 101,
+      "w": 310,
+      "x": 708,
+      "y": 31
+    },
+    "actual_screen_image": {
+      "contrast": 0.999999980131785,
+      "height": 768,
+      "width": 1024
+    },
+    "screen_menu_similarity": {
+      "meanRGBError": 7.168233309715902e-06,
+      "menuHeight": 668,
+      "menuWidth": 310,
+      "samples": 936,
+      "screenHeight": 768,
+      "screenWidth": 1024
+    }
+  },
+  {
+    "event": "recorder_exit",
+    "elapsed": 53.921,
+    "pid": 4551,
+    "exit_code": 0,
+    "seconds_since_launch": 49.50328645799999
+  },
+  {
+    "event": "recording",
+    "elapsed": 53.995,
+    "theme": "light",
+    "last_state_elapsed": 4.961869250000007,
+    "media": {
+      "duration": 25,
+      "height": 768,
+      "width": 1024
+    }
+  },
+  {
+    "event": "status_visible",
+    "elapsed": 56.458,
+    "theme": "dark",
+    "frame": {
+      "h": 24,
+      "w": 55,
+      "x": 759,
+      "y": 3
+    },
+    "pixels": {
+      "contrast": 0.7635328769683838,
+      "height": 24,
+      "width": 55
+    },
+    "manual_original_screen_inspection_required": true
+  },
+  {
+    "event": "recorder_start",
+    "elapsed": 56.462,
+    "pid": 5674,
+    "requested_duration_seconds": 25,
+    "theme": "dark"
+  },
+  {
+    "event": "capture",
+    "elapsed": 58.988,
+    "name": "dark-1-range",
+    "expected_legend": [
+      "unknown",
+      "unknown"
+    ],
+    "menu": {
+      "h": 668,
+      "id": 44,
+      "layer": 101,
+      "w": 310,
+      "x": 708,
+      "y": 31
+    },
+    "actual_screen_image": {
+      "contrast": 0.999999980131785,
+      "height": 768,
+      "width": 1024
+    },
+    "screen_menu_similarity": {
+      "meanRGBError": 3.834629160726172e-06,
+      "menuHeight": 668,
+      "menuWidth": 310,
+      "samples": 936,
+      "screenHeight": 768,
+      "screenWidth": 1024
+    }
+  },
+  {
+    "event": "pointer_move",
+    "elapsed": 59.057,
+    "theme": "dark",
+    "target": [
+      931.0,
+      148.0
+    ],
+    "source": "observed chart accessibility geometry"
+  },
+  {
+    "event": "capture",
+    "elapsed": 59.993,
+    "name": "dark-2-hover",
+    "expected_legend": [
+      "40%",
+      "60%"
+    ],
+    "menu": {
+      "h": 668,
+      "id": 44,
+      "layer": 101,
+      "w": 310,
+      "x": 708,
+      "y": 31
+    },
+    "actual_screen_image": {
+      "contrast": 0.999999980131785,
+      "height": 768,
+      "width": 1024
+    },
+    "screen_menu_similarity": {
+      "meanRGBError": 3.834629160726172e-06,
+      "menuHeight": 668,
+      "menuWidth": 310,
+      "samples": 936,
+      "screenHeight": 768,
+      "screenWidth": 1024
+    }
+  },
+  {
+    "event": "capture",
+    "elapsed": 60.907,
+    "name": "dark-3-exit",
+    "expected_legend": [
+      "unknown",
+      "unknown"
+    ],
+    "menu": {
+      "h": 668,
+      "id": 44,
+      "layer": 101,
+      "w": 310,
+      "x": 708,
+      "y": 31
+    },
+    "actual_screen_image": {
+      "contrast": 0.999999980131785,
+      "height": 768,
+      "width": 1024
+    },
+    "screen_menu_similarity": {
+      "meanRGBError": 3.834629160726172e-06,
+      "menuHeight": 668,
+      "menuWidth": 310,
+      "samples": 936,
+      "screenHeight": 768,
+      "screenWidth": 1024
+    }
+  },
+  {
+    "event": "primary_failure",
+    "elapsed": 105.922,
+    "error_type": "TimeoutExpired",
+    "error": "Command '['screencapture', '-v', '-V', '25', '-x', '/Users/runner/work/_temp/chart-app-proof/dark-screen.mov']' timed out after 45 seconds"
+  },
+  {
+    "event": "quit",
+    "elapsed": 107.35,
+    "via": "owned-process termination fallback"
+  }
+]

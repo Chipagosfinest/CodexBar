@@ -1,0 +1,585 @@
+[
+  {
+    "depth": 0,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 0
+    },
+    "role": "AXApplication",
+    "title": "CodexBar"
+  },
+  {
+    "depth": 1,
+    "frame": {
+      "h": 24,
+      "w": 55,
+      "x": 759,
+      "y": 3
+    },
+    "role": "AXMenuBar"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 24,
+      "w": 55,
+      "x": 759,
+      "y": 3
+    },
+    "identifier": "codexbar-packaged-chart-proof",
+    "role": "AXMenuBarItem",
+    "title": "CodexBar Debug"
+  },
+  {
+    "depth": 3,
+    "frame": {
+      "h": 668,
+      "w": 310,
+      "x": 708,
+      "y": 31
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 30,
+      "w": 310,
+      "x": 708,
+      "y": 36
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "description": "Overview",
+    "frame": {
+      "h": 32,
+      "w": 82,
+      "x": 723,
+      "y": 35
+    },
+    "role": "AXButton",
+    "title": ""
+  },
+  {
+    "depth": 5,
+    "description": "Codex",
+    "frame": {
+      "h": 32,
+      "w": 82,
+      "x": 822,
+      "y": 35
+    },
+    "role": "AXButton",
+    "title": ""
+  },
+  {
+    "depth": 5,
+    "description": "Claude",
+    "frame": {
+      "h": 32,
+      "w": 82,
+      "x": 921,
+      "y": 35
+    },
+    "role": "AXButton",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 708,
+      "y": 66
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 117,
+      "w": 310,
+      "x": 708,
+      "y": 77
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 117,
+      "w": 310,
+      "x": 708,
+      "y": 77
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 21,
+      "w": 62,
+      "x": 728,
+      "y": 86.5
+    },
+    "help": "1 of 2 subscriptions have spend\nCoverage: 2 / 2 \u00b7 List-price equivalent\nPriced 3 \u00b7 Unpriced 1 \u00b7 Unmetered 0 \u00b7 Estimated 0",
+    "role": "AXStaticText",
+    "value": "~$3.00"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 7,
+      "x": 796,
+      "y": 92.5
+    },
+    "help": "1 of 2 subscriptions have spend\nCoverage: 2 / 2 \u00b7 List-price equivalent\nPriced 3 \u00b7 Unpriced 1 \u00b7 Unmetered 0 \u00b7 Estimated 0",
+    "role": "AXStaticText",
+    "value": "2"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 48,
+      "x": 950,
+      "y": 92.5
+    },
+    "help": "1 of 2 subscriptions have spend\nCoverage: 2 / 2 \u00b7 List-price equivalent\nPriced 3 \u00b7 Unpriced 1 \u00b7 Unmetered 0 \u00b7 Estimated 0",
+    "role": "AXStaticText",
+    "value": "40 tokens"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 61,
+      "x": 728,
+      "y": 110.5
+    },
+    "help": "1 of 2 subscriptions have spend\nCoverage: 2 / 2 \u00b7 List-price equivalent\nPriced 3 \u00b7 Unpriced 1 \u00b7 Unmetered 0 \u00b7 Estimated 0",
+    "role": "AXStaticText",
+    "value": "Today $5.00"
+  },
+  {
+    "depth": 6,
+    "description": "Nov 5: ~$0.00",
+    "frame": {
+      "h": 40,
+      "w": 134,
+      "x": 728,
+      "y": 128
+    },
+    "help": "1 of 2 subscriptions have spend\nCoverage: 2 / 2 \u00b7 List-price equivalent\nPriced 3 \u00b7 Unpriced 1 \u00b7 Unmetered 0 \u00b7 Estimated 0",
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 6,
+    "description": "Nov 6: $5.00, Codex $3.00, Claude $2.00",
+    "frame": {
+      "h": 40,
+      "w": 134,
+      "x": 864,
+      "y": 128
+    },
+    "help": "1 of 2 subscriptions have spend\nCoverage: 2 / 2 \u00b7 List-price equivalent\nPriced 3 \u00b7 Unpriced 1 \u00b7 Unmetered 0 \u00b7 Estimated 0",
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 245,
+      "x": 728,
+      "y": 171
+    },
+    "role": "AXOpaqueProviderGroup"
+  },
+  {
+    "depth": 7,
+    "description": "Codex Unknown",
+    "frame": {
+      "h": 14,
+      "w": 104,
+      "x": 728,
+      "y": 171
+    },
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 7,
+    "description": "Claude Unknown",
+    "frame": {
+      "h": 13,
+      "w": 107,
+      "x": 866,
+      "y": 171.5
+    },
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 708,
+      "y": 194
+    },
+    "identifier": "presentOverviewShareStats",
+    "role": "AXMenuItem",
+    "title": "Share Usage Snapshot\u2026"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 708,
+      "y": 218
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 282,
+      "w": 310,
+      "x": 708,
+      "y": 229
+    },
+    "identifier": "menuCardNoOp:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 7,
+    "frame": {
+      "h": 240,
+      "w": 310,
+      "x": 0,
+      "y": 528
+    },
+    "role": "AXScrollArea"
+  },
+  {
+    "depth": 8,
+    "frame": {
+      "h": 240,
+      "w": 310,
+      "x": 0,
+      "y": 528
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 9,
+    "description": "Token activity",
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 10,
+    "description": "Nov 5, 2026 at 12:00\u202fPM to Nov 5, 2026 at 6:00\u202fPM",
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 10,
+    "description": "Nov 6, 2026 at 12:00\u202fPM to Nov 6, 2026 at 6:00\u202fPM",
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 9,
+    "description": "Display mode, Display mode",
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXRadioGroup"
+  },
+  {
+    "depth": 10,
+    "description": "Token",
+    "frame": {
+      "h": 20,
+      "w": 50,
+      "x": 0,
+      "y": 748
+    },
+    "role": "AXRadioButton"
+  },
+  {
+    "depth": 10,
+    "description": "Cost",
+    "frame": {
+      "h": 20,
+      "w": 49,
+      "x": 0,
+      "y": 748
+    },
+    "role": "AXRadioButton"
+  },
+  {
+    "depth": 9,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXStaticText",
+    "value": "Nov 6: $3.00 \u00b7 10 tokens"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 708,
+      "y": 511
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 282,
+      "w": 310,
+      "x": 708,
+      "y": 522
+    },
+    "identifier": "menuCardNoOp:",
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 7,
+    "frame": {
+      "h": 240,
+      "w": 310,
+      "x": 0,
+      "y": 528
+    },
+    "role": "AXScrollArea"
+  },
+  {
+    "depth": 8,
+    "frame": {
+      "h": 240,
+      "w": 310,
+      "x": 0,
+      "y": 528
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 9,
+    "description": "Cost history chart",
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 10,
+    "description": "Nov 6, 2026 at 12:00\u202fPM to Nov 6, 2026 at 3:00\u202fPM",
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 9,
+    "description": "Display mode, Display mode",
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXRadioGroup"
+  },
+  {
+    "depth": 10,
+    "description": "Token",
+    "frame": {
+      "h": 20,
+      "w": 50,
+      "x": 0,
+      "y": 748
+    },
+    "role": "AXRadioButton"
+  },
+  {
+    "depth": 10,
+    "description": "Cost",
+    "frame": {
+      "h": 20,
+      "w": 49,
+      "x": 0,
+      "y": 748
+    },
+    "role": "AXRadioButton"
+  },
+  {
+    "depth": 9,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 768
+    },
+    "role": "AXStaticText",
+    "value": "Nov 6: $2.00 \u00b7 10 tokens"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 708,
+      "y": 804
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 708,
+      "y": 815
+    },
+    "role": "AXMenuItem",
+    "title": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 243.6328125,
+      "x": 1,
+      "y": 751
+    },
+    "role": "AXStaticText",
+    "value": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 42,
+      "x": 1,
+      "y": 751
+    },
+    "role": "AXStaticText",
+    "value": "\u2318 R"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 708,
+      "y": 839
+    },
+    "identifier": "showSettingsGeneral",
+    "role": "AXMenuItem",
+    "title": "Settings..."
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 708,
+      "y": 863
+    },
+    "identifier": "showSettingsAbout",
+    "role": "AXMenuItem",
+    "title": "About CodexBar (v0.83.1)"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 708,
+      "y": 887
+    },
+    "identifier": "quit",
+    "role": "AXMenuItem",
+    "title": "Quit"
+  }
+]

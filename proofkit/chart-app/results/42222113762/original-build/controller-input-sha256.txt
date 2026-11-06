@@ -1,0 +1,5 @@
+21f99b809d4b6ce41ec59a593ef031753ebcfe4a36388b89f576649a75a62a50  kit/proofkit/chart-app/PackagedMenuProof.swift
+74d26cf553bae4fca89b65aaddc9f5c68d3297be4477e92b6a39875a1b6a063b  kit/proofkit/chart-app/prepare_overlay.py
+7328f54328391b68e3678a46c50b8ceab5874c737f7525993952d4ee7e58be35  kit/proofkit/chart-app/ui.swift
+07ac1f84e91a31fd5aa6ab382b3807c57164c1e0d2e181c54c7316a348012a14  kit/proofkit/chart-app/drive.py
+d2e59ffa46d40d5fa3d5f4ed61e752d8367e871c63eb9a3d5ff5457c14545e07  kit/proofkit/chart-app/verify_inputs.py

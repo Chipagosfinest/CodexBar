@@ -1,0 +1,9 @@
+{
+  "ui_states_passed": false,
+  "product_sha": "c16893bbe515695c74a5c7d594b083ce641c3d20",
+  "overlay_patch_sha256": "8203cd21642e387a4406011a4c2ce65f990cb82203f25c2279261036bfade72d",
+  "boundary": "Synthetic packaged-App menu journey with declared early-startup overlay; no shipping startup/live-account claim",
+  "sandbox_profile": "(version 1)(allow default)(deny network*)",
+  "events": 17,
+  "manual_original_screen_and_recording_inspection_required": true
+}

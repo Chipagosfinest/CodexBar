@@ -1,0 +1,16 @@
+{
+  "reusedRunID": 42218059156,
+  "reusedArtifactID": 13501669086,
+  "originalBuildControllerSHA": "d0b7ee6a66fb374068b59bb32533c4fda93ebf67",
+  "originalArchiveSHA256": {
+    "proof-built-CodexBar.app.zip": "bae027c75d3d3c878aabe415e33ceda7d86a30b38e20fc5a40b4addf48bdac5d",
+    "overlay.patch": "8203cd21642e387a4406011a4c2ce65f990cb82203f25c2279261036bfade72d",
+    "built-input-verdict.json": "0118a4c19ef6b3c2063e3b5253fbf0d2a5922fc86fdaa6a0a3dcf41814238d50",
+    "overlay-manifest.json": "69dff9b07825997e9f91db8b32dba83da07cd3c0b0a96eb8e1687b066cf76839"
+  },
+  "allTrackedAndSourceInputsMatchOriginal": true,
+  "allBundleFilesMatchOriginal": true,
+  "binarySHA256": "087701df63fb5d58922565bd158b91b21223e050d97b3011e7a074c8563ad15b",
+  "newAppCompilation": false,
+  "productSHA": "c16893bbe515695c74a5c7d594b083ce641c3d20"
+}

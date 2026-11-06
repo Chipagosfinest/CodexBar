@@ -1,0 +1,20 @@
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/.
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Frameworks/Sparkle.framework/Versions/Current/.
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Helpers/CodexBarClaudeWatchdog
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Helpers/CodexBar_CodexBarCore.bundle
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Helpers/CodexBarClaudeWatchdog
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/PlugIns/CodexBarWidget.appex
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Helpers/CodexBar_CodexBarCore.bundle
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/PlugIns/CodexBarWidget.appex
+--prepared:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Helpers/CodexBarCLI
+--validated:/Users/runner/work/CodexBar/CodexBar/product/CodexBar.app/Contents/Helpers/CodexBarCLI
+CodexBar.app: valid on disk
+CodexBar.app: satisfies its Designated Requirement

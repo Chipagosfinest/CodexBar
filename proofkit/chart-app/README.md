@@ -1,5 +1,7 @@
 # Synthetic packaged Overview chart journey
 
+Current bounded observed-UI evidence: [REPORT.md](REPORT.md). The final workflow failed dark recorder finalization; the report preserves that failure and the original false verdict alongside six original screen states.
+
 This opt-in hosted proof targets exact product `c16893bbe515695c74a5c7d594b083ce641c3d20` (#4901). It builds a real DEBUG CodexBar.app with the normal upstream adhoc packaging recipe. The declared overlay changes only the existing DEBUG early-entry hook and adds the synthetic adapter. No product worktree is modified.
 
 The adapter publishes synthetic daily cost snapshots through actual UsageStore owners: yesterday Claude unknown/Codex0; today Claude2/Codex3. The real StatusItemController builds the actual merged Overview and production chart. Independent setup assertions establish the model's $5 day, 40%/60% daily shares and unavailable range shares. The GUI driver must separately open the actual status item, hover today's real bar and move off it, observing Unknown→40/60→Unknown through accessibility and original actual-screen captures in both system appearances.
