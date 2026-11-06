@@ -1,0 +1,80 @@
+name: Cooldown runtime persistence proof
+on:
+  push:
+    branches: [proof/cooldown-runtime-20261106]
+    paths:
+      - .github/workflows/cooldown-runtime-proof.yml
+      - cooldownproofkit/**
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cooldown-runtime-proof-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  actual-cli-persistence:
+    if: github.repository == 'Chipagosfinest/CodexBar'
+    runs-on: macos-26
+    timeout-minutes: 50
+    steps:
+      - name: Check out isolated proof controller
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: controller
+      - name: Check out exact product
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: 725fb4fdda831b5cca8bf265d2c066aa8ebc04ca
+          path: product
+      - name: Record installed macOS toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p proof-output
+          xcodebuild -version > proof-output/toolchain.txt
+          swift --version >> proof-output/toolchain.txt
+          sw_vers >> proof-output/toolchain.txt
+          git -C controller rev-parse HEAD > proof-output/controller-sha.txt
+          git -C product rev-parse HEAD > proof-output/product-sha.txt
+      - name: Apply declared overlay only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 controller/cooldownproofkit/prepare_overlay.py \
+            --apply-to-disposable-copy "$GITHUB_WORKSPACE/product" \
+            --manifest-output "$GITHUB_WORKSPACE/proof-output/overlay-manifest.json"
+          git -C product diff --binary > proof-output/declared-overlay.diff
+          cp controller/cooldownproofkit/PackagedCooldownProof.swift proof-output/
+          cp controller/cooldownproofkit/CoordinatorBridge.swift.fragment proof-output/
+      - name: Build actual CLI and verify fresh-process persistence with cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 controller/cooldownproofkit/run_proof.py \
+            --checkout "$GITHUB_WORKSPACE/product" \
+            --output "$GITHUB_WORKSPACE/proof-output"
+      - name: Publish readable terminal report
+        if: always()
+        shell: bash
+        run: |
+          if [ -f proof-output/REPORT.md ]; then
+            cat proof-output/REPORT.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf '%s\n' 'Proof setup failed before the runtime controller; inspect retained logs.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Retain exact proof artifacts even on failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: cooldown-runtime-725fb4f-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            proof-output/*.json
+            proof-output/*.txt
+            proof-output/*.md
+            proof-output/*.log
+            proof-output/*.diff
+            proof-output/*.swift
+            proof-output/*.fragment
+            proof-output/runtime/*.json
+          if-no-files-found: error
+          retention-days: 14
