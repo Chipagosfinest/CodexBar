@@ -1,0 +1,20 @@
+[
+  {
+    "allowed" : true,
+    "method" : "POST",
+    "path" : "\/api\/dashboard\/get-sand-usage-status",
+    "status" : 200
+  },
+  {
+    "allowed" : true,
+    "method" : "GET",
+    "path" : "\/api\/usage-summary",
+    "status" : 200
+  },
+  {
+    "allowed" : true,
+    "method" : "GET",
+    "path" : "\/api\/auth\/me",
+    "status" : 200
+  }
+]

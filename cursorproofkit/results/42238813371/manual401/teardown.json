@@ -1,0 +1,6 @@
+{
+  "terminationRequested": true,
+  "alreadyExitedBeforeTermination": false,
+  "forcedKill": false,
+  "observedExitCode": -15
+}

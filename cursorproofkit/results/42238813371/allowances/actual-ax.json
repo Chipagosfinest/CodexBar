@@ -1,0 +1,332 @@
+[
+  {
+    "depth": 0,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 0
+    },
+    "role": "AXApplication",
+    "title": "CodexBar"
+  },
+  {
+    "depth": 1,
+    "frame": {
+      "h": 24,
+      "w": 136,
+      "x": 1566,
+      "y": 3
+    },
+    "role": "AXMenuBar"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 24,
+      "w": 136,
+      "x": 1566,
+      "y": 3
+    },
+    "identifier": "codexbar-cursor-proof",
+    "role": "AXMenuBarItem",
+    "title": "Cursor icon, Total 20%, Grok Bot 80%, Debug"
+  },
+  {
+    "depth": 3,
+    "frame": {
+      "h": 381,
+      "w": 310,
+      "x": 1555,
+      "y": 31
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 181,
+      "w": 310,
+      "x": 1555,
+      "y": 36
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 181,
+      "w": 310,
+      "x": 1555,
+      "y": 36
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 43,
+      "x": 1575,
+      "y": 45.5
+    },
+    "role": "AXStaticText",
+    "value": "Cursor"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 14,
+      "w": 163,
+      "x": 1682,
+      "y": 47.5
+    },
+    "role": "AXStaticText",
+    "value": "cursor-fixture@example.invalid"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 85,
+      "x": 1575,
+      "y": 65.5
+    },
+    "role": "AXStaticText",
+    "value": "Updated just now"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 76,
+      "x": 1769,
+      "y": 65.5
+    },
+    "role": "AXStaticText",
+    "value": "Cursor Pro Trial"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 97,
+      "x": 1575,
+      "y": 101.5
+    },
+    "help": "",
+    "role": "AXStaticText",
+    "value": "Total 20% used"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 60,
+      "x": 1785,
+      "y": 104.5
+    },
+    "help": "",
+    "role": "AXStaticText",
+    "value": "Resets in 6d"
+  },
+  {
+    "depth": 6,
+    "description": "Usage used",
+    "frame": {
+      "h": 6,
+      "w": 270,
+      "x": 1575,
+      "y": 124
+    },
+    "help": "",
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 158,
+      "x": 1575,
+      "y": 135.5
+    },
+    "help": "",
+    "role": "AXStaticText",
+    "value": "6% in deficit \u00b7 Runs out in 4d 1m"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 121,
+      "x": 1575,
+      "y": 160.5
+    },
+    "help": "",
+    "role": "AXStaticText",
+    "value": "Grok Bot 80% used"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 60,
+      "x": 1785,
+      "y": 163.5
+    },
+    "help": "",
+    "role": "AXStaticText",
+    "value": "Resets in 6d"
+  },
+  {
+    "depth": 6,
+    "description": "Usage used",
+    "frame": {
+      "h": 6,
+      "w": 270,
+      "x": 1575,
+      "y": 183
+    },
+    "help": "",
+    "role": "AXUnknown"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 164,
+      "x": 1575,
+      "y": 194.5
+    },
+    "help": "",
+    "role": "AXStaticText",
+    "value": "66% in deficit \u00b7 Runs out in 6h 1m"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1555,
+      "y": 217
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1555,
+      "y": 228
+    },
+    "identifier": "runSwitchAccount:",
+    "role": "AXMenuItem",
+    "title": "Switch Account..."
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1555,
+      "y": 252
+    },
+    "identifier": "openDashboard",
+    "role": "AXMenuItem",
+    "title": "Usage Dashboard"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1555,
+      "y": 276
+    },
+    "identifier": "openStatusPage",
+    "role": "AXMenuItem",
+    "title": "Status Page"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1555,
+      "y": 300
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1555,
+      "y": 311
+    },
+    "role": "AXMenuItem",
+    "title": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 243.6328125,
+      "x": 1571,
+      "y": 314
+    },
+    "role": "AXStaticText",
+    "value": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 42,
+      "x": 1824.6328125,
+      "y": 314
+    },
+    "role": "AXStaticText",
+    "value": "\u2318 R"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1555,
+      "y": 335
+    },
+    "identifier": "showSettingsGeneral",
+    "role": "AXMenuItem",
+    "title": "Settings..."
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1555,
+      "y": 359
+    },
+    "identifier": "showSettingsAbout",
+    "role": "AXMenuItem",
+    "title": "About CodexBar (v0.83.1)"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1555,
+      "y": 383
+    },
+    "identifier": "quit",
+    "role": "AXMenuItem",
+    "title": "Quit"
+  }
+]

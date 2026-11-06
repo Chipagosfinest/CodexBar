@@ -1,0 +1,17 @@
+{
+  "manualOriginalScreenAcceptance": true,
+  "reviewedOriginals": [
+    "allowances/1-actual-screen.png",
+    "manual401/1-actual-screen.png",
+    "allowances/status-item.png",
+    "manual401/production-cost-settings.png"
+  ],
+  "observed": "Total20% used and GrokBot80% used; actual statusT20% GB80%. Separate401process shows real quota/menu and cost-settings error, no42cost; production receipts confirm discoverable42CSV was rejected.",
+  "baselineTrackedInputsMatchedExactFbaWorktree": 4417,
+  "sourceMismatchCount": 0,
+  "productSHA": "fba37ba92f696416b36f49d4de89affcda3888ee",
+  "binarySHA256": "ae0fde35e8449854a8f9361ed2ec6bd9c1691043d5efcfcea4db03b6b73b92d4",
+  "ordinaryAppStartup": false,
+  "liveSSOOrDurabilityVerified": false,
+  "scope": "synthetic production-owner staticAppUI onIntel only"
+}

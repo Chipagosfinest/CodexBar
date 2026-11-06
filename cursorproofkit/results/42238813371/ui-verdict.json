@@ -1,0 +1,41 @@
+{
+  "productSHA": "fba37ba92f696416b36f49d4de89affcda3888ee",
+  "overlaySHA256": "66b42093d40d67063023ae325a9bb280cd02cdf5a5094198fca001fa1cb1c581",
+  "scenarios": [
+    {
+      "scenario": "allowances",
+      "automatedStaticUIChecksPassed": true,
+      "manualOriginalScreensRequired": true,
+      "failure": null,
+      "nativeMenu": {
+        "h": 381,
+        "id": 119,
+        "layer": 101,
+        "ownerPID": 36877,
+        "w": 310,
+        "x": 1555,
+        "y": 31
+      },
+      "binarySHA256": "ae0fde35e8449854a8f9361ed2ec6bd9c1691043d5efcfcea4db03b6b73b92d4"
+    },
+    {
+      "scenario": "manual401",
+      "automatedStaticUIChecksPassed": true,
+      "manualOriginalScreensRequired": true,
+      "failure": null,
+      "nativeMenu": {
+        "h": 269,
+        "id": 127,
+        "layer": 101,
+        "ownerPID": 37100,
+        "w": 310,
+        "x": 1596,
+        "y": 31
+      },
+      "binarySHA256": "ae0fde35e8449854a8f9361ed2ec6bd9c1691043d5efcfcea4db03b6b73b92d4"
+    }
+  ],
+  "automatedChecksPassed": true,
+  "manualOriginalScreenAcceptance": false,
+  "claim": "Synthetic production-owner static App UI only; no live auth or durability"
+}

@@ -1,0 +1,553 @@
+diff --git a/Sources/CodexBar/CodexbarApp.swift b/Sources/CodexBar/CodexbarApp.swift
+index 8db8308..b9f1e0e 100644
+--- a/Sources/CodexBar/CodexbarApp.swift
++++ b/Sources/CodexBar/CodexbarApp.swift
+@@ -27,6 +27,7 @@ enum CodexBarEntryPoint {
+             exit(CodexBarCoreResourceSmoke.run())
+         }
+         #if DEBUG
++        if PackagedCursorProof.runIfRequested() { return }
+         if MenuBarLayoutNativeProof.runIfRequested() {
+             return
+         }
+diff --git a/Sources/CodexBar/CursorProofFixtureSupport.swift b/Sources/CodexBar/CursorProofFixtureSupport.swift
+new file mode 100644
+index 0000000..8af2d1b
+--- /dev/null
++++ b/Sources/CodexBar/CursorProofFixtureSupport.swift
+@@ -0,0 +1,116 @@
++#if DEBUG
++import Foundation
++@testable import CodexBarCore
++
++struct CursorProofEmptyCredentials: ZaiTokenStoring, SyntheticTokenStoring, CookieHeaderStoring,
++    MiniMaxCookieStoring, MiniMaxAPITokenStoring, KimiTokenStoring, CopilotTokenStoring
++{
++    func loadToken() throws -> String? { nil }
++    func storeToken(_: String?) throws {}
++    func loadCookieHeader() throws -> String? { nil }
++    func storeCookieHeader(_: String?) throws {}
++}
++
++final class CursorProofAccounts: ProviderTokenAccountStoring, @unchecked Sendable {
++    let root: URL
++    private let lock = NSLock()
++    private var accounts: [UsageProvider: ProviderTokenAccountData] = [:]
++    init(root: URL) { self.root = root }
++    func loadAccounts() throws -> [UsageProvider: ProviderTokenAccountData] {
++        self.lock.withLock { self.accounts }
++    }
++
++    func storeAccounts(_ accounts: [UsageProvider: ProviderTokenAccountData]) throws {
++        self.lock.withLock { self.accounts = accounts }
++    }
++
++    func ensureFileExists() throws -> URL { self.root.appendingPathComponent("unused-accounts.json") }
++}
++
++final class CursorProofDefaults: UserDefaults, @unchecked Sendable {
++    private let lock = NSLock()
++    private var values: [String: Any]
++
++    init(values: [String: Any] = [:]) {
++        self.values = values
++        super.init(suiteName: "CursorProofDefaults-\(UUID().uuidString)")!
++    }
++
++    override func object(forKey defaultName: String) -> Any? {
++        self.lock.withLock { self.values[defaultName] }
++    }
++
++    override func set(_ value: Any?, forKey defaultName: String) {
++        self.lock.withLock { self.values[defaultName] = value }
++    }
++
++    override func removeObject(forKey defaultName: String) {
++        self.set(nil as Any?, forKey: defaultName)
++    }
++
++    override func bool(forKey defaultName: String) -> Bool {
++        (self.object(forKey: defaultName) as? NSNumber)?.boolValue ?? false
++    }
++
++    override func integer(forKey defaultName: String) -> Int {
++        (self.object(forKey: defaultName) as? NSNumber)?.intValue ?? 0
++    }
++
++    override func float(forKey defaultName: String) -> Float {
++        (self.object(forKey: defaultName) as? NSNumber)?.floatValue ?? 0
++    }
++
++    override func double(forKey defaultName: String) -> Double {
++        (self.object(forKey: defaultName) as? NSNumber)?.doubleValue ?? 0
++    }
++
++    override func string(forKey defaultName: String) -> String? {
++        self.object(forKey: defaultName) as? String
++    }
++
++    override func array(forKey defaultName: String) -> [Any]? {
++        self.object(forKey: defaultName) as? [Any]
++    }
++
++    override func dictionary(forKey defaultName: String) -> [String: Any]? {
++        self.object(forKey: defaultName) as? [String: Any]
++    }
++
++    override func data(forKey defaultName: String) -> Data? {
++        self.object(forKey: defaultName) as? Data
++    }
++
++    override func stringArray(forKey defaultName: String) -> [String]? {
++        self.object(forKey: defaultName) as? [String]
++    }
++
++    override func url(forKey defaultName: String) -> URL? {
++        self.object(forKey: defaultName) as? URL
++    }
++
++    override func set(_ value: Bool, forKey defaultName: String) {
++        self.set(value as Any, forKey: defaultName)
++    }
++
++    override func set(_ value: Int, forKey defaultName: String) {
++        self.set(value as Any, forKey: defaultName)
++    }
++
++    override func set(_ value: Float, forKey defaultName: String) {
++        self.set(value as Any, forKey: defaultName)
++    }
++
++    override func set(_ value: Double, forKey defaultName: String) {
++        self.set(value as Any, forKey: defaultName)
++    }
++
++    override func set(_ url: URL?, forKey defaultName: String) {
++        self.set(url as Any?, forKey: defaultName)
++    }
++
++    override func dictionaryRepresentation() -> [String: Any] {
++        self.lock.withLock { self.values }
++    }
++}
++
++#endif
+diff --git a/Sources/CodexBar/PackagedCursorProof.swift b/Sources/CodexBar/PackagedCursorProof.swift
+new file mode 100644
+index 0000000..f294173
+--- /dev/null
++++ b/Sources/CodexBar/PackagedCursorProof.swift
+@@ -0,0 +1,413 @@
++#if DEBUG
++import AppKit
++import Foundation
++import SwiftUI
++@testable import CodexBarCore
++
++/// BEGIN PURE CURSOR HTTP FIXTURE
++struct CursorFixtureReply {
++    let status: Int
++    let body: Data
++}
++
++func cursorFixtureReply(_ request: URLRequest, cookie: String, scenario: String, now: Date) -> CursorFixtureReply? {
++    guard let url = request.url, let parts = URLComponents(url: url, resolvingAgainstBaseURL: false),
++          parts.scheme == "https", parts.host == "cursor.com", parts.port == nil,
++          parts.user == nil, parts.password == nil, parts.query == nil, parts.fragment == nil,
++          request.value(forHTTPHeaderField: "Cookie") == cookie,
++          ["allowances", "manual401"].contains(scenario) else { return nil }
++    let routes = [
++        "/api/usage-summary": "GET",
++        "/api/auth/me": "GET",
++        "/api/dashboard/get-sand-usage-status": "POST",
++    ]
++    let cost = parts.path == "/api/dashboard/get-filtered-usage-events" && request.httpMethod == "POST"
++    let quota = routes[parts.path].map { $0 == request.httpMethod } ?? false
++    guard quota || (scenario == "manual401" && cost) else { return nil }
++    if scenario == "manual401" { return CursorFixtureReply(status: 401, body: Data()) }
++    let iso = ISO8601DateFormatter()
++    let start = iso.string(from: now.addingTimeInterval(-86400))
++    let end = iso.string(from: now.addingTimeInterval(6 * 86400))
++    let value: [String: Any]
++    switch parts.path {
++    case "/api/usage-summary":
++        value = [
++            "billingCycleStart": start,
++            "billingCycleEnd": end,
++            "membershipType": "free_trial",
++            "limitType": "user",
++            "individualUsage": ["plan": [
++                "used": 2000,
++                "limit": 10000,
++                "totalPercentUsed": 20,
++            ]],
++        ]
++    case "/api/auth/me": value = ["email": "cursor-fixture@example.invalid"]
++    case "/api/dashboard/get-sand-usage-status":
++        value = [
++            "currentPeriodStart": start,
++            "nextResetTimestampUtc": end,
++            "usagePercent": 80,
++            "hasAvailableUsage": true,
++            "includedLimitZero": false,
++            "isUnified": false,
++        ]
++    default: return nil
++    }
++    guard let data = try? JSONSerialization.data(withJSONObject: value, options: .sortedKeys) else { return nil }
++    return CursorFixtureReply(status: 200, body: data)
++}
++
++// END PURE CURSOR HTTP FIXTURE
++
++private final class CursorProofHTTP: URLProtocol {
++    static let lock = NSLock()
++    nonisolated(unsafe) static var cookie = ""
++    nonisolated(unsafe) static var scenario = ""
++    nonisolated(unsafe) static var now = Date()
++    nonisolated(unsafe) static var events: [[String: Any]] = []
++    nonisolated(unsafe) static var eventOutput: URL?
++    override static func canInit(with request: URLRequest) -> Bool { ["http", "https"]
++        .contains(request.url?.scheme ?? "")
++    }
++
++    override static func canonicalRequest(for request: URLRequest) -> URLRequest { request }
++    override func startLoading() {
++        let reply = Self.lock.withLock {
++            let response = cursorFixtureReply(self.request, cookie: Self.cookie, scenario: Self.scenario, now: Self.now)
++            Self.events.append([
++                "path": self.request.url?.path ?? "invalid",
++                "method": self.request.httpMethod ?? "nil",
++                "status": response?.status ?? -1,
++                "allowed": response != nil,
++            ])
++            do {
++                guard let output = Self.eventOutput else { throw CocoaError(.coderValueNotFound) }
++                let data = try JSONSerialization.data(
++                    withJSONObject: Self.events,
++                    options: [.prettyPrinted, .sortedKeys])
++                try data.write(to: output, options: .atomic)
++            } catch {
++                fatalError("Proof HTTP ledger could not be persisted: \(error)")
++            }
++            return response
++        }
++        guard let reply, let url = self.request.url,
++              let response = HTTPURLResponse(url: url, statusCode: reply.status, httpVersion: nil, headerFields: nil)
++        else { self.client?.urlProtocol(self, didFailWithError: URLError(.unsupportedURL)); return }
++        self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
++        self.client?.urlProtocol(self, didLoad: reply.body)
++        self.client?.urlProtocolDidFinishLoading(self)
++    }
++
++    override func stopLoading() {}
++}
++
++@MainActor
++enum PackagedCursorProof {
++    static func runIfRequested() -> Bool {
++        guard CommandLine.arguments.contains("--packaged-cursor-proof") else { return false }
++        let env = ProcessInfo.processInfo.environment
++        precondition(env["SWIFT_TESTING"] == "1" && env["CODEXBAR_DISABLE_KEYCHAIN_ACCESS"] == "1")
++        precondition(env["CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS"] == "1")
++        precondition(env["CODEXBAR_TEST_CODEX_FILE_ISOLATION"] == "1" && env["CODEXBAR_TEST_SESSION_FILE_ISOLATION"] ==
++            "1")
++        precondition(env["CODEXBAR_ALLOW_TEST_KEYCHAIN_ACCESS"] != "1")
++        precondition(env["CURSOR_PROOF_PRODUCT_SHA"] == "fba37ba92f696416b36f49d4de89affcda3888ee")
++        KeychainAccessGate.isDisabled = true
++        precondition(SettingsStore.isRunningTests)
++        let root = URL(fileURLWithPath: env["CURSOR_PROOF_ROOT"]!, isDirectory: true)
++        let output = URL(fileURLWithPath: env["CURSOR_PROOF_OUTPUT"]!, isDirectory: true)
++        let nonce = UUID(uuidString: env["CURSOR_PROOF_NONCE"]!)!
++        let scenario = env["CURSOR_PROOF_SCENARIO"]!
++        precondition(root.path.hasPrefix("/") && output.path.hasPrefix("/"))
++        precondition(["allowances", "manual401"].contains(scenario))
++        CursorProofHTTP.cookie = "WorkosCursorSessionToken=cursor-proof-" + nonce.uuidString
++        CursorProofHTTP.scenario = scenario
++        CursorProofHTTP.eventOutput = output.appendingPathComponent("http-events.json")
++        precondition(URLProtocol.registerClass(CursorProofHTTP.self))
++        configureUsageFormatterLocalizationProvider()
++        let app = NSApplication.shared
++        app.setActivationPolicy(.accessory)
++        let delegate = Delegate(root: root, output: output, nonce: nonce, scenario: scenario)
++        app.delegate = delegate
++        withExtendedLifetime(delegate) { app.run() }
++        return true
++    }
++
++    @MainActor
++    private final class Delegate: NSObject, NSApplicationDelegate {
++        let root: URL
++        let output: URL
++        let nonce: UUID
++        let scenario: String
++        var settings: SettingsStore?
++        var store: UsageStore?
++        var controller: StatusItemController?
++        var costWindow: NSWindow?
++        var finalizeTimer: Timer?
++        var csvTotal = 0.0
++        init(root: URL, output: URL, nonce: UUID, scenario: String) {
++            self.root = root; self.output = output; self.nonce = nonce; self.scenario = scenario
++        }
++
++        func applicationDidFinishLaunching(_: Notification) {
++            Task { @MainActor in
++                do {
++                    try await self.prepare()
++                } catch {
++                    try? self.receipt(["phase": "failed", "reason": String(describing: error)])
++                }
++            }
++        }
++
++        private func prepare() async throws {
++            try FileManager.default.createDirectory(at: self.output, withIntermediateDirectories: true)
++            let defaults = CursorProofDefaults(values: [
++                "debugDisableKeychainAccess": true,
++                "codexbar.legacySecretsMigrationCompleted": true,
++                "providerDetectionCompleted": true,
++                "openAIWebAccessEnabled": false,
++                "debugFileLoggingEnabled": false,
++                "launchAtLogin": false,
++                AppGroupSupport.migrationVersionKey: AppGroupSupport
++                    .migrationVersion,
++            ])
++            let config = CodexBarConfigStore(fileURL: self.root.appendingPathComponent("config.json"))
++            try config.save(CodexBarConfig(providers: UsageProvider.allCases.map {
++                ProviderConfig(id: $0.instanceID, enabled: $0 == .cursor)
++            }))
++            let empty = CursorProofEmptyCredentials()
++            let settings = SettingsStore(
++                userDefaults: defaults,
++                configStore: config,
++                zaiTokenStore: empty,
++                syntheticTokenStore: empty,
++                codexCookieStore: empty,
++                claudeCookieStore: empty,
++                cursorCookieStore: empty,
++                opencodeCookieStore: empty,
++                factoryCookieStore: empty,
++                minimaxCookieStore: empty,
++                minimaxAPITokenStore: empty,
++                kimiTokenStore: empty,
++                augmentCookieStore: empty,
++                ampCookieStore: empty,
++                copilotTokenStore: empty,
++                tokenAccountStore: CursorProofAccounts(root: self.root),
++                performInitialProviderDetection: false)
++            self.settings = settings
++            settings.agentSessionsEnabled = false; settings.agentSessionsRemoteEnabled = false
++            settings.providerStorageFootprintsEnabled = false; settings.statusChecksEnabled = false
++            settings.openAIWebAccessEnabled = false; settings.codexExternalOAuthSourcesAllowed = false
++            settings.codexLocalSessionCostLedgerEnabled = false
++            settings.refreshFrequency = .manual; settings.refreshAllProvidersOnMenuOpen = false
++            settings.mergeIcons = false; settings.usageBarsShowUsed = true
++            settings.showOptionalCreditsAndExtraUsage = true
++            settings.cursorCookieSource = .manual; settings.cursorCookieHeader = CursorProofHTTP.cookie
++            settings.costUsageEnabled = self.scenario == "manual401"; settings.costReportingPeriod = .rolling(days: 30)
++            settings.menuBarIconStyle = .iconAndPercent; settings.menuBarLayoutShowWindowLabels = true
++            settings._test_codexReconciliationEnvironment = ["HOME": self.root.path]
++            let layout = MenuBarLayout(lines: [[
++                .icon,
++                .lanePercent(lane: .primary),
++                .extraPercent(id: CursorSandUsageStatus.extraWindowID),
++            ]])
++            settings.setMenuBarLayout(layout, for: .cursor)
++            let data = try self.require(defaults.data(forKey: MenuBarLayoutUserDefaultsKey.overridesCurrent))
++            let decoded = try JSONDecoder().decode([String: MenuBarLayout].self, from: data)
++            precondition(decoded[UsageProvider.cursor.rawValue] == layout)
++            let store = UsageStore(
++                fetcher: UsageFetcher(environment: [:]),
++                browserDetection: BrowserDetection(homeDirectory: self.root.path, cacheTTL: 0),
++                settings: settings,
++                historicalUsageHistoryStore: HistoricalUsageHistoryStore(fileURL: self.root
++                    .appendingPathComponent("history.json")),
++                startupBehavior: .testing,
++                environmentBase: [:],
++                widgetSnapshotURL: self.root.appendingPathComponent("widget.json"),
++                cliUsageCacheURL: self.root.appendingPathComponent("cli-cache.json"),
++                widgetTimelineReloader: {})
++            self.store = store
++            let csvTotal: Double = if self.scenario == "manual401" {
++                try self.prepareAmbientCSV()
++            } else {
++                0
++            }
++            self.csvTotal = csvTotal
++            await store.refreshProvider(.cursor)
++            if self.scenario == "manual401" { await store.refreshTokenUsage(.cursor, force: true) }
++            let snapshot = store.snapshot(for: UsageProvider.cursor.instanceID)
++            var state: [String: Any] = ["phase": "ready", "savedLayoutRoundTrip": true, "csvTotal": csvTotal]
++            if self.scenario == "allowances" {
++                let snapshot = try self.require(snapshot)
++                let bot = try self.require(CursorProviderDescriptor.menuBarExtras(snapshot: snapshot).first {
++                    $0.id == CursorSandUsageStatus.extraWindowID
++                })
++                precondition(snapshot.primary?.usedPercent == 20 && bot.window.usedPercent == 80)
++                precondition(!snapshot.cursorHasUnifiedWeeklyPool && CursorProviderDescriptor
++                    .primaryLabel(snapshot: snapshot) == nil)
++                state.merge(["primaryUsed": 20, "botUsed": 80, "unified": false]) { _, new in new }
++            } else {
++                let expected = CursorStatusProbeError.notLoggedIn.localizedDescription
++                precondition(snapshot == nil && store.tokenSnapshot(for: .cursor) == nil)
++                precondition(store.errors[UsageProvider.cursor.instanceID]?.contains(expected) == true)
++                precondition(store.tokenError(for: .cursor) == expected)
++                state.merge([
++                    "quotaSnapshotNil": true,
++                    "tokenSnapshotNil": true,
++                    "selected401Error": expected,
++                ]) { _, new in new }
++            }
++            let events = CursorProofHTTP.lock.withLock { CursorProofHTTP.events }
++            precondition(!events.isEmpty && events.allSatisfy { $0["allowed"] as? Bool == true })
++            precondition(events.contains { $0["path"] as? String == "/api/usage-summary" })
++            if self.scenario == "manual401" {
++                precondition(events.contains { $0["path"] as? String == "/api/dashboard/get-filtered-usage-events" })
++            }
++            StatusItemController.setMenuOpenRefreshDelayForTesting(.seconds(3600))
++            let controller = StatusItemController(
++                store: store,
++                settings: settings,
++                account: AccountInfo(email: nil, plan: nil),
++                updater: DisabledUpdaterController(),
++                preferencesSelection: PreferencesSelection(),
++                statusBar: .system,
++                menuCardRenderingEnabled: true,
++                menuRefreshEnabled: false,
++                observeProviderConfigNotifications: false)
++            self.controller = controller
++            controller.updateIcons()
++            let status = controller.lazyStatusItem(for: .cursor)
++            status.button?.setAccessibilityIdentifier("codexbar-cursor-proof")
++            let menu = try self.require(controller.providerMenus[UsageProvider.cursor.instanceID])
++            controller.populateMenu(menu, provider: .cursor)
++            state["actualStatusTitle"] = status.button?.attributedTitle.string ?? ""
++            state["actualStatusAccessibility"] = status.button?.accessibilityLabel() ?? ""
++            if self.scenario == "manual401" {
++                let window = NSWindow(
++                    contentRect: NSRect(x: 40, y: 50, width: 560, height: 640),
++                    styleMask: [.titled, .closable],
++                    backing: .buffered,
++                    defer: false)
++                window.title = "Synthetic proof — production Cursor cost settings"
++                window.contentView = NSHostingView(rootView: Form {
++                    CostSummarySettingsSection(settings: settings, store: store)
++                }.formStyle(.grouped).padding())
++                window.makeKeyAndOrderFront(nil)
++                self.costWindow = window
++                state["costWindowID"] = window.windowNumber
++            }
++            state["httpEvents"] = CursorProofHTTP.lock.withLock { CursorProofHTTP.events }
++            try self.receipt(state)
++            let timer = Timer(timeInterval: 0.2, repeats: true) { [weak self] _ in
++                MainActor.assumeIsolated { self?.finalizeIfRequested() }
++            }
++            self.finalizeTimer = timer
++            RunLoop.main.add(timer, forMode: .common)
++            RunLoop.main.add(timer, forMode: .eventTracking)
++        }
++
++        private func prepareAmbientCSV() throws -> Double {
++            let cache = self.root.appendingPathComponent("tokscale/cursor-cache", isDirectory: true)
++            try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)
++            let csv = cache.appendingPathComponent("usage-proof.csv")
++            let date = ISO8601DateFormatter().string(from: Date())
++            let header = [
++                "Date",
++                "Model",
++                "Input (w/ Cache Write)",
++                "Input (w/o Cache Write)",
++                "Cache Read",
++                "Output Tokens",
++                "Total Tokens",
++                "Cost",
++                "Cost to you",
++            ]
++                .joined(separator: ",")
++            let row = "\(date),synthetic-model,1200,800,400,300,1500,42,0"
++            try "\(header)\n\(row)\n".write(to: csv, atomically: true, encoding: .utf8)
++            precondition(CursorLocalCSVReader.cachedCSVPaths() == [csv])
++            let rows = CursorLocalCSVReader.parseFile(at: csv)
++            precondition(rows.count == 1 && rows[0].date > Date().addingTimeInterval(-86400))
++            let csvTotal = rows.reduce(0) { $0 + $1.cost }
++            precondition(csvTotal == 42)
++            return csvTotal
++        }
++
++        private func finalizeIfRequested() {
++            let commandURL = self.output.appendingPathComponent("finalize.json")
++            guard FileManager.default.fileExists(atPath: commandURL.path) else { return }
++            do {
++                let command = try JSONSerialization.jsonObject(with: Data(contentsOf: commandURL)) as? [String: String]
++                guard command?["nonce"] == self.nonce.uuidString, command?["action"] == "finalize",
++                      let store, let controller else { throw CocoaError(.coderInvalidValue) }
++                try FileManager.default.removeItem(at: commandURL)
++                let snapshot = store.snapshot(for: UsageProvider.cursor.instanceID)
++                let events = CursorProofHTTP.lock.withLock { CursorProofHTTP.events }
++                guard !events.isEmpty, events.allSatisfy({ $0["allowed"] as? Bool == true }) else {
++                    throw CocoaError(.coderInvalidValue)
++                }
++                let status = controller.lazyStatusItem(for: .cursor)
++                var value: [String: Any] = [
++                    "phase": "finalized",
++                    "csvTotal": self.csvTotal,
++                    "httpEvents": events,
++                    "actualStatusTitle": status.button?.attributedTitle.string ?? "",
++                    "actualStatusAccessibility": status.button?.accessibilityLabel() ?? "",
++                    "quotaSnapshotNil": snapshot == nil,
++                    "tokenSnapshotNil": store.tokenSnapshot(for: .cursor) == nil,
++                ]
++                if self.scenario == "allowances" {
++                    guard let snapshot,
++                          let bot = CursorProviderDescriptor.menuBarExtras(snapshot: snapshot).first(where: {
++                              $0.id == CursorSandUsageStatus.extraWindowID
++                          }), snapshot.primary?.usedPercent == 20, bot.window.usedPercent == 80,
++                          !snapshot.cursorHasUnifiedWeeklyPool else { throw CocoaError(.coderInvalidValue) }
++                    value["primaryUsed"] = snapshot.primary?.usedPercent
++                    value["botUsed"] = bot.window.usedPercent
++                    value["unified"] = snapshot.cursorHasUnifiedWeeklyPool
++                } else {
++                    let expected = CursorStatusProbeError.notLoggedIn.localizedDescription
++                    guard snapshot == nil, store.tokenSnapshot(for: .cursor) == nil,
++                          store.errors[UsageProvider.cursor.instanceID]?.contains(expected) == true,
++                          store.tokenError(for: .cursor) == expected, self.csvTotal == 42
++                    else {
++                        throw CocoaError(.coderInvalidValue)
++                    }
++                    value["selected401Error"] = store.tokenError(for: .cursor)
++                    value["costWindowID"] = self.costWindow?.windowNumber
++                }
++                try self.receipt(value)
++            } catch {
++                do {
++                    try self.receipt(["phase": "failed", "reason": "Final source/transport verification: \(error)"])
++                } catch {
++                    fatalError("Proof final receipt persistence failed")
++                }
++            }
++            self.finalizeTimer?.invalidate()
++        }
++
++        private func require<T>(_ value: T?) throws -> T {
++            guard let value else { throw CocoaError(.coderValueNotFound) }; return value
++        }
++
++        private func receipt(_ fields: [String: Any]) throws {
++            var value = fields
++            value["productSHA"] = "fba37ba92f696416b36f49d4de89affcda3888ee"
++            value["nonce"] = self.nonce.uuidString; value["scenario"] = self.scenario
++            value["proofOnlyEarlyStartup"] = true; value["ordinaryAppStartup"] = false
++            try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
++                .write(to: self.output.appendingPathComponent("runtime.json"), options: .atomic)
++        }
++
++        func applicationWillTerminate(_: Notification) {
++            self.finalizeTimer?.invalidate()
++            self.settings?.configFileWatcher?.stop(); self.store?.stopSharedSpendDashboardPublication()
++            self.controller?.releaseStatusItemsForTesting(); StatusItemController.resetMenuOpenRefreshDelayForTesting()
++            URLProtocol.unregisterClass(CursorProofHTTP.self)
++        }
++    }
++}
++#endif

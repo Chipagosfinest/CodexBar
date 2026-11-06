@@ -1,0 +1,26 @@
+[
+  {
+    "allowed" : true,
+    "method" : "GET",
+    "path" : "\/api\/usage-summary",
+    "status" : 401
+  },
+  {
+    "allowed" : true,
+    "method" : "POST",
+    "path" : "\/api\/dashboard\/get-sand-usage-status",
+    "status" : 401
+  },
+  {
+    "allowed" : true,
+    "method" : "GET",
+    "path" : "\/api\/auth\/me",
+    "status" : 401
+  },
+  {
+    "allowed" : true,
+    "method" : "POST",
+    "path" : "\/api\/dashboard\/get-filtered-usage-events",
+    "status" : 401
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "scenario": "manual401",
+  "automatedStaticUIChecksPassed": true,
+  "manualOriginalScreensRequired": true,
+  "failure": null,
+  "nativeMenu": {
+    "h": 269,
+    "id": 127,
+    "layer": 101,
+    "ownerPID": 37100,
+    "w": 310,
+    "x": 1596,
+    "y": 31
+  },
+  "binarySHA256": "ae0fde35e8449854a8f9361ed2ec6bd9c1691043d5efcfcea4db03b6b73b92d4"
+}

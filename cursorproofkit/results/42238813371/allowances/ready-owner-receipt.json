@@ -1,0 +1,35 @@
+{
+  "actualStatusAccessibility": "\u2009T 20%\u2009GB 80% D",
+  "actualStatusTitle": "\u2009T 20%\u2009GB 80% D",
+  "botUsed": 80,
+  "csvTotal": 0,
+  "httpEvents": [
+    {
+      "allowed": true,
+      "method": "POST",
+      "path": "/api/dashboard/get-sand-usage-status",
+      "status": 200
+    },
+    {
+      "allowed": true,
+      "method": "GET",
+      "path": "/api/usage-summary",
+      "status": 200
+    },
+    {
+      "allowed": true,
+      "method": "GET",
+      "path": "/api/auth/me",
+      "status": 200
+    }
+  ],
+  "nonce": "68331FDF-F502-4BF8-AE94-0A2531140A78",
+  "ordinaryAppStartup": false,
+  "phase": "ready",
+  "primaryUsed": 20,
+  "productSHA": "fba37ba92f696416b36f49d4de89affcda3888ee",
+  "proofOnlyEarlyStartup": true,
+  "savedLayoutRoundTrip": true,
+  "scenario": "allowances",
+  "unified": false
+}

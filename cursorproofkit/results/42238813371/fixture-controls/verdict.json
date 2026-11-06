@@ -1,0 +1,33 @@
+{
+  "controlsPassed": true,
+  "httpFixtureControls": {
+    "controlsPassed": true,
+    "cases": [
+      "summary200",
+      "userinfo200",
+      "sand200",
+      "quota401",
+      "cost401",
+      "costNotAllowedInAllowanceScenario",
+      "wrongCookie",
+      "wrongHost",
+      "wrongMethod",
+      "wrongRoute",
+      "queryRejected",
+      "wrongScenario"
+    ]
+  },
+  "namedMeterControls": {
+    "controlsPassed": true,
+    "cases": [
+      "shortNamedPairs",
+      "accessibleNamedPairs",
+      "swappedRejected",
+      "unnamedRejected",
+      "contradictoryAccessibilityRejected",
+      "missingBotRejected"
+    ]
+  },
+  "adapterSHA256": "af48ea232871632a063f5a04dbbdd5a4a4e67b94ac01de9ae9c8f12574f7197b",
+  "SDK": "/Applications/Xcode_26.6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk"
+}

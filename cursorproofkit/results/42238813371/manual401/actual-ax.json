@@ -1,0 +1,556 @@
+[
+  {
+    "depth": 0,
+    "frame": {
+      "h": 0,
+      "w": 0,
+      "x": 0,
+      "y": 0
+    },
+    "role": "AXApplication",
+    "title": "CodexBar"
+  },
+  {
+    "depth": 1,
+    "frame": {
+      "h": 672,
+      "w": 560,
+      "x": 40,
+      "y": 268
+    },
+    "role": "AXWindow",
+    "title": "Synthetic proof \u2014 production Cursor cost settings"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 640,
+      "w": 560,
+      "x": 40,
+      "y": 300
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 3,
+    "frame": {
+      "h": 608,
+      "w": 528,
+      "x": 56,
+      "y": 316
+    },
+    "role": "AXScrollArea"
+  },
+  {
+    "depth": 4,
+    "description": "Cost summary",
+    "frame": {
+      "h": 16,
+      "w": 92,
+      "x": 86,
+      "y": 336.25
+    },
+    "role": "AXHeading"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 213,
+      "w": 488,
+      "x": 76,
+      "y": 362
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 16,
+      "w": 88,
+      "x": 86,
+      "y": 372.25
+    },
+    "role": "AXStaticText",
+    "value": "Cost summary"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 26,
+      "w": 328,
+      "x": 86,
+      "y": 390.25
+    },
+    "role": "AXStaticText",
+    "value": "Reads local usage logs. Shows today + the selected history window in the menu."
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 16,
+      "w": 123,
+      "x": 431,
+      "y": 372
+    },
+    "role": "AXMenuButton",
+    "title": "Inline + submenu"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 16,
+      "w": 93,
+      "x": 86,
+      "y": 437.25
+    },
+    "role": "AXStaticText",
+    "value": "History window"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 24,
+      "w": 197,
+      "x": 357,
+      "y": 434
+    },
+    "role": "AXPopUpButton",
+    "value": "History window: 30 days"
+  },
+  {
+    "depth": 5,
+    "description": "Time range",
+    "frame": {
+      "h": 24,
+      "w": 64,
+      "x": 86,
+      "y": 476
+    },
+    "role": "AXTextField",
+    "value": "30"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 16,
+      "w": 149,
+      "x": 158,
+      "y": 477.25
+    },
+    "role": "AXStaticText",
+    "value": "History window: 30 days"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 26,
+      "w": 20,
+      "x": 534,
+      "y": 472
+    },
+    "role": "AXIncrementor"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 20,
+      "x": 534,
+      "y": 472
+    },
+    "role": "AXButton"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 13,
+      "w": 20,
+      "x": 534,
+      "y": 485
+    },
+    "role": "AXButton"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 16,
+      "w": 204,
+      "x": 86,
+      "y": 520.75
+    },
+    "role": "AXStaticText",
+    "value": "Show shorter comparison periods"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 26,
+      "w": 410,
+      "x": 86,
+      "y": 538.75
+    },
+    "role": "AXStaticText",
+    "value": "Add 7, 30, and 90-day totals when they fit inside the selected history window. These totals reuse the same local scan."
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 16,
+      "w": 36,
+      "x": 518,
+      "y": 521
+    },
+    "role": "AXCheckBox"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 13,
+      "w": 283,
+      "x": 86,
+      "y": 584.75
+    },
+    "role": "AXStaticText",
+    "value": "Auto-refresh: global interval (minimum 5m) \u00b7 Timeout: 10m"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 13,
+      "w": 94,
+      "x": 86,
+      "y": 600.75
+    },
+    "role": "AXStaticText",
+    "value": "Claude: no data yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 13,
+      "w": 91,
+      "x": 86,
+      "y": 616.75
+    },
+    "role": "AXStaticText",
+    "value": "Codex: no data yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 13,
+      "w": 336,
+      "x": 86,
+      "y": 632.75
+    },
+    "role": "AXStaticText",
+    "value": "Cursor: Not logged in to Cursor. Please log in via the CodexBar menu."
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 13,
+      "w": 113,
+      "x": 86,
+      "y": 648.75
+    },
+    "role": "AXStaticText",
+    "value": "Antigravity: no data yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 13,
+      "w": 70,
+      "x": 86,
+      "y": 664.75
+    },
+    "role": "AXStaticText",
+    "value": "Pi: no data yet"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 26,
+      "w": 457,
+      "x": 86,
+      "y": 680.75
+    },
+    "role": "AXStaticText",
+    "value": "Costs may be provider-reported or estimated from token usage at public API prices. Estimates are not subscription charges."
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 16,
+      "w": 16,
+      "x": 48,
+      "y": 276
+    },
+    "role": "AXButton"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 16,
+      "w": 16,
+      "x": 94,
+      "y": 276
+    },
+    "role": "AXButton"
+  },
+  {
+    "depth": 3,
+    "frame": {
+      "h": 14,
+      "w": 14,
+      "x": 95,
+      "y": 277
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 14,
+      "w": 14,
+      "x": 95,
+      "y": 277
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 16,
+      "w": 16,
+      "x": 71,
+      "y": 276
+    },
+    "role": "AXButton"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 16,
+      "w": 329,
+      "x": 122,
+      "y": 276
+    },
+    "role": "AXStaticText",
+    "value": "Synthetic proof \u2014 production Cursor cost settings"
+  },
+  {
+    "depth": 1,
+    "frame": {
+      "h": 24,
+      "w": 95,
+      "x": 1607,
+      "y": 3
+    },
+    "role": "AXMenuBar"
+  },
+  {
+    "depth": 2,
+    "frame": {
+      "h": 24,
+      "w": 95,
+      "x": 1607,
+      "y": 3
+    },
+    "identifier": "codexbar-cursor-proof",
+    "role": "AXMenuBarItem",
+    "title": "Cursor icon, Total unavailable, Grok Bot unavailable, Debug"
+  },
+  {
+    "depth": 3,
+    "frame": {
+      "h": 269,
+      "w": 310,
+      "x": 1596,
+      "y": 31
+    },
+    "role": "AXMenu"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 69,
+      "w": 310,
+      "x": 1596,
+      "y": 36
+    },
+    "role": "AXMenuItem"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 69,
+      "w": 310,
+      "x": 1596,
+      "y": 36
+    },
+    "role": "AXGroup"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 16,
+      "w": 43,
+      "x": 1616,
+      "y": 45.5
+    },
+    "role": "AXStaticText",
+    "value": "Cursor"
+  },
+  {
+    "depth": 6,
+    "frame": {
+      "h": 26,
+      "w": 199,
+      "x": 1616,
+      "y": 65.5
+    },
+    "role": "AXStaticText",
+    "value": "Not logged in to Cursor. Please log in via the CodexBar menu."
+  },
+  {
+    "depth": 6,
+    "description": "Copy error",
+    "frame": {
+      "h": 26,
+      "w": 26,
+      "x": 1860,
+      "y": 60
+    },
+    "identifier": "doc.on.doc",
+    "role": "AXButton"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1596,
+      "y": 105
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1596,
+      "y": 116
+    },
+    "identifier": "runSwitchAccount:",
+    "role": "AXMenuItem",
+    "title": "Add Account..."
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1596,
+      "y": 140
+    },
+    "identifier": "openDashboard",
+    "role": "AXMenuItem",
+    "title": "Usage Dashboard"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1596,
+      "y": 164
+    },
+    "identifier": "openStatusPage",
+    "role": "AXMenuItem",
+    "title": "Status Page"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 11,
+      "w": 310,
+      "x": 1596,
+      "y": 188
+    },
+    "role": "AXMenuItem",
+    "title": ""
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1596,
+      "y": 199
+    },
+    "role": "AXMenuItem",
+    "title": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 243.6328125,
+      "x": 1612,
+      "y": 202
+    },
+    "role": "AXStaticText",
+    "value": "Refresh"
+  },
+  {
+    "depth": 5,
+    "frame": {
+      "h": 18,
+      "w": 42,
+      "x": 1865.6328125,
+      "y": 202
+    },
+    "role": "AXStaticText",
+    "value": "\u2318 R"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1596,
+      "y": 223
+    },
+    "identifier": "showSettingsGeneral",
+    "role": "AXMenuItem",
+    "title": "Settings..."
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1596,
+      "y": 247
+    },
+    "identifier": "showSettingsAbout",
+    "role": "AXMenuItem",
+    "title": "About CodexBar (v0.83.1)"
+  },
+  {
+    "depth": 4,
+    "frame": {
+      "h": 24,
+      "w": 310,
+      "x": 1596,
+      "y": 271
+    },
+    "identifier": "quit",
+    "role": "AXMenuItem",
+    "title": "Quit"
+  }
+]

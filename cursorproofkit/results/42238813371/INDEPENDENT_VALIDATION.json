@@ -1,0 +1,16 @@
+{
+  "productSHA": "fba37ba92f696416b36f49d4de89affcda3888ee",
+  "controllerSHA": "0a596a7d8f56e04bc61215cdcd793a86d5ab52e5",
+  "runID": 42238813371,
+  "artifactID": 13517571542,
+  "exactLocalFrozenOverlayMatchesHost": true,
+  "unchangedOriginalSourceFiles": 1782,
+  "binarySHA256": "ae0fde35e8449854a8f9361ed2ec6bd9c1691043d5efcfcea4db03b6b73b92d4",
+  "binaryArchitecture": "Mach-O64 x86_64",
+  "builtAppZipSHA256": "f2d185ad1d48499a21539a530a99bb31e1c6cfb2a467174e5728f14a05272ba0",
+  "freshFinalReceiptsAndFullHTTPLedgersVerified": true,
+  "sameOwnedProcessesUntilRequestedSIGTERM": true,
+  "agentOriginalScreenInspectionPassed": true,
+  "scope": "Instrumented synthetic production-owner static App UI only; no live authentication or durable-state claim",
+  "rootManualAcceptanceRecordedSeparately": "ROOT_INDEPENDENT_ACCEPTANCE.json"
+}
