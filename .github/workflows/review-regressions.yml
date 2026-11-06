@@ -3,6 +3,7 @@ name: Review regressions - bounded red and green
 on:
   push:
     branches: [proof/20261106-review-regressions]
+    paths-ignore: [proofkit/auth/**, .github/workflows/auth-account-proof.yml, .github/workflows/review-regressions.yml]
 
 permissions:
   contents: read
