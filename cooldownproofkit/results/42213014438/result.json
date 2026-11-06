@@ -1,0 +1,96 @@
+{
+  "binaryPath": "/Users/runner/work/CodexBar/CodexBar/product/.build/arm64-apple-macosx/debug/CodexBarCLI",
+  "binarySHA256": "73dbbb9a2a4db3f3af20602c328c95d72e8e89ca84baacbbbdace0e83225188b",
+  "build": {
+    "command": [
+      "swift",
+      "build",
+      "-c",
+      "debug",
+      "--product",
+      "CodexBarCLI",
+      "--force-resolved-versions"
+    ],
+    "elapsedSeconds": 129.516,
+    "exitCode": 0,
+    "log": "build.log",
+    "pid": 1342
+  },
+  "childEnvironmentKeys": [
+    "CFFIXED_USER_HOME",
+    "CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS",
+    "HOME",
+    "LANG",
+    "LC_ALL",
+    "PATH",
+    "TMPDIR"
+  ],
+  "classification": "verified_runtime_persistence",
+  "cleanupVerified": true,
+  "controllerSHA": "045c66b06a0216ac49509026937b9caa1c56698b",
+  "limitations": [
+    "Instrumented built CLI early entry calls unchanged private production persistence owner.",
+    "No ordinary provider refresh, login, real credential, GUI, or upgrade claim."
+  ],
+  "nonce": "2D4FB00D-E71F-4868-B8B5-8B353A9EBE75",
+  "overlayManifestSHA256": "a5729e47b3a13c72052afe950904a8a6eca00ea44f803c13844a5d833891448b",
+  "phaseCommands": [
+    {
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1)(allow default)(deny network*)",
+        "/Users/runner/work/CodexBar/CodexBar/product/.build/arm64-apple-macosx/debug/CodexBarCLI",
+        "--packaged-cooldown-proof",
+        "write",
+        "2D4FB00D-E71F-4868-B8B5-8B353A9EBE75",
+        "/Users/runner/work/CodexBar/CodexBar/proof-output/runtime",
+        "/Users/runner/work/CodexBar/CodexBar/proof-output/disposable-profile-base"
+      ],
+      "elapsedSeconds": 0.035,
+      "exitCode": 0,
+      "log": "write.log",
+      "pid": 4444
+    },
+    {
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1)(allow default)(deny network*)",
+        "/Users/runner/work/CodexBar/CodexBar/product/.build/arm64-apple-macosx/debug/CodexBarCLI",
+        "--packaged-cooldown-proof",
+        "read",
+        "2D4FB00D-E71F-4868-B8B5-8B353A9EBE75",
+        "/Users/runner/work/CodexBar/CodexBar/proof-output/runtime",
+        "/Users/runner/work/CodexBar/CodexBar/proof-output/disposable-profile-base"
+      ],
+      "elapsedSeconds": 0.025,
+      "exitCode": 0,
+      "log": "read.log",
+      "pid": 4445
+    },
+    {
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-p",
+        "(version 1)(allow default)(deny network*)",
+        "/Users/runner/work/CodexBar/CodexBar/product/.build/arm64-apple-macosx/debug/CodexBarCLI",
+        "--packaged-cooldown-proof",
+        "cleanup",
+        "2D4FB00D-E71F-4868-B8B5-8B353A9EBE75",
+        "/Users/runner/work/CodexBar/CodexBar/proof-output/runtime",
+        "/Users/runner/work/CodexBar/CodexBar/proof-output/disposable-profile-base"
+      ],
+      "elapsedSeconds": 0.023,
+      "exitCode": 0,
+      "log": "cleanup.log",
+      "pid": 4446
+    }
+  ],
+  "productSHA": "725fb4fdda831b5cca8bf265d2c066aa8ebc04ca",
+  "readVerified": true,
+  "runAttempt": "1",
+  "runID": "42213014438",
+  "runtimeNetworkDenied": true,
+  "verified": true
+}

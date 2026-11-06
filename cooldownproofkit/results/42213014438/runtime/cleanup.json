@@ -1,0 +1,21 @@
+{
+  "injectedDefaults" : false,
+  "instrumentedBuiltCLI" : true,
+  "intervalKey" : "claudeOAuthDelegatedRefreshCooldownIntervalSecondsV1.profile.ebdf9edbe2fe199f86f43850d1c1be88b6222f461f553dad8558252cd1588d87",
+  "nonce" : "2D4FB00D-E71F-4868-B8B5-8B353A9EBE75",
+  "ordinaryProviderRefresh" : false,
+  "phase" : "cleanup",
+  "pid" : 4446,
+  "productSHA" : "725fb4fdda831b5cca8bf265d2c066aa8ebc04ca",
+  "profileIdentifier" : "ebdf9edbe2fe199f86f43850d1c1be88b6222f461f553dad8558252cd1588d87",
+  "profilePathDerivedWithoutCredentialReads" : true,
+  "removedOnlyNonceKeys" : [
+    "claudeOAuthDelegatedRefreshLastAttemptAtV1.profile.ebdf9edbe2fe199f86f43850d1c1be88b6222f461f553dad8558252cd1588d87",
+    "claudeOAuthDelegatedRefreshCooldownIntervalSecondsV1.profile.ebdf9edbe2fe199f86f43850d1c1be88b6222f461f553dad8558252cd1588d87"
+  ],
+  "sharedProductionState" : true,
+  "standardPreferencesFallback" : true,
+  "taskLocalOverrides" : false,
+  "testProcessSafetyIsRunning" : false,
+  "timestampKey" : "claudeOAuthDelegatedRefreshLastAttemptAtV1.profile.ebdf9edbe2fe199f86f43850d1c1be88b6222f461f553dad8558252cd1588d87"
+}

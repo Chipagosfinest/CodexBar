@@ -1,0 +1,32 @@
+
+#if DEBUG
+// PROOF-ONLY APPEND: not included in the product branch or a released library API.
+extension ClaudeOAuthDelegatedRefreshCoordinator {
+    package static func packagedProofCooldownKeys(environment: [String: String]) -> (
+        profile: String, timestamp: String, interval: String)
+    {
+        precondition(!TestProcessSafety.isRunning)
+        precondition(self.currentStateStorage === self.sharedState)
+        precondition(self.sharedState.persistsCooldown)
+        precondition(self.sharedState.defaults == nil)
+        let profile = ClaudeOAuthCredentialsStore.credentialsProfileIdentifier(environment: environment)
+        let ambient = ClaudeOAuthCredentialsStore.credentialsProfileIdentifier(
+            environment: ProcessInfo.processInfo.environment)
+        // Never migrate/remove legacy global keys or touch an ambient real profile.
+        precondition(profile != ambient)
+        return (
+            profile,
+            self.profileKey(self.cooldownDefaultsKey, profileIdentifier: profile),
+            self.profileKey(self.cooldownIntervalDefaultsKey, profileIdentifier: profile))
+    }
+
+    package static func packagedProofRecordCooldown(
+        now: Date, cooldown: TimeInterval, environment: [String: String])
+    {
+        let keys = self.packagedProofCooldownKeys(environment: environment)
+        // Call the unchanged production writer, with its real shared state/defaults fallback.
+        self.recordAttempt(
+            now: now, cooldown: cooldown, profileIdentifier: keys.profile, state: self.sharedState)
+    }
+}
+#endif
