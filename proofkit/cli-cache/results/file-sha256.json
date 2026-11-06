@@ -1,0 +1,10 @@
+{
+  "red-verdict.json": "e7f1a9a9a509e845e446c2293bd991fff307a2d865889d6acae3d9d3c8631e57",
+  "red-reclassified-verdict.json": "d708e713018cce273d51f8dcd441842365c856e510a1ef03d1c7fa9ed82e15c7",
+  "green-expected-production-source-sha256.json": "b0bd2759e957c1bd03d7296c8cc1df3b25bc69871f4d1cdce92e37230cb58e0c",
+  "green-provenance.json": "f7887af2bd90df1e82a5d52cde0093ad562e6e33c88a2674c3fc8f17796159b5",
+  "red-provenance.json": "e99e80802f39bc4e21a822102e7e6ed82f97ece99f4da4d476c2fbb5e9c8bbe2",
+  "red-expected-production-source-sha256.json": "510268d2893e4046e29f98571b48f837c809de4e34247d9df39f20c43f4c892b",
+  "green-verdict.json": "6c6b7bad857268986caa65f01194ac2a62829b796b851ca892a8ad43f222d34b",
+  "red-assertion-excerpts.json": "8185a019bafdddbc1e0897547855ab2d63b4a379c0a1d420d755eb171fca1a15"
+}

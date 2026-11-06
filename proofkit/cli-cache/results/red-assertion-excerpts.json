@@ -1,0 +1,7 @@
+[
+  "\u2718 Test \"private Cursor cache renders authoritative allowance labels\" recorded an issue with 1 argument isUnified \u2192 true at CLIUsageCacheTests.swift:62:13: Expectation failed: (output \u2192 \"Total: 20% left [==----------]",
+  "\u2718 Test \"private Cursor cache renders authoritative allowance labels\" recorded an issue with 1 argument isUnified \u2192 true at CLIUsageCacheTests.swift:63:13: Expectation failed: !((output \u2192 \"Total: 20% left [==----------]",
+  "\u2718 Test \"private Cursor cache renders authoritative allowance labels\" with 2 test cases failed after 0.154 seconds with 2 issues.",
+  "\u2718 Test \"private CLI cache preserves explicit unified evidence through disk round trip\" recorded an issue at CursorAccountBoundaryTests.swift:135:9: Expectation failed: (CursorProviderDescriptor.primaryLabel(snapshot: loaded) \u2192 nil) == \"Weekly\"",
+  "\u2718 Test run with 25 tests in 2 suites failed after 1.177 seconds with 6 issues."
+]

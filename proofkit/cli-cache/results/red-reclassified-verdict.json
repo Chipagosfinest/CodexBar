@@ -1,0 +1,39 @@
+{
+  "product_sha": "ec61c49dd71c3aa6efe33162762ef2164ecfaea1",
+  "exit_code": 1,
+  "suites_passed": {
+    "CursorAccountBoundaryTests": false,
+    "CursorCostAccountBoundaryTests": false,
+    "CursorLoginAccountBoundaryTests": false,
+    "CursorLoginRunnerTests": false,
+    "CursorLoginBrowserRoutingTests": false,
+    "CLIUsageCacheTests": false
+  },
+  "test_counts": [
+    "25"
+  ],
+  "production_source_matches_declared_candidate": true,
+  "selected_tests_unchanged": true,
+  "unexpected_failure": true,
+  "expectation": "red",
+  "core_regression_failed": true,
+  "cli_renderer_regression_failed": true,
+  "behavioral_red": true,
+  "verified_green": false,
+  "classification": "Local reclassification of original hosted runtime; no product rerun",
+  "explanation": "Parameterized Swift Testing summary inserts \"with 2 test cases\" before \"failed\".",
+  "exact_runtime_assertions": [
+    "\u2718 Test \"private Cursor cache renders authoritative allowance labels\" recorded an issue with 1 argument isUnified \u2192 true at CLIUsageCacheTests.swift:62:13: Expectation failed: (output \u2192 \"Total: 20% left [==----------]\nPace: 66% in deficit | Expected 14% used | Runs out in 6h 1m\nResets in 5d 23h\").contains(\"Weekly: 20% left\")",
+    "\u2718 Test \"private Cursor cache renders authoritative allowance labels\" recorded an issue with 1 argument isUnified \u2192 true at CLIUsageCacheTests.swift:63:13: Expectation failed: !((output \u2192 \"Total: 20% left [==----------]\nPace: 66% in deficit | Expected 14% used | Runs out in 6h 1m\nResets in 5d 23h\").contains(\"Total:\") \u2192 true)",
+    "\u2718 Test \"private CLI cache preserves explicit unified evidence through disk round trip\" recorded an issue at CursorAccountBoundaryTests.swift:133:9: Expectation failed: (loaded \u2192 UsageSnapshot(primary: Optional(CodexBarCore.RateWindow(usedPercent: 80.0, title: nil, windowMinutes: Optional(10080), resetsAt: Optional(2026-11-01 07:33:20 +0000), resetDescription: Optional(\"Resets Nov 1 at 7:33AM\"), quotaLimit: nil, quotaUnit: nil, nextRegenPercent: nil, isSyntheticPlaceholder: false)), secondary: nil, tertiary: nil, extraRateWindows: nil, providerCost: nil, costUsage: nil, details: [], iconProvider: nil, menuBarItems: [], deepseekDetailedUsageState: CodexBarCore.DeepSeekDetailedUsageState.notRequested, deepseekPlatformProfiles: [], deepseekPlatformBalanceOwner: nil, browserSessionOwner: nil, opencodegoUsage: nil, throughput: nil, openAIAPIUsage: nil, codexResetCredits: nil, grokResetCredits: nil, claudeResetCredits: nil, mistralUsage: nil, copilotMeteredZeroCredits: false, cursorHasUnifiedWeeklyPool: false, commandCodeSubscriptionEnrichmentUnavailable: false, commandCodeHasSubscriptionPlan: false, commandCodeMonthlyGrantDepleted: false, subscriptionExpiresAt: nil, subscriptionRenewsAt: nil, subscriptionRenewsAtIsDateOnly: false, subscriptionExpiresAtIsDateOnly: false, updatedAt: 2026-10-26 07:33:20 +0000, identity: nil, planObservation: nil, dataConfidence: CodexBarCore.UsageDataConfidence.unknown)).cursorHasUnifiedWeeklyPool \u2192 false",
+    "\u2718 Test \"private CLI cache preserves explicit unified evidence through disk round trip\" recorded an issue at CursorAccountBoundaryTests.swift:135:9: Expectation failed: (CursorProviderDescriptor.primaryLabel(snapshot: loaded) \u2192 nil) == \"Weekly\"",
+    "\u2718 Test \"private CLI cache preserves explicit unified evidence through disk round trip\" recorded an issue at CursorAccountBoundaryTests.swift:136:9: Expectation failed: (CursorProviderDescriptor.sharedWeeklyPool(snapshot: loaded) \u2192 nil) == (live.primary \u2192 RateWindow(usedPercent: 80.0, title: nil, windowMinutes: Optional(10080), resetsAt: Optional(2026-11-01 07:33:20 +0000), resetDescription: Optional(\"Resets Nov 1 at 7:33AM\"), quotaLimit: nil, quotaUnit: nil, nextRegenPercent: nil, isSyntheticPlaceholder: false))",
+    "\u2718 Test \"private CLI cache preserves explicit unified evidence through disk round trip\" recorded an issue at CursorAccountBoundaryTests.swift:137:9: Expectation failed: (CursorProviderDescriptor.primaryLabel(snapshot: loaded.scoped(to: .cursor)) \u2192 nil) == \"Weekly\""
+  ],
+  "exact_runtime_summary": [
+    "\u2718 Test run with 25 tests in 2 suites failed after 1.177 seconds with 6 issues."
+  ],
+  "original_hosted_red_job_conclusion": "failure",
+  "original_verdict_sha256": "e7f1a9a9a509e845e446c2293bd991fff307a2d865889d6acae3d9d3c8631e57",
+  "original_runtime_log_sha256": "c2061f6f7c653d9c134b040ed59aaf9afa72ba0d62aa21233d8f5422d53fce57"
+}

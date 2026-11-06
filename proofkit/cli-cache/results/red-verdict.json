@@ -1,0 +1,23 @@
+{
+  "product_sha": "ec61c49dd71c3aa6efe33162762ef2164ecfaea1",
+  "exit_code": 1,
+  "suites_passed": {
+    "CursorAccountBoundaryTests": false,
+    "CursorCostAccountBoundaryTests": false,
+    "CursorLoginAccountBoundaryTests": false,
+    "CursorLoginRunnerTests": false,
+    "CursorLoginBrowserRoutingTests": false,
+    "CLIUsageCacheTests": false
+  },
+  "test_counts": [
+    "25"
+  ],
+  "production_source_matches_declared_candidate": true,
+  "selected_tests_unchanged": true,
+  "unexpected_failure": true,
+  "expectation": "red",
+  "core_regression_failed": true,
+  "cli_renderer_regression_failed": false,
+  "behavioral_red": false,
+  "verified_green": false
+}

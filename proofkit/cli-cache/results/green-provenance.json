@@ -1,0 +1,25 @@
+{
+  "product_sha": "ec61c49dd71c3aa6efe33162762ef2164ecfaea1",
+  "controller_sha": "31c038d9ac6ba467469b3ff9b0dd3cbe753b8070",
+  "selected_sources": [
+    "Tests/CodexBarTests/CursorAccountBoundaryTests.swift",
+    "Tests/CodexBarTests/CursorCostAccountBoundaryTests.swift",
+    "Tests/CodexBarTests/CursorLoginAccountBoundaryTests.swift",
+    "Tests/CodexBarTests/CursorLoginRunnerTests.swift",
+    "Tests/CodexBarTests/CursorLoginBrowserRoutingTests.swift",
+    "Tests/CodexBarTests/CLIUsageCacheTests.swift"
+  ],
+  "selected_source_sha256": {
+    "Tests/CodexBarTests/CursorAccountBoundaryTests.swift": "5e1f326de45c54689fbbb2d0b7a2eda5b785c5051c35007571b21d78de8f5a43",
+    "Tests/CodexBarTests/CursorCostAccountBoundaryTests.swift": "0e8b2f222e0923559adf9164403e0c33f10b9a04ece2d5f5bf323fa469c643c4",
+    "Tests/CodexBarTests/CursorLoginAccountBoundaryTests.swift": "f9434f767eb6a9381f3ed70fcbf433abd15f632d2dfc8462c456a53fe080ee74",
+    "Tests/CodexBarTests/CursorLoginRunnerTests.swift": "4c22a97c00bba206b475a4382bbc735dff693b2de31c22b9d51329212f6370af",
+    "Tests/CodexBarTests/CursorLoginBrowserRoutingTests.swift": "84a46e85bb31b23d21d16c0195ad68e13af9fe6a754e0630e8244b249ebc590e",
+    "Tests/CodexBarTests/CLIUsageCacheTests.swift": "98991b182f2c2607a60bbde1d511ba6af23b197634d7b248b347808097a0e560"
+  },
+  "harness_patch_sha256": "4c3383e668002f7b90f5c95c34a2f63aa466f14bd77214ab507fe2337251b815",
+  "filter": "CursorAccountBoundaryTests|CursorCostAccountBoundaryTests|CursorLoginAccountBoundaryTests|CursorLoginRunnerTests|CursorLoginBrowserRoutingTests|CLIUsageCacheTests",
+  "expectation": "green",
+  "candidate_patch_sha256": "be191b9907d86b00916c2a3b5c6d07658c295748c21c655d74b20e18e85fbeee",
+  "boundary": "Synthetic tests compile intact App/Core modules at immutable baseline plus declared four-file cache/test delta (tests only for RED). No account/keychain or installed-app claim."
+}

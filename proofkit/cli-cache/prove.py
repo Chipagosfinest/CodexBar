@@ -93,7 +93,7 @@ def verify(product, output, exit_code, expectation):
                "selected_tests_unchanged": all(digest(product / name) == value for name, value in metadata["selected_source_sha256"].items()),
                "unexpected_failure": bool(re.search(r"Expectation failed|Issue recorded|error: (?:fatalError|Build failed)|Testing failed:|Command timed out", log))}
     runtime_core_failure = bool(re.search(r'Test "' + re.escape(CORE_TEST) + r'" failed', log))
-    runtime_cli_failure = bool(re.search(r'Test "' + re.escape(CLI_TEST) + r'" failed', log))
+    runtime_cli_failure = bool(re.search(r'Test "' + re.escape(CLI_TEST) + r'"(?: with \d+ test cases)? failed', log))
     verdict.update(expectation=expectation, core_regression_failed=runtime_core_failure,
                    cli_renderer_regression_failed=runtime_cli_failure)
     infrastructure_error = bool(re.search(r"error: (?:fatalError|Build failed)|Testing failed:|Command timed out", log))
