@@ -1,0 +1,1 @@
+efb2eaebcaa2acc84d9d441b24a6ab27b73c0523e81ac563c2ca5d72462af48d  Tests/CodexBarTests/MenuBarUsageTotalTests.swift

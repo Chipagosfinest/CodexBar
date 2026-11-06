@@ -1,0 +1,7 @@
+ProductName:		macOS
+ProductVersion:		26.7.2
+BuildVersion:		25G332
+Xcode 26.6
+Build version 17F113
+Python 3.15.2
+Aqua

@@ -1,0 +1,520 @@
+diff --git a/Package.swift b/Package.swift
+index 7fe7c2e..322224b 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -241,6 +241,7 @@ let package = Package(
+                 "CodexBarTests/ProviderPluginRuntimeTests.swift",
+                 "CodexBarTests/Sub2APIPluginGoldenTests.swift",
+             ],
++            sources: ["CodexBarTests/MenuBarUsageTotalTests.swift", "CodexBarTests/TestStores.swift", "CodexBarTests/ZaiTokenStoreTestSupport.swift", "CodexBarTests/CodexCredentialFixtures.swift"],
+             resources: [
+                 .copy("CodexBarTests/Fixtures"),
+             ],
+diff --git a/Scripts/run_swift_test.py b/Scripts/run_swift_test.py
+index e16af5d..15366be 100755
+--- a/Scripts/run_swift_test.py
++++ b/Scripts/run_swift_test.py
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python3
+ """Run native SwiftPM selection with the shared test-process containment."""
+ 
++import contextlib
+ import os
+ import sys
+ import tempfile
+@@ -23,7 +24,7 @@ def main() -> int:
+         return 2
+     # Like serial groups, the whole invocation, including its build, gets temporary HOME and
+     # CFFIXED_USER_HOME values instead of the caller's.
+-    with tempfile.TemporaryDirectory(prefix="codexbar-native-test-home-") as home:
++    with contextlib.nullcontext(tempfile.mkdtemp(prefix="codexbar-proof-test-home-")) as home:
+         return run_command(["swift", "test", "--no-parallel", *sys.argv[1:]], timeout=timeout,
+                            environment=os.environ | {"HOME": home, "CFFIXED_USER_HOME": home})
+ 
+diff --git a/Sources/CodexBar/Menu/MenuBarUsageTotal.swift b/Sources/CodexBar/Menu/MenuBarUsageTotal.swift
+index a72e9ad..2df4aec 100644
+--- a/Sources/CodexBar/Menu/MenuBarUsageTotal.swift
++++ b/Sources/CodexBar/Menu/MenuBarUsageTotal.swift
+@@ -146,8 +146,8 @@ extension MenuBarLayoutRenderer {
+             fill: total.map { display($0.averageRemainingPercent) } ?? 0,
+             logo: warning == nil ? nil : logo,
+             text: neutralText,
+-            font: font,
+-            alpha: total?.isStale == true ? Self.usageTotalStaleAlpha : 1)
++            alpha: total?.isStale == true ? Self.usageTotalStaleAlpha : 1,
++            options: options)
+         let accessibilityLabel = Self.usageTotalAccessibilityLabel(total, showUsed: options.showUsed)
+ 
+         let title = NSMutableAttributedString()
+@@ -163,14 +163,13 @@ extension MenuBarLayoutRenderer {
+             }
+             title.append(Self.usageTotalAttachment(
+                 Self.usageTotalCapsule(text: Self.usageTotalPercent(display(warning.remainingPercent)), font: font),
+-                font: font))
++                font: font,
++                verticalAdjustment: options.verticalAdjustment))
+         }
+         return MenuBarLayoutRenderedTitle(
+             attributedTitle: title,
+             accessibilityLabel: accessibilityLabel,
+-            leadingIcon: options.highContrast
+-                ? nil
+-                : Self.offsetLeadingIcon(neutral, adjustment: options.verticalAdjustment))
++            leadingIcon: options.highContrast ? nil : neutral)
+     }
+ 
+     private static func usageTotalPercent(_ percent: Double) -> String {
+@@ -200,10 +199,13 @@ extension MenuBarLayoutRenderer {
+         fill: Double,
+         logo: NSImage?,
+         text: String?,
+-        font: NSFont,
+-        alpha: CGFloat)
++        alpha: CGFloat,
++        options: MenuBarLayoutRenderOptions)
+         -> NSImage
+     {
++        let font = NSFont.monospacedDigitSystemFont(
++            ofSize: Self.fontSize(size: options.size, isStacked: false), weight: .regular)
++        let verticalAdjustment = CGFloat(options.verticalAdjustment)
+         let meter = Self.usageTotalMeterSize
+         let gap = Self.usageTotalGap
+         let logoSide = Self.usageTotalLogoSide
+@@ -214,6 +216,10 @@ extension MenuBarLayoutRenderer {
+         let width = meter.width + (logo == nil ? 0 : gap + logoSide) + (label == nil ? 0 : gap + labelWidth)
+         let image = NSImage(size: NSSize(width: width, height: height), flipped: false) { _ in
+             let context = NSGraphicsContext.current?.cgContext
++            // This image already fills the 22 pt canvas; shift its content instead of adding padding.
++            context?.saveGState()
++            defer { context?.restoreGState() }
++            context?.translateBy(x: 0, y: verticalAdjustment)
+             context?.setAlpha(alpha)
+             context?.beginTransparencyLayer(auxiliaryInfo: nil)
+             defer { context?.endTransparencyLayer() }
+@@ -263,14 +269,32 @@ extension MenuBarLayoutRenderer {
+         return image
+     }
+ 
+-    private static func usageTotalAttachment(_ image: NSImage, font: NSFont) -> NSAttributedString {
++    private static func usageTotalAttachment(
++        _ image: NSImage,
++        font: NSFont,
++        verticalAdjustment: Int = 0) -> NSAttributedString
++    {
++        let height = Self.usageTotalCanvasHeight
++        // Keep line metrics fixed; NSButton can otherwise recenter away part of a baseline offset.
++        let originalOrigin = ((font.capHeight - image.size.height) / 2).rounded()
++        let paddedOrigin = ((font.capHeight - height) / 2).rounded()
++        let padding = originalOrigin - paddedOrigin
++        let attachmentImage = NSImage(size: NSSize(width: image.size.width, height: height), flipped: false) { _ in
++            image.draw(in: NSRect(
++                x: 0,
++                y: padding + CGFloat(verticalAdjustment),
++                width: image.size.width,
++                height: image.size.height))
++            return true
++        }
++        attachmentImage.isTemplate = image.isTemplate
+         let attachment = NSTextAttachment()
+-        attachment.image = image
++        attachment.image = attachmentImage
+         attachment.bounds = NSRect(
+             x: 0,
+-            y: ((font.capHeight - image.size.height) / 2).rounded(),
+-            width: image.size.width,
+-            height: image.size.height)
++            y: ((font.capHeight - attachmentImage.size.height) / 2).rounded(),
++            width: attachmentImage.size.width,
++            height: attachmentImage.size.height)
+         let value = NSMutableAttributedString(attachment: attachment)
+         value.addAttribute(.font, value: font, range: NSRange(location: 0, length: value.length))
+         return value
+diff --git a/Tests/CodexBarTests/MenuBarUsageTotalTests.swift b/Tests/CodexBarTests/MenuBarUsageTotalTests.swift
+index f6b7096..bebcf53 100644
+--- a/Tests/CodexBarTests/MenuBarUsageTotalTests.swift
++++ b/Tests/CodexBarTests/MenuBarUsageTotalTests.swift
+@@ -8,16 +8,21 @@ import Testing
+ struct MenuBarUsageTotalTests {
+     private typealias Entry = MenuBarUsageTotal.Entry
+ 
+-    private static func options(showUsed: Bool = false) -> MenuBarLayoutRenderOptions {
++    private static func options(
++        showUsed: Bool = false,
++        highContrast: Bool = false,
++        verticalAdjustment: Int = 0) -> MenuBarLayoutRenderOptions
++    {
+         MenuBarLayoutRenderOptions(
+             size: .regular,
+-            highContrast: false,
++            highContrast: highContrast,
+             showUsed: showUsed,
+             conditionals: [],
+             appearanceName: NSAppearance.Name.darkAqua.rawValue,
+             isDebugApp: false,
+             isStale: false,
+-            now: Date())
++            now: Date(),
++            verticalAdjustment: verticalAdjustment)
+     }
+ 
+     private static func window(used: Double) -> RateWindow {
+@@ -157,6 +162,54 @@ struct MenuBarUsageTotalTests {
+ 
+     // MARK: - Rendering
+ 
++    @Test(arguments: [false, true], [false, true])
++    func `saved vertical adjustment shifts and clips every total attachment image`(
++        highContrast: Bool, warning: Bool) throws
++    {
++        let total = try #require(MenuBarUsageTotal(entries: [
++            Entry(provider: .claude, remainingPercent: warning ? 8 : 62, isStale: false),
++        ]))
++        let logo = try #require(ProviderBrandIcon.image(for: .claude))
++        let original = MenuBarLayoutRenderer.renderUsageTotal(
++            total, logo: logo, options: Self.options(highContrast: highContrast))
++        let originalImages = Self.attachmentImages(original.attributedTitle)
++        #expect(originalImages.count == (highContrast ? 1 : 0) + (warning ? 1 : 0))
++        if !highContrast, !warning {
++            #expect(originalImages.isEmpty)
++            #expect(original.leadingIcon?.isTemplate == true)
++        }
++        for scale in [1, 2] {
++            for adjustment in [-20, -5, -3, 3, 5, 20] {
++                let shifted = MenuBarLayoutRenderer.renderUsageTotal(
++                    total,
++                    logo: logo,
++                    options: Self.options(highContrast: highContrast, verticalAdjustment: adjustment))
++                let shiftedImages = Self.attachmentImages(shifted.attributedTitle)
++                #expect(shiftedImages.count == originalImages.count)
++                let pixelShift = try Self.calibratedPixelShift(adjustment: adjustment, scale: scale)
++                for (before, after) in zip(originalImages, shiftedImages) {
++                    let originalBitmap = try Self.leadingBitmap(before, scale: scale)
++                    let shiftedBitmap = try Self.leadingBitmap(after, scale: scale)
++                    Self.expectTranslatedMask(
++                        original: originalBitmap,
++                        shifted: shiftedBitmap,
++                        pixelShift: pixelShift,
++                        redOnly: false)
++                }
++                #expect(shifted.statusItemWidth(gap: .regular) == original.statusItemWidth(gap: .regular))
++                #expect(shifted.accessibilityLabel == original.accessibilityLabel)
++            }
++        }
++    }
++
++    private static func attachmentImages(_ title: NSAttributedString) -> [NSImage] {
++        var images: [NSImage] = []
++        title.enumerateAttribute(.attachment, in: NSRange(location: 0, length: title.length)) { value, _, _ in
++            if let image = (value as? NSTextAttachment)?.image { images.append(image) }
++        }
++        return images
++    }
++
+     @Test
+     func `calm total is one template image so AppKit tints it for any menu bar`() throws {
+         let total = try #require(MenuBarUsageTotal(entries: [
+@@ -467,3 +520,304 @@ struct MenuBarUsageTotalTests {
+         #expect(rendered.attributedTitle.length > 0)
+     }
+ }
++
++extension MenuBarUsageTotalTests {
++    @Test(arguments: [false, true])
++    func `saved vertical adjustment moves the actual normal contrast leading pixels`(warning: Bool) throws {
++        let total = try #require(MenuBarUsageTotal(entries: [
++            Entry(provider: .claude, remainingPercent: warning ? 8 : 62, isStale: false),
++        ]))
++        let logo = try #require(ProviderBrandIcon.image(for: .claude))
++        let original = MenuBarLayoutRenderer.renderUsageTotal(total, logo: logo, options: Self.options())
++        let originalImage = try #require(original.leadingIcon)
++        for scale in [1, 2] {
++            let before = try Self.leadingAlphaCentroid(originalImage, scale: scale)
++            let calibration = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 0), scale: scale)
++            for adjustment in [-3, 3] {
++                let calibrated = try Self.leadingAlphaCentroid(
++                    Self.calibrationImage(shift: adjustment), scale: scale)
++                let expectedDelta = calibrated - calibration
++                // This independent drawing calibrates bitmap y orientation and pixel-to-point conversion.
++                #expect(abs(abs(expectedDelta) - CGFloat(abs(adjustment))) < 0.01)
++                let shifted = MenuBarLayoutRenderer.renderUsageTotal(
++                    total, logo: logo, options: Self.options(verticalAdjustment: adjustment))
++                let shiftedImage = try #require(shifted.leadingIcon)
++                let after = try Self.leadingAlphaCentroid(shiftedImage, scale: scale)
++                #expect(abs((after - before) - expectedDelta) < 0.25)
++                #expect(shiftedImage.isTemplate == originalImage.isTemplate)
++                #expect(shifted.statusItemWidth(gap: .regular) == original.statusItemWidth(gap: .regular))
++                #expect(shifted.accessibilityLabel == original.accessibilityLabel)
++            }
++        }
++    }
++
++    @Test(arguments: [false, true], [false, true])
++    func `native warning capsule pixels translate and clip throughout the saved adjustment range`(
++        highContrast: Bool, dark: Bool) throws
++    {
++        for scale in [1, 2] {
++            let original = try Self.nativeWarningCapsuleBitmap(
++                highContrast: highContrast, dark: dark, adjustment: 0, scale: scale)
++            #expect(Self.pixelMask(original, redOnly: true).filter(\.self).count > 20)
++            for adjustment in [-20, -5, -3, 3, 5, 20] {
++                let shifted = try Self.nativeWarningCapsuleBitmap(
++                    highContrast: highContrast, dark: dark, adjustment: adjustment, scale: scale)
++                let pixelShift = try Self.calibratedPixelShift(adjustment: adjustment, scale: scale)
++                Self.expectTranslatedMask(
++                    original: original,
++                    shifted: shifted,
++                    pixelShift: pixelShift,
++                    redOnly: true)
++            }
++        }
++    }
++
++    private static func nativeWarningCapsuleBitmap(
++        highContrast: Bool, dark: Bool, adjustment: Int, scale: Int) throws -> NSBitmapImageRep
++    {
++        _ = NSApplication.shared
++        let appearanceName = dark ? NSAppearance.Name.darkAqua : .aqua
++        let appearance = try #require(NSAppearance(named: appearanceName))
++        let total = try #require(MenuBarUsageTotal(entries: [
++            Entry(provider: .claude, remainingPercent: 8, isStale: false),
++        ]))
++        let logo = try #require(ProviderBrandIcon.image(for: .claude))
++        let options = MenuBarLayoutRenderOptions(
++            size: .regular,
++            highContrast: highContrast,
++            showUsed: false,
++            conditionals: [],
++            appearanceName: appearanceName.rawValue,
++            isDebugApp: false,
++            now: Date(timeIntervalSince1970: 1_793_000_000),
++            verticalAdjustment: adjustment)
++        let rendered = MenuBarLayoutRenderer.renderUsageTotal(total, logo: logo, options: options)
++        let width = rendered.statusItemWidth(gap: .regular)
++        let bounds = NSRect(x: 0, y: 0, width: width, height: 22)
++        let canvas = NSView(frame: bounds)
++        canvas.appearance = appearance
++        let button = NSButton(frame: bounds)
++        button.isBordered = false
++        button.imagePosition = .imageLeading
++        button.imageScaling = .scaleNone
++        button.alignment = .center
++        button.appearance = appearance
++        button.attributedTitle = rendered.attributedTitle
++        button.image = rendered.leadingIcon.map {
++            MenuBarLayoutRenderer.attachmentImage($0, tint: .labelColor)
++        }
++        button.setAccessibilityLabel(rendered.accessibilityLabel)
++        canvas.addSubview(button)
++        let window = NSWindow(contentRect: bounds, styleMask: [.borderless], backing: .buffered, defer: false)
++        window.appearance = appearance
++        window.contentView = canvas
++        window.orderFront(nil)
++        defer { window.orderOut(nil) }
++        canvas.layoutSubtreeIfNeeded()
++        let bitmap = try #require(NSBitmapImageRep(
++            bitmapDataPlanes: nil,
++            pixelsWide: Int(ceil(width)) * scale,
++            pixelsHigh: 22 * scale,
++            bitsPerSample: 8,
++            samplesPerPixel: 4,
++            hasAlpha: true,
++            isPlanar: false,
++            colorSpaceName: .deviceRGB,
++            bytesPerRow: 0,
++            bitsPerPixel: 0))
++        bitmap.size = bounds.size
++        appearance.performAsCurrentDrawingAppearance {
++            button.cacheDisplay(in: button.bounds, to: bitmap)
++        }
++        return bitmap
++    }
++
++    private static func calibratedPixelShift(adjustment: Int, scale: Int) throws -> Int {
++        // Use a small fully visible movement to calibrate bitmap orientation independently,
++        // then extrapolate in points: at ±20 the reference rectangle itself would be clipped.
++        let before = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 0), scale: scale)
++        let after = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 3), scale: scale)
++        #expect(abs(abs(after - before) - 3) < 0.01)
++        let direction: CGFloat = after > before ? 1 : -1
++        return Int((direction * CGFloat(adjustment * scale)).rounded())
++    }
++
++    private static func pixelMask(_ bitmap: NSBitmapImageRep, redOnly: Bool) -> [Bool] {
++        var mask: [Bool] = []
++        for y in 0..<bitmap.pixelsHigh {
++            for x in 0..<bitmap.pixelsWide {
++                guard let color = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else {
++                    mask.append(false)
++                    continue
++                }
++                // The red mask excludes Claude's orange mark; alpha alone covers all neutral attachments.
++                mask.append(redOnly
++                    ? color.alphaComponent > 0.1 && color.redComponent > 0.6 && color.greenComponent < 0.3 && color
++                    .blueComponent < 0.3
++                    : color.alphaComponent > 0.1)
++            }
++        }
++        return mask
++    }
++
++    private static func expectTranslatedMask(
++        original: NSBitmapImageRep, shifted: NSBitmapImageRep, pixelShift: Int, redOnly: Bool)
++    {
++        #expect(shifted.pixelsWide == original.pixelsWide)
++        #expect(shifted.pixelsHigh == original.pixelsHigh)
++        guard shifted.pixelsWide == original.pixelsWide, shifted.pixelsHigh == original.pixelsHigh else { return }
++        let width = original.pixelsWide
++        let height = original.pixelsHigh
++        let originalMask = Self.pixelMask(original, redOnly: redOnly)
++        let actualMask = Self.pixelMask(shifted, redOnly: redOnly)
++        var expected: [Bool] = []
++        for y in 0..<height {
++            for x in 0..<width {
++                let sourceY = y - pixelShift
++                expected.append(sourceY >= 0 && sourceY < height ? originalMask[sourceY * width + x] : false)
++            }
++        }
++        let mismatches = zip(expected, actualMask).filter { $0 != $1 }.count
++        // Integer translation preserves the shape, including clipping or disappearance at large nudges.
++        // A small raster tolerance permits edge antialiasing without accepting recentering.
++        let allowedMismatch = max(2, expected.filter(\.self).count / 50)
++        #expect(mismatches <= allowedMismatch)
++    }
++
++    private static func calibrationImage(shift: Int) -> NSImage {
++        NSImage(size: NSSize(width: 12, height: 22), flipped: false) { _ in
++            NSColor.black.setFill()
++            NSRect(x: 2, y: CGFloat(8 + shift), width: 8, height: 4).fill()
++            return true
++        }
++    }
++
++    private static func leadingBitmap(_ image: NSImage, scale: Int) throws -> NSBitmapImageRep {
++        let canvas = NSSize(width: ceil(image.size.width), height: 22)
++        let context = try #require(CGContext(
++            data: nil,
++            width: Int(canvas.width) * scale,
++            height: Int(canvas.height) * scale,
++            bitsPerComponent: 8,
++            bytesPerRow: 0,
++            space: CGColorSpaceCreateDeviceRGB(),
++            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
++        NSGraphicsContext.saveGraphicsState()
++        defer { NSGraphicsContext.restoreGraphicsState() }
++        NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: false)
++        context.scaleBy(x: CGFloat(scale), y: CGFloat(scale))
++        // Match the status button's image centering without using the production offset helper.
++        let origin = NSPoint(x: 0, y: (canvas.height - image.size.height) / 2)
++        image.draw(in: NSRect(origin: origin, size: image.size))
++        return try NSBitmapImageRep(cgImage: #require(context.makeImage()))
++    }
++
++    private static func leadingAlphaCentroid(_ image: NSImage, scale: Int) throws -> CGFloat {
++        let bitmap = try Self.leadingBitmap(image, scale: scale)
++        var mass: CGFloat = 0
++        var weightedY: CGFloat = 0
++        for y in 0..<bitmap.pixelsHigh {
++            for x in 0..<bitmap.pixelsWide {
++                let alpha = bitmap.colorAt(x: x, y: y)?.alphaComponent ?? 0
++                mass += alpha
++                weightedY += (CGFloat(y) + 0.5) * alpha
++            }
++        }
++        try #require(mass > 1)
++        return weightedY / mass / CGFloat(scale)
++    }
++}
++
++// Proof-only: appended after the unchanged deterministic suite has passed.
++extension MenuBarUsageTotalTests {
++    @Test(.enabled(if: ProcessInfo.processInfo.environment["VERTICAL_PROOF_OUTPUT"] != nil))
++    func `render synthetic saved vertical adjustments`() throws {
++        let environment = ProcessInfo.processInfo.environment
++        let output = URL(fileURLWithPath: try #require(environment["VERTICAL_PROOF_OUTPUT"]))
++        let product = try #require(environment["PROOF_PRODUCT_SHA"])
++        let delta = try #require(environment["PROOF_DELTA_SHA"])
++        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
++        _ = NSApplication.shared
++        let logo = try #require(ProviderBrandIcon.image(for: .claude))
++        var states: [[String: Any]] = []
++        for adjustments in [[0, -3, 3], [0, -5, 5]] {
++            let suffix = adjustments.contains(5) ? "-large" : ""
++            for dark in [false, true] {
++                let theme = dark ? "dark" : "light"
++                let appearance = dark ? NSAppearance.Name.darkAqua : .aqua
++                let canvas = VerticalAdjustmentProofCanvas(frame: NSRect(x: 0, y: 0, width: 700, height: 290))
++                canvas.appearance = NSAppearance(named: appearance)
++                func label(_ text: String, x: CGFloat, y: CGFloat, width: CGFloat, size: CGFloat = 10) {
++                    let field = NSTextField(labelWithString: text)
++                    field.font = .monospacedSystemFont(ofSize: size, weight: .regular)
++                    field.frame = NSRect(x: x, y: y, width: width, height: 18)
++                    canvas.addSubview(field)
++                }
++                label("SYNTHETIC — production renderer on native NSButton; component fixture", x: 12, y: 266, width: 680)
++                label("Product: \(product)", x: 12, y: 248, width: 680, size: 9)
++                label("Candidate delta: \(delta)", x: 12, y: 232, width: 680, size: 9)
++                for (column, adjustment) in adjustments.enumerated() {
++                    label("offset \(adjustment) pt", x: CGFloat(190 + column * 160), y: 204, width: 150)
++                }
++                for (row, flags) in [(false, false), (false, true), (true, false), (true, true)].enumerated() {
++                    let (highContrast, warning) = flags
++                    let y = CGFloat(170 - row * 42)
++                    label("\(highContrast ? "HC" : "Normal") \(warning ? "warning" : "calm")", x: 12, y: y, width: 170)
++                    let total = try #require(MenuBarUsageTotal(entries: [
++                        MenuBarUsageTotal.Entry(provider: .claude, remainingPercent: warning ? 8 : 62, isStale: false),
++                    ]))
++                    for (column, adjustment) in adjustments.enumerated() {
++                        let options = MenuBarLayoutRenderOptions(
++                            size: .regular, highContrast: highContrast, showUsed: false, conditionals: [],
++                            appearanceName: appearance.rawValue, isDebugApp: false, isStale: false,
++                            now: Date(timeIntervalSince1970: 1_793_000_000), verticalAdjustment: adjustment)
++                        let rendered = MenuBarLayoutRenderer.renderUsageTotal(total, logo: logo, options: options)
++                        let width = rendered.statusItemWidth(gap: .regular)
++                        let button = NSButton(frame: NSRect(
++                            x: CGFloat(190 + column * 160) + (145 - width) / 2, y: y, width: width, height: 22))
++                        button.isBordered = false
++                        button.imagePosition = .imageLeading
++                        button.imageScaling = .scaleNone
++                        button.alignment = .center
++                        button.appearance = canvas.appearance
++                        button.attributedTitle = rendered.attributedTitle
++                        // Production template-mask tinting, rather than a fixture-painted replacement.
++                        button.image = rendered.leadingIcon.map {
++                            MenuBarLayoutRenderer.attachmentImage($0, tint: .labelColor)
++                        }
++                        button.setAccessibilityLabel(rendered.accessibilityLabel)
++                        canvas.addSubview(button)
++                        states.append([
++                            "synthetic": true, "componentFixture": true, "theme": theme, "offsetSet": suffix,
++                            "highContrast": highContrast, "warning": warning, "verticalAdjustment": adjustment,
++                            "productSHA": product, "candidateDeltaSHA": delta,
++                            "productionStatusWidth": rendered.statusItemWidth(gap: .regular),
++                            "accessibilityLabel": rendered.accessibilityLabel,
++                        ])
++                    }
++                }
++                let window = NSWindow(contentRect: canvas.bounds, styleMask: [.borderless], backing: .buffered, defer: false)
++                window.appearance = canvas.appearance
++                window.contentView = canvas
++                window.orderFront(nil)
++                canvas.layoutSubtreeIfNeeded()
++                RunLoop.current.run(until: Date().addingTimeInterval(0.2))
++                let bitmap = try #require(canvas.bitmapImageRepForCachingDisplay(in: canvas.bounds))
++                canvas.cacheDisplay(in: canvas.bounds, to: bitmap)
++                let png = try #require(bitmap.representation(using: .png, properties: [:]))
++                try png.write(to: output.appendingPathComponent("vertical-adjustment\(suffix)-\(theme).png"))
++                window.orderOut(nil)
++            }
++        }
++        try JSONSerialization.data(withJSONObject: states, options: [.prettyPrinted, .sortedKeys])
++            .write(to: output.appendingPathComponent("states.json"))
++    }
++}
++
++@MainActor
++private final class VerticalAdjustmentProofCanvas: NSView {
++    override func draw(_ dirtyRect: NSRect) {
++        NSColor.windowBackgroundColor.setFill()
++        dirtyRect.fill()
++    }
++}
