@@ -1,0 +1,184 @@
+diff --git a/Sources/CodexBarCore/Providers/Claude/ClaudeOAuth/ClaudeOAuthDelegatedRefreshCoordinator.swift b/Sources/CodexBarCore/Providers/Claude/ClaudeOAuth/ClaudeOAuthDelegatedRefreshCoordinator.swift
+index 2a01e3aba..0511dd463 100644
+--- a/Sources/CodexBarCore/Providers/Claude/ClaudeOAuth/ClaudeOAuthDelegatedRefreshCoordinator.swift
++++ b/Sources/CodexBarCore/Providers/Claude/ClaudeOAuth/ClaudeOAuthDelegatedRefreshCoordinator.swift
+@@ -9,6 +9,7 @@ public enum ClaudeOAuthDelegatedRefreshCoordinator {
+     private final class AttemptStateStorage: @unchecked Sendable {
+         let lock = NSLock()
+         let persistsCooldown: Bool
++        let defaults: UserDefaults?
+         var loadedCooldownProfiles: Set<String> = []
+         var cooldownByProfile: [String: CooldownState] = [:]
+         var inFlightAttemptID: UInt64?
+@@ -17,8 +18,9 @@ public enum ClaudeOAuthDelegatedRefreshCoordinator {
+         var inFlightTask: Task<AttemptResult, Never>?
+         var nextAttemptID: UInt64 = 0
+ 
+-        init(persistsCooldown: Bool) {
++        init(persistsCooldown: Bool, defaults: UserDefaults? = nil) {
+             self.persistsCooldown = persistsCooldown
++            self.defaults = defaults
+         }
+     }
+ 
+@@ -575,7 +577,7 @@ public enum ClaudeOAuthDelegatedRefreshCoordinator {
+         self.loadCooldownIfNeededLocked(profileIdentifier: profileIdentifier, state: state)
+         state.cooldownByProfile[profileIdentifier] = CooldownState(lastAttemptAt: now, interval: cooldown)
+         guard state.persistsCooldown else { return }
+-        let defaults = UserDefaults.standard
++        let defaults = state.defaults ?? .standard
+         defaults.set(
+             now.timeIntervalSince1970,
+             forKey: self.profileKey(self.cooldownDefaultsKey, profileIdentifier: profileIdentifier))
+@@ -609,7 +611,7 @@ public enum ClaudeOAuthDelegatedRefreshCoordinator {
+             lastAttemptAt: now,
+             interval: self.shortCooldownInterval)
+         guard state.persistsCooldown else { return true }
+-        let defaults = UserDefaults.standard
++        let defaults = state.defaults ?? .standard
+         defaults.set(
+             now.timeIntervalSince1970,
+             forKey: self.profileKey(self.cooldownDefaultsKey, profileIdentifier: profileIdentifier))
+@@ -630,7 +632,7 @@ public enum ClaudeOAuthDelegatedRefreshCoordinator {
+             return
+         }
+ 
+-        let defaults = UserDefaults.standard
++        let defaults = state.defaults ?? .standard
+         let timestampKey = self.profileKey(self.cooldownDefaultsKey, profileIdentifier: profileIdentifier)
+         let intervalKey = self.profileKey(self.cooldownIntervalDefaultsKey, profileIdentifier: profileIdentifier)
+         let defaultProfileIdentifier = ClaudeOAuthCredentialsStore.credentialsProfileIdentifier(
+@@ -737,6 +739,17 @@ public enum ClaudeOAuthDelegatedRefreshCoordinator {
+         }
+     }
+ 
++    /// A migration fixture needs persistence semantics without sharing CFPreferences with other workers.
++    static func withIsolatedPersistedStateForTesting<T>(
++        defaults: UserDefaults,
++        operation: () throws -> T) rethrows -> T
++    {
++        let state = AttemptStateStorage(persistsCooldown: true, defaults: defaults)
++        return try self.$stateStorageForTesting.withValue(state) {
++            try operation()
++        }
++    }
++
+     static func resetForTesting() {
+         let state = self.currentStateStorage
+         state.lock.lock()
+@@ -749,7 +762,7 @@ public enum ClaudeOAuthDelegatedRefreshCoordinator {
+         state.nextAttemptID = 0
+         state.lock.unlock()
+         guard state.persistsCooldown else { return }
+-        let defaults = UserDefaults.standard
++        let defaults = state.defaults ?? .standard
+         defaults.removeObject(forKey: self.cooldownDefaultsKey)
+         defaults.removeObject(forKey: self.cooldownIntervalDefaultsKey)
+         for key in defaults.dictionaryRepresentation().keys
+diff --git a/Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift b/Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift
+index ca3fc3a29..22dc82f98 100644
+--- a/Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift
++++ b/Tests/CodexBarTests/ClaudeOAuthDelegatedRefreshProfileIsolationTests.swift
+@@ -7,32 +7,77 @@ struct ClaudeOAuthDelegatedRefreshProfileIsolationTests {
+     @Test
+     func `legacy cooldown migrates only to the default credentials profile`() {
+         ClaudeOAuthCredentialsStore.withEnvironmentCredentialsURLForTesting {
+-            let defaults = UserDefaults.standard
+-            let legacyTimestampKey = "claudeOAuthDelegatedRefreshLastAttemptAtV1"
+-            let legacyIntervalKey = "claudeOAuthDelegatedRefreshCooldownIntervalSecondsV1"
++            let defaults = InMemoryUserDefaults()
++            ClaudeOAuthDelegatedRefreshCoordinator.withIsolatedPersistedStateForTesting(defaults: defaults) {
++                let legacyTimestampKey = "claudeOAuthDelegatedRefreshLastAttemptAtV1"
++                let legacyIntervalKey = "claudeOAuthDelegatedRefreshCooldownIntervalSecondsV1"
++                let now = Date(timeIntervalSince1970: 68000)
++                let defaultEnvironment = ProcessInfo.processInfo.environment
++                let otherEnvironment = ["CLAUDE_CONFIG_DIR": "/tmp/codexbar-profile-migration-other"]
++                let defaultProfileIdentifier = ClaudeOAuthCredentialsStore.credentialsProfileIdentifier(
++                    environment: defaultEnvironment)
++                let scopedTimestampKey = legacyTimestampKey + ".profile." + defaultProfileIdentifier
++                let scopedIntervalKey = legacyIntervalKey + ".profile." + defaultProfileIdentifier
++
++                ClaudeOAuthDelegatedRefreshCoordinator.resetForTesting()
++                defer { ClaudeOAuthDelegatedRefreshCoordinator.resetForTesting() }
++                defaults.set(now.timeIntervalSince1970, forKey: legacyTimestampKey)
++                defaults.set(300.0, forKey: legacyIntervalKey)
++
++                #expect(ClaudeOAuthDelegatedRefreshCoordinator.isInCooldown(
++                    now: now.addingTimeInterval(1),
++                    environment: defaultEnvironment))
++                #expect(!ClaudeOAuthDelegatedRefreshCoordinator.isInCooldown(
++                    now: now.addingTimeInterval(1),
++                    environment: otherEnvironment))
++                #expect(defaults.object(forKey: scopedTimestampKey) as? Double == now.timeIntervalSince1970)
++                #expect(defaults.object(forKey: scopedIntervalKey) as? Double == 300.0)
++                #expect(defaults.object(forKey: legacyTimestampKey) == nil)
++                #expect(defaults.object(forKey: legacyIntervalKey) == nil)
++            }
++        }
++    }
++
++    @Test
++    func `resetting another persisted store cannot erase a migrated profile cooldown`() {
++        ClaudeOAuthCredentialsStore.withEnvironmentCredentialsURLForTesting {
++            let firstDefaults = InMemoryUserDefaults()
++            let secondDefaults = InMemoryUserDefaults()
++            let environment = ProcessInfo.processInfo.environment
++            let profile = ClaudeOAuthCredentialsStore.credentialsProfileIdentifier(environment: environment)
++            let legacyTimestamp = "claudeOAuthDelegatedRefreshLastAttemptAtV1"
++            let legacyInterval = "claudeOAuthDelegatedRefreshCooldownIntervalSecondsV1"
++            let timestampKey = legacyTimestamp + ".profile." + profile
++            let intervalKey = legacyInterval + ".profile." + profile
+             let now = Date(timeIntervalSince1970: 68000)
+-            let defaultEnvironment = ProcessInfo.processInfo.environment
+-            let otherEnvironment = ["CLAUDE_CONFIG_DIR": "/tmp/codexbar-profile-migration-other"]
+-            let defaultProfileIdentifier = ClaudeOAuthCredentialsStore.credentialsProfileIdentifier(
+-                environment: defaultEnvironment)
+-            let scopedTimestampKey = legacyTimestampKey + ".profile." + defaultProfileIdentifier
+-            let scopedIntervalKey = legacyIntervalKey + ".profile." + defaultProfileIdentifier
+-
+-            ClaudeOAuthDelegatedRefreshCoordinator.resetForTesting()
+-            defer { ClaudeOAuthDelegatedRefreshCoordinator.resetForTesting() }
+-            defaults.set(now.timeIntervalSince1970, forKey: legacyTimestampKey)
+-            defaults.set(300.0, forKey: legacyIntervalKey)
+-
+-            #expect(ClaudeOAuthDelegatedRefreshCoordinator.isInCooldown(
+-                now: now.addingTimeInterval(1),
+-                environment: defaultEnvironment))
+-            #expect(!ClaudeOAuthDelegatedRefreshCoordinator.isInCooldown(
+-                now: now.addingTimeInterval(1),
+-                environment: otherEnvironment))
+-            #expect(defaults.object(forKey: scopedTimestampKey) as? Double == now.timeIntervalSince1970)
+-            #expect(defaults.object(forKey: scopedIntervalKey) as? Double == 300.0)
+-            #expect(defaults.object(forKey: legacyTimestampKey) == nil)
+-            #expect(defaults.object(forKey: legacyIntervalKey) == nil)
++            firstDefaults.set(now.timeIntervalSince1970, forKey: legacyTimestamp)
++            firstDefaults.set(300.0, forKey: legacyInterval)
++            secondDefaults.set(now.addingTimeInterval(-1000).timeIntervalSince1970, forKey: legacyTimestamp)
++            secondDefaults.set(20.0, forKey: legacyInterval)
++
++            ClaudeOAuthDelegatedRefreshCoordinator.withIsolatedPersistedStateForTesting(defaults: firstDefaults) {
++                #expect(ClaudeOAuthDelegatedRefreshCoordinator.isInCooldown(now: now, environment: environment))
++                #expect(firstDefaults.object(forKey: timestampKey) as? Double == now.timeIntervalSince1970)
++                #expect(firstDefaults.object(forKey: intervalKey) as? Double == 300)
++                ClaudeOAuthDelegatedRefreshCoordinator.withIsolatedPersistedStateForTesting(defaults: secondDefaults) {
++                    // Identical profile IDs still belong to distinct persistence owners.
++                    #expect(!ClaudeOAuthDelegatedRefreshCoordinator.isInCooldown(now: now, environment: environment))
++                    #expect(secondDefaults.object(forKey: timestampKey) as? Double ==
++                        now.addingTimeInterval(-1000).timeIntervalSince1970)
++                    #expect(secondDefaults.object(forKey: intervalKey) as? Double == 20)
++                    ClaudeOAuthDelegatedRefreshCoordinator.resetForTesting()
++                    #expect(secondDefaults.object(forKey: timestampKey) == nil)
++                    #expect(secondDefaults.object(forKey: intervalKey) == nil)
++                    #expect(firstDefaults.object(forKey: timestampKey) as? Double == now.timeIntervalSince1970)
++                    #expect(firstDefaults.object(forKey: intervalKey) as? Double == 300)
++                }
++                #expect(ClaudeOAuthDelegatedRefreshCoordinator.isInCooldown(
++                    now: now.addingTimeInterval(1), environment: environment))
++                #expect(firstDefaults.object(forKey: timestampKey) as? Double == now.timeIntervalSince1970)
++                #expect(firstDefaults.object(forKey: intervalKey) as? Double == 300)
++                #expect(firstDefaults.object(forKey: legacyTimestamp) == nil)
++                #expect(firstDefaults.object(forKey: legacyInterval) == nil)
++            }
+         }
+     }
+ 
