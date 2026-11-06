@@ -23,7 +23,7 @@ verdict = {
     "production_source_matches_candidate": all(digest(product / name) == value for name, value in expected.items()),
     "render_log_sha256": digest(rendered / "tests.log"),
 }
-verdict["passed"] = (exit_code == 0 and len(images) == 2 and len(states) == 24
+verdict["passed"] = (exit_code == 0 and len(images) == 4 and len(states) == 48
                      and verdict["original_oracle_matches"] and verdict["production_source_matches_candidate"])
 (rendered / "verdict.json").write_text(json.dumps(verdict, indent=2) + "\n")
 print(json.dumps(verdict, indent=2))

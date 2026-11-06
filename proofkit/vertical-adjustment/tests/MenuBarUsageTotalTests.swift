@@ -163,7 +163,7 @@ struct MenuBarUsageTotalTests {
     // MARK: - Rendering
 
     @Test(arguments: [false, true], [false, true])
-    func `saved vertical adjustment moves every total attachment equally`(
+    func `saved vertical adjustment shifts and clips every total attachment image`(
         highContrast: Bool, warning: Bool) throws
     {
         let total = try #require(MenuBarUsageTotal(entries: [
@@ -172,38 +172,42 @@ struct MenuBarUsageTotalTests {
         let logo = try #require(ProviderBrandIcon.image(for: .claude))
         let original = MenuBarLayoutRenderer.renderUsageTotal(
             total, logo: logo, options: Self.options(highContrast: highContrast))
-        let originalBaselines = Self.attachmentBaselines(original.attributedTitle)
-        #expect(originalBaselines.count == (highContrast ? 1 : 0) + (warning ? 1 : 0))
+        let originalImages = Self.attachmentImages(original.attributedTitle)
+        #expect(originalImages.count == (highContrast ? 1 : 0) + (warning ? 1 : 0))
         if !highContrast, !warning {
-            // The ordinary calm state is an image, covered by the leading-icon rendering contract.
-            #expect(originalBaselines.isEmpty)
+            #expect(originalImages.isEmpty)
             #expect(original.leadingIcon?.isTemplate == true)
         }
-        for adjustment in [-3, 3] {
-            let shifted = MenuBarLayoutRenderer.renderUsageTotal(
-                total,
-                logo: logo,
-                options: Self.options(highContrast: highContrast, verticalAdjustment: adjustment))
-            let shiftedBaselines = Self.attachmentBaselines(shifted.attributedTitle)
-            #expect(shiftedBaselines.count == originalBaselines.count)
-            for (before, after) in zip(originalBaselines, shiftedBaselines) {
-                #expect(abs((after - before) - CGFloat(adjustment)) < 0.001)
+        for scale in [1, 2] {
+            for adjustment in [-20, -5, -3, 3, 5, 20] {
+                let shifted = MenuBarLayoutRenderer.renderUsageTotal(
+                    total,
+                    logo: logo,
+                    options: Self.options(highContrast: highContrast, verticalAdjustment: adjustment))
+                let shiftedImages = Self.attachmentImages(shifted.attributedTitle)
+                #expect(shiftedImages.count == originalImages.count)
+                let pixelShift = try Self.calibratedPixelShift(adjustment: adjustment, scale: scale)
+                for (before, after) in zip(originalImages, shiftedImages) {
+                    let originalBitmap = try Self.leadingBitmap(before, scale: scale)
+                    let shiftedBitmap = try Self.leadingBitmap(after, scale: scale)
+                    Self.expectTranslatedMask(
+                        original: originalBitmap,
+                        shifted: shiftedBitmap,
+                        pixelShift: pixelShift,
+                        redOnly: false)
+                }
+                #expect(shifted.statusItemWidth(gap: .regular) == original.statusItemWidth(gap: .regular))
+                #expect(shifted.accessibilityLabel == original.accessibilityLabel)
             }
-            #expect(shifted.statusItemWidth(gap: .regular) == original.statusItemWidth(gap: .regular))
-            #expect(shifted.accessibilityLabel == original.accessibilityLabel)
         }
     }
 
-    private static func attachmentBaselines(_ title: NSAttributedString) -> [CGFloat] {
-        var baselines: [CGFloat] = []
-        title.enumerateAttribute(.attachment, in: NSRange(location: 0, length: title.length)) { value, range, _ in
-            guard let attachment = value as? NSTextAttachment else { return }
-            let offset = (title.attribute(.baselineOffset, at: range.location, effectiveRange: nil) as? NSNumber)?
-                .doubleValue ?? 0
-            // Either attachment bounds or attributed baseline can implement the saved nudge.
-            baselines.append(attachment.bounds.minY + CGFloat(offset))
+    private static func attachmentImages(_ title: NSAttributedString) -> [NSImage] {
+        var images: [NSImage] = []
+        title.enumerateAttribute(.attachment, in: NSRange(location: 0, length: title.length)) { value, _, _ in
+            if let image = (value as? NSTextAttachment)?.image { images.append(image) }
         }
-        return baselines
+        return images
     }
 
     @Test
@@ -548,26 +552,28 @@ extension MenuBarUsageTotalTests {
     }
 
     @Test(arguments: [false, true], [false, true])
-    func `native warning capsule pixels follow the saved vertical adjustment`(
+    func `native warning capsule pixels translate and clip throughout the saved adjustment range`(
         highContrast: Bool, dark: Bool) throws
     {
         for scale in [1, 2] {
-            let before = try Self.nativeWarningCapsuleCentroid(
+            let original = try Self.nativeWarningCapsuleBitmap(
                 highContrast: highContrast, dark: dark, adjustment: 0, scale: scale)
-            let calibration = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 0), scale: scale)
-            for adjustment in [-3, 3] {
-                let expectedDelta = try Self.leadingAlphaCentroid(
-                    Self.calibrationImage(shift: adjustment), scale: scale) - calibration
-                #expect(abs(abs(expectedDelta) - CGFloat(abs(adjustment))) < 0.01)
-                let after = try Self.nativeWarningCapsuleCentroid(
+            #expect(Self.pixelMask(original, redOnly: true).filter(\.self).count > 20)
+            for adjustment in [-20, -5, -3, 3, 5, 20] {
+                let shifted = try Self.nativeWarningCapsuleBitmap(
                     highContrast: highContrast, dark: dark, adjustment: adjustment, scale: scale)
-                #expect(abs((after - before) - expectedDelta) < 0.25)
+                let pixelShift = try Self.calibratedPixelShift(adjustment: adjustment, scale: scale)
+                Self.expectTranslatedMask(
+                    original: original,
+                    shifted: shifted,
+                    pixelShift: pixelShift,
+                    redOnly: true)
             }
         }
     }
 
-    private static func nativeWarningCapsuleCentroid(
-        highContrast: Bool, dark: Bool, adjustment: Int, scale: Int) throws -> CGFloat
+    private static func nativeWarningCapsuleBitmap(
+        highContrast: Bool, dark: Bool, adjustment: Int, scale: Int) throws -> NSBitmapImageRep
     {
         _ = NSApplication.shared
         let appearanceName = dark ? NSAppearance.Name.darkAqua : .aqua
@@ -623,21 +629,59 @@ extension MenuBarUsageTotalTests {
         appearance.performAsCurrentDrawingAppearance {
             button.cacheDisplay(in: button.bounds, to: bitmap)
         }
-        var mass: CGFloat = 0
-        var weightedY: CGFloat = 0
+        return bitmap
+    }
+
+    private static func calibratedPixelShift(adjustment: Int, scale: Int) throws -> Int {
+        // Use a small fully visible movement to calibrate bitmap orientation independently,
+        // then extrapolate in points: at ±20 the reference rectangle itself would be clipped.
+        let before = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 0), scale: scale)
+        let after = try Self.leadingAlphaCentroid(Self.calibrationImage(shift: 3), scale: scale)
+        #expect(abs(abs(after - before) - 3) < 0.01)
+        let direction: CGFloat = after > before ? 1 : -1
+        return Int((direction * CGFloat(adjustment * scale)).rounded())
+    }
+
+    private static func pixelMask(_ bitmap: NSBitmapImageRep, redOnly: Bool) -> [Bool] {
+        var mask: [Bool] = []
         for y in 0..<bitmap.pixelsHigh {
             for x in 0..<bitmap.pixelsWide {
-                guard let color = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB),
-                      color.redComponent > 0.6, color.greenComponent < 0.3, color.blueComponent < 0.3
-                else { continue }
-                // Claude's orange logo has green above this mask; only the production red capsule qualifies.
-                let weight = color.alphaComponent
-                mass += weight
-                weightedY += (CGFloat(y) + 0.5) * weight
+                guard let color = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else {
+                    mask.append(false)
+                    continue
+                }
+                // The red mask excludes Claude's orange mark; alpha alone covers all neutral attachments.
+                mask.append(redOnly
+                    ? color.alphaComponent > 0.1 && color.redComponent > 0.6 && color.greenComponent < 0.3 && color
+                    .blueComponent < 0.3
+                    : color.alphaComponent > 0.1)
             }
         }
-        try #require(mass > 20)
-        return weightedY / mass / CGFloat(scale)
+        return mask
+    }
+
+    private static func expectTranslatedMask(
+        original: NSBitmapImageRep, shifted: NSBitmapImageRep, pixelShift: Int, redOnly: Bool)
+    {
+        #expect(shifted.pixelsWide == original.pixelsWide)
+        #expect(shifted.pixelsHigh == original.pixelsHigh)
+        guard shifted.pixelsWide == original.pixelsWide, shifted.pixelsHigh == original.pixelsHigh else { return }
+        let width = original.pixelsWide
+        let height = original.pixelsHigh
+        let originalMask = Self.pixelMask(original, redOnly: redOnly)
+        let actualMask = Self.pixelMask(shifted, redOnly: redOnly)
+        var expected: [Bool] = []
+        for y in 0..<height {
+            for x in 0..<width {
+                let sourceY = y - pixelShift
+                expected.append(sourceY >= 0 && sourceY < height ? originalMask[sourceY * width + x] : false)
+            }
+        }
+        let mismatches = zip(expected, actualMask).filter { $0 != $1 }.count
+        // Integer translation preserves the shape, including clipping or disappearance at large nudges.
+        // A small raster tolerance permits edge antialiasing without accepting recentering.
+        let allowedMismatch = max(2, expected.filter(\.self).count / 50)
+        #expect(mismatches <= allowedMismatch)
     }
 
     private static func calibrationImage(shift: Int) -> NSImage {
@@ -648,7 +692,7 @@ extension MenuBarUsageTotalTests {
         }
     }
 
-    private static func leadingAlphaCentroid(_ image: NSImage, scale: Int) throws -> CGFloat {
+    private static func leadingBitmap(_ image: NSImage, scale: Int) throws -> NSBitmapImageRep {
         let canvas = NSSize(width: ceil(image.size.width), height: 22)
         let context = try #require(CGContext(
             data: nil,
@@ -665,7 +709,11 @@ extension MenuBarUsageTotalTests {
         // Match the status button's image centering without using the production offset helper.
         let origin = NSPoint(x: 0, y: (canvas.height - image.size.height) / 2)
         image.draw(in: NSRect(origin: origin, size: image.size))
-        let bitmap = try NSBitmapImageRep(cgImage: #require(context.makeImage()))
+        return try NSBitmapImageRep(cgImage: #require(context.makeImage()))
+    }
+
+    private static func leadingAlphaCentroid(_ image: NSImage, scale: Int) throws -> CGFloat {
+        let bitmap = try Self.leadingBitmap(image, scale: scale)
         var mass: CGFloat = 0
         var weightedY: CGFloat = 0
         for y in 0..<bitmap.pixelsHigh {

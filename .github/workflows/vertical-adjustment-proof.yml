@@ -1,9 +1,9 @@
-name: Menubar native capsule - sequential physical red and green
+name: Menubar full adjustment range - sequential red and green
 
 on:
   push:
     branches: [proof/20261106-review-regressions]
-    paths: [proofkit/vertical-adjustment/physical_proof.py, proofkit/vertical-adjustment/prephysical-ee6b.patch, proofkit/vertical-adjustment/tests/**, proofkit/vertical-adjustment/candidate.patch, proofkit/vertical-adjustment/Render.swift.fragment, proofkit/vertical-adjustment/render_verdict.py, .github/workflows/vertical-adjustment-proof.yml]
+    paths: [proofkit/vertical-adjustment/range_proof.py, proofkit/vertical-adjustment/pre-range-f967.patch, proofkit/vertical-adjustment/tests/**, proofkit/vertical-adjustment/candidate.patch, proofkit/vertical-adjustment/Render.swift.fragment, proofkit/vertical-adjustment/render_verdict.py, .github/workflows/vertical-adjustment-proof.yml]
 
 permissions:
   contents: read
@@ -54,9 +54,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$PROOF_OUT/red"
-          python3 kit/proofkit/vertical-adjustment/physical_proof.py prepare --expect red --product product --output "$PROOF_OUT/red" > "$PROOF_OUT/red/filter.txt"
+          python3 kit/proofkit/vertical-adjustment/range_proof.py prepare --expect red --product product --output "$PROOF_OUT/red" > "$PROOF_OUT/red/filter.txt"
           cat "$PROOF_OUT/red/provenance.json"
-      - name: Require new native capsule RED and all previous twenty controls passing
+      - name: Require range-image and native-mask RED with nineteen existing controls passing
         working-directory: product
         shell: bash
         run: |
@@ -68,13 +68,13 @@ jobs:
           set -e
           printf '%s\n' "$result" > "$PROOF_OUT/red/test-exit.txt"
           tail -100 "$PROOF_OUT/red/tests.log"
-          python3 ../kit/proofkit/vertical-adjustment/physical_proof.py verify --expect red --product . --output "$PROOF_OUT/red" --exit-code "$result"
+          python3 ../kit/proofkit/vertical-adjustment/range_proof.py verify --expect red --product . --output "$PROOF_OUT/red" --exit-code "$result"
       - name: Apply final production delta while preserving physical oracle bytes
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p "$PROOF_OUT/green"
-          python3 kit/proofkit/vertical-adjustment/physical_proof.py transition --expect green --product product --prior "$PROOF_OUT/red" --output "$PROOF_OUT/green" > "$PROOF_OUT/green/filter.txt"
+          python3 kit/proofkit/vertical-adjustment/range_proof.py transition --expect green --product product --prior "$PROOF_OUT/red" --output "$PROOF_OUT/green" > "$PROOF_OUT/green/filter.txt"
           cat "$PROOF_OUT/green/provenance.json"
       - name: Require all twenty-one tests GREEN with the same physical oracle
         working-directory: product
@@ -88,7 +88,7 @@ jobs:
           set -e
           printf '%s\n' "$result" > "$PROOF_OUT/green/test-exit.txt"
           tail -100 "$PROOF_OUT/green/tests.log"
-          python3 ../kit/proofkit/vertical-adjustment/physical_proof.py verify --expect green --product . --output "$PROOF_OUT/green" --exit-code "$result"
+          python3 ../kit/proofkit/vertical-adjustment/range_proof.py verify --expect green --product . --output "$PROOF_OUT/green" --exit-code "$result"
       - name: Capture optional synthetic component fixture after deterministic green
         continue-on-error: true
         working-directory: product
@@ -115,6 +115,6 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: vertical-physical-red-green-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
+          name: vertical-range-red-green-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/review-regression-proof
           retention-days: 14

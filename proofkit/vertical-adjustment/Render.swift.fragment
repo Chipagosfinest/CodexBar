@@ -11,71 +11,74 @@ extension MenuBarUsageTotalTests {
         _ = NSApplication.shared
         let logo = try #require(ProviderBrandIcon.image(for: .claude))
         var states: [[String: Any]] = []
-        for dark in [false, true] {
-            let theme = dark ? "dark" : "light"
-            let appearance = dark ? NSAppearance.Name.darkAqua : .aqua
-            let canvas = VerticalAdjustmentProofCanvas(frame: NSRect(x: 0, y: 0, width: 700, height: 290))
-            canvas.appearance = NSAppearance(named: appearance)
-            func label(_ text: String, x: CGFloat, y: CGFloat, width: CGFloat, size: CGFloat = 10) {
-                let field = NSTextField(labelWithString: text)
-                field.font = .monospacedSystemFont(ofSize: size, weight: .regular)
-                field.frame = NSRect(x: x, y: y, width: width, height: 18)
-                canvas.addSubview(field)
-            }
-            label("SYNTHETIC — production renderer on native NSButton; component fixture", x: 12, y: 266, width: 680)
-            label("Product: \(product)", x: 12, y: 248, width: 680, size: 9)
-            label("Candidate delta: \(delta)", x: 12, y: 232, width: 680, size: 9)
-            for (column, adjustment) in [0, -3, 3].enumerated() {
-                label("offset \(adjustment) pt", x: CGFloat(190 + column * 160), y: 204, width: 150)
-            }
-            for (row, flags) in [(false, false), (false, true), (true, false), (true, true)].enumerated() {
-                let (highContrast, warning) = flags
-                let y = CGFloat(170 - row * 42)
-                label("\(highContrast ? "HC" : "Normal") \(warning ? "warning" : "calm")", x: 12, y: y, width: 170)
-                let total = try #require(MenuBarUsageTotal(entries: [
-                    MenuBarUsageTotal.Entry(provider: .claude, remainingPercent: warning ? 8 : 62, isStale: false),
-                ]))
-                for (column, adjustment) in [0, -3, 3].enumerated() {
-                    let options = MenuBarLayoutRenderOptions(
-                        size: .regular, highContrast: highContrast, showUsed: false, conditionals: [],
-                        appearanceName: appearance.rawValue, isDebugApp: false, isStale: false,
-                        now: Date(timeIntervalSince1970: 1_793_000_000), verticalAdjustment: adjustment)
-                    let rendered = MenuBarLayoutRenderer.renderUsageTotal(total, logo: logo, options: options)
-                    let width = rendered.statusItemWidth(gap: .regular)
-                    let button = NSButton(frame: NSRect(
-                        x: CGFloat(190 + column * 160) + (145 - width) / 2, y: y, width: width, height: 22))
-                    button.isBordered = false
-                    button.imagePosition = .imageLeading
-                    button.imageScaling = .scaleNone
-                    button.alignment = .center
-                    button.appearance = canvas.appearance
-                    button.attributedTitle = rendered.attributedTitle
-                    // Production template-mask tinting, rather than a fixture-painted replacement.
-                    button.image = rendered.leadingIcon.map {
-                        MenuBarLayoutRenderer.attachmentImage($0, tint: .labelColor)
-                    }
-                    button.setAccessibilityLabel(rendered.accessibilityLabel)
-                    canvas.addSubview(button)
-                    states.append([
-                        "synthetic": true, "componentFixture": true, "theme": theme,
-                        "highContrast": highContrast, "warning": warning, "verticalAdjustment": adjustment,
-                        "productSHA": product, "candidateDeltaSHA": delta,
-                        "productionStatusWidth": rendered.statusItemWidth(gap: .regular),
-                        "accessibilityLabel": rendered.accessibilityLabel,
-                    ])
+        for adjustments in [[0, -3, 3], [0, -5, 5]] {
+            let suffix = adjustments.contains(5) ? "-large" : ""
+            for dark in [false, true] {
+                let theme = dark ? "dark" : "light"
+                let appearance = dark ? NSAppearance.Name.darkAqua : .aqua
+                let canvas = VerticalAdjustmentProofCanvas(frame: NSRect(x: 0, y: 0, width: 700, height: 290))
+                canvas.appearance = NSAppearance(named: appearance)
+                func label(_ text: String, x: CGFloat, y: CGFloat, width: CGFloat, size: CGFloat = 10) {
+                    let field = NSTextField(labelWithString: text)
+                    field.font = .monospacedSystemFont(ofSize: size, weight: .regular)
+                    field.frame = NSRect(x: x, y: y, width: width, height: 18)
+                    canvas.addSubview(field)
                 }
+                label("SYNTHETIC — production renderer on native NSButton; component fixture", x: 12, y: 266, width: 680)
+                label("Product: \(product)", x: 12, y: 248, width: 680, size: 9)
+                label("Candidate delta: \(delta)", x: 12, y: 232, width: 680, size: 9)
+                for (column, adjustment) in adjustments.enumerated() {
+                    label("offset \(adjustment) pt", x: CGFloat(190 + column * 160), y: 204, width: 150)
+                }
+                for (row, flags) in [(false, false), (false, true), (true, false), (true, true)].enumerated() {
+                    let (highContrast, warning) = flags
+                    let y = CGFloat(170 - row * 42)
+                    label("\(highContrast ? "HC" : "Normal") \(warning ? "warning" : "calm")", x: 12, y: y, width: 170)
+                    let total = try #require(MenuBarUsageTotal(entries: [
+                        MenuBarUsageTotal.Entry(provider: .claude, remainingPercent: warning ? 8 : 62, isStale: false),
+                    ]))
+                    for (column, adjustment) in adjustments.enumerated() {
+                        let options = MenuBarLayoutRenderOptions(
+                            size: .regular, highContrast: highContrast, showUsed: false, conditionals: [],
+                            appearanceName: appearance.rawValue, isDebugApp: false, isStale: false,
+                            now: Date(timeIntervalSince1970: 1_793_000_000), verticalAdjustment: adjustment)
+                        let rendered = MenuBarLayoutRenderer.renderUsageTotal(total, logo: logo, options: options)
+                        let width = rendered.statusItemWidth(gap: .regular)
+                        let button = NSButton(frame: NSRect(
+                            x: CGFloat(190 + column * 160) + (145 - width) / 2, y: y, width: width, height: 22))
+                        button.isBordered = false
+                        button.imagePosition = .imageLeading
+                        button.imageScaling = .scaleNone
+                        button.alignment = .center
+                        button.appearance = canvas.appearance
+                        button.attributedTitle = rendered.attributedTitle
+                        // Production template-mask tinting, rather than a fixture-painted replacement.
+                        button.image = rendered.leadingIcon.map {
+                            MenuBarLayoutRenderer.attachmentImage($0, tint: .labelColor)
+                        }
+                        button.setAccessibilityLabel(rendered.accessibilityLabel)
+                        canvas.addSubview(button)
+                        states.append([
+                            "synthetic": true, "componentFixture": true, "theme": theme, "offsetSet": suffix,
+                            "highContrast": highContrast, "warning": warning, "verticalAdjustment": adjustment,
+                            "productSHA": product, "candidateDeltaSHA": delta,
+                            "productionStatusWidth": rendered.statusItemWidth(gap: .regular),
+                            "accessibilityLabel": rendered.accessibilityLabel,
+                        ])
+                    }
+                }
+                let window = NSWindow(contentRect: canvas.bounds, styleMask: [.borderless], backing: .buffered, defer: false)
+                window.appearance = canvas.appearance
+                window.contentView = canvas
+                window.orderFront(nil)
+                canvas.layoutSubtreeIfNeeded()
+                RunLoop.current.run(until: Date().addingTimeInterval(0.2))
+                let bitmap = try #require(canvas.bitmapImageRepForCachingDisplay(in: canvas.bounds))
+                canvas.cacheDisplay(in: canvas.bounds, to: bitmap)
+                let png = try #require(bitmap.representation(using: .png, properties: [:]))
+                try png.write(to: output.appendingPathComponent("vertical-adjustment\(suffix)-\(theme).png"))
+                window.orderOut(nil)
             }
-            let window = NSWindow(contentRect: canvas.bounds, styleMask: [.borderless], backing: .buffered, defer: false)
-            window.appearance = canvas.appearance
-            window.contentView = canvas
-            window.orderFront(nil)
-            canvas.layoutSubtreeIfNeeded()
-            RunLoop.current.run(until: Date().addingTimeInterval(0.2))
-            let bitmap = try #require(canvas.bitmapImageRepForCachingDisplay(in: canvas.bounds))
-            canvas.cacheDisplay(in: canvas.bounds, to: bitmap)
-            let png = try #require(bitmap.representation(using: .png, properties: [:]))
-            try png.write(to: output.appendingPathComponent("vertical-adjustment-\(theme).png"))
-            window.orderOut(nil)
         }
         try JSONSerialization.data(withJSONObject: states, options: [.prettyPrinted, .sortedKeys])
             .write(to: output.appendingPathComponent("states.json"))
