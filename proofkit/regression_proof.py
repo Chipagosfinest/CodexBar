@@ -27,7 +27,7 @@ CASES = {
     },
     "footer": {
         "sha": "13185f0888b8e60ad22f72d66767f23601d7b960",
-        "sources": ["OverviewOverflowPluginRefreshTests.swift", "UserProviderPluginTests.swift",
+        "sources": ["OverviewOverflowPluginRefreshTests.swift", "UserProviderPluginProofSuite.swift",
                     "UserProviderPluginTestSupport.swift", "TestStores.swift",
                     "ZaiTokenStoreTestSupport.swift", "CodexCredentialFixtures.swift"],
         "filter": "UserProviderPluginTests.*successful refresh replaces a captured overflow plugin card without reopening Overview",

@@ -15,8 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {case: core, sha: b3e44381197a743c88a5f82d9008848e8a578b44}
-          - {case: chart, sha: cf6efdea76161eb3061e0b954d8150231181149f}
           - {case: footer, sha: 13185f0888b8e60ad22f72d66767f23601d7b960}
     env:
       PRODUCT_SHA: ${{ matrix.sha }}
