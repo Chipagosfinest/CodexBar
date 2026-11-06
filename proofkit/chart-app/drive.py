@@ -46,9 +46,13 @@ displays = json.loads(ui("displays"))
 assert len(displays) == 1, "Bounded proof requires a single observed display"
 
 
+def onscreen_point(x, y):
+    return math.isfinite(x) and math.isfinite(y) and any(
+        d["x"] <= x < d["x"] + d["w"] and d["y"] <= y < d["y"] + d["h"] for d in displays)
+
+
 def valid_point(x, y, menu=None):
-    assert math.isfinite(x) and math.isfinite(y)
-    assert any(d["x"] <= x < d["x"] + d["w"] and d["y"] <= y < d["y"] + d["h"] for d in displays), "Offscreen pointer target rejected"
+    assert onscreen_point(x, y), "Offscreen pointer target rejected"
     if menu:
         assert menu["x"] <= x < menu["x"] + menu["w"] and menu["y"] <= y < menu["y"] + menu["h"], "Chart target outside observed menu"
 
@@ -211,7 +215,7 @@ try:
         last_state = time.monotonic() - video_start
         assert last_state < 24, "Video could miss final state; retain screenshots but reject recording coverage"
         ui("esc")
-        assert recording.wait(timeout=30) == 0
+        assert recording.wait(timeout=45) == 0
         recording_log.close()
         media = json.loads(ui("media", out / (theme + "-screen.mov")))
         assert media["duration"] >= last_state and media["width"] > 0
@@ -219,11 +223,15 @@ try:
     receipt()
     assert process.poll() is None
     passed = True
+except BaseException as error:
+    log("primary_failure", error_type=type(error).__name__, error=str(error))
+    raise
 finally:
     try:
         current_nodes = nodes() if process.poll() is None else []
         quits = [row for row in current_nodes if row.get("role") == "AXMenuItem" and text(row).strip().startswith("Quit")
-                 and row["frame"]["w"] > 0]
+                 and row["frame"]["w"] > 0
+                 and onscreen_point(row["frame"]["x"] + row["frame"]["w"] / 2, row["frame"]["y"] + row["frame"]["h"] / 2)]
         if not quits and process.poll() is None:
             current_nodes = nodes()
             items = [row for row in current_nodes if row.get("identifier") == "codexbar-packaged-chart-proof" and row["frame"]["w"] > 0]
@@ -232,7 +240,8 @@ finally:
                 ui("click", item["x"] + item["w"] / 2, item["y"] + item["h"] / 2)
                 time.sleep(0.5)
                 quits = [row for row in nodes() if row.get("role") == "AXMenuItem" and text(row).strip().startswith("Quit")
-                         and row["frame"]["w"] > 0]
+                         and row["frame"]["w"] > 0
+                         and onscreen_point(row["frame"]["x"] + row["frame"]["w"] / 2, row["frame"]["y"] + row["frame"]["h"] / 2)]
         if quits:
             quit_frame = quits[-1]["frame"]
             ui("click", quit_frame["x"] + quit_frame["w"] / 2, quit_frame["y"] + quit_frame["h"] / 2)
@@ -241,6 +250,8 @@ finally:
                 log("quit", via="actual menu item")
             except subprocess.TimeoutExpired:
                 pass
+    except Exception as cleanup_error:
+        log("menu_cleanup_failure", error_type=type(cleanup_error).__name__, error=str(cleanup_error))
     finally:
         if process.poll() is None:
             process.terminate()
@@ -250,7 +261,13 @@ finally:
         banner.wait(timeout=5)
         for recording, handle in recordings:
             if recording.poll() is None:
-                recording.wait(timeout=30)
+                try:
+                    recording.wait(timeout=45)
+                except subprocess.TimeoutExpired:
+                    recording.terminate()
+                    recording.wait(timeout=5)
+                    passed = False
+                    log("recording_cleanup_failure", error="Recording did not finalize within bounded 45-second budget")
             if not handle.closed:
                 handle.close()
         appearance(original_dark)

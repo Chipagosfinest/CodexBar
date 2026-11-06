@@ -1,0 +1,39 @@
+{
+  "runID": 42218059156,
+  "controllerSHA": "d0b7ee6a66fb374068b59bb32533c4fda93ebf67",
+  "artifactID": 13501669086,
+  "artifactURL": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42218059156/artifacts/13501669086",
+  "classification": "partial-light-journey-recorder-finalization-timeout",
+  "overallRunStatus": "failure",
+  "appPackagedAndLaunched": true,
+  "fullUIAcceptance": false,
+  "darkAppearanceExecuted": false,
+  "lightAXAndScreenStates": [
+    "rangeUnknown",
+    "hoverClaude40Codex60",
+    "exitUnknown"
+  ],
+  "primaryFailure": "subprocess.TimeoutExpired waiting30seconds for screencapture25second recording",
+  "secondaryFailure": "Cleanup attempted offscreen Quit center(863,899); native helper correctly rejected y899 outside768pt display, then owned-process termination fallback ran.",
+  "movieProbe": {
+    "durationSeconds": 25.0,
+    "width": 1024,
+    "height": 768
+  },
+  "movieInspectedFramesSeconds": [
+    0.5,
+    3.0
+  ],
+  "movieObservation": "Actual frame0.5 shows status item before menu; frame3 shows actual menu and hovered40/60. No delayed-start claim is inferred from finalization metadata.",
+  "fileSHA256": {
+    "driver.log": "96db422d78a6e984c25f5ea88fc8168291aee884f47501a3b6fffc7f04b92eeb",
+    "events.json": "c478bdb667b14d16ea1891c50ce42ef268f8eb3c2f1ce0f53e31f01f9a8139c9",
+    "built-input-verdict.json": "0118a4c19ef6b3c2063e3b5253fbf0d2a5922fc86fdaa6a0a3dcf41814238d50",
+    "overlay-manifest.json": "69dff9b07825997e9f91db8b32dba83da07cd3c0b0a96eb8e1687b066cf76839",
+    "light-screen.mov": "0d2b22b0a3e273fae77385d307314f1a7e9924ae655875a8d88615bff047515e",
+    "light-1-range-screen.png": "9fd622e81b46ca51404854e8c91c4687bfeda33eaecaf3c8760556619bdbde75",
+    "light-2-hover-screen.png": "e7b29cdf840b78225fab46bb5ef4eb46eb4eca5bbab391151391f3e46183423e",
+    "light-3-exit-screen.png": "5ec8c9ef8a7d59bcd6e60bcca4aa3452649a882a8e2cba9f2a5b182d4009e04f"
+  },
+  "nextStep": "Reuse exact verified built bundle; controller-only bounded45second recorder finalization and onscreen cleanup filtering. Product and adapter bytes unchanged."
+}

@@ -1,9 +1,7 @@
 name: Packaged synthetic Overview chart - actual screen journey
 
 on:
-  push:
-    branches: [proof/20261106-review-regressions]
-    paths: [proofkit/chart-app/**, .github/workflows/chart-app-proof.yml]
+  workflow_dispatch:
 
 permissions:
   contents: read
