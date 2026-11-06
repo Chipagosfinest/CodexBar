@@ -239,3 +239,30 @@ accept only complete post-rebuild state, and fail wrong scope, closed/reopened m
 The new build workflow runs those controls, process controls, arrow controls and original PNG capture
 controls before the cold App build. Both older build/UI workflows are manual-only; one new push
 handler performs the declared build plus native journey. No retry dispatch exists.
+
+## Candidate UI-only navigation repair draft (not executed)
+
+Branch `proof/footer-candidate-ui-only-20261106` uses the registered manual-only
+`footer-app-ui-retry.yml`; a branch push must trigger zero jobs. Dispatch requires
+root approval. It reuses run42242259960 artifact13516399711 byte-for-byte, including
+actual x64 binary `cdcb62d6e2e6601b8322c2714cac5730c16bc9eb7d07d0b1d6ea7556c38b4c12`.
+There is no App compilation or `.build` reuse. Four archive digests, full tracked
+inputs/source maps, every bundle file and strict codesign are checked again.
+
+The prior run failed PRE-refresh: native scrolling moved More from y930 to y906,
+so the stale y942 pointer highlighted Refresh. No plugin refresh was triggered.
+The original screen/MOV/receipt remain failure evidence, not candidate acceptance.
+Only the pre-refresh hover is repaired: fresh live root-scoped AX More row and
+parent hierarchy identity, same owned CG root/epoch/display, maximum3 moves only
+when the center changes, within the original20sec opening deadline. The AX
+identity is the observed hierarchy path/role/title, not an asserted AppKit pointer.
+Each hover records fresh AX and actual-screen context; it never clicks, closes,
+reopens, unhighlights, or commands refresh. After actual child5/error acceptance,
+all existing owned refresh/42-clear/newcard-view/window/epoch oracles and40sec
+movie/85sec recorder budget remain unchanged.
+
+Offline hover controls cover recorded930→906, same-center/no extra post, move
+limit, wrong PID/root/layer/parent, closed/reopened root, Refresh, ambiguous More,
+changed identity, offscreen and nonfinite targets. Host GUI preflight and existing
+arrow/process/capture controls precede the sole UI attempt. Original screenshots
+and continuous media still require independent manual acceptance.

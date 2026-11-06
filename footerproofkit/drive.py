@@ -11,6 +11,7 @@ import subprocess
 import time
 from wait_process import observed_exit
 from capture_geometry import select_capture_rectangle
+from hover_guard import fresh_more, should_hover
 
 PIN = "e8a0cca51036fa8f30362a0710754d812ace34a3"
 CANDIDATE_PATCH_SHA = "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961"
@@ -145,6 +146,52 @@ def reveal_more():
     raise RuntimeError("More never became visible after12 native down-arrow dwells; no reopen")
 
 
+
+def open_fresh_more():
+    # The original20sec initial-child deadline includes every AX/screen/hover action.
+    deadline = time.monotonic() + 20
+    identity, previous, moves = None, None, 0
+    while time.monotonic() < deadline:
+        window = current_root()
+        value = receipt()
+        assert value["moreEnds"] == 0 and value["moreBegins"] <= 1, "More ended/reopened before initial acceptance"
+        rows = nodes()
+        target = fresh_more(rows, window, displays[0], process.pid, root_window["id"],
+                            (value["rootBegins"], value["rootEnds"]), identity)
+        identity = target["identity"]
+        if card_state(5, True):
+            header = next(row["frame"] for row in visible_rows() if "synthetic overflow meter" in text(row).casefold())
+            hx, hy = center(header)
+            child = next((w for w in menu_windows() if w["id"] != root_window["id"] and inside(hx, hy, w)
+                          and w["ownerPID"] == process.pid and w["layer"] == 101), None)
+            if child is not None:
+                assert time.monotonic() < deadline, "Initial child acceptance exceeded original20sec budget"
+                log("initial-child-accepted", hover_moves=moves, actualMore=target, root=window, child=child)
+                return child
+        if should_hover(target["point"], previous, moves):
+            screen = out / f"more-hover-{moves + 1}-screen.png"
+            subprocess.run(["screencapture", "-x", str(screen)], check=True, timeout=15)
+            info = json.loads(ui("image-info", screen))
+            assert info["width"] >= 640 and info["height"] >= 480 and info["contrast"] > 0.1
+            # Capture can take time: reacquire the actual scoped row AGAIN immediately before posting.
+            window = current_root()
+            value = receipt()
+            assert value["moreEnds"] == 0 and value["moreBegins"] <= 1, "More ended/reopened before hover"
+            latest = nodes()
+            target = fresh_more(latest, window, displays[0], process.pid, root_window["id"],
+                                (value["rootBegins"], value["rootEnds"]), identity)
+            (out / f"more-hover-{moves + 1}-ax.json").write_text(json.dumps(latest, indent=2) + "\n")
+            if should_hover(target["point"], previous, moves):
+                assert time.monotonic() < deadline, "Original20sec hover budget expired; no pointer post"
+                x, y = center(target["frame"])
+                ui("move", x, y)
+                moves += 1
+                previous = target["point"]
+                log("fresh-more-hover", move=moves, actualMore=target, root=window, screen=info)
+        time.sleep(0.2)
+    raise RuntimeError("Bounded wait failed: visible overflow5/error within original20sec and3hover moves; no click/reopen")
+
+
 def receipt():
     path = out / "runtime/runtime-receipt.json"
     if not path.exists():
@@ -240,13 +287,8 @@ try:
     time.sleep(1)
     ui("click", x, y)
     root_window = wait(lambda: max(menu_windows(), key=lambda w: w["h"], default=None), "actual root opened by pointer")
-    more = reveal_more()
-    x, y = center(more)
-    ui("move", x, y)
-    wait(lambda: card_state(5, True), "visible overflow 5% with error")
-    header = next(row["frame"] for row in visible_rows() if "synthetic overflow meter" in text(row).casefold())
-    hx, hy = center(header)
-    child_window = wait(lambda: next((w for w in menu_windows() if w["id"] != root_window["id"] and inside(hx, hy, w)), None), "actual More window")
+    reveal_more()
+    child_window = open_fresh_more()
     capture("1-before", 5, True)
     assert receipt()["rootBegins"] == 1
     trigger = out / "runtime/trigger-refresh.json"

@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   footer-app-proof:
-    runs-on: macos-26
+    runs-on: macos-26-intel
     timeout-minutes: 15
     env:
       PRODUCT_SHA: e8a0cca51036fa8f30362a0710754d812ace34a3
@@ -31,12 +31,17 @@ jobs:
           latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
           sudo xcode-select -s "$latest/Contents/Developer"
           echo "DEVELOPER_DIR=$latest/Contents/Developer" >> "$GITHUB_ENV"
+          export DEVELOPER_DIR="$latest/Contents/Developer"
+          SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
+          export SDKROOT
+          echo "SDKROOT=$SDKROOT" >> "$GITHUB_ENV"
           mkdir -p "$RUNNER_TEMP/footer-app-proof/preflight"
+          { xcrun --sdk macosx --find swiftc; echo "$SDKROOT"; xcrun --sdk macosx swiftc --version; } > "$RUNNER_TEMP/footer-app-proof/compiler-sdk.txt"
           echo "PROOF_OUT=$RUNNER_TEMP/footer-app-proof" >> "$GITHUB_ENV"
           { sw_vers; xcodebuild -version; swift --version; launchctl managername; } > "$RUNNER_TEMP/footer-app-proof/environment.txt"
           test "$(launchctl managername)" = Aqua
-          swiftc -parse-as-library kit/footerproofkit/ui.swift -o "$RUNNER_TEMP/footer-ui" > "$RUNNER_TEMP/footer-app-proof/helper-build.log" 2>&1
-          swiftc -parse-as-library kit/footerproofkit/menu_arrow.swift -o "$RUNNER_TEMP/footer-arrow" > "$RUNNER_TEMP/footer-app-proof/arrow-helper-build.log" 2>&1
+          xcrun --sdk macosx swiftc -sdk "$SDKROOT" -parse-as-library kit/footerproofkit/ui.swift -o "$RUNNER_TEMP/footer-ui" > "$RUNNER_TEMP/footer-app-proof/helper-build.log" 2>&1
+          xcrun --sdk macosx swiftc -sdk "$SDKROOT" -parse-as-library kit/footerproofkit/menu_arrow.swift -o "$RUNNER_TEMP/footer-arrow" > "$RUNNER_TEMP/footer-app-proof/arrow-helper-build.log" 2>&1
           python3 - <<'PY_PREFLIGHT'
           import json, os, pathlib, subprocess
           out=pathlib.Path(os.environ['RUNNER_TEMP'])/'footer-app-proof/preflight'
@@ -50,7 +55,7 @@ jobs:
           assert media['duration']>1.5 and media['width']>0
           (out/'media.json').write_text(json.dumps(media,indent=2)+'\n')
           PY_PREFLIGHT
-      - name: Reuse exact verified bundle from completed build42218270832
+      - name: Reuse exact verified bundle from completed build42242259960
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -58,17 +63,18 @@ jobs:
           set -euo pipefail
           defaults write NSGlobalDomain AppleLanguages -array en
           mkdir -p "$PROOF_OUT/original-build"
-          gh run download 42218270832 --repo Chipagosfinest/CodexBar --name packaged-footer-e8a0cca51036fa8f30362a0710754d812ace34a3-1 --dir "$PROOF_OUT/original-build"
+          gh run download 42242259960 --repo Chipagosfinest/CodexBar --name packaged-footer-oracle-e8a0cca51036fa8f30362a0710754d812ace34a3-1 --dir "$PROOF_OUT/original-build"
+          python3 kit/footerproofkit/hover_controls.py > "$PROOF_OUT/hover-controls.json"
           python3 kit/footerproofkit/reuse_package.py "$PROOF_OUT/original-build" "$PWD/product" "$PROOF_OUT"
           git -C kit rev-parse HEAD > "$PROOF_OUT/controller-sha.txt"
-          shasum -a 256 kit/footerproofkit/{PackagedFooterProof.swift,prepare_overlay.py,ui.swift,drive.py,verify_inputs.py,reuse_package.py,wait_process.py,driver_controls.py,menu_arrow.swift,arrow_controls.swift,check_arrow_controls.py,summarize.py,capture_geometry.py,capture_controls.py} > "$PROOF_OUT/controller-input-sha256.txt"
+          shasum -a 256 kit/footerproofkit/{PackagedFooterProof.swift,prepare_overlay.py,ui.swift,drive.py,verify_inputs.py,reuse_package.py,wait_process.py,driver_controls.py,menu_arrow.swift,arrow_controls.swift,check_arrow_controls.py,summarize.py,capture_geometry.py,capture_controls.py,hover_guard.py,hover_controls.py} > "$PROOF_OUT/controller-input-sha256.txt"
           printf '%s\n' '(version 1)(allow default)(deny network*)' > "$PROOF_OUT/runtime-network-deny.sb"
       - name: Drive actual root and More continuously through synthetic production refresh
         shell: bash
         run: |
           set -euo pipefail
           overlay_sha=$(shasum -a 256 "$PROOF_OUT/overlay.patch" | awk '{print $1}')
-          swiftc -parse-as-library kit/footerproofkit/arrow_controls.swift -o "$RUNNER_TEMP/footer-arrow-controls"
+          xcrun --sdk macosx swiftc -sdk "$SDKROOT" -parse-as-library kit/footerproofkit/arrow_controls.swift -o "$RUNNER_TEMP/footer-arrow-controls"
           "$RUNNER_TEMP/footer-arrow-controls" "$PROOF_OUT/arrow-controls"
           python3 kit/footerproofkit/check_arrow_controls.py "$RUNNER_TEMP/footer-arrow" "$PROOF_OUT/arrow-controls" > "$PROOF_OUT/arrow-controls.json"
           python3 kit/footerproofkit/driver_controls.py > "$PROOF_OUT/driver-controls.json"
