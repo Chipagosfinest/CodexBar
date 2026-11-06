@@ -1,0 +1,7 @@
+# Native-highlight GREEN-only follow-up
+
+The original Intel workflow 42237102523 failed overall. Its actual App/Core build completed; the original regression passed and the new native-highlight regression failed with exactly three expected assertions (nested callback, captured card, captured view). The original classifier additionally required a fresh-cache fingerprint failure, although cache warming does not establish replacement of the captured visible card. The original false verdict and raw logs remain unchanged.
+
+This separate workflow verifies original artifact13514105099 from controller2b593a0865d851605f98d93bd447df98c56cec65, its exact ZIP and raw log hashes, and writes a separate corrected classification. It then checks out fresh exactE8 and runs only GREEN with the identical six test files and frozen23-line production delta. No baseline test rerun, test changes, UI journey, or architecture-wide claim. Intel x86_64 only. Actual GREEN is pending; publication authorizes one GREEN-only run.
+
+Local preparation smoke verified the downloaded original archive, exact three-issue classification, all fresh baseline tracked inputs, source-only candidate delta, frozen candidate/source hashes, identical six selected test hashes, and no untracked inputs. It did not build or run the App/tests. Originals plus smoke are under scratch/codexbar-clean-20261105/footer-highlight-green-draft-smoke.
