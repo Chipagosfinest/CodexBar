@@ -1,6 +1,6 @@
 # Footer native-highlight regression — prepared, not published
 
-One standard macos-26 job will compile intact actual App/Core modules at immutable baseline `e8a0cca51036fa8f30362a0710754d812ace34a3`, run the same two frozen tests RED, then apply only the one-file production candidate and run GREEN incrementally in the same checkout/build tree. No local App/test process, push or dispatch has occurred during preparation.
+One standard macos-26-intel job will compile intact actual App/Core modules at immutable baseline `e8a0cca51036fa8f30362a0710754d812ace34a3`, run the same two frozen tests RED, then apply only the one-file production candidate and run GREEN incrementally in the same checkout/build tree. No local App/test process, push or dispatch has occurred during preparation.
 
 Frozen test SHA256: `65125fe154fe846983ae550a6beff83d58860d0c7e90558f00c6b79631243281`. Candidate production-only 23-line patch SHA256: `574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961`, including the enabled-plugin guard. Candidate source SHA256: `9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524`.
 
@@ -13,3 +13,10 @@ The strict classifier requires exactly two nonparameterized methods/one suite: o
 Local preparation checks: Python/YAML parse, nine synthetic classifier controls, source-only disposable-clone preparation/candidate-application smoke and an untracked-Swift injection rejection. See `local-smoke.json`. No runtime RED/GREEN is claimed yet.
 
 Publication is pending root review. The new workflow uses an exact-branch push trigger (not workflow_dispatch) matching only the two runner scripts, frozen patch, two test fixtures and workflow file. Reports, results, README and local-smoke changes do not match. Historical workflows and immutable reports are unchanged. No default/main update or old proof rerun is needed.
+
+
+## Finite Intel capacity fallback
+
+The original arm64 attempt [42234411509](https://github.com/Chipagosfinest/CodexBar/actions/runs/42234411509) failed after 15 minutes waiting for hosted capacity: runner ID 0, no assigned runner and zero executed steps. GitHub reported “The job was not acquired by Runner of type hosted even after multiple attempts” plus macOS arm64 capacity notices. It produced no behavioral RED or candidate GREEN. Original run/job/annotation bytes and their hashes remain preserved separately.
+
+One authorized replacement switches only the runner label to supported `macos-26-intel` and adds `uname -m` to the environment receipt. The production candidate, two test methods, classifier and input-integrity guards remain frozen. This run will establish the deterministic menu contract on **x64**, not arm64; no generic cross-architecture runtime claim is made. No other matrix, same-run blind retry, product change or additional job is authorized by this fallback. Documentation/result-only commits still cannot trigger the runner.
