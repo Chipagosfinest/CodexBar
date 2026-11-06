@@ -185,3 +185,25 @@ media duration; Escape/app cleanup comes afterward. Real exit0/exit3/live-timeou
 on host. Pixel controls accept down-chevrons and reject blank/up-chevrons at1x/2x. These are guard
 controls, not UI proof. Final acceptance still requires original continuous-media inspection.
 The prior cold-build workflow is manual-only, so one proof-branch push launches only the UI retry.
+
+## Evidence-specific native group capture correction
+
+Second run42224431572 scrolled/opened actual More correctly and visibly captured5%+error. It
+stopped before refreshing because native `screencapture -l rootID` returned the root+More union
+615x668 while the comparison expected root-only310x668. Original unchanged PNGs independently
+match the observed union with mean RGB error0.00002139; wrong root-only bounds give0.357645.
+This was a capture-controller geometry failure, not a product refresh verdict.
+
+The followup selects capture geometry only by exact PNG dimensions and freshly observed owned,
+visible menu IDs: individual target menu or the root+More union. It validates actual CG ownerPID,
+menu layer101 and display bounds. It never searches geometry by similarity score. The same936
+samples and0.13tolerance then compare original native pixels with the actual full-screen capture.
+Pointer targets continue to use individual menu/display bounds, never empty union space.
+
+`capture-controls/` contains unchanged original synthetic hosted PNGs and source SHA/provenance:
+chart42222113762 supplies a real root-only capture; footer42224431572 supplies the real group.
+Offline controls exercise the exact same pixel comparison using recorded display geometry,
+accept both positive cases and reject wrong dimensions, unowned menu geometry and wrong pixel
+rectangles. The live driver always uses actual current CG display bounds. Two failed runs and
+all raw original artifacts remain separate. No app, source adapter, navigation, recording budget
+or refresh oracle changed for this evidence-specific correction.

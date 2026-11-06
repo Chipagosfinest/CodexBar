@@ -63,7 +63,7 @@ jobs:
           gh run download 42218270832 --repo Chipagosfinest/CodexBar --name packaged-footer-e8a0cca51036fa8f30362a0710754d812ace34a3-1 --dir "$PROOF_OUT/original-build"
           python3 kit/footerproofkit/reuse_package.py "$PROOF_OUT/original-build" "$PWD/product" "$PROOF_OUT"
           git -C kit rev-parse HEAD > "$PROOF_OUT/controller-sha.txt"
-          shasum -a 256 kit/footerproofkit/{PackagedFooterProof.swift,prepare_overlay.py,ui.swift,drive.py,verify_inputs.py,reuse_package.py,wait_process.py,driver_controls.py,menu_arrow.swift,arrow_controls.swift,check_arrow_controls.py,summarize.py} > "$PROOF_OUT/controller-input-sha256.txt"
+          shasum -a 256 kit/footerproofkit/{PackagedFooterProof.swift,prepare_overlay.py,ui.swift,drive.py,verify_inputs.py,reuse_package.py,wait_process.py,driver_controls.py,menu_arrow.swift,arrow_controls.swift,check_arrow_controls.py,summarize.py,capture_geometry.py,capture_controls.py} > "$PROOF_OUT/controller-input-sha256.txt"
           printf '%s\n' '(version 1)(allow default)(deny network*)' > "$PROOF_OUT/runtime-network-deny.sb"
       - name: Drive actual root and More continuously through synthetic production refresh
         shell: bash
@@ -74,6 +74,8 @@ jobs:
           "$RUNNER_TEMP/footer-arrow-controls" "$PROOF_OUT/arrow-controls"
           python3 kit/footerproofkit/check_arrow_controls.py "$RUNNER_TEMP/footer-arrow" "$PROOF_OUT/arrow-controls" > "$PROOF_OUT/arrow-controls.json"
           python3 kit/footerproofkit/driver_controls.py > "$PROOF_OUT/driver-controls.json"
+          python3 kit/footerproofkit/capture_controls.py "$RUNNER_TEMP/footer-ui" kit/footerproofkit/capture-controls > "$PROOF_OUT/capture-controls.json"
+          cp kit/footerproofkit/capture-controls/provenance.json "$PROOF_OUT/capture-control-provenance.json"
           python3 kit/footerproofkit/drive.py --app "$PWD/product/CodexBar.app" --helper "$RUNNER_TEMP/footer-ui" --arrow-helper "$RUNNER_TEMP/footer-arrow" --output "$PROOF_OUT" --runtime-root "$RUNNER_TEMP/footer-runtime" --overlay-sha "$overlay_sha" > "$PROOF_OUT/driver.log" 2>&1 || { tail -100 "$PROOF_OUT/driver.log"; exit 1; }
           python3 kit/footerproofkit/verify_inputs.py product "$PROOF_OUT"
           cat "$PROOF_OUT/ui-verdict.json"

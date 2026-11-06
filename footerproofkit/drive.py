@@ -10,6 +10,7 @@ import re
 import subprocess
 import time
 from wait_process import observed_exit
+from capture_geometry import select_capture_rectangle
 
 PIN = "e8a0cca51036fa8f30362a0710754d812ace34a3"
 SANDBOX = "(version 1)(allow default)(deny network*)"
@@ -183,9 +184,14 @@ def capture(label, percent, error_present):
     for kind, window in [("root", root_window), ("more", child_window)]:
         png = out / (label + "-" + kind + ".png")
         subprocess.run(["screencapture", "-x", "-o", "-l" + str(window["id"]), str(png)], check=True, timeout=15)
-        similarity = json.loads(ui("screen-similarity", screen, png, window["x"], window["y"], window["w"], window["h"]))
-        assert similarity["meanRGBError"] < 0.13, "Actual display does not match native menu window"
-        log("window-capture", label=label, kind=kind, window=window, similarity=similarity)
+        observed = menu_windows()
+        extent = select_capture_rectangle(json.loads(ui("image-info", png)), info, displays[0], observed,
+                                          window["id"], [root_window["id"], child_window["id"]], process.pid)
+        rect = extent["rectangle"]
+        similarity = json.loads(ui("screen-similarity", screen, png, rect["x"], rect["y"], rect["w"], rect["h"]))
+        log("window-capture", label=label, kind=kind, window=window, actualExtent=extent, similarity=similarity)
+        assert similarity["samples"] == 936 and similarity["meanRGBError"] < 0.13, "Actual display does not match native menu/group capture"
+        stable_open_windows()
     log("capture", label=label, percent=percent, error_present=error_present, actual_screen=info)
 
 

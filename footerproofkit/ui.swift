@@ -48,6 +48,7 @@ func windows(_ pid: pid_t) -> [[String: Any]] {
         guard (window[kCGWindowOwnerPID as String] as? Int) == Int(pid) else { return nil }
         let bounds = window[kCGWindowBounds as String] as? [String: Double] ?? [:]
         return ["id": window[kCGWindowNumber as String] as? Int ?? 0,
+                "ownerPID": window[kCGWindowOwnerPID as String] as? Int ?? 0,
                 "layer": window[kCGWindowLayer as String] as? Int ?? 0,
                 "x": bounds["X"] ?? 0, "y": bounds["Y"] ?? 0,
                 "w": bounds["Width"] ?? 0, "h": bounds["Height"] ?? 0]
@@ -106,10 +107,12 @@ func imageInfo(_ path: String) throws -> [String: Any] {
     return ["width": image.pixelsWide, "height": image.pixelsHigh, "contrast": maximum - minimum]
 }
 
-func screenSimilarity(_ screenPath: String, _ menuPath: String, _ rectangle: CGRect) throws -> [String: Any] {
+func screenSimilarity(_ screenPath: String, _ menuPath: String, _ rectangle: CGRect,
+                      recordedDisplay: CGRect? = nil) throws -> [String: Any] {
+    let availableDisplays = recordedDisplay.map { [$0] } ?? displayBounds()
     guard let screen = NSBitmapImageRep(data: try Data(contentsOf: URL(fileURLWithPath: screenPath))),
           let menu = NSBitmapImageRep(data: try Data(contentsOf: URL(fileURLWithPath: menuPath))),
-          let display = displayBounds().first, displayBounds().count == 1, display.contains(rectangle)
+          let display = availableDisplays.first, availableDisplays.count == 1, display.contains(rectangle)
     else { throw CocoaError(.fileReadCorruptFile) }
     let scale = CGFloat(screen.pixelsWide) / display.width
     guard abs(CGFloat(screen.pixelsHigh) - display.height * scale) < 2 else { throw CocoaError(.featureUnsupported) }
@@ -255,6 +258,12 @@ struct ChartNativeUI {
         case "screen-similarity":
             try writeJSON(screenSimilarity(args[2], args[3], CGRect(x: Double(args[4])!, y: Double(args[5])!,
                                                                   width: Double(args[6])!, height: Double(args[7])!)))
+        case "screen-similarity-recorded":
+            // Offline controls only. The live driver always uses screen-similarity with actual CG displays.
+            try writeJSON(screenSimilarity(args[2], args[3], CGRect(x: Double(args[4])!, y: Double(args[5])!,
+                                                                  width: Double(args[6])!, height: Double(args[7])!),
+                                           recordedDisplay: CGRect(x: Double(args[8])!, y: Double(args[9])!,
+                                                                   width: Double(args[10])!, height: Double(args[11])!)))
         case "application":
             guard let application = NSRunningApplication(processIdentifier: pid_t(args[2])!) else { throw CocoaError(.fileNoSuchFile) }
             try writeJSON(["pid": application.processIdentifier, "executable": application.executableURL?.path ?? "",
