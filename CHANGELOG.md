@@ -15,13 +15,23 @@
 - Kiro: preserve the `+` in CLI-reported plan names so Pro+ subscriptions are shown as Kiro Pro+. (#4928) Thanks @jeanroloff!
 ### Changed
 
-- Dropdown: Overview's compact layout is now the default: one line per provider (logo, tightest limit, bar, percent, reset), most urgent first, and a click opens its tab. Row height no longer depends on quota windows or errors, a signed-out provider gets one red row instead of disappearing, and up to 12 providers appear. Detailed stays in Settings.
+- Antigravity: reuse HTTP connections for account verification while preserving shorter refresh deadlines.
+
+- Replicate: reuse HTTP connections for billing refreshes without retaining cookies, credentials, or cached responses in the connection pool.
+
+- Alibaba Token Plan: reuse HTTP connections between refreshes while preserving separate dashboard and quota cookie routing.
+
+- Antigravity: reuse the known `agy` version across refreshes while its executable is unchanged, avoiding repeated version subprocesses.
+
+- Plugins: reduce API refresh CPU work by reusing initialized script runtimes while preserving concurrent account fetches.
 - Menu: dim retained quota and Code Review bars after their own refresh failures, while keeping successful fallback readings and separate credit/cost sections in their normal colors (#4883). Thanks @Chipagosfinest!
 - Menu: use tabular digits for usage and cost values to reduce movement when equal-length numbers change (#4884). Thanks @Chipagosfinest!
+- Dropdown: Overview's compact layout is now the default: one line per provider (logo, tightest limit, bar, percent, reset), most urgent first, and a click opens its tab. Row height no longer depends on quota windows or errors, a signed-out provider gets one red row instead of disappearing, and up to 12 providers appear. Detailed stays in Settings.
 
 - Settings: use native popup selectors while keeping imported custom choices visible (#4895). Thanks @elijahfriedman!
 ### Added
 
+- CLI: validate and save Claude Platform sessions from private stdin input with `config login --provider claudeplatform --stdin`, without browser or Keychain access (#4845).
 - Settings: find panes by title alongside provider names in sidebar search, with an empty state covering both (#4875). Thanks @elijahfriedman!
 
 - Codex: reclaim accumulated WebKit network caches while preserving sign-ins, retain same-day asset reuse, and retire the matching unused dashboard store when a managed account is removed (#4942).
