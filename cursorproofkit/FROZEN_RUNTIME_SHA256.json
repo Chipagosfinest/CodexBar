@@ -1,0 +1,22 @@
+{
+  "dispatched": false,
+  "draftOnly": true,
+  "hostedAppBuildExecuted": false,
+  "localAppExecuted": false,
+  "localInputGuardSmokeSHA256": "05546eb37f373ea1b1d997577936d29007d372248f114d235eae4e732db0b225",
+  "localOverlayManifestSHA256": "518dca7c70543e731e6a4cd8ae78fe2c41ac807960237fc83b290a2762ea63a4",
+  "productSHA": "fba37ba92f696416b36f49d4de89affcda3888ee",
+  "pureControlsVerdictSHA256": "6fdbab74527e55fc48d1cf457318de0546a5d9fc747d28597edf4a255706f0dd",
+  "runtimeSHA256": {
+    ".github/workflows/cursor-app-proof.yml": "65a18b496b31e5ae7fc7bf31332b1d6fc50aad8cab7bc87b4b5faaf743bfe908",
+    "cursorproofkit/FixtureControls.swift": "64201dbc2c929b8cb1754b64ecb4b548c753af81a2aadd1c8f7fd991164a049f",
+    "cursorproofkit/FixtureSupport.swift": "d260e0dc0fefde255c1e3cc6af60d16600246886f0384bd5937fc5e62db1ddbd",
+    "cursorproofkit/PackagedCursorProof.swift": "af48ea232871632a063f5a04dbbdd5a4a4e67b94ac01de9ae9c8f12574f7197b",
+    "cursorproofkit/controls.py": "5bf807d8fd38848483b0286d9d8e76b00ec7ac6e36bf613ca003a07a4da3e911",
+    "cursorproofkit/drive.py": "7a19c002076fd6639f98955e03534421d5a985bf6b55f0c151b5003b5777fba4",
+    "cursorproofkit/guards.py": "3734bfc41f2694fe6019b2c2c75c722298c38e50416bcfb44ecd7cd6b4a1994d",
+    "cursorproofkit/prepare_overlay.py": "027331ad7cc932f84e689148de1f590d4b4dbb5ce5c490d2ad7e84f3af9c28d6",
+    "cursorproofkit/ui.swift": "8bb886dfd496a05b3634c318bf468540884f395163a0569c0edf20e9c8171f90",
+    "cursorproofkit/verify_inputs.py": "7c5f52d5db7c88668adbbbeabee081e3f5ade46055bd31a34eabeed502fbb048"
+  }
+}
