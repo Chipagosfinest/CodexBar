@@ -9,3 +9,5 @@ The production CLI renderer fixture writes and reloads the private disk cache, t
 Independent review found no blocking issue: only Cursor cache entries retain the explicit pool classification, after the existing pool-shape validator accepts it; private cache identity stays stripped. The descriptor permits missing identity for that explicit non-identifying evidence while rejecting an explicitly conflicting provider. Legacy weekly shapes and non-Cursor cache entries do not gain classification. Generic scoping and authentication/cookie-source behavior are unchanged.
 
 The existing scrubber, keychain denial and native process containment remain active. This is a synthetic disk-cache-to-production-renderer proof, not an installed CLI process using a real locked keychain or live provider. Prior auth, cooldown and dropdown proof runs are preserved.
+
+RED must retain baseline production source bytes; GREEN must retain candidate production bytes. The artifact records both baseline and expected maps so reviewers can independently distinguish those inputs.
