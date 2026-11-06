@@ -36,6 +36,7 @@ enum PackagedMenuProof {
         return true
     }
 
+    @MainActor
     private final class Delegate: NSObject, NSApplicationDelegate {
         let output: URL
         let root: URL
@@ -167,6 +168,7 @@ enum PackagedMenuProof {
                         windowMinutes: 300,
                         resetsAt: now.addingTimeInterval(3600),
                         resetDescription: nil),
+                    secondary: nil,
                     updatedAt: now), provider: provider)
                 store.publishTokenSnapshot(CostUsageTokenSnapshot(
                     sessionTokens: nil,
