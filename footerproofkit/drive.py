@@ -13,6 +13,8 @@ from wait_process import observed_exit
 from capture_geometry import select_capture_rectangle
 
 PIN = "e8a0cca51036fa8f30362a0710754d812ace34a3"
+CANDIDATE_PATCH_SHA = "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961"
+CANDIDATE_SOURCE_SHA = "9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524"
 SANDBOX = "(version 1)(allow default)(deny network*)"
 RECORDING_SECONDS = 40
 # Prior hosted chart42222113762 observed49.503s launch-to-exit for a valid25s clip.
@@ -150,6 +152,8 @@ def receipt():
         return None
     value = json.loads(path.read_text())
     assert value["productSHA"] == PIN and value["nonce"] == nonce and value["synthetic"]
+    assert value["productionCandidatePatchSHA256"] == CANDIDATE_PATCH_SHA
+    assert value["productionCandidateSourceSHA256"] == CANDIDATE_SOURCE_SHA
     assert value["forbiddenFirstPartyRefreshes"] == value["pluginTransportRequests"] == value["blockedHTTPRequests"] == 0
     assert value["ordinaryAppStartup"] is False and value["proofOnlyEarlyStartup"]
     assert not value["phase"].startswith("failed:"), "Proof oracle failed without abort: " + value["phase"]
@@ -204,14 +208,16 @@ minimal = {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "HOME": str(root), "CFFIXED_
            "CODEX_HOME": str(root / "codex"), "TMPDIR": str(root / "tmp") + "/", "LANG": "en_US.UTF-8",
            "SWIFT_TESTING": "1", "CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS": "1", "CODEXBAR_DISABLE_KEYCHAIN_ACCESS": "1",
            "CODEXBAR_TEST_CODEX_FILE_ISOLATION": "1", "CODEXBAR_TEST_SESSION_FILE_ISOLATION": "1",
-           "PACKAGED_FOOTER_PROOF_PRODUCT_SHA": PIN, "PACKAGED_FOOTER_PROOF_ROOT": str(root),
+           "PACKAGED_FOOTER_PROOF_PRODUCT_SHA": PIN,
+           "PACKAGED_FOOTER_PROOF_CANDIDATE_PATCH_SHA": CANDIDATE_PATCH_SHA,
+           "PACKAGED_FOOTER_PROOF_ROOT": str(root),
            "PACKAGED_FOOTER_PROOF_OUTPUT": str(out / "runtime"), "PACKAGED_FOOTER_PROOF_NONCE": nonce}
 original_dark = subprocess.check_output(["osascript", "-e", 'tell application "System Events" to tell appearance preferences to get dark mode'], text=True, timeout=15).strip() == "true"
 try:
     subprocess.run(["osascript", "-e", 'tell application "System Events" to tell appearance preferences to set dark mode to false'], check=True, timeout=15)
     for name in ["app.log", "banner.log", "video.log"]:
         handles.append((out / name).open("w"))
-    banner = subprocess.Popen(["sandbox-exec", "-p", SANDBOX, helper, "banner", str(out), PIN, args.overlay_sha],
+    banner = subprocess.Popen(["sandbox-exec", "-p", SANDBOX, helper, "banner", str(out), PIN + " + candidate " + CANDIDATE_PATCH_SHA[:16], args.overlay_sha],
                               env=minimal, stdout=handles[1], stderr=subprocess.STDOUT)
     process = subprocess.Popen(["sandbox-exec", "-p", SANDBOX, str(binary), "--packaged-footer-proof"],
                                env=minimal, stdout=handles[0], stderr=subprocess.STDOUT)
@@ -325,7 +331,9 @@ finally:
     for handle in handles:
         handle.close()
     verdict = {"automated_ui_state_checks_passed": passed, "manual_original_media_inspection_required": True,
-               "productSHA": PIN, "overlaySHA256": args.overlay_sha, "failure": failure,
+               "productSHA": PIN, "productionCandidatePatchSHA256": CANDIDATE_PATCH_SHA,
+               "productionCandidateSourceSHA256": CANDIDATE_SOURCE_SHA,
+               "overlaySHA256": args.overlay_sha, "failure": failure,
                "boundary": "Instrumented packaged DEBUG app; synthetic test-safety startup, no ordinary startup/auth claim",
                "rootWindow": root_window, "moreWindow": child_window, "eventCount": len(events)}
     (out / "ui-verdict.json").write_text(json.dumps(verdict, indent=2) + "\n")

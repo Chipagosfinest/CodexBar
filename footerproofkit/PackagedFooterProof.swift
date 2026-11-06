@@ -49,6 +49,7 @@ func footerOracleDecision(_ state: FooterOracleObservation) -> FooterOracleDecis
 /// Proof-only early app startup. Never included in the product branch.
 @MainActor
 enum PackagedFooterProof {
+    private static let productionPatchSHA = "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961"
     static func runIfRequested() -> Bool {
         guard CommandLine.arguments.contains("--packaged-footer-proof") else { return false }
         let env = ProcessInfo.processInfo.environment
@@ -62,7 +63,8 @@ enum PackagedFooterProof {
         guard let rootPath = env["PACKAGED_FOOTER_PROOF_ROOT"], rootPath.hasPrefix("/"),
               let outputPath = env["PACKAGED_FOOTER_PROOF_OUTPUT"], outputPath.hasPrefix("/"),
               let nonceText = env["PACKAGED_FOOTER_PROOF_NONCE"], let nonce = UUID(uuidString: nonceText),
-              env["PACKAGED_FOOTER_PROOF_PRODUCT_SHA"] == "e8a0cca51036fa8f30362a0710754d812ace34a3"
+              env["PACKAGED_FOOTER_PROOF_PRODUCT_SHA"] == "e8a0cca51036fa8f30362a0710754d812ace34a3",
+              env["PACKAGED_FOOTER_PROOF_CANDIDATE_PATCH_SHA"] == Self.productionPatchSHA
         else { preconditionFailure("Require disposable paths, UUID and exact product SHA") }
         KeychainAccessGate.isDisabled = true
         configureUsageFormatterLocalizationProvider()
@@ -101,6 +103,7 @@ enum PackagedFooterProof {
         var moreEndsAtTrigger = 0
         var ownedCompletionFinished = false
         var postCompletionRebuilds = 0
+        var observedRebuildScopes: [String] = []
         var lastOracleReason = "not-started"
         var baselineReceipt: [String: Any] = [:]
         var lastOracleObservation: [String: Bool] = [:]
@@ -419,9 +422,20 @@ enum PackagedFooterProof {
             self.phaseStarted = Date()
             // Same real guarded rebuild observer seam and completion ordering used by the production regression.
             controller._test_openMenuRebuildObserver = { [weak self, weak menu] rebuilt in
-                guard let self, let menu, rebuilt === menu else { return }
-                if self.ownedCompletionFinished { self.postCompletionRebuilds += 1 }
-                self.record("production-root-rebuild-observed")
+                guard let self, let menu else { return }
+                let scope: String
+                if rebuilt === menu {
+                    scope = "root"
+                } else if rebuilt === self.baselineMore, rebuilt.supermenu === menu {
+                    scope = "baseline-more"
+                } else {
+                    return
+                }
+                if self.ownedCompletionFinished {
+                    self.postCompletionRebuilds += 1
+                    self.observedRebuildScopes.append(scope)
+                }
+                self.record("production-" + scope + "-rebuild-observed")
             }
             self.record("baseline-bound-in-actually-open-menus")
             self.record("explicit-plugin-refresh-started")
@@ -523,7 +537,10 @@ enum PackagedFooterProof {
         private func writeReceipt() throws {
             let receipt: [String: Any] = [
                 "synthetic": true, "proofOnlyEarlyStartup": true, "ordinaryAppStartup": false,
-                "productSHA": "e8a0cca51036fa8f30362a0710754d812ace34a3", "nonce": self.nonce.uuidString,
+                "productSHA": "e8a0cca51036fa8f30362a0710754d812ace34a3",
+                "productionCandidatePatchSHA256": "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961",
+                "productionCandidateSourceSHA256": "9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524",
+                "nonce": self.nonce.uuidString,
                 "phase": self.phase, "events": self.events, "rootBegins": self.rootBegins, "rootEnds": self.rootEnds,
                 "moreBegins": self.moreBegins, "moreEnds": self.moreEnds,
                 "initialUsedPercent": 5, "successfulUsedPercent": 42,
@@ -537,6 +554,7 @@ enum PackagedFooterProof {
                 "freshFingerprint": self.freshFingerprint ?? "not-yet-completed",
                 "ownedCompletionFinished": self.ownedCompletionFinished,
                 "postCompletionRebuilds": self.postCompletionRebuilds,
+                "observedRebuildScopes": self.observedRebuildScopes,
                 "lastOracleReason": self.lastOracleReason,
                 "lastOracleObservation": self.lastOracleObservation,
             ]

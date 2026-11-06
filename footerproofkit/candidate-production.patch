@@ -1,0 +1,40 @@
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift b/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
+index 1fbc6030b..caa595bc7 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
+@@ -148,12 +148,35 @@ extension StatusItemController {
+         }
+         for menu in self.openMenus.values {
+             (menu.items.first?.view as? ProviderSwitcherView)?.updateQuotaIndicators()
++            self.refreshOverviewOverflowPluginCard(in: menu, instanceID: instanceID)
+             if containsPluginCard(menu) {
+                 self.scheduleOpenMenuRebuildIfStillVisible(menu, provider: self.menuProvider(for: menu))
+             }
+         }
+     }
+ 
++    private func refreshOverviewOverflowPluginCard(in menu: NSMenu, instanceID: ProviderInstanceID) {
++        guard self.settings.isPluginEnabled(instanceID),
++              let overflow = menu.items.first(where: {
++                  ($0.representedObject as? String) == "overviewOverflow"
++              })?.submenu,
++              let index = overflow.items.firstIndex(where: {
++                  ($0.representedObject as? String) == "pluginCard:\(instanceID.rawValue)"
++              }),
++              let plugin = UserProviderPluginRegistry.plugin(for: instanceID)
++        else { return }
++        // More is a native highlighted parent: rebuilding the root must remain deferred.
++        // Replace only its captured plugin leaf, retaining the parent and submenu navigation.
++        let oldCard = overflow.items[index]
++        let freshCard = self.makeUserPluginMenuCardItem(plugin, width: self.renderedMenuWidth(for: menu))
++        overflow.insertItem(freshCard, at: index)
++        overflow.removeItem(oldCard)
++        self.flushHostedMenuRowRendering(in: overflow)
++        #if DEBUG
++        self._test_openMenuRebuildObserver?(overflow)
++        #endif
++    }
++
+     static func userPluginsForMenu(
+         _ plugins: [UserProviderPlugin],
+         isEnabled: (ProviderInstanceID) -> Bool,

@@ -10,6 +10,9 @@ import subprocess
 PIN = "e8a0cca51036fa8f30362a0710754d812ace34a3"
 ENTRY = "Sources/CodexBar/CodexbarApp.swift"
 ADAPTER = "Sources/CodexBar/PackagedFooterProof.swift"
+CANDIDATE_SOURCE = "Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift"
+CANDIDATE_PATCH_SHA = "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961"
+CANDIDATE_SOURCE_SHA = "9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524"
 
 
 def digest(path):
@@ -41,6 +44,14 @@ def main():
         raise SystemExit("Refusing a dirty checkout, including manifests, build scripts, and untracked files")
     tracked_before = tracked_hashes(root)
     before = source_hashes(root)
+    candidate = Path(__file__).with_name("candidate-production.patch").resolve()
+    assert digest(candidate) == CANDIDATE_PATCH_SHA, "Frozen production patch drifted"
+    subprocess.run(["git", "-C", str(root), "apply", "--check", str(candidate)], check=True)
+    subprocess.run(["git", "-C", str(root), "apply", str(candidate)], check=True)
+    candidate_inputs = tracked_hashes(root)
+    assert candidate_inputs.keys() == tracked_before.keys()
+    assert {name for name in tracked_before if tracked_before[name] != candidate_inputs[name]} == {CANDIDATE_SOURCE}
+    assert digest(root / CANDIDATE_SOURCE) == CANDIDATE_SOURCE_SHA
     entry = root / ENTRY
     original = entry.read_text()
     marker = "        #if DEBUG\n        if MenuBarLayoutNativeProof.runIfRequested() {"
@@ -53,12 +64,17 @@ def main():
         raise SystemExit("Proof adapter path already exists")
     entry.write_text(original.replace(marker, replacement, 1))
     shutil.copyfile(Path(__file__).with_name("PackagedFooterProof.swift"), root / ADAPTER)
+    subprocess.run(["git", "-C", str(root), "add", "--intent-to-add", "--", ADAPTER], check=True)
     after = source_hashes(root)
     changed = [p for p in before if before[p] != after.get(p)]
     added = [p for p in after if p not in before]
-    assert changed == [ENTRY], changed
+    assert changed == sorted([ENTRY, CANDIDATE_SOURCE]), changed
     assert added == [ADAPTER], added
     manifest = {"productSHA": PIN, "proofOnly": True,
+                "productionCandidate": {"baseProductSHA": PIN, "patchSHA256": CANDIDATE_PATCH_SHA,
+                                        "sourceFile": CANDIDATE_SOURCE, "sourceSHA256": CANDIDATE_SOURCE_SHA},
+                "declaredProductionChangedSourceFiles": [CANDIDATE_SOURCE],
+                "declaredProofChangedSourceFiles": [ENTRY],
                 "ordinaryShippingStartup": False,
                 "declaredChangedSourceFiles": changed, "declaredAddedSourceFiles": added,
                 "beforeSourceSHA256": before, "afterSourceSHA256": after,

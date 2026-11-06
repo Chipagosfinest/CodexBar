@@ -1,0 +1,21 @@
+{
+  "status": "prepared; not run; requires actual candidate regression GREEN before one hosted push",
+  "baseProductSHA": "e8a0cca51036fa8f30362a0710754d812ace34a3",
+  "productionSourceSHA256": "9792aa446f3edd603aa0445ee1c5085b765707a6c62281d5e224086073759524",
+  "productionPatchSHA256": "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961",
+  "controllerInputSHA256": {
+    "PackagedFooterProof.swift": "b28f1d2f9ec8c8f4309b23a25b5e2f83e503ada0b6d3d6da1449a4da9fec0eac",
+    "drive.py": "22aa80ea9ecf1a88b463bc1982a04acb7c366c0c9dce55e8bfeb21808f3ea176",
+    "prepare_overlay.py": "ea1109a3a22c57ae0fe73347ce521520597e815e39c4d6193cff956aa409eca0",
+    "verify_inputs.py": "123b2c6f72e4427b2ca2ec1e3bf94d8622a7eed52550bb18543f5913732485b1",
+    "candidate-production.patch": "574c1c7468735d813b979c1ff2c83963807df36ebee2a5caa229adf28ab3f961"
+  },
+  "sourceOnlySmokePassed": true,
+  "untrackedSwiftRejected": true,
+  "unexpectedIntentTrackedFileRejected": true,
+  "pureOracleControlsPassed": 13,
+  "strictSwiftLintPassed": true,
+  "workflowYAMLValidated": true,
+  "independentReviewMustFix": 0,
+  "ordinaryAppStartupOrLiveAuth": false
+}

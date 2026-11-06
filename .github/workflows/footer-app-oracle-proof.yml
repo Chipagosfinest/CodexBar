@@ -3,14 +3,19 @@ name: Packaged synthetic Overview footer - open-card oracle build and native ref
 on:
   push:
     branches: [proof/footer-runtime-20261106]
-    paths: [footerproofkit/**, .github/workflows/footer-app-oracle-proof.yml]
+    paths:
+      - footerproofkit/*.py
+      - footerproofkit/*.swift
+      - footerproofkit/candidate-production.patch
+      - footerproofkit/capture-controls/**
+      - .github/workflows/footer-app-oracle-proof.yml
 
 permissions:
   contents: read
 
 jobs:
   footer-app-proof:
-    runs-on: macos-26
+    runs-on: macos-26-intel
     timeout-minutes: 50
     env:
       PRODUCT_SHA: e8a0cca51036fa8f30362a0710754d812ace34a3
@@ -68,6 +73,8 @@ jobs:
           set -euo pipefail
           defaults write NSGlobalDomain AppleLanguages -array en
           python3 kit/footerproofkit/prepare_overlay.py --apply-to-disposable-copy "$PWD/product" --manifest-output "$PROOF_OUT/overlay-manifest.json"
+          python3 kit/footerproofkit/verify_inputs.py product "$PROOF_OUT" --inputs-only
+          cp kit/footerproofkit/candidate-production.patch "$PROOF_OUT/candidate-production.patch"
           git -C product add --intent-to-add Sources/CodexBar/PackagedFooterProof.swift
           git -C product diff --binary HEAD > "$PROOF_OUT/overlay.patch"
           git -C kit rev-parse HEAD > "$PROOF_OUT/controller-sha.txt"
