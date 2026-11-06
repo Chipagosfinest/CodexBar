@@ -1,0 +1,52 @@
+[
+  {
+    "candidateDeltaSHA" : "71c861b63cafb247c5f8f489cec50cc6d4b38a1c2a0a9cceff9e7bf0ab6d43d3",
+    "caption" : "stale data",
+    "productSHA" : "b3e44381197a743c88a5f82d9008848e8a578b44",
+    "remainingPercent" : 5,
+    "scenario" : "Fresh quota; retained Code Review",
+    "status" : "stale",
+    "synthetic" : true,
+    "width" : 310
+  },
+  {
+    "candidateDeltaSHA" : "71c861b63cafb247c5f8f489cec50cc6d4b38a1c2a0a9cceff9e7bf0ab6d43d3",
+    "caption" : "Code review",
+    "productSHA" : "b3e44381197a743c88a5f82d9008848e8a578b44",
+    "remainingPercent" : 5,
+    "scenario" : "Retained quota; fresh Code Review",
+    "status" : "critical",
+    "synthetic" : true,
+    "width" : 310
+  },
+  {
+    "candidateDeltaSHA" : "71c861b63cafb247c5f8f489cec50cc6d4b38a1c2a0a9cceff9e7bf0ab6d43d3",
+    "caption" : "Session",
+    "productSHA" : "b3e44381197a743c88a5f82d9008848e8a578b44",
+    "remainingPercent" : 5,
+    "scenario" : "Fresh quota; fallback diagnostic",
+    "status" : "critical",
+    "synthetic" : true,
+    "width" : 310
+  },
+  {
+    "candidateDeltaSHA" : "71c861b63cafb247c5f8f489cec50cc6d4b38a1c2a0a9cceff9e7bf0ab6d43d3",
+    "caption" : "stale data",
+    "productSHA" : "b3e44381197a743c88a5f82d9008848e8a578b44",
+    "remainingPercent" : 5,
+    "scenario" : "Retained quota; account subtitle",
+    "status" : "stale",
+    "synthetic" : true,
+    "width" : 310
+  },
+  {
+    "candidateDeltaSHA" : "71c861b63cafb247c5f8f489cec50cc6d4b38a1c2a0a9cceff9e7bf0ab6d43d3",
+    "caption" : "Monthly credit limit",
+    "productSHA" : "b3e44381197a743c88a5f82d9008848e8a578b44",
+    "remainingPercent" : 5,
+    "scenario" : "Fresh synthetic credits; quota failed",
+    "status" : "critical",
+    "synthetic" : true,
+    "width" : 310
+  }
+]

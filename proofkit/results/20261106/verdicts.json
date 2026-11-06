@@ -1,0 +1,298 @@
+{
+  "core-red": {
+    "verdict": {
+      "case": "core",
+      "product_sha": "b3e44381197a743c88a5f82d9008848e8a578b44",
+      "exit_code": 1,
+      "expected_test_started": true,
+      "expected_assertions": [
+        "Expectation failed: (line.status",
+        "Expectation failed: (line.caption",
+        "Expectation failed: (line.status",
+        "Expectation failed: (line.caption",
+        "Expectation failed: (line.status",
+        "Expectation failed: (line.caption",
+        "Expectation failed: (line.status",
+        "Expectation failed: (line.caption",
+        "Expectation failed: (line.status",
+        "Expectation failed: (line.caption",
+        "Expectation failed: (line.status",
+        "Expectation failed: (line.caption",
+        "Expectation failed: (line.status",
+        "Expectation failed: (line.caption"
+      ],
+      "baseline_metric_controls_passed": true,
+      "has_test_summary": true,
+      "production_source_unchanged": true,
+      "infrastructure_error": false,
+      "behavioral_red": true
+    },
+    "provenance": {
+      "case": "core",
+      "product_sha": "b3e44381197a743c88a5f82d9008848e8a578b44",
+      "controller_sha": "2e33cc55035de29098c65513c40e0fbcffc96410",
+      "filter": "OverviewProviderLineFreshnessTests|MenuCardStaleTintTests",
+      "expected_test": "retained code review stays stale when the quota refresh succeeded",
+      "selected_sources": [
+        "Tests/CodexBarTests/OverviewProviderLineFreshnessTests.swift",
+        "Tests/CodexBarTests/MenuCardStaleTintTests.swift"
+      ],
+      "selected_source_sha256": {
+        "Tests/CodexBarTests/OverviewProviderLineFreshnessTests.swift": "96c58787f5aad752cb21f3aa59fb72b742bf95442f91f71b8d665bfda1ea8737",
+        "Tests/CodexBarTests/MenuCardStaleTintTests.swift": "8eb4b41e312d5e737f310dde11d863c2ef147c1015ef6b59b01d5622bc7df400"
+      },
+      "harness_patch_sha256": "030fa0d9c9aaef19a6ba1981af1945be35ec57f396101bca456953dbf8dbb3f9",
+      "boundary": "Synthetic bounded tests against unmodified production source; no UI journey claim"
+    },
+    "summary": "\u2718 Test run with 12 tests in 2 suites failed after 0.210 seconds with 19 issues.",
+    "artifact_url": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42184089088/artifacts/13486708268"
+  },
+  "chart-initial-red": {
+    "verdict": {
+      "case": "chart",
+      "product_sha": "cf6efdea76161eb3061e0b954d8150231181149f",
+      "exit_code": 1,
+      "expected_test_started": true,
+      "expected_assertions": [
+        "Expectation failed: (segments",
+        "Expectation failed: (segments",
+        "Expectation failed: daily.legend"
+      ],
+      "baseline_metric_controls_passed": true,
+      "has_test_summary": true,
+      "production_source_unchanged": true,
+      "infrastructure_error": false,
+      "behavioral_red": true
+    },
+    "provenance": {
+      "case": "chart",
+      "product_sha": "cf6efdea76161eb3061e0b954d8150231181149f",
+      "controller_sha": "2e33cc55035de29098c65513c40e0fbcffc96410",
+      "filter": "OverviewSpendChartTests.*a provider with unavailable range spend retains its priced daily contribution",
+      "expected_test": "a provider with unavailable range spend retains its priced daily contribution",
+      "selected_sources": [
+        "Tests/CodexBarTests/OverviewSpendChartTests.swift"
+      ],
+      "selected_source_sha256": {
+        "Tests/CodexBarTests/OverviewSpendChartTests.swift": "6bec78746fbd0807865ec098048c1b5740c148b6879a04e62171232ec9ee0778"
+      },
+      "harness_patch_sha256": "ea11fa3a619b23bbe043d5493ba1ff37b2bcdc35fd1da25be2c5fff1bf7f3c08",
+      "boundary": "Synthetic bounded tests against unmodified production source; no UI journey claim"
+    },
+    "summary": "\u2718 Test run with 1 test in 1 suite failed after 0.149 seconds with 3 issues.",
+    "artifact_url": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42184089088/artifacts/13486204509"
+  },
+  "footer-red": {
+    "verdict": {
+      "case": "footer",
+      "product_sha": "13185f0888b8e60ad22f72d66767f23601d7b960",
+      "exit_code": 1,
+      "expected_test_started": true,
+      "expected_assertions": [
+        "Expectation failed: rebuilt",
+        "Expectation failed: (freshCard",
+        "Expectation failed: (freshView"
+      ],
+      "baseline_metric_controls_passed": true,
+      "has_test_summary": true,
+      "production_source_unchanged": true,
+      "infrastructure_error": false,
+      "behavioral_red": true
+    },
+    "provenance": {
+      "case": "footer",
+      "product_sha": "13185f0888b8e60ad22f72d66767f23601d7b960",
+      "controller_sha": "b6a37e79109851bd9aab7e43c1e1149753de7195",
+      "filter": "UserProviderPluginTests.*successful refresh replaces a captured overflow plugin card without reopening Overview",
+      "expected_test": "successful refresh replaces a captured overflow plugin card without reopening Overview",
+      "selected_sources": [
+        "Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift",
+        "Tests/CodexBarTests/UserProviderPluginProofSuite.swift",
+        "Tests/CodexBarTests/UserProviderPluginTestSupport.swift",
+        "Tests/CodexBarTests/TestStores.swift",
+        "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift",
+        "Tests/CodexBarTests/CodexCredentialFixtures.swift"
+      ],
+      "selected_source_sha256": {
+        "Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift": "9dc5dc9f4e0176e4db28f0b4e939938b80c484591d88f817bfb6ba4cf20230d6",
+        "Tests/CodexBarTests/UserProviderPluginProofSuite.swift": "04c708a93cce0ee3838256d172c30722b966160d04269923d782e29cab60b8fa",
+        "Tests/CodexBarTests/UserProviderPluginTestSupport.swift": "5c805895a2b4e671c0b329fcd77cd1c0409f9657b3470220a7985dc17e8dae9f",
+        "Tests/CodexBarTests/TestStores.swift": "a6dc497095b3909e622bb2d8f7a74e761486de51a9aac95796fe18e384dd5d98",
+        "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift": "7ab8e18e5ccb6d01b21bbc0c34fa1e35b888e69e634f63f073eb261a3e230a8d",
+        "Tests/CodexBarTests/CodexCredentialFixtures.swift": "437ba400266c7311c7705358834687462ca50eeb2c68fc9c09f7c52a28742f82"
+      },
+      "harness_patch_sha256": "2938d66f49800c95e207699944d0a5580149c3844b8b12931b456b902125cbe2",
+      "boundary": "Synthetic bounded tests against unmodified production source; no UI journey claim"
+    },
+    "summary": "\u2718 Test run with 1 test in 1 suite failed after 9.457 seconds with 3 issues.",
+    "artifact_url": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42185608436"
+  },
+  "core-green": {
+    "verdict": {
+      "case": "core",
+      "expectation": "green",
+      "product_sha": "b3e44381197a743c88a5f82d9008848e8a578b44",
+      "exit_code": 0,
+      "expected_test_started": true,
+      "expected_assertions": [],
+      "baseline_metric_controls_passed": true,
+      "has_test_summary": true,
+      "production_source_matches_declared_input": true,
+      "production_source_unchanged": false,
+      "infrastructure_error": false,
+      "behavioral_red": false,
+      "candidate_green": true
+    },
+    "provenance": {
+      "case": "core",
+      "expectation": "green",
+      "product_sha": "b3e44381197a743c88a5f82d9008848e8a578b44",
+      "controller_sha": "8e66c4240fd6021b4b7618b93ce7bf4b10c3b140",
+      "filter": "OverviewProviderLineFreshnessTests|OverviewProviderLineTests|MenuCardStaleTintTests",
+      "expected_test": "retained code review stays stale when the quota refresh succeeded",
+      "selected_sources": [
+        "Tests/CodexBarTests/OverviewProviderLineFreshnessTests.swift",
+        "Tests/CodexBarTests/OverviewProviderLineTests.swift",
+        "Tests/CodexBarTests/MenuCardStaleTintTests.swift",
+        "Tests/CodexBarTests/TestStores.swift",
+        "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift",
+        "Tests/CodexBarTests/CodexCredentialFixtures.swift"
+      ],
+      "selected_source_sha256": {
+        "Tests/CodexBarTests/OverviewProviderLineFreshnessTests.swift": "96c58787f5aad752cb21f3aa59fb72b742bf95442f91f71b8d665bfda1ea8737",
+        "Tests/CodexBarTests/OverviewProviderLineTests.swift": "86555cafebe44e6dd68ee4c6f7b7a1fc3a6ed97724f2c66a9601f741ac92bfe3",
+        "Tests/CodexBarTests/MenuCardStaleTintTests.swift": "8eb4b41e312d5e737f310dde11d863c2ef147c1015ef6b59b01d5622bc7df400",
+        "Tests/CodexBarTests/TestStores.swift": "41f10e7dcd10da0f8aeb1b1bf39eeb1bebb184bc30af21cefa46c769b80e18de",
+        "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift": "7ab8e18e5ccb6d01b21bbc0c34fa1e35b888e69e634f63f073eb261a3e230a8d",
+        "Tests/CodexBarTests/CodexCredentialFixtures.swift": "437ba400266c7311c7705358834687462ca50eeb2c68fc9c09f7c52a28742f82"
+      },
+      "harness_patch_sha256": "4bea2042a0b7f264553def27dfce34490ff2205ff389d6f3cbf8d59326171d30",
+      "candidate_production_patch_sha256": "71c861b63cafb247c5f8f489cec50cc6d4b38a1c2a0a9cceff9e7bf0ab6d43d3",
+      "boundary": "Synthetic bounded tests; immutable base plus explicit candidate delta; no UI journey claim"
+    },
+    "summary": "\u2714 Test run with 35 tests in 3 suites passed after 18.148 seconds.",
+    "artifact_url": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42188062340/artifacts/13488732545"
+  },
+  "chart-red": {
+    "verdict": {
+      "case": "chart",
+      "expectation": "red",
+      "product_sha": "cf6efdea76161eb3061e0b954d8150231181149f",
+      "exit_code": 1,
+      "expected_test_started": true,
+      "expected_assertions": [
+        "Expectation failed: (segments",
+        "Expectation failed: (segments",
+        "Expectation failed: daily.legend"
+      ],
+      "baseline_metric_controls_passed": true,
+      "has_test_summary": true,
+      "production_source_matches_declared_input": true,
+      "production_source_unchanged": true,
+      "infrastructure_error": false,
+      "behavioral_red": true,
+      "candidate_green": false
+    },
+    "provenance": {
+      "case": "chart",
+      "expectation": "red",
+      "product_sha": "cf6efdea76161eb3061e0b954d8150231181149f",
+      "controller_sha": "8e66c4240fd6021b4b7618b93ce7bf4b10c3b140",
+      "filter": "OverviewSpendChartTests",
+      "expected_test": "a provider with unavailable range spend retains its priced daily contribution",
+      "selected_sources": [
+        "Tests/CodexBarTests/OverviewSpendChartTests.swift"
+      ],
+      "selected_source_sha256": {
+        "Tests/CodexBarTests/OverviewSpendChartTests.swift": "8f89d0baddcb1b43ca2c6209c848e119aacbad2e75baad3bd2abec8ee25c2f64"
+      },
+      "harness_patch_sha256": "dfaafc825711a76ae5738464506f6f1da27d1a3819ec0c74146a3d236fea1c0f",
+      "candidate_production_patch_sha256": null,
+      "boundary": "Synthetic bounded tests; immutable base plus explicit candidate delta; no UI journey claim"
+    },
+    "summary": "\u2718 Test run with 19 tests in 1 suite failed after 0.205 seconds with 4 issues.",
+    "artifact_url": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42188062340/artifacts/13489520138"
+  },
+  "chart-green": {
+    "verdict": {
+      "case": "chart",
+      "expectation": "green",
+      "product_sha": "cf6efdea76161eb3061e0b954d8150231181149f",
+      "exit_code": 0,
+      "expected_test_started": true,
+      "expected_assertions": [],
+      "baseline_metric_controls_passed": true,
+      "has_test_summary": true,
+      "production_source_matches_declared_input": true,
+      "production_source_unchanged": false,
+      "infrastructure_error": false,
+      "behavioral_red": false,
+      "candidate_green": true
+    },
+    "provenance": {
+      "case": "chart",
+      "expectation": "green",
+      "product_sha": "cf6efdea76161eb3061e0b954d8150231181149f",
+      "controller_sha": "8e66c4240fd6021b4b7618b93ce7bf4b10c3b140",
+      "filter": "OverviewSpendChartTests",
+      "expected_test": "a provider with unavailable range spend retains its priced daily contribution",
+      "selected_sources": [
+        "Tests/CodexBarTests/OverviewSpendChartTests.swift"
+      ],
+      "selected_source_sha256": {
+        "Tests/CodexBarTests/OverviewSpendChartTests.swift": "8f89d0baddcb1b43ca2c6209c848e119aacbad2e75baad3bd2abec8ee25c2f64"
+      },
+      "harness_patch_sha256": "949d8b05f61c3c4bb6445bc061fca8fc43d89042b8c8368b27a5a4d6d13d45be",
+      "candidate_production_patch_sha256": "ff58b5ad03850718a6ffe37f4b3ef132582bb770b1c8853e1fc5352518025194",
+      "boundary": "Synthetic bounded tests; immutable base plus explicit candidate delta; no UI journey claim"
+    },
+    "summary": "\u2714 Test run with 19 tests in 1 suite passed after 0.170 seconds.",
+    "artifact_url": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42188062340/artifacts/13489245466"
+  },
+  "footer-green": {
+    "verdict": {
+      "case": "footer",
+      "expectation": "green",
+      "product_sha": "13185f0888b8e60ad22f72d66767f23601d7b960",
+      "exit_code": 0,
+      "expected_test_started": true,
+      "expected_assertions": [],
+      "baseline_metric_controls_passed": true,
+      "has_test_summary": true,
+      "production_source_matches_declared_input": true,
+      "production_source_unchanged": false,
+      "infrastructure_error": false,
+      "behavioral_red": false,
+      "candidate_green": true
+    },
+    "provenance": {
+      "case": "footer",
+      "expectation": "green",
+      "product_sha": "13185f0888b8e60ad22f72d66767f23601d7b960",
+      "controller_sha": "8e66c4240fd6021b4b7618b93ce7bf4b10c3b140",
+      "filter": "UserProviderPluginTests.*successful refresh replaces a captured overflow plugin card without reopening Overview",
+      "expected_test": "successful refresh replaces a captured overflow plugin card without reopening Overview",
+      "selected_sources": [
+        "Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift",
+        "Tests/CodexBarTests/UserProviderPluginProofSuite.swift",
+        "Tests/CodexBarTests/UserProviderPluginTestSupport.swift",
+        "Tests/CodexBarTests/TestStores.swift",
+        "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift",
+        "Tests/CodexBarTests/CodexCredentialFixtures.swift"
+      ],
+      "selected_source_sha256": {
+        "Tests/CodexBarTests/OverviewOverflowPluginRefreshTests.swift": "9dc5dc9f4e0176e4db28f0b4e939938b80c484591d88f817bfb6ba4cf20230d6",
+        "Tests/CodexBarTests/UserProviderPluginProofSuite.swift": "04c708a93cce0ee3838256d172c30722b966160d04269923d782e29cab60b8fa",
+        "Tests/CodexBarTests/UserProviderPluginTestSupport.swift": "5c805895a2b4e671c0b329fcd77cd1c0409f9657b3470220a7985dc17e8dae9f",
+        "Tests/CodexBarTests/TestStores.swift": "a6dc497095b3909e622bb2d8f7a74e761486de51a9aac95796fe18e384dd5d98",
+        "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift": "7ab8e18e5ccb6d01b21bbc0c34fa1e35b888e69e634f63f073eb261a3e230a8d",
+        "Tests/CodexBarTests/CodexCredentialFixtures.swift": "437ba400266c7311c7705358834687462ca50eeb2c68fc9c09f7c52a28742f82"
+      },
+      "harness_patch_sha256": "d4d3e3d6d4516bfab17019c43326a9537f98cb1c0c687ba07e5db4bf98ad8144",
+      "candidate_production_patch_sha256": "2ab6893d696a73df718f1529d9c4cdad651a688408ba68f32f21e5a0833206e8",
+      "boundary": "Synthetic bounded tests; immutable base plus explicit candidate delta; no UI journey claim"
+    },
+    "summary": "\u2714 Test run with 1 test in 1 suite passed after 4.702 seconds.",
+    "artifact_url": "https://github.com/Chipagosfinest/CodexBar/actions/runs/42188062340/artifacts/13488797678"
+  }
+}
