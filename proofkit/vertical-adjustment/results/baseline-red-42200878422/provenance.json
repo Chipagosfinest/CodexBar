@@ -1,0 +1,43 @@
+{
+  "product_sha": "5614c2736caf037cd5205151194dd036f205f792",
+  "controller_sha": "adeff336419cb822be509bbe662117dfeff8be11",
+  "selected_sources": [
+    "Tests/CodexBarTests/MenuBarUsageTotalTests.swift",
+    "Tests/CodexBarTests/TestStores.swift",
+    "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift",
+    "Tests/CodexBarTests/CodexCredentialFixtures.swift"
+  ],
+  "selected_source_sha256": {
+    "Tests/CodexBarTests/MenuBarUsageTotalTests.swift": "70c3f3129087d9c41663b964a22527a70324b51a90f189db266c57d4ca348c23",
+    "Tests/CodexBarTests/TestStores.swift": "41f10e7dcd10da0f8aeb1b1bf39eeb1bebb184bc30af21cefa46c769b80e18de",
+    "Tests/CodexBarTests/ZaiTokenStoreTestSupport.swift": "7ab8e18e5ccb6d01b21bbc0c34fa1e35b888e69e634f63f073eb261a3e230a8d",
+    "Tests/CodexBarTests/CodexCredentialFixtures.swift": "437ba400266c7311c7705358834687462ca50eeb2c68fc9c09f7c52a28742f82"
+  },
+  "harness_patch_sha256": "55c86c2a92958e9b065a98565d02556673eb6962414967c92d62cb1e9546cf1e",
+  "filter": "MenuBarUsageTotalTests",
+  "baseline_test_names": [
+    "total averages each provider and keeps no reading without quotas",
+    "near limit starts at ten percent left with the tightest provider first",
+    "a forecast within the hour warns like the dropdown does",
+    "stale data never raises the warning but still counts toward the total",
+    "a provider reads as its tightest limit",
+    "a measured quota outside the semantic lanes can still be the tightest",
+    "balance backed lanes are not quotas",
+    "calm total is one template image so AppKit tints it for any menu bar",
+    "warning names the provider with its logo and a capsule that ignores the wallpaper",
+    "warning without a logo still names the provider",
+    "show used follows the setting everywhere",
+    "no quota reading renders a placeholder rather than an empty item",
+    "all providers source drives the merged status item and leaves other sources alone",
+    "a session forecast warns even when the weekly window would last",
+    "a limit whose reset has passed no longer warns",
+    "the warning follows the clock on manual refresh in every menu bar style",
+    "all providers choice is opt in and persists",
+    "high contrast tints the neutral part instead of using a template"
+  ],
+  "regression_test_names": [
+    "saved vertical adjustment moves every total attachment equally",
+    "saved vertical adjustment moves the actual normal contrast leading pixels"
+  ],
+  "boundary": "Synthetic actual AppKit attachment tests compile intact production App/Core modules; baseline production is unchanged; no installed-app claim."
+}

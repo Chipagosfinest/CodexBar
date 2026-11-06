@@ -1,9 +1,9 @@
-name: Menubar attachment adjustment - baseline runtime red
+name: Menubar attachment adjustment - candidate green and native fixture
 
 on:
   push:
     branches: [proof/20261106-review-regressions]
-    paths: [proofkit/vertical-adjustment/prove.py, proofkit/vertical-adjustment/tests/**, .github/workflows/vertical-adjustment-proof.yml]
+    paths: [proofkit/vertical-adjustment/prove.py, proofkit/vertical-adjustment/tests/**, proofkit/vertical-adjustment/candidate.patch, proofkit/vertical-adjustment/Render.swift.fragment, proofkit/vertical-adjustment/render_verdict.py, .github/workflows/vertical-adjustment-proof.yml]
 
 permissions:
   contents: read
@@ -53,9 +53,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 kit/proofkit/vertical-adjustment/prove.py prepare --product product --output "$PROOF_OUT" > "$PROOF_OUT/filter.txt"
+          python3 kit/proofkit/vertical-adjustment/prove.py prepare --expect green --product product --output "$PROOF_OUT" > "$PROOF_OUT/filter.txt"
           cat "$PROOF_OUT/provenance.json"
-      - name: Require actual attachment regression with all original controls passing
+      - name: Require all original and frozen attachment/pixel regressions to pass
         working-directory: product
         shell: bash
         run: |
@@ -67,10 +67,32 @@ jobs:
           set -e
           printf '%s\n' "$result" > "$PROOF_OUT/test-exit.txt"
           tail -100 "$PROOF_OUT/tests.log"
-          python3 ../kit/proofkit/vertical-adjustment/prove.py verify --product . --output "$PROOF_OUT" --exit-code "$result"
+          python3 ../kit/proofkit/vertical-adjustment/prove.py verify --expect green --product . --output "$PROOF_OUT" --exit-code "$result"
+      - name: Capture optional synthetic component fixture after deterministic green
+        continue-on-error: true
+        working-directory: product
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$PROOF_OUT/rendered"
+          export VERTICAL_PROOF_OUTPUT="$PROOF_OUT/rendered"
+          export PROOF_PRODUCT_SHA="$PRODUCT_SHA"
+          export PROOF_DELTA_SHA=$(python3 -c 'import json,os; print(json.load(open(os.environ["PROOF_OUT"]+"/provenance.json"))["candidate_patch_sha256"])')
+          shasum -a 256 Tests/CodexBarTests/MenuBarUsageTotalTests.swift > "$PROOF_OUT/rendered/test-before-sha256.txt"
+          cat ../kit/proofkit/vertical-adjustment/Render.swift.fragment >> Tests/CodexBarTests/MenuBarUsageTotalTests.swift
+          shasum -a 256 Tests/CodexBarTests/MenuBarUsageTotalTests.swift > "$PROOF_OUT/rendered/test-render-sha256.txt"
+          cp Tests/CodexBarTests/MenuBarUsageTotalTests.swift "$PROOF_OUT/rendered/fixture.swift"
+          git diff --binary HEAD > "$PROOF_OUT/rendered/render-harness.patch"
+          set +e
+          ./Scripts/test_fast.sh --jobs 2 --filter 'MenuBarUsageTotalTests.*render synthetic saved vertical adjustments' > "$PROOF_OUT/rendered/tests.log" 2>&1
+          result=$?
+          set -e
+          printf '%s\n' "$result" > "$PROOF_OUT/rendered/test-exit.txt"
+          tail -80 "$PROOF_OUT/rendered/tests.log"
+          python3 ../kit/proofkit/vertical-adjustment/render_verdict.py . "$PROOF_OUT" "$result"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: vertical-adjustment-red-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
+          name: vertical-adjustment-green-${{ env.PRODUCT_SHA }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/review-regression-proof
           retention-days: 14

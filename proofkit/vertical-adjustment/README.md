@@ -1,4 +1,4 @@
-# Saved attachment alignment: baseline proof
+# Saved attachment alignment: baseline and candidate proof
 
 This baseline-only macOS 26 run compiles the actual production App/Core modules at `5614c2736caf037cd5205151194dd036f205f792`, replacing only the selected `MenuBarUsageTotalTests.swift` with the test-author's frozen oracle, SHA256 `70c3f3129087d9c41663b964a22527a70324b51a90f189db266c57d4ca348c23`.
 
@@ -8,8 +8,12 @@ The full existing suite runs, with unchanged TestStores, ZaiTokenStoreTestSuppor
 
 The artifact retains all production Swift hashes, selected test files/hashes, complete harness patch, environment, logs, exit status and verdict. Existing environment scrubbing, keychain denial and process containment remain active; the disposable hosted HOME is retained only for Xcode Metal mounts. This is a synthetic native AppKit component test, not an installed-app screenshot or live-account journey.
 
-This workflow triggers only for its script, frozen test or workflow changes. Prior auth/cache, cooldown and dropdown proof jobs are preserved. A source candidate and GREEN are intentionally deferred until actual RED.
+This workflow triggers only for its script, frozen test or workflow changes. Prior auth/cache, cooldown and dropdown proof jobs are preserved. The original baseline-only controller was published before source implementation. Verified runtime RED42200878422 now permits the declared source candidate.
 
 The supplemental test `saved vertical adjustment moves the actual normal contrast leading pixels` measures alpha-weighted pixel centroids at 1×/2×, for normal calm/warning states at ±3 points. An independently drawn translated rectangle calibrates bitmap orientation and point conversion. Both new tests must fail through actual expectations in baseline RED; all original controls must pass.
 
 First attempt42199396599 was compiler-only: the test helper placed `verticalAdjustment` before required `now`. No tests ran and it is explicitly rejected as RED. Original artifact13493033693 and frozen349 test bytes remain preserved, with [verdict/provenance/classification](results/compiler-only-42199396599). This retry corrects only that argument ordering and adds the new pixel oracle; original attachment assertions are unchanged. The actual initializer at baseline was inspected: `now` precedes `verticalAdjustment`. No production source changed.
+
+Verified original RED: run42200878422,20tests/1suite/16expectedissues, both new methodsfailed, all18original controls passed. This is explicitly reused, not rerun. CandidateGREEN applies only the production hunk from candidate.patch (SHA256 `ee6b755000e8f88451232a411df9a132ddd7eea47737e43bef738e571fc5cf7c`) to the same5614base and injects exactly the same70c3 testbytes. All20tests must pass; all1446production source hashes and4selected test/support hashes are retained and checked.
+
+After deterministicGREEN only, an optional separate step appends the native component-render fixture and records testbefore/after hashes. It draws actual production outputs at their production status-item widths on nativeNSButton surfaces for offsets0/−3/+3, calm/warning×HC×light/dark, with production template tinting and visible synthetic/base/delta banners. Its own verdict and artifacts are separate; render failure cannot overwrite deterministicGREEN. Images are not accepted as proof until original-resolution inspection. No installed-App journey is claimed.
