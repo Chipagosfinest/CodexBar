@@ -31,6 +31,18 @@ def prepare(product, output, expectation):
     production = {name: digest(product / name) for name in git(product, "ls-files", "Sources").splitlines()
                   if name.endswith(".swift")}
     (output / "production-source-sha256.json").write_text(json.dumps(production, indent=2) + "\n")
+    witness_directory = kit / "results/range-red-transition-controller-failed-42208591132"
+    witness_hash = None
+    if expectation == "green":
+        witness = json.loads((witness_directory / "verdict.json").read_text())
+        witness_meta = json.loads((witness_directory / "provenance.json").read_text())
+        assert witness["behavioral_red"] and witness["exit_code"] == 1 and witness["test_counts"] == ["21"]
+        assert all(witness["baseline_controls_passed"].values()) and all(witness["regression_tests_failed"].values())
+        assert witness["production_source_matches_declared_input"] and witness["selected_tests_unchanged"]
+        assert witness_meta["product_sha"] == PRODUCT_SHA
+        assert witness_meta["candidate_patch_sha256"] == "f967603f05180a8f91489e71810c61ec314db90aa5743da7433bceb131575847"
+        assert witness_meta["selected_source_sha256"]["Tests/CodexBarTests/MenuBarUsageTotalTests.swift"] == digest(kit / "tests/MenuBarUsageTotalTests.swift")
+        witness_hash = digest(witness_directory / "verdict.json")
     original_tests = (product / "Tests/CodexBarTests/MenuBarUsageTotalTests.swift").read_text()
     original_names = re.findall(r"func `([^`]+)`", original_tests)
     assert digest(kit / "tests/MenuBarUsageTotalTests.swift") == "07a4330a06c1ca450418b9ce6619100e21dc8fed472ce381d8ab1ffe75cbcf0a"
@@ -45,8 +57,10 @@ def prepare(product, output, expectation):
         candidate = kit / ("pre-range-f967.patch" if expectation == "red" else "candidate.patch")
         headers = re.findall(r"^diff --git a/(\S+) b/(\S+)$", candidate.read_text(), re.MULTILINE)
         assert headers and all(before == after for before, after in headers)
-        assert {after for _, after in headers} == {"Sources/CodexBar/Menu/MenuBarUsageTotal.swift",
-                                                   "Tests/CodexBarTests/MenuBarUsageTotalTests.swift"}
+        expected_paths = {"Sources/CodexBar/Menu/MenuBarUsageTotal.swift"}
+        if expectation == "red":
+            expected_paths.add("Tests/CodexBarTests/MenuBarUsageTotalTests.swift")
+        assert {after for _, after in headers} == expected_paths
         subprocess.run(["git", "apply", "--check", "--include=Sources/*", str(candidate)], cwd=product, check=True)
         subprocess.run(["git", "apply", "--include=Sources/*", str(candidate)], cwd=product, check=True)
         candidate_paths = {"Sources/CodexBar/Menu/MenuBarUsageTotal.swift"}
@@ -91,7 +105,7 @@ def prepare(product, output, expectation):
         destination = output / "selected-tests" / Path(name).name
         destination.parent.mkdir(exist_ok=True)
         shutil.copyfile(product / name, destination)
-    metadata = {"product_sha": PRODUCT_SHA, "controller_sha": git(kit.parent.parent, "rev-parse", "HEAD"), "expectation": expectation, "candidate_patch_sha256": candidate_hash, "reused_behavioral_red_run": 42200878422, "limited_green_and_failed_visual_run": 42202916289, "limited_small_offset_run": 42206524467,
+    metadata = {"product_sha": PRODUCT_SHA, "controller_sha": git(kit.parent.parent, "rev-parse", "HEAD"), "expectation": expectation, "candidate_patch_sha256": candidate_hash, "reused_behavioral_red_run": 42200878422, "limited_green_and_failed_visual_run": 42202916289, "limited_small_offset_run": 42206524467, "reused_range_red_run": 42208591132, "reused_range_red_verdict_sha256": witness_hash,
                 "selected_sources": selected, "selected_source_sha256": {name: digest(product / name) for name in selected},
                 "harness_patch_sha256": digest(output / "test-harness.patch"), "filter": "|".join(SUITES), "baseline_test_names": original_names, "regression_test_names": regressions,
                 "boundary": "Synthetic actual AppKit attachment tests compile intact production App/Core modules; baseline or explicit production-only candidate delta; no installed-app claim."}
@@ -111,8 +125,7 @@ def transition(product, output, prior):
     candidate = kit / "candidate.patch"
     headers = re.findall(r"^diff --git a/(\S+) b/(\S+)$", candidate.read_text(), re.MULTILINE)
     assert headers and all(before == after for before, after in headers)
-    assert {after for _, after in headers} == {"Sources/CodexBar/Menu/MenuBarUsageTotal.swift",
-                                               "Tests/CodexBarTests/MenuBarUsageTotalTests.swift"}
+    assert {after for _, after in headers} == {"Sources/CodexBar/Menu/MenuBarUsageTotal.swift"}
     prephysical = kit / "pre-range-f967.patch"
     assert digest(prephysical) == metadata["candidate_patch_sha256"]
     subprocess.run(["git", "apply", "-R", "--check", "--include=Sources/*", str(prephysical)], cwd=product, check=True)

@@ -1,0 +1,15 @@
+{
+  "boundary": "Synthetic production renderer on native NSButton; component fixture, not installed app",
+  "exit_code": 0,
+  "image_sha256": {
+    "vertical-adjustment-dark.png": "776bde93401900eafa7d553d8f006ba9dd2218a329ced101c79cf6d80aa32fbf",
+    "vertical-adjustment-light.png": "3f444d5524a54db6f45ef253288921b9e9abcf906f13f1c676d5c851b3056bbc"
+  },
+  "state_count": 24,
+  "fixture_before_sha256": "0e442f51112e7ee2dc1456eb77a38b2fab01dc5296ec096b9e9c1a6defc24303",
+  "fixture_after_sha256": "9010bbacd5e9222ada8670859ff5f3d8dc8a0c87f8f3753abe2aebe2c7bc77dc",
+  "original_oracle_matches": true,
+  "production_source_matches_candidate": true,
+  "render_log_sha256": "ff1b2afc64e6981d50d865e14cc012aec0407dde95c78e929725d82ac6669d9b",
+  "passed": true
+}

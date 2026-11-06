@@ -1,0 +1,11 @@
+{
+  "scope": "Controller preparation and source transition only; no Swift runtime tests",
+  "isolated_git_base": "5614c2736caf037cd5205151194dd036f205f792",
+  "prepare_red_then_transition_passed": true,
+  "green_only_prepare_passed": true,
+  "production_hash_count": 1446,
+  "final_production_file_sha256": "89d2133a662f5835610e48154ae3381e349b86f8bd091660b06ff172f63a8be7",
+  "oracle_sha256": "07a4330a06c1ca450418b9ce6619100e21dc8fed472ce381d8ab1ffe75cbcf0a",
+  "candidate_patch_sha256": "76ec19a7fa42d2038e1207354c1c3e8a75d168308c0d0fe37754f099dd594b80",
+  "controller_script_sha256": "b0b27ca936838d1fb49597494d0541123d005dad581de85b450e1a81c44e291c"
+}

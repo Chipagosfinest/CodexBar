@@ -1,0 +1,232 @@
+{
+  "physical_motion_accepted": true,
+  "image_sha256": {
+    "vertical-adjustment-light.png": "3f444d5524a54db6f45ef253288921b9e9abcf906f13f1c676d5c851b3056bbc",
+    "vertical-adjustment-dark.png": "776bde93401900eafa7d553d8f006ba9dd2218a329ced101c79cf6d80aa32fbf"
+  },
+  "boundary": "Read-only analysis of native component images; not installed-app proof",
+  "canvas_points": [
+    700,
+    290
+  ],
+  "button_frame_height_points": 22,
+  "foreground_mask": "max RGB distance from background >30",
+  "capsule_mask": "R>150 G<80 B<80",
+  "expected_delta_for_offsets_0_minus3_plus3": [
+    0,
+    3,
+    -3
+  ],
+  "observations": [
+    {
+      "theme": "light",
+      "row": "normal calm",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        null,
+        null,
+        null
+      ],
+      "capsule_mask_pixels": [
+        0,
+        0,
+        0
+      ],
+      "physical_motion_passed": true
+    },
+    {
+      "theme": "light",
+      "row": "normal warning",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_mask_pixels": [
+        285,
+        285,
+        285
+      ],
+      "physical_motion_passed": true
+    },
+    {
+      "theme": "light",
+      "row": "HC calm",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        null,
+        null,
+        null
+      ],
+      "capsule_mask_pixels": [
+        0,
+        0,
+        0
+      ],
+      "physical_motion_passed": true
+    },
+    {
+      "theme": "light",
+      "row": "HC warning",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_mask_pixels": [
+        285,
+        285,
+        285
+      ],
+      "physical_motion_passed": true
+    },
+    {
+      "theme": "dark",
+      "row": "normal calm",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        null,
+        null,
+        null
+      ],
+      "capsule_mask_pixels": [
+        0,
+        0,
+        0
+      ],
+      "physical_motion_passed": true
+    },
+    {
+      "theme": "dark",
+      "row": "normal warning",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_mask_pixels": [
+        285,
+        285,
+        285
+      ],
+      "physical_motion_passed": true
+    },
+    {
+      "theme": "dark",
+      "row": "HC calm",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        null,
+        null,
+        null
+      ],
+      "capsule_mask_pixels": [
+        0,
+        0,
+        0
+      ],
+      "physical_motion_passed": true
+    },
+    {
+      "theme": "dark",
+      "row": "HC warning",
+      "foreground_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_delta_points": [
+        0.0,
+        3.0,
+        -3.0
+      ],
+      "capsule_mask_pixels": [
+        285,
+        285,
+        285
+      ],
+      "physical_motion_passed": true
+    }
+  ],
+  "zero_offset_reference_comparisons": [
+    {
+      "theme": "light",
+      "row": "normal calm",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    },
+    {
+      "theme": "light",
+      "row": "normal warning",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    },
+    {
+      "theme": "light",
+      "row": "HC calm",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    },
+    {
+      "theme": "light",
+      "row": "HC warning",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    },
+    {
+      "theme": "dark",
+      "row": "normal calm",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    },
+    {
+      "theme": "dark",
+      "row": "normal warning",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    },
+    {
+      "theme": "dark",
+      "row": "HC calm",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    },
+    {
+      "theme": "dark",
+      "row": "HC warning",
+      "changed_rgb_pixels": 0,
+      "zero_offset_pixel_identical": true
+    }
+  ]
+}

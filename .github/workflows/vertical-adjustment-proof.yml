@@ -1,4 +1,4 @@
-name: Menubar full adjustment range - sequential red and green
+name: Menubar full adjustment range - candidate green and native fixture
 
 on:
   push:
@@ -49,32 +49,12 @@ jobs:
           echo "$RUNNER_TEMP/proof-python" >> "$GITHUB_PATH"
           echo "PROOF_OUT=$RUNNER_TEMP/review-regression-proof" >> "$GITHUB_ENV"
           { sw_vers; xcodebuild -version; "$proof_python" --version; launchctl managername; } > "$RUNNER_TEMP/review-regression-proof/environment.txt"
-      - name: Prepare actual intermediate source and frozen physical oracle
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p "$PROOF_OUT/red"
-          python3 kit/proofkit/vertical-adjustment/range_proof.py prepare --expect red --product product --output "$PROOF_OUT/red" > "$PROOF_OUT/red/filter.txt"
-          cat "$PROOF_OUT/red/provenance.json"
-      - name: Require range-image and native-mask RED with nineteen existing controls passing
-        working-directory: product
-        shell: bash
-        run: |
-          set -euo pipefail
-          filter=$(cat "$PROOF_OUT/red/filter.txt")
-          set +e
-          ./Scripts/test_fast.sh --jobs 2 --filter "$filter" > "$PROOF_OUT/red/tests.log" 2>&1
-          result=$?
-          set -e
-          printf '%s\n' "$result" > "$PROOF_OUT/red/test-exit.txt"
-          tail -100 "$PROOF_OUT/red/tests.log"
-          python3 ../kit/proofkit/vertical-adjustment/range_proof.py verify --expect red --product . --output "$PROOF_OUT/red" --exit-code "$result"
-      - name: Apply final production delta while preserving physical oracle bytes
+      - name: Prepare final source and same oracle with retained genuine range RED witness
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p "$PROOF_OUT/green"
-          python3 kit/proofkit/vertical-adjustment/range_proof.py transition --expect green --product product --prior "$PROOF_OUT/red" --output "$PROOF_OUT/green" > "$PROOF_OUT/green/filter.txt"
+          python3 kit/proofkit/vertical-adjustment/range_proof.py prepare --expect green --product product --output "$PROOF_OUT/green" > "$PROOF_OUT/green/filter.txt"
           cat "$PROOF_OUT/green/provenance.json"
       - name: Require all twenty-one tests GREEN with the same physical oracle
         working-directory: product

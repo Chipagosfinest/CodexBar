@@ -1,0 +1,8 @@
+{
+  "classification": "Genuine range behavioral RED; subsequent controller transition failed before GREEN runtime",
+  "run": 42208591132,
+  "test_summary": "21 tests in 1 suite failed with80issues;19controls passed;2range methods failed",
+  "original_runtime_log_sha256": "57ed0811bbf98db4672a012a447b29ee7fbc13308ffa9d4fd3ffd7b625c6c44c",
+  "transition_error": "Controller expectedSource+Testheaders, but frozen76ec patch correctly containsSource-onlyheader.",
+  "green_was_run": false
+}

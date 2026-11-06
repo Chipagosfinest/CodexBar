@@ -1,0 +1,44 @@
+{
+  "product_sha": "5614c2736caf037cd5205151194dd036f205f792",
+  "exit_code": 1,
+  "suites_passed": {
+    "MenuBarUsageTotalTests": false
+  },
+  "test_counts": [
+    "21"
+  ],
+  "production_source_matches_declared_input": true,
+  "selected_tests_unchanged": true,
+  "unexpected_failure": true,
+  "baseline_controls_passed": {
+    "a forecast within the hour warns like the dropdown does": true,
+    "a limit whose reset has passed no longer warns": true,
+    "a measured quota outside the semantic lanes can still be the tightest": true,
+    "a provider reads as its tightest limit": true,
+    "a session forecast warns even when the weekly window would last": true,
+    "all providers choice is opt in and persists": true,
+    "all providers source drives the merged status item and leaves other sources alone": true,
+    "balance backed lanes are not quotas": true,
+    "calm total is one template image so AppKit tints it for any menu bar": true,
+    "high contrast tints the neutral part instead of using a template": true,
+    "near limit starts at ten percent left with the tightest provider first": true,
+    "no quota reading renders a placeholder rather than an empty item": true,
+    "saved vertical adjustment moves every total attachment equally": true,
+    "saved vertical adjustment moves the actual normal contrast leading pixels": true,
+    "show used follows the setting everywhere": true,
+    "stale data never raises the warning but still counts toward the total": true,
+    "the warning follows the clock on manual refresh in every menu bar style": true,
+    "total averages each provider and keeps no reading without quotas": true,
+    "warning names the provider with its logo and a capsule that ignores the wallpaper": true,
+    "warning without a logo still names the provider": true
+  },
+  "regression_tests_failed": {
+    "native warning capsule pixels follow the saved vertical adjustment": true
+  },
+  "behavioral_red": true,
+  "expectation": "red",
+  "regression_tests_passed": {
+    "native warning capsule pixels follow the saved vertical adjustment": false
+  },
+  "verified_green": false
+}
