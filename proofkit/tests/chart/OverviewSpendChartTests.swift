@@ -163,7 +163,9 @@ struct OverviewSpendChartTests {
         let nine = OverviewDailySpend.legend(totals: totals)
         #expect(nine.count == 8)
         #expect(nine.last?.provider == nil)
-        #expect(abs(nine.map(\.share).reduce(0, +) - 1) < 0.000_001)
+        let rangeShares: [Double?] = nine.map(\.share)
+        #expect(rangeShares.allSatisfy { $0 != nil })
+        #expect(abs(rangeShares.compactMap(\.self).reduce(0, +) - 1) < 0.000_001)
 
         let segments = OverviewDailySpend.segments(rows: rows, legend: nine)
         #expect(segments.last?.provider == nil)
@@ -296,11 +298,12 @@ struct OverviewSpendChartTests {
             now: now,
             calendar: calendar)
         let daily = try #require(OverviewDailySpend.make(model: model))
-        let shares = Dictionary(uniqueKeysWithValues: daily.legend.compactMap { entry in
-            entry.provider.map { ($0, entry.share) }
-        })
-        #expect(shares[.claude] == 0.8)
-        #expect(shares[.codex] == 0.2)
+        let claude = try #require(daily.legend.first { $0.provider == .claude })
+        let codex = try #require(daily.legend.first { $0.provider == .codex })
+        let claudeShare: Double? = claude.share
+        let codexShare: Double? = codex.share
+        #expect(claudeShare == 0.8)
+        #expect(codexShare == 0.2)
     }
 
     @Test
@@ -348,10 +351,16 @@ struct OverviewSpendChartTests {
         #expect(segments.filter { $0.provider == .codex }.map(\.cost).reduce(0, +) == 3)
         #expect(segments.map(\.cost).reduce(0, +) == summary.totalCost)
 
-        let claudeLegend = try #require(daily.legend.first { $0.provider == .claude })
         let codexLegend = try #require(daily.legend.first { $0.provider == .codex })
-        #expect(abs(daily.share(of: claudeLegend, pointID: pointID) - 0.4) < 0.000_001)
-        #expect(abs(daily.share(of: codexLegend, pointID: pointID) - 0.6) < 0.000_001)
+        let codexRangeShare: Double? = daily.share(of: codexLegend, pointID: nil)
+        #expect(codexRangeShare == nil)
+        let claudeLegend = try #require(daily.legend.first { $0.provider == .claude })
+        let claudeShare: Double? = daily.share(of: claudeLegend, pointID: pointID)
+        let codexShare: Double? = daily.share(of: codexLegend, pointID: pointID)
+        #expect(try abs(#require(claudeShare) - 0.4) < 0.000_001)
+        #expect(try abs(#require(codexShare) - 0.6) < 0.000_001)
+        let claudeRangeShare: Double? = daily.share(of: claudeLegend, pointID: nil)
+        #expect(claudeRangeShare == nil)
         // Hovering a complete day does not make the source's other unpriced day complete.
         #expect(group.providers.first { $0.provider == .claude }?.totalCost == nil)
         #expect(group.hasPartialCost)

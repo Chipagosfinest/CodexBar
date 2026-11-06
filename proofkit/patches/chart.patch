@@ -1,0 +1,104 @@
+diff --git a/Sources/CodexBar/Menu/OverviewSpendChart.swift b/Sources/CodexBar/Menu/OverviewSpendChart.swift
+index d4b3551d3..2269b039f 100644
+--- a/Sources/CodexBar/Menu/OverviewSpendChart.swift
++++ b/Sources/CodexBar/Menu/OverviewSpendChart.swift
+@@ -132,7 +132,7 @@ struct OverviewDailySpend: Equatable {
+     struct LegendEntry: Equatable, Identifiable {
+         let provider: UsageProvider?
+         let name: String
+-        let share: Double
++        let share: Double?
+ 
+         var id: String {
+             self.provider?.rawValue ?? "other"
+@@ -147,15 +147,31 @@ struct OverviewDailySpend: Equatable {
+     var stacks: [String: [Segment]] = [:]
+     var legend: [LegendEntry] = []
+ 
+-    /// Providers with spend, largest first. This order also stacks every bar, so a provider keeps its place all month.
+-    static func legend(totals costs: [(provider: UsageProvider, cost: Double)]) -> [LegendEntry] {
++    /// Providers with spend, largest first. Daily-only contributors stay visible without inventing a range share.
++    /// This order also stacks every bar, so a provider keeps its place all month.
++    static func legend(
++        totals costs: [(provider: UsageProvider, cost: Double)],
++        dailyRows: [SpendDashboardModel.DailyProviderRow] = [],
++        rangeSharesAvailable: Bool = true) -> [LegendEntry]
++    {
+         var totals: [UsageProvider: Double] = [:]
+         for (provider, cost) in costs where cost > 0 && cost.isFinite {
+             totals[provider, default: 0] += cost
+         }
++        var dailyTotals: [UsageProvider: Double] = [:]
++        for row in dailyRows {
++            guard let cost = row.totalCost, cost > 0, cost.isFinite else { continue }
++            dailyTotals[row.provider, default: 0] += cost
++        }
++        var rankedTotals = totals
++        for (provider, cost) in dailyTotals where rankedTotals[provider] == nil {
++            rankedTotals[provider] = cost
++        }
++        guard !rankedTotals.isEmpty else { return [] }
+         let total = totals.values.reduce(0, +)
+-        guard total > 0 else { return [] }
+-        let sorted = totals.sorted { ($0.value, $1.key.rawValue) > ($1.value, $0.key.rawValue) }
++        let hasRangeShares = rangeSharesAvailable && total > 0 && total.isFinite &&
++            dailyTotals.keys.allSatisfy { totals[$0] != nil }
++        let sorted = rankedTotals.sorted { ($0.value, $1.key.rawValue) > ($1.value, $0.key.rawValue) }
+         let foldsTail = sorted.count > self.maxSeries
+         let kept = foldsTail ? Array(sorted.prefix(self.maxSeries - 1)) : sorted
+         // An entry can merge several accounts, so it takes the provider's name rather than any one account's.
+@@ -163,10 +179,11 @@ struct OverviewDailySpend: Equatable {
+             LegendEntry(
+                 provider: $0.key,
+                 name: ProviderDescriptorRegistry.descriptor(for: $0.key).metadata.displayName,
+-                share: $0.value / total)
++                share: hasRangeShares ? totals[$0.key].map { $0 / total } : nil)
+         }
+         if foldsTail {
+-            let otherShare = sorted.dropFirst(kept.count).map(\.value).reduce(0, +) / total
++            let otherShare = hasRangeShares
++                ? sorted.dropFirst(kept.count).compactMap { totals[$0.key] }.reduce(0, +) / total : nil
+             entries.append(LegendEntry(provider: nil, name: L("Other"), share: otherShare))
+         }
+         return entries
+@@ -235,7 +252,7 @@ struct OverviewDailySpend: Equatable {
+     }
+ 
+     /// The range's share, or that day's while one is hovered.
+-    func share(of entry: LegendEntry, pointID: String?) -> Double {
++    func share(of entry: LegendEntry, pointID: String?) -> Double? {
+         guard let pointID else { return entry.share }
+         let segments = self.stacks[pointID] ?? []
+         let total = segments.map(\.cost).reduce(0, +)
+@@ -397,7 +414,9 @@ struct OverviewSpendLegend: View {
+ 
+     private func item(_ entry: OverviewDailySpend.LegendEntry) -> some View {
+         let share = self.daily.share(of: entry, pointID: self.selectedPointID)
+-        let shareText = share > 0 && share < 0.01 ? "<1%" : "\(Int((share * 100).rounded()))%"
++        let shareText = share.map { share in
++            share > 0 && share < 0.01 ? "<1%" : "\(Int((share * 100).rounded()))%"
++        } ?? L("Unknown")
+         return HStack(spacing: 4) {
+             self.swatch(entry)
+             if let provider = entry.provider {
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+OverviewChart.swift b/Sources/CodexBar/StatusItem/StatusItemController+OverviewChart.swift
+index 06b5aa6b2..275e2a772 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+OverviewChart.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+OverviewChart.swift
+@@ -18,9 +18,14 @@ extension OverviewDailySpend {
+         formatter.locale = codexBarLocalizedLocale()
+         formatter.setLocalizedDateFormatFromTemplate("MMMd")
+         formatter.timeZone = group.timeZone
+-        // Daily summaries cover only days every provider can report; the headline uses each full window.
++        // Daily summaries cover only days every provider can report; range shares use each full window.
++        // A provider can still contribute priced days when its full-window total is unavailable.
+         let legend = OverviewDailySpend.legend(
+-            totals: group.providers.compactMap { row in row.totalCost.map { (row.provider, $0) } })
++            totals: group.providers.compactMap { row in row.totalCost.map { (row.provider, $0) } },
++            dailyRows: summaries.filter { $0.key >= first && $0.key <= last }.values.flatMap(\.providers),
++            rangeSharesAvailable: group.providers.allSatisfy {
++                $0.totalCost != nil && !$0.costIsLowerBound && $0.incompleteRequestCount == 0
++            })
+         var points: [MenuUsageBarPoint] = []
+         var stacks: [String: [OverviewDailySpend.Segment]] = [:]
+         var day = first

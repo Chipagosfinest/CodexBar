@@ -1,0 +1,15 @@
+diff --git a/Sources/CodexBar/Menu/OverviewProviderLine.swift b/Sources/CodexBar/Menu/OverviewProviderLine.swift
+index efafb706a..80db0247f 100644
+--- a/Sources/CodexBar/Menu/OverviewProviderLine.swift
++++ b/Sources/CodexBar/Menu/OverviewProviderLine.swift
+@@ -54,7 +54,9 @@ struct OverviewProviderLine: Equatable, Identifiable {
+         let lowest = metrics.min { $0.remainingPercent < $1.remainingPercent }
+         // An exhausted limit has already stopped the provider; a forecast only says when one will.
+         let tightest = (lowest?.remainingPercent ?? 100) <= 0 ? lowest : (imminent ?? lowest)
+-        let isStale = model.subtitleStyle == .error
++        // Match MetricRow: subtitles can describe diagnostics or a different refresh source.
++        let isStale = tightest?.retainedMeasurementOverride
++            ?? (model.showsRetainedMeasurement && tightest?.isSyntheticCreditLane != true)
+ 
+         guard let tightest else {
+             self.caption = account

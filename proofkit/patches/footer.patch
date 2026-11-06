@@ -1,0 +1,26 @@
+diff --git a/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift b/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
+index 08bccebf4..1fbc6030b 100644
+--- a/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
++++ b/Sources/CodexBar/StatusItem/StatusItemController+UserPlugins.swift
+@@ -138,12 +138,17 @@ extension StatusItemController {
+         let cardID = "pluginCard:\(instanceID.rawValue)"
+         // Plugin cards capture snapshots, so their visible payload needs the guarded rebuild path.
+         let overviewID = "\(Self.overviewRowIdentifierPrefix)\(instanceID.rawValue)"
++        func containsPluginCard(_ menu: NSMenu) -> Bool {
++            menu.items.contains { item in
++                let id = item.representedObject as? String
++                if id == cardID || id == overviewID { return true }
++                if let submenu = item.submenu { return containsPluginCard(submenu) }
++                return false
++            }
++        }
+         for menu in self.openMenus.values {
+             (menu.items.first?.view as? ProviderSwitcherView)?.updateQuotaIndicators()
+-            if menu.items.contains(where: {
+-                let id = $0.representedObject as? String
+-                return id == cardID || id == overviewID
+-            }) {
++            if containsPluginCard(menu) {
+                 self.scheduleOpenMenuRebuildIfStillVisible(menu, provider: self.menuProvider(for: menu))
+             }
+         }

@@ -1,0 +1,92 @@
+
+import AppKit
+
+// Appended only to the copied proof test file, so its unchanged private fixture
+// factories remain the single source of Model.make inputs.
+extension OverviewProviderLineFreshnessTests {
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["COMPACT_FRESHNESS_PROOF_OUTPUT"] != nil))
+    func `render synthetic compact freshness states`() throws {
+        let environment = ProcessInfo.processInfo.environment
+        let output = URL(fileURLWithPath: try #require(environment["COMPACT_FRESHNESS_PROOF_OUTPUT"]))
+        let product = try #require(environment["PROOF_PRODUCT_SHA"])
+        let delta = try #require(environment["PROOF_DELTA_SHA"])
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        let models: [(String, UsageMenuCardView.Model)] = [
+            ("Fresh quota; retained Code Review", try self.codexModel(
+                quotaRefreshFailed: false, dashboardRefreshFailed: true)),
+            ("Retained quota; fresh Code Review", try self.codexModel(
+                quotaRefreshFailed: true, dashboardRefreshFailed: false)),
+            ("Fresh quota; fallback diagnostic", try self.claudeModel(
+                error: "Fallback succeeded", quotaRefreshFailed: false)),
+            ("Retained quota; account subtitle", try self.claudeModel(
+                error: "Synthetic quota refresh failure", quotaRefreshFailed: true,
+                subtitleOverride: "Synthetic work account")),
+            ("Fresh synthetic credits; quota failed", try self.syntheticCreditModel()),
+        ]
+        let rows = models.map { label, model in
+            (label, OverviewProviderLine(id: label, model: model))
+        }
+        let width = StatusItemController.menuCardBaseWidth
+        _ = NSApplication.shared
+        for dark in [false, true] {
+            let theme = dark ? "dark" : "light"
+            let canvas = CompactFreshnessProofCanvas(
+                rows: rows, product: product, delta: delta, rowWidth: width)
+                .environment(\.colorScheme, dark ? .dark : .light)
+            let host = NSHostingView(rootView: canvas)
+            let window = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: width + 32, height: 500),
+                styleMask: [.borderless], backing: .buffered, defer: false)
+            window.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
+            window.contentView = host
+            host.layoutSubtreeIfNeeded()
+            let height = ceil(host.fittingSize.height)
+            window.setContentSize(NSSize(width: width + 32, height: height))
+            host.frame = NSRect(x: 0, y: 0, width: width + 32, height: height)
+            window.orderFront(nil)
+            host.layoutSubtreeIfNeeded()
+            RunLoop.current.run(until: Date().addingTimeInterval(0.2))
+            let bitmap = try #require(host.bitmapImageRepForCachingDisplay(in: host.bounds))
+            host.cacheDisplay(in: host.bounds, to: bitmap)
+            let png = try #require(bitmap.representation(using: .png, properties: [:]))
+            try png.write(to: output.appendingPathComponent("compact-freshness-\(theme).png"))
+            window.orderOut(nil)
+        }
+        let states: [[String: Any]] = rows.map { label, line in
+            ["scenario": label, "status": String(describing: line.status),
+             "caption": line.caption ?? "", "remainingPercent": line.remainingPercent.map { $0 as Any } ?? NSNull(),
+             "width": Double(width), "synthetic": true, "productSHA": product, "candidateDeltaSHA": delta]
+        }
+        try JSONSerialization.data(withJSONObject: states, options: [.prettyPrinted, .sortedKeys])
+            .write(to: output.appendingPathComponent("states.json"))
+    }
+}
+
+private struct CompactFreshnessProofCanvas: View {
+    let rows: [(String, OverviewProviderLine)]
+    let product: String
+    let delta: String
+    let rowWidth: CGFloat
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("SYNTHETIC - production compact row renderer").font(.caption.bold())
+                Text("Product: \(self.product)")
+                Text("Candidate delta: \(self.delta)")
+            }
+            .font(.system(size: 9, design: .monospaced))
+            .fixedSize(horizontal: false, vertical: true)
+            ForEach(Array(self.rows.enumerated()), id: \.offset) { entry in
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(entry.element.0).font(.caption2).foregroundStyle(.secondary)
+                    OverviewProviderLineView(line: entry.element.1, width: self.rowWidth)
+                        .frame(height: 24)
+                }
+            }
+        }
+        .padding(16)
+        .frame(width: self.rowWidth + 32, alignment: .leading)
+        .background(Color(nsColor: .windowBackgroundColor))
+    }
+}
