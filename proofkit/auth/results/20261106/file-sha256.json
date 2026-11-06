@@ -1,0 +1,14 @@
+{
+  "hosted-production-source-sha256.json": "510268d2893e4046e29f98571b48f837c809de4e34247d9df39f20c43f4c892b",
+  "cache-driver.swift": "3d0f3fb6130911ff2b67a9838f8400f00181e0595bcf6f3f0fb911e81d68c470",
+  "hosted-provenance.json": "a827dc7ad83c30e320ee37a17216ab3410471e01c61140151c34e8192fab9b8d",
+  "released-cli-checksum.json": "f9442d826ff5abbf63f85ed729390addd35e1eab90c58c8fd3e0124176fbada2",
+  "hosted-verdict.json": "2263c3a35518a9c09cb4574d79ed1e53aa267198e2c59fec3f2d21e4617fb3be",
+  "released-cli-results.json": "dfbe61b537a16a0005dd53dd4b54784f1682b053d9bb99538ca25d286c1d9aed",
+  "cache-inputs.json": "12326f9bd46d5074b4bcf6efdd7b8bc0f430a990dbbf17f9a077a9989f4abf36",
+  "cache-results.json": "d07e5767a7fa659188ea05b04bb29518401b32c0e9c9d7924e8a5674fcd33ff7",
+  "synthetic-cache/recent.json": "c81313161378341e8f631d245812fd255b196de6a734097bae37bd3ceef3e4f7",
+  "synthetic-cache/expired.json": "50d6461f10bd1755fe9363e00463148f263a42109a32f7f7c1c294e3ccd82346",
+  "synthetic-cache/engine-state.json": "102a059d972ecdda6c7c031d2707e82a497e45fa5bdee1275d9f42b327dd5fb4",
+  "synthetic-cache/future.json": "c9c1f5ba2161cb8639dc0e636bb537f8dbf10c04f54f7bfa5163a161a3d9c730"
+}

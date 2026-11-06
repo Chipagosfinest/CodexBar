@@ -1,0 +1,20 @@
+{
+  "stable": {
+    "commit": "348e2fa8d36ae8e452739ca07a79e83ab9d25e98",
+    "sourceSHA256": {
+      "Sources/CodexBar/Sync/CloudSyncPersistence.swift": "6a2a2c334aaf88e2c17ac828994bd919b3510300d6c81476c93545eef39e51e8",
+      "Sources/CodexBarCore/UsageFetcher.swift": "f2350be926c94386b5326030c2466c64432ed5a3ba35777b5c5dd68c12e697b5",
+      "Sources/CodexBarCore/CLIUsageCache.swift": "b254cfb7fff33a85e79750a0e448a57f4216787f9fb32820f8d6f79a56b94569",
+      "Sources/CodexBarCore/Sync/SyncModels.swift": "9f3570937c75f924051d42644cac8bcf5faec964dfd5f27b547c52c4d3359450"
+    }
+  },
+  "candidate": {
+    "commit": "fc2866c6bd25b1e1f27e01d39e8cd31c76ac83f7",
+    "sourceSHA256": {
+      "Sources/CodexBar/Sync/CloudSyncPersistence.swift": "6a2a2c334aaf88e2c17ac828994bd919b3510300d6c81476c93545eef39e51e8",
+      "Sources/CodexBarCore/UsageFetcher.swift": "804330044ac22df79488d60f080a5b39c1100fa63d4d6aa89c1088823aba87f2",
+      "Sources/CodexBarCore/CLIUsageCache.swift": "b254cfb7fff33a85e79750a0e448a57f4216787f9fb32820f8d6f79a56b94569",
+      "Sources/CodexBarCore/Sync/SyncModels.swift": "9f3570937c75f924051d42644cac8bcf5faec964dfd5f27b547c52c4d3359450"
+    }
+  }
+}

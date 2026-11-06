@@ -1,0 +1,74 @@
+[
+  {
+    "label": "stable",
+    "binarySHA256": "ac282e970df39f9c487105ba47f555a3cb5014b13ff5b95a3821f0948f7ef0df",
+    "commands": [
+      {
+        "args": [
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "CodexBar 0.83.0\n",
+        "stderr": ""
+      },
+      {
+        "args": [
+          "config",
+          "validate",
+          "--json"
+        ],
+        "exit": 0,
+        "stdout": "[]\n",
+        "stderr": ""
+      },
+      {
+        "args": [
+          "config",
+          "dump",
+          "--json"
+        ],
+        "exit": 0,
+        "stdout": "{\"providers\":[{\"cookieHeader\":\"[REDACTED]\",\"cookieSource\":\"manual\",\"enabled\":false,\"id\":\"cursor\",\"source\":\"web\"},{\"enabled\":false,\"id\":\"grok\"},{\"enabled\":true,\"id\":\"codex\"},{\"enabled\":false,\"id\":\"openai\"},{\"enabled\":false,\"id\":\"azureopenai\"},{\"enabled\":false,\"id\":\"claude\"},{\"enabled\":false,\"id\":\"clinepass\"},{\"enabled\":false,\"id\":\"opencode\"},{\"enabled\":false,\"id\":\"opencodego\"},{\"enabled\":false,\"id\":\"alibaba\"},{\"enabled\":false,\"id\":\"alibabatokenplan\",\"region\":\"cn\"},{\"enabled\":false,\"id\":\"qwencloud\"},{\"enabled\":false,\"id\":\"factory\"},{\"enabled\":false,\"id\":\"fireworks\"},{\"enabled\":false,\"id\":\"gemini\"},{\"enabled\":false,\"id\":\"antigravity\"},{\"enabled\":false,\"id\":\"copilot\"},{\"enabled\":false,\"id\":\"devin\"},{\"enabled\":false,\"id\":\"zai\"},{\"enabled\":false,\"id\":\"minimax\"},{\"enabled\":false,\"id\":\"manus\"},{\"enabled\":false,\"id\":\"kimi\"},{\"enabled\":false,\"id\":\"kilo\"},{\"enabled\":false,\"id\":\"kiro\"},{\"enabled\":false,\"id\":\"vertexai\"},{\"enabled\":false,\"id\":\"augment\"},{\"enabled\":false,\"id\":\"jetbrains\"},{\"enabled\":false,\"id\":\"moonshot\"},{\"enabled\":false,\"id\":\"amp\"},{\"enabled\":false,\"id\":\"t3chat\"},{\"enabled\":false,\"id\":\"langdock\"},{\"enabled\":false,\"id\":\"ollama\"},{\"enabled\":false,\"id\":\"synthetic\"},{\"enabled\":false,\"id\":\"openrouter\"},{\"enabled\":false,\"id\":\"elevenlabs\"},{\"enabled\":false,\"id\":\"warp\"},{\"enabled\":false,\"id\":\"windsurf\"},{\"enabled\":false,\"id\":\"zed\"},{\"enabled\":false,\"id\":\"perplexity\"},{\"enabled\":false,\"id\":\"mimo\"},{\"enabled\":false,\"id\":\"doubao\"},{\"enabled\":false,\"id\":\"sakana\"},{\"enabled\":false,\"id\":\"abacus\"},{\"enabled\":false,\"id\":\"mistral\"},{\"enabled\":false,\"id\":\"deepseek\"},{\"enabled\":false,\"id\":\"deepinfra\"},{\"enabled\":false,\"id\":\"codebuff\"},{\"enabled\":false,\"id\":\"venice\"},{\"enabled\":false,\"id\":\"commandcode\"},{\"enabled\":false,\"id\":\"qoder\"},{\"enabled\":false,\"id\":\"stepfun\"},{\"enabled\":false,\"id\":\"bedrock\"},{\"enabled\":false,\"id\":\"groq\"},{\"enabled\":false,\"id\":\"llmproxy\"},{\"enabled\":false,\"id\":\"litellm\"},{\"enabled\":false,\"id\":\"bifrost\"},{\"enabled\":false,\"id\":\"aixy\"},{\"enabled\":false,\"id\":\"deepgram\"},{\"enabled\":false,\"id\":\"soniox\"},{\"enabled\":false,\"id\":\"poe\"},{\"enabled\":false,\"id\":\"chutes\"},{\"enabled\":false,\"id\":\"neuralwatt\"},{\"enabled\":false,\"id\":\"helmcode\"},{\"enabled\":false,\"id\":\"clawrouter\"},{\"enabled\":false,\"id\":\"longcat\"},{\"enabled\":false,\"id\":\"sub2api\"},{\"enabled\":false,\"id\":\"wayfinder\"},{\"enabled\":false,\"id\":\"zenmux\"},{\"enabled\":false,\"id\":\"aiand\"},{\"enabled\":false,\"id\":\"zoommate\"},{\"enabled\":false,\"id\":\"xai\"},{\"enabled\":false,\"id\":\"xapi\"},{\"enabled\":false,\"id\":\"notion\"},{\"enabled\":false,\"id\":\"ibmbob\"},{\"enabled\":false,\"id\":\"nous\"},{\"enabled\":false,\"id\":\"muse\"},{\"enabled\":false,\"id\":\"coderabbit\"},{\"enabled\":false,\"id\":\"replicate\"},{\"enabled\":false,\"id\":\"huggingface\"},{\"enabled\":false,\"id\":\"raycast\"},{\"enabled\":false,\"id\":\"pi\"},{\"enabled\":false,\"id\":\"v0\"},{\"enabled\":false,\"id\":\"typesafe\"},{\"enabled\":false,\"id\":\"hyper\"},{\"enabled\":false,\"id\":\"gitkraken\"},{\"enabled\":false,\"id\":\"futureagi\"},{\"enabled\":false,\"id\":\"devpass\"},{\"enabled\":false,\"id\":\"atlascloud\"},{\"enabled\":false,\"id\":\"vercel\"},{\"enabled\":false,\"id\":\"llmman\"},{\"enabled\":false,\"id\":\"xkiro\"},{\"enabled\":false,\"id\":\"museai\"},{\"enabled\":false,\"id\":\"lithosai\"},{\"enabled\":false,\"id\":\"workbuddy\"},{\"enabled\":false,\"id\":\"tavily\"},{\"enabled\":false,\"id\":\"linkup\"},{\"enabled\":false,\"id\":\"tinyapi\"},{\"enabled\":false,\"id\":\"exa\"},{\"enabled\":false,\"id\":\"cosmic\"},{\"enabled\":false,\"id\":\"aerostack\"},{\"enabled\":false,\"id\":\"sailresearch\"},{\"enabled\":false,\"id\":\"sofya\"},{\"enabled\":false,\"id\":\"fal\"},{\"enabled\":false,\"id\":\"flora\"},{\"enabled\":false,\"id\":\"parallel\"},{\"enabled\":false,\"id\":\"claudeplatform\"},{\"enabled\":false,\"id\":\"munito\"},{\"enabled\":false,\"id\":\"traecn\"},{\"enabled\":false,\"id\":\"chatbox\"},{\"enabled\":false,\"id\":\"abliteration\"},{\"enabled\":false,\"id\":\"opendesign\"}],\"shareUsageWithCLI\":true,\"version\":1}\n",
+        "stderr": ""
+      }
+    ],
+    "configSHA256Before": "a85748e1970789cc9a05b213075b90b2072725c60bcf1a2fe4f6ace9a44c457f",
+    "configSHA256After": "a85748e1970789cc9a05b213075b90b2072725c60bcf1a2fe4f6ace9a44c457f"
+  },
+  {
+    "label": "candidate",
+    "binarySHA256": "c784a822d0b5b16c6e6115802e51a4973a401aa4551a782046ceeabc8cf9e528",
+    "commands": [
+      {
+        "args": [
+          "--version"
+        ],
+        "exit": 0,
+        "stdout": "CodexBar\n",
+        "stderr": ""
+      },
+      {
+        "args": [
+          "config",
+          "validate",
+          "--json"
+        ],
+        "exit": 0,
+        "stdout": "[]\n",
+        "stderr": ""
+      },
+      {
+        "args": [
+          "config",
+          "dump",
+          "--json"
+        ],
+        "exit": 0,
+        "stdout": "{\"providers\":[{\"cookieHeader\":\"[REDACTED]\",\"cookieSource\":\"manual\",\"enabled\":false,\"id\":\"cursor\",\"source\":\"web\"},{\"enabled\":false,\"id\":\"grok\"},{\"enabled\":true,\"id\":\"codex\"},{\"enabled\":false,\"id\":\"openai\"},{\"enabled\":false,\"id\":\"azureopenai\"},{\"enabled\":false,\"id\":\"claude\"},{\"enabled\":false,\"id\":\"clinepass\"},{\"enabled\":false,\"id\":\"opencode\"},{\"enabled\":false,\"id\":\"opencodego\"},{\"enabled\":false,\"id\":\"alibaba\"},{\"enabled\":false,\"id\":\"alibabatokenplan\",\"region\":\"cn\"},{\"enabled\":false,\"id\":\"qwencloud\"},{\"enabled\":false,\"id\":\"factory\"},{\"enabled\":false,\"id\":\"fireworks\"},{\"enabled\":false,\"id\":\"gemini\"},{\"enabled\":false,\"id\":\"antigravity\"},{\"enabled\":false,\"id\":\"copilot\"},{\"enabled\":false,\"id\":\"devin\"},{\"enabled\":false,\"id\":\"zai\"},{\"enabled\":false,\"id\":\"minimax\"},{\"enabled\":false,\"id\":\"manus\"},{\"enabled\":false,\"id\":\"kimi\"},{\"enabled\":false,\"id\":\"kilo\"},{\"enabled\":false,\"id\":\"kiro\"},{\"enabled\":false,\"id\":\"vertexai\"},{\"enabled\":false,\"id\":\"augment\"},{\"enabled\":false,\"id\":\"jetbrains\"},{\"enabled\":false,\"id\":\"moonshot\"},{\"enabled\":false,\"id\":\"amp\"},{\"enabled\":false,\"id\":\"t3chat\"},{\"enabled\":false,\"id\":\"langdock\"},{\"enabled\":false,\"id\":\"ollama\"},{\"enabled\":false,\"id\":\"synthetic\"},{\"enabled\":false,\"id\":\"openrouter\"},{\"enabled\":false,\"id\":\"elevenlabs\"},{\"enabled\":false,\"id\":\"warp\"},{\"enabled\":false,\"id\":\"windsurf\"},{\"enabled\":false,\"id\":\"zed\"},{\"enabled\":false,\"id\":\"perplexity\"},{\"enabled\":false,\"id\":\"mimo\"},{\"enabled\":false,\"id\":\"doubao\"},{\"enabled\":false,\"id\":\"sakana\"},{\"enabled\":false,\"id\":\"abacus\"},{\"enabled\":false,\"id\":\"mistral\"},{\"enabled\":false,\"id\":\"deepseek\"},{\"enabled\":false,\"id\":\"deepinfra\"},{\"enabled\":false,\"id\":\"codebuff\"},{\"enabled\":false,\"id\":\"venice\"},{\"enabled\":false,\"id\":\"commandcode\"},{\"enabled\":false,\"id\":\"qoder\"},{\"enabled\":false,\"id\":\"stepfun\"},{\"enabled\":false,\"id\":\"bedrock\"},{\"enabled\":false,\"id\":\"groq\"},{\"enabled\":false,\"id\":\"llmproxy\"},{\"enabled\":false,\"id\":\"litellm\"},{\"enabled\":false,\"id\":\"bifrost\"},{\"enabled\":false,\"id\":\"aixy\"},{\"enabled\":false,\"id\":\"deepgram\"},{\"enabled\":false,\"id\":\"soniox\"},{\"enabled\":false,\"id\":\"poe\"},{\"enabled\":false,\"id\":\"chutes\"},{\"enabled\":false,\"id\":\"neuralwatt\"},{\"enabled\":false,\"id\":\"helmcode\"},{\"enabled\":false,\"id\":\"clawrouter\"},{\"enabled\":false,\"id\":\"longcat\"},{\"enabled\":false,\"id\":\"sub2api\"},{\"enabled\":false,\"id\":\"wayfinder\"},{\"enabled\":false,\"id\":\"zenmux\"},{\"enabled\":false,\"id\":\"aiand\"},{\"enabled\":false,\"id\":\"zoommate\"},{\"enabled\":false,\"id\":\"xai\"},{\"enabled\":false,\"id\":\"xapi\"},{\"enabled\":false,\"id\":\"notion\"},{\"enabled\":false,\"id\":\"ibmbob\"},{\"enabled\":false,\"id\":\"nous\"},{\"enabled\":false,\"id\":\"muse\"},{\"enabled\":false,\"id\":\"coderabbit\"},{\"enabled\":false,\"id\":\"replicate\"},{\"enabled\":false,\"id\":\"huggingface\"},{\"enabled\":false,\"id\":\"raycast\"},{\"enabled\":false,\"id\":\"pi\"},{\"enabled\":false,\"id\":\"v0\"},{\"enabled\":false,\"id\":\"typesafe\"},{\"enabled\":false,\"id\":\"hyper\"},{\"enabled\":false,\"id\":\"gitkraken\"},{\"enabled\":false,\"id\":\"futureagi\"},{\"enabled\":false,\"id\":\"devpass\"},{\"enabled\":false,\"id\":\"atlascloud\"},{\"enabled\":false,\"id\":\"vercel\"},{\"enabled\":false,\"id\":\"llmman\"},{\"enabled\":false,\"id\":\"xkiro\"},{\"enabled\":false,\"id\":\"museai\"},{\"enabled\":false,\"id\":\"lithosai\"},{\"enabled\":false,\"id\":\"workbuddy\"},{\"enabled\":false,\"id\":\"tavily\"},{\"enabled\":false,\"id\":\"linkup\"},{\"enabled\":false,\"id\":\"tinyapi\"},{\"enabled\":false,\"id\":\"exa\"},{\"enabled\":false,\"id\":\"cosmic\"},{\"enabled\":false,\"id\":\"aerostack\"},{\"enabled\":false,\"id\":\"sailresearch\"},{\"enabled\":false,\"id\":\"sofya\"},{\"enabled\":false,\"id\":\"fal\"},{\"enabled\":false,\"id\":\"flora\"},{\"enabled\":false,\"id\":\"parallel\"},{\"enabled\":false,\"id\":\"claudeplatform\"},{\"enabled\":false,\"id\":\"munito\"},{\"enabled\":false,\"id\":\"traecn\"},{\"enabled\":false,\"id\":\"chatbox\"},{\"enabled\":false,\"id\":\"abliteration\"},{\"enabled\":false,\"id\":\"opendesign\"}],\"shareUsageWithCLI\":true,\"version\":1}\n",
+        "stderr": ""
+      }
+    ],
+    "configSHA256Before": "a85748e1970789cc9a05b213075b90b2072725c60bcf1a2fe4f6ace9a44c457f",
+    "configSHA256After": "a85748e1970789cc9a05b213075b90b2072725c60bcf1a2fe4f6ace9a44c457f"
+  }
+]

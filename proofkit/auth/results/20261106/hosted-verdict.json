@@ -1,0 +1,18 @@
+{
+  "product_sha": "fc2866c6bd25b1e1f27e01d39e8cd31c76ac83f7",
+  "exit_code": 0,
+  "suites_passed": {
+    "CursorAccountBoundaryTests": true,
+    "CursorCostAccountBoundaryTests": true,
+    "CursorLoginAccountBoundaryTests": true,
+    "CursorLoginRunnerTests": true,
+    "CursorLoginBrowserRoutingTests": true
+  },
+  "test_counts": [
+    "45"
+  ],
+  "production_source_unchanged": true,
+  "selected_tests_unchanged": true,
+  "unexpected_failure": false,
+  "verified_green": true
+}

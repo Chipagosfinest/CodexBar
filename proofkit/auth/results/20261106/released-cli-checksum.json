@@ -1,0 +1,8 @@
+{
+  "release": "v0.83.0",
+  "release_url": "https://github.com/steipete/CodexBar/releases/tag/v0.83.0",
+  "archive": "CodexBarCLI-v0.83.0-macos-arm64.tar.gz",
+  "owner_published_archive_sha256": "3fb6af9582a0b232dc1708e1d8f13985441dbe2e74903791c902d1fa8bb7c4a9",
+  "downloaded_archive_sha256": "3fb6af9582a0b232dc1708e1d8f13985441dbe2e74903791c902d1fa8bb7c4a9",
+  "archive_checksum_matches": true
+}

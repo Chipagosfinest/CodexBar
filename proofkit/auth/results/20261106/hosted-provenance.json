@@ -1,0 +1,21 @@
+{
+  "product_sha": "fc2866c6bd25b1e1f27e01d39e8cd31c76ac83f7",
+  "controller_sha": "9ff82ca08fc974cc9848d876c6f7846ab1d59844",
+  "selected_sources": [
+    "Tests/CodexBarTests/CursorAccountBoundaryTests.swift",
+    "Tests/CodexBarTests/CursorCostAccountBoundaryTests.swift",
+    "Tests/CodexBarTests/CursorLoginAccountBoundaryTests.swift",
+    "Tests/CodexBarTests/CursorLoginRunnerTests.swift",
+    "Tests/CodexBarTests/CursorLoginBrowserRoutingTests.swift"
+  ],
+  "selected_source_sha256": {
+    "Tests/CodexBarTests/CursorAccountBoundaryTests.swift": "95cb999a43aafb222f3ebde24d29983cf6a9f59992a724512fc3ee6d7b834094",
+    "Tests/CodexBarTests/CursorCostAccountBoundaryTests.swift": "0e8b2f222e0923559adf9164403e0c33f10b9a04ece2d5f5bf323fa469c643c4",
+    "Tests/CodexBarTests/CursorLoginAccountBoundaryTests.swift": "f9434f767eb6a9381f3ed70fcbf433abd15f632d2dfc8462c456a53fe080ee74",
+    "Tests/CodexBarTests/CursorLoginRunnerTests.swift": "4c22a97c00bba206b475a4382bbc735dff693b2de31c22b9d51329212f6370af",
+    "Tests/CodexBarTests/CursorLoginBrowserRoutingTests.swift": "84a46e85bb31b23d21d16c0195ad68e13af9fe6a754e0630e8244b249ebc590e"
+  },
+  "harness_patch_sha256": "8f56def14662c20b3a4b59c81411107b1ef4aa30262afad16c2fdffd8f8d8d2d",
+  "filter": "CursorAccountBoundaryTests|CursorCostAccountBoundaryTests|CursorLoginAccountBoundaryTests|CursorLoginRunnerTests|CursorLoginBrowserRoutingTests",
+  "boundary": "Synthetic tests compile intact CodexBar App/Core modules. Injected browser/network/cache seams; no live login or installed-app claim."
+}

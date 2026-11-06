@@ -1,0 +1,150 @@
+[
+  {
+    "case": "stable-create",
+    "binarySHA256": "621a4d850ec306330471033783544dab104f38b1b3601b241b4ded94bc3dc8dd",
+    "exit": 0,
+    "before": {},
+    "after": {
+      "recent.json": "c81313161378341e8f631d245812fd255b196de6a734097bae37bd3ceef3e4f7",
+      "expired.json": "50d6461f10bd1755fe9363e00463148f263a42109a32f7f7c1c294e3ccd82346",
+      "engine-state.json": "102a059d972ecdda6c7c031d2707e82a497e45fa5bdee1275d9f42b327dd5fb4",
+      "future.json": "c9c1f5ba2161cb8639dc0e636bb537f8dbf10c04f54f7bfa5163a161a3d9c730"
+    },
+    "projection": {
+      "boundary": "Actual production Core and App persistence sources; synthetic source harness, not app launch",
+      "cases": [
+        {
+          "ageSeconds": 90,
+          "bot": 80,
+          "case": "recent",
+          "cliCacheHit": true,
+          "inferredSharedWeeklyPool": true,
+          "primary": 20,
+          "syncAccountPreserved": true
+        },
+        {
+          "ageSeconds": 7200,
+          "bot": 80,
+          "case": "expired",
+          "cliCacheHit": false,
+          "inferredSharedWeeklyPool": true,
+          "primary": 20,
+          "syncAccountPreserved": true
+        },
+        {
+          "ageSeconds": -3600,
+          "bot": 80,
+          "case": "future",
+          "cliCacheHit": false,
+          "inferredSharedWeeklyPool": true,
+          "primary": 20,
+          "syncAccountPreserved": true
+        }
+      ],
+      "loadedSyncSnapshots": 3,
+      "mode": "create"
+    }
+  },
+  {
+    "case": "stable-load",
+    "binarySHA256": "621a4d850ec306330471033783544dab104f38b1b3601b241b4ded94bc3dc8dd",
+    "exit": 0,
+    "before": {
+      "recent.json": "c81313161378341e8f631d245812fd255b196de6a734097bae37bd3ceef3e4f7",
+      "expired.json": "50d6461f10bd1755fe9363e00463148f263a42109a32f7f7c1c294e3ccd82346",
+      "engine-state.json": "102a059d972ecdda6c7c031d2707e82a497e45fa5bdee1275d9f42b327dd5fb4",
+      "future.json": "c9c1f5ba2161cb8639dc0e636bb537f8dbf10c04f54f7bfa5163a161a3d9c730"
+    },
+    "after": {
+      "recent.json": "c81313161378341e8f631d245812fd255b196de6a734097bae37bd3ceef3e4f7",
+      "expired.json": "50d6461f10bd1755fe9363e00463148f263a42109a32f7f7c1c294e3ccd82346",
+      "engine-state.json": "102a059d972ecdda6c7c031d2707e82a497e45fa5bdee1275d9f42b327dd5fb4",
+      "future.json": "c9c1f5ba2161cb8639dc0e636bb537f8dbf10c04f54f7bfa5163a161a3d9c730"
+    },
+    "projection": {
+      "boundary": "Actual production Core and App persistence sources; synthetic source harness, not app launch",
+      "cases": [
+        {
+          "ageSeconds": 90,
+          "bot": 80,
+          "case": "recent",
+          "cliCacheHit": true,
+          "inferredSharedWeeklyPool": true,
+          "primary": 20,
+          "syncAccountPreserved": true
+        },
+        {
+          "ageSeconds": 7200,
+          "bot": 80,
+          "case": "expired",
+          "cliCacheHit": false,
+          "inferredSharedWeeklyPool": true,
+          "primary": 20,
+          "syncAccountPreserved": true
+        },
+        {
+          "ageSeconds": -3600,
+          "bot": 80,
+          "case": "future",
+          "cliCacheHit": false,
+          "inferredSharedWeeklyPool": true,
+          "primary": 20,
+          "syncAccountPreserved": true
+        }
+      ],
+      "loadedSyncSnapshots": 3,
+      "mode": "check"
+    }
+  },
+  {
+    "case": "candidate-load",
+    "binarySHA256": "1e4770d586dceecaa19652353d8e77cd94d76e02a2fbf3bf97300131f7c3a3e0",
+    "exit": 0,
+    "before": {
+      "recent.json": "c81313161378341e8f631d245812fd255b196de6a734097bae37bd3ceef3e4f7",
+      "expired.json": "50d6461f10bd1755fe9363e00463148f263a42109a32f7f7c1c294e3ccd82346",
+      "engine-state.json": "102a059d972ecdda6c7c031d2707e82a497e45fa5bdee1275d9f42b327dd5fb4",
+      "future.json": "c9c1f5ba2161cb8639dc0e636bb537f8dbf10c04f54f7bfa5163a161a3d9c730"
+    },
+    "after": {
+      "recent.json": "c81313161378341e8f631d245812fd255b196de6a734097bae37bd3ceef3e4f7",
+      "expired.json": "50d6461f10bd1755fe9363e00463148f263a42109a32f7f7c1c294e3ccd82346",
+      "engine-state.json": "102a059d972ecdda6c7c031d2707e82a497e45fa5bdee1275d9f42b327dd5fb4",
+      "future.json": "c9c1f5ba2161cb8639dc0e636bb537f8dbf10c04f54f7bfa5163a161a3d9c730"
+    },
+    "projection": {
+      "boundary": "Actual production Core and App persistence sources; synthetic source harness, not app launch",
+      "cases": [
+        {
+          "ageSeconds": 90,
+          "bot": 80,
+          "case": "recent",
+          "cliCacheHit": true,
+          "inferredSharedWeeklyPool": false,
+          "primary": 20,
+          "syncAccountPreserved": true
+        },
+        {
+          "ageSeconds": 7200,
+          "bot": 80,
+          "case": "expired",
+          "cliCacheHit": false,
+          "inferredSharedWeeklyPool": false,
+          "primary": 20,
+          "syncAccountPreserved": true
+        },
+        {
+          "ageSeconds": -3600,
+          "bot": 80,
+          "case": "future",
+          "cliCacheHit": false,
+          "inferredSharedWeeklyPool": false,
+          "primary": 20,
+          "syncAccountPreserved": true
+        }
+      ],
+      "loadedSyncSnapshots": 3,
+      "mode": "check"
+    }
+  }
+]
