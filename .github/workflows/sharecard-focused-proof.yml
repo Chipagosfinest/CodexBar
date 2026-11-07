@@ -1,0 +1,74 @@
+name: Share card marks - RED then GREEN
+
+on:
+  push:
+    branches: [proof/sharecard-focused-20261107]
+
+permissions:
+  contents: read
+
+jobs:
+  proof:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: red
+            sha: 73cb68e8a
+          - label: green
+            sha: 4157d0712
+    runs-on: xcode-27
+    timeout-minutes: 75
+    env:
+      CODEXBAR_DISABLE_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {fetch-depth: 0, persist-credentials: false}
+      - name: Check out ${{ matrix.label }} product commit
+        run: |
+          set -euo pipefail
+          git checkout --detach "${{ matrix.sha }}"
+          git log --oneline -1 | tee "$RUNNER_TEMP/product.txt"
+      - name: Select Xcode 27
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
+          echo "DEVELOPER_DIR=/Applications/Xcode_27.0.app/Contents/Developer" >> "$GITHUB_ENV"
+          /usr/bin/xcodebuild -version
+      - name: SwiftLint (green only)
+        if: matrix.label == 'green'
+        run: ./Scripts/install_lint_tools.sh swiftlint && .build/lint-tools/bin/swiftlint --strict --no-cache --quiet
+      - name: Share-card tests
+        id: tests
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/proof"
+          source ./Scripts/test_environment.sh
+          CODEXBAR_SHARE_APPEARANCE_PROOF_DIR="$RUNNER_TEMP/proof" \
+            swift test --filter 'ShareStats' 2>&1 | tee "$RUNNER_TEMP/proof/test.log"
+      - name: Record outcome
+        env:
+          OUTCOME: ${{ steps.tests.outcome }}
+          LABEL: ${{ matrix.label }}
+        run: |
+          set -euo pipefail
+          echo "$LABEL tests: $OUTCOME" | tee "$RUNNER_TEMP/proof/outcome.txt"
+          cp "$RUNNER_TEMP/product.txt" "$RUNNER_TEMP/proof/"
+          # macOS /bin/bash 3.2 does not exit on a failed [[ ]] under set -e; fail explicitly.
+          if [[ "$LABEL" == red ]]; then
+            [[ "$OUTCOME" == failure ]] || { echo "RED unexpectedly passed"; exit 1; }
+            grep -q 'Test "light export identifies every row with a legible provider mark" failed' \
+              "$RUNNER_TEMP/proof/test.log" || { echo "RED failed for another reason"; exit 1; }
+            if grep -E '✘ Test "' "$RUNNER_TEMP/proof/test.log" | grep -v 'legible provider mark'; then
+              echo "RED has unrelated failures"; exit 1
+            fi
+          else
+            [[ "$OUTCOME" == success ]] || { echo "GREEN failed"; exit 1; }
+          fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: sharecard-${{ matrix.label }}
+          path: ${{ runner.temp }}/proof
