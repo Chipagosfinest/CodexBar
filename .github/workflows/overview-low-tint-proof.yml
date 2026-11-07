@@ -1,0 +1,80 @@
+name: Overview low-quota tint - RED then GREEN
+
+on:
+  push:
+    branches: [proof/overview-low-tint-20261107]
+
+permissions:
+  contents: read
+
+jobs:
+  proof:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: red
+            sha: a755d335b
+          - label: green
+            sha: f1243ba69
+    runs-on: xcode-27
+    timeout-minutes: 90
+    env:
+      CODEXBAR_DISABLE_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {fetch-depth: 0, persist-credentials: false}
+      - name: Check out ${{ matrix.label }} product commit plus probe
+        run: |
+          set -euo pipefail
+          cp proofkit/CompactOverviewHeightProbeTests.swift "$RUNNER_TEMP/"
+          git checkout --detach "${{ matrix.sha }}"
+          cp "$RUNNER_TEMP/CompactOverviewHeightProbeTests.swift" Tests/CodexBarTests/
+          git log --oneline -1 | tee "$RUNNER_TEMP/product.txt"
+      - name: Select Xcode 27
+        run: |
+          set -euo pipefail
+          sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
+          echo "DEVELOPER_DIR=/Applications/Xcode_27.0.app/Contents/Developer" >> "$GITHUB_ENV"
+      - name: SwiftLint (green only)
+        if: matrix.label == 'green'
+        run: |
+          set -euo pipefail
+          rm Tests/CodexBarTests/CompactOverviewHeightProbeTests.swift
+          ./Scripts/install_lint_tools.sh swiftlint
+          .build/lint-tools/bin/swiftlint --strict --no-cache --quiet
+          git checkout -- . && cp "$RUNNER_TEMP/CompactOverviewHeightProbeTests.swift" Tests/CodexBarTests/
+      - name: Focused tests
+        id: tests
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/proof"
+          source ./Scripts/test_environment.sh
+          CODEXBAR_OVERVIEW_PROBE_DIR="$RUNNER_TEMP/proof" \
+            swift test --filter 'MenuCard|MetricRow|Overview|UsageProgressBar|CodexProjection|BusinessCredits' 2>&1 | tee "$RUNNER_TEMP/proof/test.log"
+      - name: Record outcome
+        env:
+          OUTCOME: ${{ steps.tests.outcome }}
+          LABEL: ${{ matrix.label }}
+        run: |
+          set -euo pipefail
+          log="$RUNNER_TEMP/proof/test.log"
+          echo "$LABEL tests: $OUTCOME" | tee "$RUNNER_TEMP/proof/outcome.txt"
+          cp "$RUNNER_TEMP/product.txt" "$RUNNER_TEMP/proof/"
+          # macOS /bin/bash 3.2 does not exit on a failed [[ ]] under set -e; fail explicitly.
+          if [[ "$LABEL" == red ]]; then
+            [[ "$OUTCOME" == failure ]] || { echo "RED unexpectedly passed"; exit 1; }
+            grep -q 'Test "a window with at most ten percent left uses the low-quota tint' "$log" || { echo "RED: target test missing"; exit 1; }
+            if grep -E '✘ Test "' "$log" | grep -v 'at most ten percent left'; then
+              echo "RED has unrelated failures"; exit 1
+            fi
+          else
+            [[ "$OUTCOME" == success ]] || { echo "GREEN failed"; exit 1; }
+          fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: overview-tint-${{ matrix.label }}
+          path: ${{ runner.temp }}/proof
