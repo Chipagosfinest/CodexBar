@@ -1,0 +1,42 @@
+{
+  "images": [
+    {
+      "image": "before-partial.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "sha256": "8c1e733d24f2cebaa38f333f50b26e9d45a5676dbccfd8430a0b337e5094031c",
+      "inspected_original_resolution": true
+    },
+    {
+      "image": "after-partial.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "sha256": "8f91a5ad969b6184790bbb72d1d3eaa143100173a21eb91673b9692c471def97",
+      "inspected_original_resolution": true
+    },
+    {
+      "image": "after-complete.png",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "sha256": "9768bd1c6c3da9c0a7163f73c5ce8fef20c69ffbe96cdc13f07173df6ff29a68",
+      "inspected_original_resolution": true
+    }
+  ],
+  "observed": {
+    "before-partial": "Selected July15; fixture-alpha/beta $1 each, 50% each and bars; no model-partial warning.",
+    "after-partial": "Selected July15; Partial model breakdown; fixture-alpha/beta $1 each; percentages and bars absent.",
+    "after-complete": "Selected July16 after actual pointer click; fixture-alpha/beta $3 each; 50% each and bars; no model-partial warning."
+  },
+  "does_not_prove": [
+    "Real-account ingestion/authentication or persistence",
+    "Normal settings-window navigation",
+    "Installed release behavior",
+    "Full PR test-suite success"
+  ]
+}

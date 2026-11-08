@@ -1,0 +1,23 @@
+{
+  "basis" : "cost",
+  "knownWindowCost" : 8,
+  "label" : "after",
+  "modelHistoryComplete" : true,
+  "productSHA" : "823a843f8bc7b42a53dcb7090221b086e2e045a0",
+  "rankingPartial" : false,
+  "rows" : [
+    {
+      "model" : "fixture-alpha",
+      "share" : 0.5,
+      "value" : 3
+    },
+    {
+      "model" : "fixture-beta",
+      "share" : 0.5,
+      "value" : 3
+    }
+  ],
+  "selectedDay" : 16,
+  "synthetic" : true,
+  "windowHasPartialCost" : true
+}

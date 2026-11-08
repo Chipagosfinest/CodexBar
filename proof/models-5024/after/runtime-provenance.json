@@ -1,0 +1,18 @@
+{
+  "productSHA": "823a843f8bc7b42a53dcb7090221b086e2e045a0",
+  "synthetic": true,
+  "normalStartupBypassed": "ModelsAppProof before resource smoke/settings/accounts/provider startup",
+  "productionSourceSHA256": {
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel.swift": "948de4b2333932e1e950506e02228365424c1088f7368b67ee7c2de5f7d53219",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModel+ModelBreakdown.swift": "3f4b65b30de86663ac48c7ec6a798575326b843dbaecd7e805e58dcde8556d5d",
+    "Sources/CodexBar/SpendDashboard/SpendDashboardModelRanking.swift": "6e4446502b5a2fe63177afb8629cd76f1eb4608137dba70807aa7cede0f3966c",
+    "Sources/CodexBar/Settings/PreferencesSpendDashboardPane.swift": "5e13556115defd984e0776668f35c66329a4a99ae17b71f5add9c10b10cc8dd7"
+  },
+  "overlaySHA256": "9d7312eaaf2a01657e8447a9c7f17b8234cc8d54f9c2a822b78057955dfbddbe",
+  "fixtureSHA256": "88270586c319b62e34bd9c1b55608ea952cfafca8d18ec250d6d703fe24537f9",
+  "executableSHA256": "f03ca18a6d150d33daf540c3ca0aae5ce94f2037ec6068d5ce2aa38fa3c17246",
+  "screens": {
+    "complete-screen.png": "9768bd1c6c3da9c0a7163f73c5ce8fef20c69ffbe96cdc13f07173df6ff29a68",
+    "partial-screen.png": "8f91a5ad969b6184790bbb72d1d3eaa143100173a21eb91673b9692c471def97"
+  }
+}

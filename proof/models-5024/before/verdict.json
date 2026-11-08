@@ -1,0 +1,41 @@
+{
+  "verdict": "passed",
+  "checks": [
+    {
+      "check": "runtime product SHA matches",
+      "passed": true
+    },
+    {
+      "check": "partial day retains dollar amounts",
+      "passed": true
+    },
+    {
+      "check": "partial warning matches baseline/fixed contract",
+      "passed": true
+    },
+    {
+      "check": "partial day share visibility matches baseline/fixed contract",
+      "passed": true
+    },
+    {
+      "check": "complete-day button visible in real accessibility tree",
+      "passed": true
+    },
+    {
+      "check": "complete selected day has own costs",
+      "passed": true
+    },
+    {
+      "check": "complete selected day restores complete ranking",
+      "passed": true
+    },
+    {
+      "check": "complete selected day restores shares",
+      "passed": true
+    },
+    {
+      "check": "whole window remains partial independently",
+      "passed": true
+    }
+  ]
+}
