@@ -1,0 +1,80 @@
+name: Models 5024 actual app selected-day proof
+
+on:
+  push:
+    branches: [proof/models-5024-actual-ui-20261108]
+    paths:
+      - .github/workflows/models-actual-ui-proof.yml
+      - modelsproofkit/**
+
+permissions:
+  contents: read
+
+jobs:
+  models-actual-ui:
+    runs-on: macos-26-intel
+    timeout-minutes: 60
+    env:
+      PRODUCT_SHA: 823a843f8bc7b42a53dcb7090221b086e2e045a0
+      BASELINE_SHA: 7447bc77c2497323d9c41e40164ce705533493c8
+      CODEXBAR_DISABLE_KEYCHAIN_ACCESS: "1"
+      CODEXBAR_SUPPRESS_TEST_KEYCHAIN_ACCESS: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {path: kit, persist-credentials: false}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {path: product, ref: '${{ env.PRODUCT_SHA }}', persist-credentials: false}
+      - name: Native display and input preflight before cold build
+        shell: bash
+        run: |
+          set -euo pipefail
+          latest=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$latest/Contents/Developer"
+          echo "DEVELOPER_DIR=$latest/Contents/Developer" >> "$GITHUB_ENV"
+          export PROOF_OUT="$RUNNER_TEMP/models-5024-ui"
+          echo "PROOF_OUT=$PROOF_OUT" >> "$GITHUB_ENV"
+          mkdir -p "$PROOF_OUT/preflight"
+          { sw_vers; xcodebuild -version; xcrun swiftc --version; launchctl managername; } > "$PROOF_OUT/environment.txt"
+          test "$(launchctl managername)" = Aqua
+          xcrun swiftc -parse-as-library kit/modelsproofkit/native-ui.swift -o "$RUNNER_TEMP/models-ui" > "$PROOF_OUT/helper-build.log" 2>&1
+          sandbox-exec -p '(version 1)(allow default)(deny network*)' "$RUNNER_TEMP/models-ui" preflight "$PROOF_OUT/preflight"
+          python3 - <<'PY'
+          import json,os,pathlib
+          p=pathlib.Path(os.environ['PROOF_OUT'])/'preflight/preflight.json'
+          result=json.loads(p.read_text())
+          assert all(result[k] for k in ['preflightPassed','actualCGEventOpenedNativeMenu','axTrusted','screenCaptureAllowed','postEventAllowed']),result
+          PY
+      - name: Baseline then exact PR product in the same build workspace
+        shell: bash
+        run: |
+          set -euo pipefail
+          defaults write NSGlobalDomain AppleLanguages -array en
+          git -C product fetch --depth=1 origin "$BASELINE_SHA"
+          git -C kit rev-parse HEAD > "$PROOF_OUT/controller-sha.txt"
+          shasum -a 256 kit/modelsproofkit/* > "$PROOF_OUT/controller-input-sha256.txt"
+          for label in before after; do
+            sha="$BASELINE_SHA"
+            if [[ "$label" == after ]]; then sha="$PRODUCT_SHA"; fi
+            out="$PROOF_OUT/$label"
+            mkdir -p "$out"
+            git -C product checkout --detach "$sha"
+            python3 kit/modelsproofkit/prepare.py product "$out"
+            (
+              cd product
+              CODEXBAR_SIGNING=adhoc ./Scripts/package_app.sh debug > "$out/package.log" 2>&1
+            ) || { tail -100 "$out/package.log"; exit 1; }
+            codesign --verify --deep --strict product/CodexBar.app > "$out/codesign.log" 2>&1
+            python3 kit/modelsproofkit/drive.py "$PWD/product/CodexBar.app" "$RUNNER_TEMP/models-ui" "$out" --label "$label" --sha "$sha" > "$out/driver.log" 2>&1 || { cat "$out/driver.log"; exit 1; }
+            # Preserve the exact built binary separately; source is verified against each product SHA.
+            shasum -a 256 product/CodexBar.app/Contents/MacOS/CodexBar > "$out/executable-sha256.txt"
+            git -C product restore -- Sources/CodexBar/CodexbarApp.swift
+            git -C product reset -- Sources/CodexBar/ModelsAppProof.swift
+            rm product/Sources/CodexBar/ModelsAppProof.swift
+            test -z "$(git -C product status --porcelain --untracked-files=no)"
+          done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: models-5024-actual-ui-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/models-5024-ui
+          retention-days: 14
